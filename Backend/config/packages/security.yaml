@@ -1,0 +1,46 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: 'auto'
+        App\Entity\User:
+            algorithm: auto
+
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: ROLE_USERhttps://symfony.com/doc/current/doctrine.html
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        chain_provider:
+            chain:
+                providers: [app_user_provider, in_memory]
+        in_memory:
+            memory:
+                users:
+                    superadmin:
+                        password: '$argon2id$v=19$m=65536,t=4,p=1$ntzCN8YnqxPF7h8vKuvYQg$vee1heTEF/CJcWqsoLZrdsCaROjgKFU+UXtKI1GGjj4'
+                        roles: ['ROLE_SUPER_ADMIN']
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        api_doc:
+            pattern:  ^/api/doc
+            stateless: true
+            anonymous: true
+        api:
+            pattern:   ^/api
+            stateless: true
+            anonymous: true
+            provider: chain_provider
+        main:
+            pattern: ^/
+            anonymous: true
+            lazy: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
