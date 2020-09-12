@@ -4,8 +4,10 @@ Feature: Test ingredient JSON API DELETE
         Given the request body is:
         """
         {
-            "name": "Swaen",
-            "unitFactor": 1
+            "name": "Un autre bordel",
+            "unitFactor": 1,
+            "childName": "other",
+            "type": "un truc"
         }
         """
         When I request "/api/ingredient" using HTTP POST

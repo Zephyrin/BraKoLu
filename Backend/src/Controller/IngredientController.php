@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Ingredient;
+use App\Form\Ingredients as TypeClass;
+use App\Entity\Ingredients as EntityClass;
 use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use App\Controller\Helpers\HelperController;
@@ -23,6 +25,7 @@ use JsonException;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 
 /**
  * Class IngredientController
@@ -57,6 +60,7 @@ class IngredientController extends AbstractFOSRestController
 
     private $title = "title";
     private $subtitle = "subtitle";
+    private $childName = "childName";
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -84,6 +88,10 @@ class IngredientController extends AbstractFOSRestController
      *          @SWG\Schema(ref=@Model(type=Ingredient::class))
      *     ),
      *     @SWG\Response(
+     *          response=412,
+     *          description="Il manque le champs 'discr' qui permet de définir l'ingrédient en un type.<BR/>."
+     *     ),
+     *     @SWG\Response(
      *          response=422,
      *          description="Le JSON comporte une erreur ou l'ingrédient est en conflit avec un autre.<BR/>
      * Regarde la réponse, elle en dira plus."
@@ -107,7 +115,8 @@ class IngredientController extends AbstractFOSRestController
         if ($data instanceof JsonResponse)
             return $data;
 
-        $form = $this->createForm(IngredientType::class, new Ingredient());
+        $form = $this->createForm($this->getClassOrInstance($data), $this->getClassOrInstance($data, false));
+        unset($data[$this->childName]);
         $form->submit($data, false);
         $validation = $this->validationError($form, $this);
         if ($validation instanceof JsonResponse) {
@@ -118,7 +127,8 @@ class IngredientController extends AbstractFOSRestController
         $this->entityManager->persist($insertData);
 
         $this->entityManager->flush();
-        return  $this->view($insertData, Response::HTTP_CREATED);
+        $view =  $this->view($insertData, Response::HTTP_CREATED);
+        return $view;
     }
 
     /**
@@ -253,7 +263,7 @@ class IngredientController extends AbstractFOSRestController
         $existingIngredient = $this->getIngredientById($id);
         if ($existingIngredient instanceof JsonResponse)
             return $existingIngredient;
-        $form = $this->createForm(IngredientType::class, $existingIngredient);
+        $form = $this->createForm($this->getIngredientType($existingIngredient), $existingIngredient);
         $data = $this->getDataFromJson($request, true);
         if ($data instanceof JSonResponse) {
             return $data;
@@ -329,5 +339,43 @@ class IngredientController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $ingredient;
+    }
+
+    /**
+     * Retourne le nom de la classe ou une nouvelle instance de la classe à partir
+     * des données reçu par le serveur. On regarde le champs discr pour déterminer ça.
+     *
+     * @param [type] $data les données envoyées par le serveur.
+     * @param boolean $isClass Si $isClass = true alors retourne le nom de la 
+     *  classe sinon retourne une nouvelle instance de la classe.
+     * @return string|Ing\Other|Ing\Cereal
+     * @throws PreconditionFailedHttpException
+     */
+    private function getClassOrInstance($data, bool $isClass = true)
+    {
+        switch ($data[$this->childName]) {
+            case 'other':
+                if ($isClass)
+                    return TypeClass\OtherType::class;
+                return new EntityClass\Other();
+            case 'cereal':
+                if ($isClass)
+                    return TypeClass\CerealType::class;
+                return new EntityClass\Cereal();
+            default:
+                throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
+        }
+    }
+
+    private function getIngredientType($existingClass)
+    {
+        switch (get_class($existingClass)) {
+            case "App\Entity\Ingredients\Other":
+                return TypeClass\OtherType::class;
+            case "App\Entity\Ingredients\Cereal":
+                return TypeClass\CerealType::class;
+            default:
+                throw new PreconditionFailedHttpException('Wrong type. RTFD !');
+        }
     }
 }

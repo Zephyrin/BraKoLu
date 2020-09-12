@@ -10,17 +10,29 @@ use Swagger\Annotations as SWG;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\SerializedName;
-
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
 /**
  * @SWG\Definition(
  *     description="Un ingredient est une classe abstraite de base qui est instanciée par un enfant de type Houblon,
  *  Levure, Bouteille..."
  * )
- *
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="childName", type="string")
+ * @ORM\DiscriminatorMap({
+ *      "cereal" = "App\Entity\Ingredients\Cereal"
+ *      , "other" = "App\Entity\Ingredients\Other"
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
+ * @DiscriminatorMap(
+ *  typeProperty="childName"
+ *  , fieldName="childName"
+ *  , mapping={
+ *    "cereal"="App\Entity\Ingredients\Cereal"
+ *    , "other"="App\Entity\Ingredients\Other"
+ * })
  */
-class Ingredient
+abstract class Ingredient
 {
     /**
      * @var int|null

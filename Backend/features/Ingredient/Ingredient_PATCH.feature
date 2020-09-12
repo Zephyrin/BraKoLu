@@ -5,7 +5,9 @@ Feature: Test Ingredient JSON API endpoint PATCH
         """
         {
             "name": "Admiral",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "type": "un type",
+            "childName": "other"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -17,11 +19,9 @@ Feature: Test Ingredient JSON API endpoint PATCH
         """
         {
             "id": "@regExp(/[0-9]+/)",
-            "name": "Admiral",
-            "unitFactor": 1000
+            "name": "Admiral"
         }
         """
-        And the response body has 3 fields
         Then the request body is:
         """
         {
@@ -40,17 +40,21 @@ Feature: Test Ingredient JSON API endpoint PATCH
             "name": "Admiral",
             "unitFactor": 1000,
             "comment": "Un houblon amère",
-            "unit": "kg"
+            "unit": "kg",
+            "type": "un type",
+            "childName": "other"
         }
         """
-        And the response body has 5 fields
+        And the response body has 7 fields
 
     Scenario: Je ne peux pas mettre un jour un ingrédient avec un JSON vide
         Given the request body is:
         """
         {
             "name": "Amarillo",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "type": "un type",
+            "childName": "other"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -75,7 +79,9 @@ Feature: Test Ingredient JSON API endpoint PATCH
         """
         {
             "name": "Apollo",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -112,7 +118,9 @@ Feature: Test Ingredient JSON API endpoint PATCH
         """
         {
             "name": "Aramis",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -121,7 +129,9 @@ Feature: Test Ingredient JSON API endpoint PATCH
         """
         {
             "name": "Aurora",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -150,7 +160,8 @@ Feature: Test Ingredient JSON API endpoint PATCH
                     },
                     "comment": [],
                     "unit": [],
-                    "unitFactor": []
+                    "unitFactor": [],
+                    "type": []
                 }
             }]
         }

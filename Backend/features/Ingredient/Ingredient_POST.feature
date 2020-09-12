@@ -7,7 +7,9 @@ Feature: Test Ingredient JSON API endpoint
             "name": "Admiral",
             "unitFactor": 1000,
             "comment": "Amérisant",
-            "unit": "kg"
+            "unit": "kg",
+            "childName": "other",
+            "type": "un type"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -22,15 +24,22 @@ Feature: Test Ingredient JSON API endpoint
             "name": "Admiral",
             "unitFactor": 1000,
             "comment": "Amérisant",
-            "unit": "kg"
+            "unit": "kg",
+            "childName": "other",
+            "type": "un type"
         }
         """
-        And the response body has 5 fields
+        And the response body has 7 fields
         Then the request body is:
         """
         {
             "name": "Amarillo",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "cereal",
+            "plant": "Une plante",
+            "type": "toto",
+            "format": "grain",
+            "EBC": 10
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -43,16 +52,23 @@ Feature: Test Ingredient JSON API endpoint
         {
             "id": "@regExp(/[0-9]+/)",
             "name": "Amarillo",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "cereal",
+            "plant": "Une plante",
+            "type": "toto",
+            "format": "grain",
+            "EBC": 10
         }
         """
-        And the response body has 3 fields
+        And the response body has 8 fields
         Then the request body is:
         """
         {
             "name": "Apollo",
             "unitFactor": 1000,
-            "comment": "Orange et un poil résineux"
+            "comment": "Orange et un poil résineux",
+            "type": "un type",
+            "childName": "other"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -66,10 +82,12 @@ Feature: Test Ingredient JSON API endpoint
             "id": "@regExp(/[0-9]+/)",
             "name": "Apollo",
             "unitFactor": 1000,
-            "comment": "Orange et un poil résineux"
+            "comment": "Orange et un poil résineux",
+            "type": "un type",
+            "childName": "other"
         }
         """
-        And the response body has 4 fields
+        And the response body has 6 fields
         When I request "/api/ingredients" using HTTP GET
         Then the response body is a JSON array of length 3
         """
@@ -78,15 +96,24 @@ Feature: Test Ingredient JSON API endpoint
             "name": "Admiral",
             "unitFactor": 1000,
             "comment": "Amérisant",
-            "unit": "kg"
+            "unit": "kg",
+            "type": "un type",
+            "childName": "other"
         }, {
             "id": "@regExp(/[0-9]+/)",
             "name": "Amirallo",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "cereal",
+            "plant": "Une plante",
+            "type": "toto",
+            "format": "grain",
+            "EBC": 10
         }, {
             "id": "@regExp(/[0-9]+/)",
             "name": "Apollo",
             "unitFactor": 1000,
-            "comment": "Orange et un poil résineux"
+            "comment": "Orange et un poil résineux",
+            "type": "un type",
+            "childName": "other"
         }]
         """

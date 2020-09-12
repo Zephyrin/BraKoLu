@@ -7,7 +7,9 @@ Feature: Test Ingredient JSON API endpoint GET
             "name": "Ahtanum",
             "unitFactor": 1000,
             "comment": "Un houblon aromatique",
-            "unit": "kg"
+            "unit": "kg",
+            "childName": "other",
+            "type": "rien pour le moment"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -22,10 +24,12 @@ Feature: Test Ingredient JSON API endpoint GET
             "name": "Ahtanum",
             "comment": "Un houblon aromatique",
             "unit": "kg",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "rien pour le moment"
         }
         """
-        And the response body has 5 fields
+        And the response body has 7 fields
         Then I request "/api/ingredients" using HTTP GET
         Then the response code is 200
         And the response body contains JSON:
@@ -35,7 +39,9 @@ Feature: Test Ingredient JSON API endpoint GET
             "name": "Ahtanum",
             "comment": "Un houblon aromatique",
             "unit": "kg",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "rien pour le moment"
         }]
         """
         And the response body is a JSON array of length 1
@@ -45,7 +51,9 @@ Feature: Test Ingredient JSON API endpoint GET
         """
         {
             "name": "Admiral",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -58,17 +66,21 @@ Feature: Test Ingredient JSON API endpoint GET
         {
             "id": "@regExp(/[0-9]+/)",
             "name": "Admiral",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }
         """
-        And the response body has 3 fields
+        And the response body has 5 fields
         Then the request body is:
         """
         {
             "name": "Ahtanum",
             "unitFactor": 1000,
             "comment": "Un houblon aromatique",
-            "unit": "kg"
+            "unit": "kg",
+            "childName": "other",
+            "type": "rien pour le moment"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -79,13 +91,18 @@ Feature: Test Ingredient JSON API endpoint GET
         """
         [
         {
+            "id": "@regExp(/[0-9]+/)",
             "name": "Ahtanum",
             "unitFactor": 1000,
             "comment": "Un houblon aromatique",
-            "unit": "kg"
+            "unit": "kg",
+            "childName": "other",
+            "type": "rien pour le moment"
         }, {
             "id": "@regExp(/[0-9]+/)",
             "name": "Admiral",
-            "unitFactor": 1000
+            "unitFactor": 1000,
+            "childName": "other",
+            "type": "un type"
         }]
         """
