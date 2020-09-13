@@ -70,6 +70,11 @@ abstract class Ingredient
      */
     private $unitFactor;
 
+    /**
+     * @ORM\OneToOne(targetEntity=IngredientStock::class, mappedBy="ingredient", cascade={"persist", "remove"})
+     */
+    private $ingredientStock;
+
     public function __construct()
     {
     }
@@ -121,6 +126,31 @@ abstract class Ingredient
     public function setUnitFactor(int $unitFactor): self
     {
         $this->unitFactor = $unitFactor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IngredientStock[]
+     */
+    public function getIngredientStocks(): Collection
+    {
+        return $this->ingredientStocks;
+    }
+
+    public function getIngredientStock(): ?IngredientStock
+    {
+        return $this->ingredientStock;
+    }
+
+    public function setIngredientStock(IngredientStock $ingredientStock): self
+    {
+        $this->ingredientStock = $ingredientStock;
+
+        // set the owning side of the relation if necessary
+        if ($ingredientStock->getIngredient() !== $this) {
+            $ingredientStock->setIngredient($this);
+        }
 
         return $this;
     }
