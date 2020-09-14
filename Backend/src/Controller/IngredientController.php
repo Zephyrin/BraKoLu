@@ -89,7 +89,7 @@ class IngredientController extends AbstractFOSRestController
      *     ),
      *     @SWG\Response(
      *          response=412,
-     *          description="Il manque le champs 'discr' qui permet de définir l'ingrédient en un type.<BR/>."
+     *          description="Il manque le champs 'childName' qui permet de définir l'ingrédient en un type."
      *     ),
      *     @SWG\Response(
      *          response=422,

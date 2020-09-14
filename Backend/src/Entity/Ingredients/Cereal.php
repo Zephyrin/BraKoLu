@@ -6,12 +6,16 @@ use App\Repository\Ingredients\CerealRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
 use JMS\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CerealRepository::class)
  */
 class Cereal extends Ingredient
 {
+    // TODO à traduire en anglais
+    const TYPES = ['malt', 'cru'];
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -19,6 +23,7 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Cereal::TYPES, message="Sélectionne un type correct.")
      */
     private $type;
 

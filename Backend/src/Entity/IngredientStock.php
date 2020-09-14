@@ -4,12 +4,18 @@ namespace App\Entity;
 
 use App\Repository\IngredientStockRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=IngredientStockRepository::class)
  */
 class IngredientStock
 {
+    const STATES_CREATED = 'created';
+    const STATES_ORDERED = 'ordered';
+    const STATES_STOCKED = 'stocked';
+    const STATES_SOLD_OUT = 'sold_out';
+    const STATES = ['created', 'ordered', 'stocked', 'sold_out'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -34,6 +40,7 @@ class IngredientStock
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\Choice(choices=IngredientStock::STATES, message="Sélectionne un status correct.")
      */
     private $state;
 

@@ -37,7 +37,7 @@ Feature: Test Ingredient JSON API endpoint
             "unitFactor": 1000,
             "childName": "cereal",
             "plant": "Une plante",
-            "type": "toto",
+            "type": "malt",
             "format": "grain",
             "EBC": 10
         }
@@ -55,7 +55,7 @@ Feature: Test Ingredient JSON API endpoint
             "unitFactor": 1000,
             "childName": "cereal",
             "plant": "Une plante",
-            "type": "toto",
+            "type": "malt",
             "format": "grain",
             "EBC": 10
         }
@@ -105,7 +105,7 @@ Feature: Test Ingredient JSON API endpoint
             "unitFactor": 1000,
             "childName": "cereal",
             "plant": "Une plante",
-            "type": "toto",
+            "type": "malt",
             "format": "grain",
             "EBC": 10
         }, {
