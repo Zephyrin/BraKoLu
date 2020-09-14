@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Exception;
+use App\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -49,14 +50,14 @@ trait HelperController
         AbstractFOSRestController $controller
     ) {
         if (false === $form->isValid()) {
-            return new JsonResponse(
+            throw new JsonException(new JsonResponse(
                 [
                     'status' => 'Erreur',
                     'message' => 'Erreur de validation',
                     'errors' => $controller->formErrorSerializer->normalize($form)
                 ],
                 JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-            );
+            ));
         }
         return true;
     }
@@ -74,14 +75,14 @@ trait HelperController
     ) {
         $data = json_decode($request->getContent(), $assoc);
         if ($data === null || count($data) === 0) {
-            return new JsonResponse(
+            throw new JsonException(new JsonResponse(
                 [
                     'status' => 'Erreur',
                     'message' => 'Erreur de validation',
                     'errors' => 'Le JSON reçu est vide comme ton cerveau',
                 ],
                 JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-            );
+            ));
         }
         return $data;
     }
@@ -92,27 +93,27 @@ trait HelperController
     ) {
         $error = $controller->formErrorSerializer->normalize($form);
 
-        return new JsonResponse(
+        throw new JsonException(new JsonResponse(
             [
                 'status' => 'Erreur',
                 'message' => 'Erreur de validation',
                 'errors' => $error
             ],
             JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-        );
+        ));
     }
 
     public function createConflictError(
         string $message
     ) {
-        return new JsonResponse(
+        throw new JsonException(new JsonResponse(
             [
                 'status' => 'Erreur',
                 'message' => 'Erreur de conflict',
                 'errors' => $message
             ],
             JsonResponse::HTTP_CONFLICT
-        );
+        ));
     }
 
     public function formatErrorManageImage(
@@ -135,14 +136,14 @@ trait HelperController
         array_push($errors, $tmp);
 
 
-        return new JsonResponse(
+        throw new JsonException(new JsonResponse(
             [
                 'status' => 'Erreur',
                 'message' => 'Erreur de validation',
                 'errors' => $errors
             ],
             JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-        );
+        ));
     }
 
     public function validationErrorWithChild(
@@ -168,7 +169,7 @@ trait HelperController
                     }
                 }
             }
-            return new JsonResponse($data, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            throw new JsonException(new JsonResponse($data, JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
         }
         return true;
     }

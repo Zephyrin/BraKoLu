@@ -26,10 +26,11 @@ Feature: Test Ingredient JSON API endpoint GET
             "unit": "kg",
             "unitFactor": 1000,
             "childName": "other",
-            "type": "rien pour le moment"
+            "type": "rien pour le moment",
+            "ingredientStocks": []
         }
         """
-        And the response body has 7 fields
+        And the response body has 8 fields
         Then I request "/api/ingredients" using HTTP GET
         Then the response code is 200
         And the response body contains JSON:
@@ -41,7 +42,8 @@ Feature: Test Ingredient JSON API endpoint GET
             "unit": "kg",
             "unitFactor": 1000,
             "childName": "other",
-            "type": "rien pour le moment"
+            "type": "rien pour le moment",
+            "ingredientStocks": []
         }]
         """
         And the response body is a JSON array of length 1
@@ -68,10 +70,11 @@ Feature: Test Ingredient JSON API endpoint GET
             "name": "Admiral",
             "unitFactor": 1000,
             "childName": "other",
-            "type": "un type"
+            "type": "un type",
+            "ingredientStocks": []
         }
         """
-        And the response body has 5 fields
+        And the response body has 6 fields
         Then the request body is:
         """
         {
@@ -97,12 +100,14 @@ Feature: Test Ingredient JSON API endpoint GET
             "comment": "Un houblon aromatique",
             "unit": "kg",
             "childName": "other",
-            "type": "rien pour le moment"
+            "type": "rien pour le moment",
+            "ingredientStocks": []
         }, {
             "id": "@regExp(/[0-9]+/)",
             "name": "Admiral",
             "unitFactor": 1000,
             "childName": "other",
-            "type": "un type"
+            "type": "un type",
+            "ingredientStocks": []
         }]
         """

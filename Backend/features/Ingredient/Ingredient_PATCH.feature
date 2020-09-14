@@ -42,10 +42,11 @@ Feature: Test Ingredient JSON API endpoint PATCH
             "comment": "Un houblon amère",
             "unit": "kg",
             "type": "un type",
-            "childName": "other"
+            "childName": "other",
+            "ingredientStocks": []
         }
         """
-        And the response body has 7 fields
+        And the response body has 8 fields
 
     Scenario: Je ne peux pas mettre un jour un ingrédient avec un JSON vide
         Given the request body is:

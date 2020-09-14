@@ -17,11 +17,6 @@ trait HelperIngredientType
             ->add('name')
             ->add('comment')
             ->add('unit')
-            ->add('unitFactor')
-            ->add(
-                'ingredientStock',
-                EntityType::class,
-                ['class' => IngredientStock::class, 'required' => false]
-            );
+            ->add('unitFactor');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\IngredientStockRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=IngredientStockRepository::class)
@@ -24,16 +25,20 @@ class IngredientStock
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="The creation date should not be null")
+     * @ORM\Column(type="date")
+     * @SerializedName("creationDate")
      */
     private $creationDate;
 
     /**
+     * @Assert\NotBlank(message="The quantity should not be null")
      * @ORM\Column(type="integer")
      */
     private $quantity;
 
     /**
+     * @Assert\NotBlank(message="The price should not be null")
      * @ORM\Column(type="integer")
      */
     private $price;
@@ -41,26 +46,30 @@ class IngredientStock
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\Choice(choices=IngredientStock::STATES, message="Sélectionne un status correct.")
+     * @Assert\NotBlank(message="The state should not be null")
      */
     private $state;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
+     * @SerializedName("orderedDate")
      */
     private $orderedDate;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @SerializedName("receivedDate")
      */
     private $receivedDate;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @SerializedName("endedDate")
      */
     private $endedDate;
 
     /**
-     * @ORM\OneToOne(targetEntity=Ingredient::class, inversedBy="ingredientStock", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="ingredientStocks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $ingredient;
@@ -75,7 +84,7 @@ class IngredientStock
         return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creationDate): self
+    public function setCreationDate(?\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
 
@@ -159,7 +168,7 @@ class IngredientStock
         return $this->ingredient;
     }
 
-    public function setIngredient(Ingredient $ingredient): self
+    public function setIngredient(?Ingredient $ingredient): self
     {
         $this->ingredient = $ingredient;
 

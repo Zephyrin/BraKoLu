@@ -71,12 +71,14 @@ abstract class Ingredient
     private $unitFactor;
 
     /**
-     * @ORM\OneToOne(targetEntity=IngredientStock::class, mappedBy="ingredient", cascade={"persist", "remove"})
+     * @SerializedName("ingredientStocks")
+     * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="ingredient", orphanRemoval=true)
      */
-    private $ingredientStock;
+    private $ingredientStocks;
 
     public function __construct()
     {
+        $this->ingredientStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,18 +140,24 @@ abstract class Ingredient
         return $this->ingredientStocks;
     }
 
-    public function getIngredientStock(): ?IngredientStock
+    public function addIngredientStock(IngredientStock $ingredientStock): self
     {
-        return $this->ingredientStock;
+        if (!$this->ingredientStocks->contains($ingredientStock)) {
+            $this->ingredientStocks[] = $ingredientStock;
+            $ingredientStock->setIngredient($this);
+        }
+
+        return $this;
     }
 
-    public function setIngredientStock(IngredientStock $ingredientStock): self
+    public function removeIngredientStock(IngredientStock $ingredientStock): self
     {
-        $this->ingredientStock = $ingredientStock;
-
-        // set the owning side of the relation if necessary
-        if ($ingredientStock->getIngredient() !== $this) {
-            $ingredientStock->setIngredient($this);
+        if ($this->ingredientStocks->contains($ingredientStock)) {
+            $this->ingredientStocks->removeElement($ingredientStock);
+            // set the owning side to null (unless already changed)
+            if ($ingredientStock->getIngredient() === $this) {
+                $ingredientStock->setIngredient(null);
+            }
         }
 
         return $this;

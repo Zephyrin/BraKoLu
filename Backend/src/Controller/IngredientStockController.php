@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Helpers\HelperController;
 use App\Entity\IngredientStock;
 use App\Repository\IngredientStockRepository;
+use App\Form\IngredientStockType;
 use App\Controller\Helpers\HelperForwardController;
 use App\Serializer\FormErrorSerializer;
 
@@ -52,6 +53,7 @@ class IngredientStockController extends AbstractFOSRestController
     private $formErrorSerializer;
 
     private $ingredient = "ingredient";
+    private $creationDate = "creationDate";
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -104,23 +106,16 @@ class IngredientStockController extends AbstractFOSRestController
         if ($data instanceof JsonResponse)
             return $data;
         $responseIngredient = $this->createOrUpdateIngredient($data, $this->ingredient);
-        $form = $this->createForm(IngredientStock::class, new IngredientStock());
-        $now = new DateTime();
-        $data[$this->creationDate] = $now->format('d-M-Y');
+        $newEntity = new IngredientStock();
+        $newEntity->setCreationDate(new DateTime());
+        $form = $this->createForm(IngredientStockType::class, $newEntity);
         $form->submit($data, false);
-        $validation = $this->validationError($form, $this);
-        if ($validation instanceof JsonResponse) {
-            return $validation;
-        }
-        $validation = $this->validationErrorWithChild(
+        $this->validationErrorWithChild(
             $form,
             $this,
             $responseIngredient,
             $this->ingredient
         );
-        if ($validation instanceof JsonResponse) {
-            return $validation;
-        }
         $insertData = $form->getData();
         $this->entityManager->persist($insertData);
 

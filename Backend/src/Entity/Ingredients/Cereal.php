@@ -16,6 +16,9 @@ class Cereal extends Ingredient
     // TODO à traduire en anglais
     const TYPES = ['malt', 'cru'];
 
+    // TODO à traduire en anglais
+    const FORMATS = ['grain', 'flocon', 'extrait'];
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -29,6 +32,7 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Cereal::FORMATS, message="Sélectionne un type correct.")
      */
     private $format;
 

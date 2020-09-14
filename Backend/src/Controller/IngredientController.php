@@ -110,18 +110,19 @@ class IngredientController extends AbstractFOSRestController
      */
     public function postAction(Request $request)
     {
-        $data = $this->getDataFromJson($request, true);
+        return $this->post($this->getDataFromJson($request, true));
+    }
 
+    public function post(array $data)
+    {
         if ($data instanceof JsonResponse)
             return $data;
 
         $form = $this->createForm($this->getClassOrInstance($data), $this->getClassOrInstance($data, false));
         unset($data[$this->childName]);
         $form->submit($data, false);
-        $validation = $this->validationError($form, $this);
-        if ($validation instanceof JsonResponse) {
-            return $validation;
-        }
+        $this->validationError($form, $this);
+
         $insertData = $form->getData();
 
         $this->entityManager->persist($insertData);
@@ -159,8 +160,6 @@ class IngredientController extends AbstractFOSRestController
     public function getAction(string $id)
     {
         $ingredient = $this->getIngredientById($id);
-        if ($ingredient instanceof JsonResponse)
-            return $ingredient;
         return $this->view($ingredient);
     }
 
@@ -253,27 +252,33 @@ class IngredientController extends AbstractFOSRestController
      * @return View|JsonResponse
      * @throws ExceptionInterface
      */
-    public function putAction(Request $request, string $id)
+    public function patchAction(Request $request, string $id)
     {
-        return $this->putOrPatch($request, false, $id);
+        return $this->putOrPatch($this->getDataFromJson($request, true), false, $id);
     }
 
-    private function putOrPatch(Request $request, bool $clearData, string $id)
+    /**
+     * @param array $data
+     * @param string $id
+     * @param bool $clearMissing
+     * @return View|JsonResponse
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function putOrPatch(array $data, bool $clearMissing, string $id)
     {
         $existingIngredient = $this->getIngredientById($id);
         if ($existingIngredient instanceof JsonResponse)
             return $existingIngredient;
         $form = $this->createForm($this->getIngredientType($existingIngredient), $existingIngredient);
-        $data = $this->getDataFromJson($request, true);
+        unset($data[$this->childName]);
         if ($data instanceof JSonResponse) {
             return $data;
         }
 
-        $form->submit($data, $clearData);
-        $validation = $this->validationError($form, $this);
-        if ($validation instanceof JsonResponse) {
-            return $validation;
-        }
+        $form->submit($data, $clearMissing);
+        $this->validationError($form, $this);
+
         $insertData = $form->getData();
 
         $this->entityManager->flush();
@@ -315,8 +320,6 @@ class IngredientController extends AbstractFOSRestController
     public function deleteAction(string $id)
     {
         $ingredient = $this->getIngredientById($id);
-        if ($ingredient instanceof JsonResponse)
-            return $ingredient;
 
         $this->entityManager->remove($ingredient);
         $this->entityManager->flush();
