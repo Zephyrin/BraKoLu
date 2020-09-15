@@ -20,8 +20,6 @@ use Swagger\Annotations as SWG;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use JsonException;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
@@ -29,7 +27,10 @@ use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 /**
  * Class IngredientController
  * @package App\Controller
- *
+ * 
+ * Je spécifie que toute les entrées HTTP qui sont définies dans ce fichier auront comme préfix /api
+ * ce qui donne une URL de ce genre: http://URL:PORT/api/XXX
+ * 
  * @Route("api")
  * @SWG\Tag(
  *     name="Ingredient"
@@ -82,15 +83,15 @@ class IngredientController extends AbstractFOSRestController
     /**
      * Cette méthode (postAction) est utilisée lorsque le serveur reçoit une 
      * requête de type HTTP POST sur l'adresse http://URL:PORT/api/ingredient
-     * C'est définie avec le \@Route de la classe (api) et le \@Route ci dessous.
+     * C'est définie avec le &commat;Route de la classe (api) et le &commat;Route ci dessous.
      * 
-     * Les annotations \@SWG permettent de définir la documentation développeur 
+     * Les annotations &commat;SWG permettent de définir la documentation développeur 
      * sur le serveur http://URL:PORT/api/doc
      * 
      * @Route("/ingredient",
      *  name="api_ingredient_post",
      *  methods={"POST"}
-     *  )
+     * )
      *
      * @SWG\Post(
      *     consumes={"application/json"},
@@ -132,7 +133,7 @@ class IngredientController extends AbstractFOSRestController
     }
 
     /**
-     * Ne dépend plus da la requête. Elle est public car elle pourra être appelée par d'autre controleur
+     * Post ne dépend plus da la requête. Elle est public car elle pourra être appelée par d'autre controleur
      * pour créer un ingrédient tout en créant son objet. Par exemple le controller IngredientStockController.php
      * utilise cette fonction lorsque dans ces propriétés il y a un ingrédient qui ne possède pas d'ID.
      *
@@ -213,11 +214,11 @@ class IngredientController extends AbstractFOSRestController
     /**
      * CF les commentaires de postAction.
      * Particularité de http://URL:PORT/api/ingredients, on peut appliquer des filtres sur la 
-     * récupération des ingrédients. Ils sont définies dans les \@QueryParam. 
+     * récupération des ingrédients. Ils sont définies dans les &commat;QueryParam. 
      * Cela se traduit par un appel à l'url suivante : http://URL:PORT/api/ingredients?page=1&limit=10
      * On peut définir autant de paramètre que l'on souhaite.
      * J'ai créé un outil qui permet de ne pas se préoccupé de la pagination, du coup par défaut, il
-     * faut rajouter les \QueryParam page, limit, sort, sortBy.
+     * faut rajouter les commat;QueryParam page, limit, sort, sortBy.
      * La recherche s'effectue au niveau du répo de la classe en question, ici App\Repository\Ingredients\XType.php
      * 
      * @Route("/ingredients",
@@ -266,7 +267,7 @@ class IngredientController extends AbstractFOSRestController
     }
 
     /**
-     * CF commentaire de getAction
+     * CF commentaire de getAction.
      * 
      * @Route("/ingredient/{id}",
      *  name="api_ingredient_patch",
@@ -351,7 +352,7 @@ class IngredientController extends AbstractFOSRestController
     }
 
     /**
-     * CF commentaire de get
+     * CF commentaire de getAction.
      * 
      * @Route("/ingredient/{id}",
      *  name="api_ingredient_delete",
