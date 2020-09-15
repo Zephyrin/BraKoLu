@@ -173,6 +173,11 @@ class IngredientController extends AbstractFOSRestController
     }
 
     /**
+     * CF les commentaires de postAction.
+     * Ici petite particularité, on ajoute un requirements qui permet de valider que l'id utiliser
+     * dans la requête http://URL:PORT/api/ingredient/ID soit bien un entier d'au moins un chiffre.
+     * CF les expressions régulières sur google.
+     * 
      * @Route("/ingredient/{id}",
      *  name="api_ingredient_get",
      *  methods={"GET"},
@@ -199,11 +204,22 @@ class IngredientController extends AbstractFOSRestController
      */
     public function getAction(string $id)
     {
-        $ingredient = $this->getIngredientById($id);
-        return $this->view($ingredient);
+        // Très simple, je retourne une view contenant dans le body le JSON de l'ingrédient
+        // qui possède l'ID $id. La fonction émet l'exception HttpNotFoundException si l'ingrédient
+        // n'existe pas. Donc pas besoin de gerer les erreurs ici.
+        return $this->view($this->getById($id));
     }
 
     /**
+     * CF les commentaires de postAction.
+     * Particularité de http://URL:PORT/api/ingredients, on peut appliquer des filtres sur la 
+     * récupération des ingrédients. Ils sont définies dans les \@QueryParam. 
+     * Cela se traduit par un appel à l'url suivante : http://URL:PORT/api/ingredients?page=1&limit=10
+     * On peut définir autant de paramètre que l'on souhaite.
+     * J'ai créé un outil qui permet de ne pas se préoccupé de la pagination, du coup par défaut, il
+     * faut rajouter les \QueryParam page, limit, sort, sortBy.
+     * La recherche s'effectue au niveau du répo de la classe en question, ici App\Repository\Ingredients\XType.php
+     * 
      * @Route("/ingredients",
      *  name="api_ingredient_gets",
      *  methods={"GET"})
@@ -244,11 +260,14 @@ class IngredientController extends AbstractFOSRestController
      */
     public function getAllAction(ParamFetcher $paramFetcher)
     {
-        $ingredients = $this->ingredientRepository->findAllPagination($paramFetcher);
-        return $this->setPaginateToView($ingredients, $this);
+        // La fonction setPaginateToView est créée dans le helperController et est dépendante du helper
+        // AbstractRepository.
+        return $this->setPaginateToView($this->ingredientRepository->findAllPagination($paramFetcher), $this);
     }
 
     /**
+     * CF commentaire de getAction
+     * 
      * @Route("/ingredient/{id}",
      *  name="api_ingredient_patch",
      *  methods={"PATCH"},
@@ -298,6 +317,8 @@ class IngredientController extends AbstractFOSRestController
     }
 
     /**
+     * CF commentaire de post
+     * 
      * @param array $data
      * @param string $id
      * @param bool $clearMissing
@@ -307,26 +328,31 @@ class IngredientController extends AbstractFOSRestController
      */
     public function putOrPatch(array $data, bool $clearMissing, string $id)
     {
-        $existingIngredient = $this->getIngredientById($id);
-        if ($existingIngredient instanceof JsonResponse)
-            return $existingIngredient;
-        $form = $this->createForm($this->getIngredientType($existingIngredient), $existingIngredient);
+        $existing = $this->getById($id);
+
+        $form = $this->createForm($this->getIngredientType($existing), $existing);
         unset($data[$this->childName]);
-        if ($data instanceof JSonResponse) {
-            return $data;
-        }
 
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this);
 
-        $insertData = $form->getData();
+        // Si besoin de récuperer l'instance et d'appliquer des modifications via le code.
+        // $insertData = $form->getData();
 
+        // Ici pas besoin de dire à entityManager que l'objet à évoluer car il le sait déjà :) 
+        // Comment et bien en le récupérant via le $this->getById($id), entityManager sait quel sont les 
+        // valeur de chaque attribut. Lorsque l'action $form->submit($data, $clearMissing) est réalisée,
+        // entityManager est « notifié » et marque les attrubuts qui ont été modifiés. 
+        // Lors du flush, celui-ci applique les modifications qu'il a noté dans la base de données.
         $this->entityManager->flush();
-
+        // Retourne le code par défaut qui est pas de données et les données à mettre à jour ont bien
+        // été modifiées.
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
+     * CF commentaire de get
+     * 
      * @Route("/ingredient/{id}",
      *  name="api_ingredient_delete",
      *  methods={"DELETE"},
@@ -359,23 +385,27 @@ class IngredientController extends AbstractFOSRestController
      */
     public function deleteAction(string $id)
     {
-        $ingredient = $this->getIngredientById($id);
-
+        $ingredient = $this->getById($id);
+        // J'indique à entityManager que $ingredient et ces dépendances (IngredientStock) doivent-être supprimés.
+        // Les dépendances sont supprimés car dans la class Ingredient.php l'attribut ingredientStocks est marqué
+        // de l'annotation orphanRemoval=true.
         $this->entityManager->remove($ingredient);
         $this->entityManager->flush();
-        return $this->view(
-            null,
-            Response::HTTP_NO_CONTENT
-        );
+        return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
+     * Retourne l'ingrédient qui possède l'id $id.
+     * Si aucun ingrédient n'est trouvé, alors on émet l'exception NotFoundHttpException qui sera gérée par le serveur.
+     * 
+     * Cette fonction pourrait tout à fait se retrouver dans le trait HelperController afin de limiter le copier/coller
+     * entre les controlleurs.
      * @param string $id
      *
-     * @return Ingredient
-     * @throws NotFoundHttpException
+     * @return Ingredient L'ingrédient récupéré dans la base de données.
+     * @throws NotFoundHttpException L'ingrédient n'a pas été trouvé.
      */
-    private function getIngredientById(string $id)
+    private function getById(string $id)
     {
         $ingredient = $this->ingredientRepository->find($id);
         if (null === $ingredient) {
@@ -396,8 +426,15 @@ class IngredientController extends AbstractFOSRestController
      */
     private function getClassOrInstance($data, bool $isClass = true)
     {
+        // Je sais que j'ai un champs childName dans le JSON envoyé par le client.
+        // Si il n'existe pas, je lui dis que ça ne va pas avec l'exception 
+        // PreconditionFailedHttpException.
         switch ($data[$this->childName]) {
             case 'other':
+                // Le childName s'appel « other »
+                // Si je recherche la classe, je lui retourne la classe, sinon je lui retourne le type qui 
+                // permet de valider le formulaire.
+                // Ça permet d'avoir la gestion des enfants au même endroit plutôt qu'éparpillé dans tout le fichier.
                 if ($isClass)
                     return TypeClass\OtherType::class;
                 return new EntityClass\Other();
@@ -420,6 +457,8 @@ class IngredientController extends AbstractFOSRestController
      */
     private function getIngredientType($existingClass)
     {
+        // Je récupère le nom de la classe de l'élément retourné par la base de données
+        // Puis je retourne le type qui permet de réaliser la validation.
         switch (get_class($existingClass)) {
             case "App\Entity\Ingredients\Other":
                 return TypeClass\OtherType::class;
