@@ -9,7 +9,6 @@ use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use App\Controller\Helpers\HelperController;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Serializer\FormErrorSerializer;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -39,40 +38,55 @@ use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
  */
 class IngredientController extends AbstractFOSRestController
 {
+    /**
+     * Utilise les fonctionnalités écritent dans HelperController.
+     */
     use HelperController;
 
     /**
-     * @var EntityManagerInterface
+     * Est l'utilitaire d'accès à la base de données.
+     * 
+     * @var EntityManagerInterface 
      */
     private $entityManager;
     /**
+     * Est l'utilitaire spécialisé d'accés à laa base de données pour un ingrédient.
+     * Elle comporte principalement la recherche.
+     *  
      * @var IngredientRepository
      */
     private $ingredientRepository;
 
-    /**
-     * @var FormErrorSerializer
-     */
-    private $formErrorSerializer;
-
     /* Simplify les rennomages de masse. Un seul endroit où changer le nom des champs. */
-    private $id = "id";
-
-    private $title = "title";
-    private $subtitle = "subtitle";
     private $childName = "childName";
 
+    /**
+     * Le constructeur du controlleur. 
+     * J'utilise de l'injection de dépendance en nommant correctement les variables.
+     * Symfony va se charger d'instancier si besoin les classes ci-dessous et les passer en
+     * argument au controlleur.
+     * Je les sauvegarde ensuite dans des variables privée pour les utiliser dans les différentes
+     * méthode.
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param IngredientRepository $ingredientRepository
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
-        IngredientRepository $ingredientRepository,
-        FormErrorSerializer $formErrorSerializer
+        IngredientRepository $ingredientRepository
     ) {
         $this->entityManager = $entityManager;
         $this->ingredientRepository = $ingredientRepository;
-        $this->formErrorSerializer = $formErrorSerializer;
     }
 
     /**
+     * Cette méthode (postAction) est utilisée lorsque le serveur reçoit une 
+     * requête de type HTTP POST sur l'adresse http://URL:PORT/api/ingredient
+     * C'est définie avec le \@Route de la classe (api) et le \@Route ci dessous.
+     * 
+     * Les annotations \@SWG permettent de définir la documentation développeur 
+     * sur le serveur http://URL:PORT/api/doc
+     * 
      * @Route("/ingredient",
      *  name="api_ingredient_post",
      *  methods={"POST"}
@@ -104,32 +118,58 @@ class IngredientController extends AbstractFOSRestController
      *    )
      * )
      *
-     * @param Request $request
-     * @return View|JsonResponse
-     * @throws ExceptionInterface
+     * @param Request $request est la requête reçu par le serveur. On a accès au body et aux headers.
+     * @return View est le type de base à retourner pour que le serveur puisse construire la réponse HTTP.
+     * @throws ExceptionInterface j'utilise les Exceptions pour envoyer les erreurs aux clients. On verra cette partie 
+     * plus tard
      */
     public function postAction(Request $request)
     {
+        // $this->getDataFromJson($request, true) est une méthode définie dans le trait HelperController
+        // Le trait permet de définir des fonctionnalités qui pourront être utilisées comme si elles
+        // étaient présente dans la classe qui utilise le trait via le use HelperController
         return $this->post($this->getDataFromJson($request, true));
     }
 
+    /**
+     * Ne dépend plus da la requête. Elle est public car elle pourra être appelée par d'autre controleur
+     * pour créer un ingrédient tout en créant son objet. Par exemple le controller IngredientStockController.php
+     * utilise cette fonction lorsque dans ces propriétés il y a un ingrédient qui ne possède pas d'ID.
+     *
+     * @param array $data est un tableau avec des attributs qui doivent avoir les mêmes noms que ceux de la classe
+     *  Ingrédient
+     * @return void
+     */
     public function post(array $data)
     {
-        if ($data instanceof JsonResponse)
-            return $data;
-
+        // Ici je crée une form qui permet d'associer les attributs de $data dans un nouvelle objet de type Ingrédient.
+        // Ce formulaire utilise aussi un type de formulaire qui lié à la classe va lui permettre de faire la validation
+        // des données. Ce formulaire sait si ce champs ne doit pas être null ou tout autre truc que l'on définie dans 
+        // le fichier App\Form\IngredientType.php ou les enfants App\Form\Ingredients\*.php et les annotations
+        // présentent dans le fichier App\Entity\Ingredient ou les enfants App\Entity\Ingredients\*.php.
         $form = $this->createForm($this->getClassOrInstance($data), $this->getClassOrInstance($data, false));
+        // Avant d'associé le tableau de valeur à la classe, je supprime les champs de « travail » tel que le 
+        // discriminator qui m'a permit de trouver le type d'ingrédient à instancier. 
         unset($data[$this->childName]);
+        // Le formulaire applique les données $data à la classe qui a été créée ci-dessus.
         $form->submit($data, false);
+        // Et l'on regarde si le formulaire comporte des erreurs.
+        // Si c'est le cas, une exception est levée avec la réponse à l'intérieur. On a pas besoin de tester le retour
+        // et le serveur est capable de renvoyer la réponse correctement.
         $this->validationError($form, $this);
-
+        // Permet d'avoir la classe Ingredient instancié avec les données mise à jour lors du submit.
         $insertData = $form->getData();
 
+        // Je dis à l'outil de gestion de la base de données, il faudra sauvegarder cette objet.
         $this->entityManager->persist($insertData);
-
+        // La base de données va sauvegarder en base. Il se peut qu'une ou plusieurs exception saute à se moment là sur 
+        // des contraintes que nous n'avons pas pu tester telqu'un champs unique. Le serveur sait encore une fois gérer
+        // cette exception.
+        // Les données générées automatiquement par la base de données se retrouve dans les objets qui seront 
+        // sauvegardées.
         $this->entityManager->flush();
-        $view =  $this->view($insertData, Response::HTTP_CREATED);
-        return $view;
+        // Je retourne une nouvelle vue avec dans le body la données créée et le code 201 HTTP CREATED
+        return $this->view($insertData, Response::HTTP_CREATED);
     }
 
     /**
@@ -305,12 +345,12 @@ class IngredientController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=204,
-     *     description="L'ingrédient n'existe pas."
+     *     description="L'ingrédient a bien été supprimé."
      * )
      *
      * @SWG\Response(
      *     response=404,
-     *     description="The ingredient page doesnot exists."
+     *     description="L'ingrédient n'existe pas."
      * )
      *
      * @param string $id
@@ -370,6 +410,14 @@ class IngredientController extends AbstractFOSRestController
         }
     }
 
+    /**
+     * Retourne le formulaire associée à la classe $existingClass déjà instanciée.
+     * Permet de savoir quelle validation appliquée sur la classe récupérée dans la base de données.
+     *
+     * @param Ing\Other|Ing\Cereal $existingClass fait partie des classes qui implémentent la classe App\Entity\Ingredient::class.
+     * @return string Le nom de la classe de validation
+     * @throws PreconditionFailedHttpException
+     */
     private function getIngredientType($existingClass)
     {
         switch (get_class($existingClass)) {
