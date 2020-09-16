@@ -23,6 +23,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
+use App\Serializer\FormErrorSerializer;
 
 /**
  * Class IngredientController
@@ -58,6 +59,14 @@ class IngredientController extends AbstractFOSRestController
      */
     private $ingredientRepository;
 
+    /**
+     * Permet de gérer les erreurs liées à la validation d'entités.
+     * Surtout utiliser dans HelperController.php.
+     * 
+     * @var FormErrorSerializer
+     */
+    private $formErrorSerializer;
+
     /* Simplify les rennomages de masse. Un seul endroit où changer le nom des champs. */
     private $childName = "childName";
 
@@ -74,10 +83,12 @@ class IngredientController extends AbstractFOSRestController
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        IngredientRepository $ingredientRepository
+        IngredientRepository $ingredientRepository,
+        FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
         $this->ingredientRepository = $ingredientRepository;
+        $this->formErrorSerializer = $formErrorSerializer;
     }
 
     /**

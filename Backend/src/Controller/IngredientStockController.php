@@ -34,8 +34,14 @@ use DateTime;
  */
 class IngredientStockController extends AbstractFOSRestController
 {
+    /**
+     * Utilise les fonctionnalités écritent dans HelperController.
+     */
     use HelperController;
 
+    /**
+     * Utilise les fonctionnalités écritent dans HelperForwardController.
+     */
     use HelperForwardController;
 
     /**
@@ -45,7 +51,7 @@ class IngredientStockController extends AbstractFOSRestController
     /**
      * @var IngredientStockRepository
      */
-    private $ingredientStockRepository;
+    private $repository;
 
     /**
      * @var FormErrorSerializer
@@ -53,15 +59,14 @@ class IngredientStockController extends AbstractFOSRestController
     private $formErrorSerializer;
 
     private $ingredient = "ingredient";
-    private $creationDate = "creationDate";
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        IngredientStockRepository $ingredientStockRepository,
+        IngredientStockRepository $repository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
-        $this->ingredientStockRepository = $ingredientStockRepository;
+        $this->repository = $repository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
@@ -103,10 +108,10 @@ class IngredientStockController extends AbstractFOSRestController
     {
         $data = $this->getDataFromJson($request, true);
 
-        if ($data instanceof JsonResponse)
-            return $data;
         $responseIngredient = $this->createOrUpdateIngredient($data, $this->ingredient);
         $newEntity = new IngredientStock();
+        // La date de création doit-être mise avant la validation. Car c'est un attribut
+        // obligatoire, mais qui n'est pas accessible par le client.
         $newEntity->setCreationDate(new DateTime());
         $form = $this->createForm(IngredientStockType::class, $newEntity);
         $form->submit($data, false);
@@ -150,8 +155,7 @@ class IngredientStockController extends AbstractFOSRestController
      */
     public function getAction(string $id)
     {
-        $ingredient = $this->getById($id);
-        return $this->view($ingredient);
+        return $this->view($this->getById($id));
     }
 
     /**
@@ -195,7 +199,7 @@ class IngredientStockController extends AbstractFOSRestController
      */
     public function getAllAction(ParamFetcher $paramFetcher)
     {
-        $ingredients = $this->ingredientRepository->findAllPagination($paramFetcher);
+        $ingredients = $this->repository->findAllPagination($paramFetcher);
         return $this->setPaginateToView($ingredients, $this);
     }
 
@@ -261,14 +265,9 @@ class IngredientStockController extends AbstractFOSRestController
         $existing = $this->getById($id);
         $form = $this->createForm(IngredientStockType::class, $existing);
         unset($data[$this->childName]);
-        if ($data instanceof JSonResponse) {
-            return $data;
-        }
 
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this);
-
-        $insertData = $form->getData();
 
         $this->entityManager->flush();
 
@@ -313,10 +312,7 @@ class IngredientStockController extends AbstractFOSRestController
 
         $this->entityManager->remove($existing);
         $this->entityManager->flush();
-        return $this->view(
-            null,
-            Response::HTTP_NO_CONTENT
-        );
+        return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -327,7 +323,7 @@ class IngredientStockController extends AbstractFOSRestController
      */
     private function getById(string $id)
     {
-        $ingredient = $this->ingredientStockRepository->find($id);
+        $ingredient = $this->repository->find($id);
         if (null === $ingredient) {
             throw new NotFoundHttpException();
         }
