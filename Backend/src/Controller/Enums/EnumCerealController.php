@@ -38,13 +38,22 @@ class EnumCerealController extends AbstractFOSRestController
      * )
      * 
      * @SWG\Get(
-     *  summary="Récupère les valeurs possible de l'enum Cereal::FORMATS.",
-     *  produces={"application/json"}
+     *  summary="Récupère les valeurs possible de l'enum Cereal::FORMATS ou de Cereal::TYPES. Ce sont les valeurs qui 
+     * pourront être utilisées pour les attributs format ou type.",
+     *  produces={"application/json"},
+     *  @SWG\Parameter(
+     *          name="name",
+     *          type="string",
+     *          required=false,
+     *          description="Le nom de l'attribut dont on souhaite récupérer la liste des valeur: possibles: formats ou types.",
+     *          in="path"
+     *      )
      * )
      * @SWG\Response(
      *  response=200,
      *  description="L'enum a bien été récupéré.",
-     *  @SWG\Schema(ref=@Model(type=Cereal::FORMATS))
+     *  @SWG\Schema(type="array",
+     *      @SWG\Items(type="enum", enum="{'{malt,cru}', '{grain, flocon}', '{...}'}"))
      * )
      * @param string $name
      * @return View
