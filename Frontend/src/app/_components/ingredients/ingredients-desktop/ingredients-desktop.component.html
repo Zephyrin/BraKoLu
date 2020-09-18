@@ -1,0 +1,46 @@
+<button mat-button
+        (click)="openCreateDialog()"
+        [matTooltip]="'Créer un nouvel ingrédient'">
+  <mat-icon>add</mat-icon>
+</button>
+<table mat-table
+       class="full-width"
+       #matTable
+       matSort
+       [dataSource]="dataSource">
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="name"> Nom </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="unit">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="unit"> Unité </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.unit}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="unitFactor">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="unitFactor"> Facteur d'unité </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.unitFactor}} </td>
+  </ng-container>
+  <ng-container matColumnDef="comment">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="comment"> Commentaire </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.comment}} </td>
+  </ng-container>
+
+  <tr mat-header-row
+      *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

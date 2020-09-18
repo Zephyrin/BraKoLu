@@ -1,0 +1,43 @@
+<mat-sidenav-container class="sidenav-container"
+                       fullscreen>
+  <mat-sidenav #drawer
+               class="sidenav"
+               [fixedInViewport]="(isHandset$ | async) === false"
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link"
+         [routerLinkActiveOptions]="{ exact: true}"
+         routerLink="">Accueil à définir</a>
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link"
+         [routerLinkActiveOptions]="{ exact: true }"
+         routerLink="ingredients">Ingrédients</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()"
+              *ngIf="(isHandset$ | async)"
+              [matTooltip]="'Afficher le menu'">
+        <mat-icon [attr.aria-label]="'Afficher le bouton'">menu</mat-icon>
+      </button>
+      <p class="align-content-center title ml-auto mr-auto">BraKoLu</p>
+    </mat-toolbar>
+
+    <!-- Add Content Here -->
+    <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
+      <router-outlet></router-outlet>
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

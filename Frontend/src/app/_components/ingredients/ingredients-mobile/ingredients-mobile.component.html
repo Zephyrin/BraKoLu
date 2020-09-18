@@ -1,0 +1,32 @@
+<button mat-button
+        (click)="openCreateDialog()"
+        [matTooltip]="'Créer un nouvel ingrédient'">
+  <mat-icon>add</mat-icon>
+</button>
+<div *ngFor="let element of service.model">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{getTitle(element)}}</mat-card-title>
+      <mat-card-subtitle>{{getSubtitle(element)}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{getContent(element)}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<p>Ou encore comme ça ^^</p>
+<mat-accordion multi>
+  <mat-expansion-panel *ngFor="let element of service.model">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{getTitle(element)}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{getSubtitle(element)}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p *ngIf="element.comment">{{getContent(element)}}</p>
+  </mat-expansion-panel>
+
+</mat-accordion>

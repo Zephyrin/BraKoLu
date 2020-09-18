@@ -1,0 +1,228 @@
+[
+  {
+    "key": "menu",
+    "translate": { "en": "Menu", "fr": "Menu" }
+  }, {
+    "key": "home",
+    "translate": { "en": "Home", "fr": "Accueil" }
+  }, {
+    "key": "shop",
+    "translate": { "en": "Shop", "fr": "Boutique" }
+  }, {
+    "key": "gallery",
+    "translate": { "en": "Gallery", "fr": "Galerie" }
+  }, {
+    "key": "about",
+    "translate": { "en": "About", "fr": "À propos" }
+  }, {
+    "key": "contact",
+    "translate": { "en": "Contact", "fr": "Contact" }
+  }, {
+    "key": "events",
+    "translate": { "en": "Events", "fr": "Évènement" }
+  }, {
+    "key": "designer.circle",
+    "translate": { "en": "Designer circle", "fr": "Cercle de créateur" }
+  }, {
+    "key": "merchant",
+    "translate": { "en": "Merchant", "fr": "Marchant" }
+  }, {
+    "key": "admin",
+    "translate": { "en": "Admin", "fr": "Admin" }
+  }, {
+    "key": "tooltip.menu",
+    "translate": { "en": "Menu display", "fr": "Afficher le menu" }
+  }, {
+    "key": "aria.label.btn.menu",
+    "translate": { "en": "Menu display buton", "fr": "Bouton d'affichage du menu" }
+  }, {
+    "key": "signup",
+    "translate": { "en": "Sign up", "fr": "S'enregistrer" }
+  }, {
+    "key": "signin",
+    "translate": { "en": "Sign in", "fr": "Connexion" }
+  }, {
+    "key": "logout",
+    "translate": { "en": "Logout", "fr": "Déconnexion" }
+  }, {
+    "key": "username",
+    "translate": { "en": "Username", "fr": "Nom d'utilisateur"}
+  }, {
+    "key": "username.required",
+    "translate": { "en": "Username is required", "fr": "Le nom d'utilisateur est requis" }
+  }, {
+    "key": "email",
+    "translate": { "en": "Email", "fr": "Courriel"}
+  }, {
+    "key": "email.required",
+    "translate": { "en": "Email is required", "fr": "Le courriel est requis" }
+  },  {
+    "key": "password",
+    "translate": { "en": "Password", "fr": "Mot de passe" }
+  }, {
+    "key": "hide.password",
+    "translate": { "en": "Hide password", "fr": "Cacher le mot de passe" }
+  }, {
+    "key": "show.password",
+    "translate": { "en": "Show password", "fr": "Afficher le mot de passe" }
+  }, {
+    "key": "password.required",
+    "translate": { "en": "Password is required", "fr": "Le mot de passe est requis" }
+  }, {
+    "key": "have.account",
+    "translate": { "en": "You have an account:", "fr": "Vous avez un compte :" }
+  }, {
+    "key": "don.t.have.account",
+    "translate": { "en": "You don't have an account:", "fr": "Vous n'avez pas encore de compte :" }
+  }, {
+    "key": "aria.label.language",
+    "translate": { "en": "Menu to select language", "fr": "Menu de sélection de la langue" }
+  }, {
+    "key": "language",
+    "translate": { "en": "Language", "fr": "Langue" }
+  }, {
+    "key": "click.add.background",
+    "translate": { "en": "Click here to add the main image", "fr": "Clique ici pour ajouter l'image principal" }
+  }, {
+    "key": "click.add.separator",
+    "translate": { "en": "Click here to add the separator", "fr": "Clique ici pour ajouter l'image de séparation" }
+  }, {
+    "key": "click.update.background",
+    "translate": { "en": "Click on image to update the main image", "fr": "Clique sur l'image pour la modifier" }
+  }, {
+    "key": "click.update.separator",
+    "translate": { "en": "Click on image to update the separator", "fr": "Clique sur l'image pour modifier la séparation" }
+  }, {
+    "key": "aria.edit.home",
+    "translate": { "en": "Edit the home page", "fr": "Édition de la page d'accueil" }
+  }, {
+    "key": "image.selector",
+    "translate": { "en": "Image selector", "fr": "Sélection d'image" }
+  }, {
+    "key": "add.image",
+    "translate": { "en": "Add a new image", "fr": "Ajout d'une nouvelle image"}
+  }, {
+    "key": "select.image",
+    "translate": { "en": "Image from existing", "fr": "Image depuis une existante"}
+  }, {
+    "key": "cancel",
+    "translate": { "en": "Cancel", "fr": "Annuler" }
+  }, {
+    "key": "picture",
+    "translate": { "en": "Picture", "fr": "Photo" }
+  }, {
+    "key": "picture.description",
+    "translate": { "en": "Picture description", "fr": "Description de la photo" }
+  }, {
+    "key": "missing.translation",
+    "translate": { "en": "There are some missing translations", "fr": "Il manque quelques traductions"}
+  }, {
+    "key": "save.translation",
+    "translate": { "en": "Save translation", "fr": "Sauvegarde de la traduction"}
+  }, {
+    "key": "cancel.translation",
+    "translate": { "en": "Cancel modifications", "fr": "Annule les modifications"}
+  }, {
+    "key": "edit.translation",
+    "translate": { "en": "Edit translation", "fr": "Édite la traduction"}
+  }, {
+    "key": "picture.required",
+    "translate": { "en": "This picture is required", "fr": "Cette photo est indispensable" }
+  }, {
+    "key": "remove.picture",
+    "translate": { "en": "Remove this picture", "fr": "Enlève cette photo" }
+  }, {
+    "key": "delete.picture",
+    "translate": { "en": "Delete this picture", "fr": "Supprime cette photo" }
+  }, {
+    "key": "ok",
+    "translate": { "en": "Ok", "fr": "Ok" }
+  }, {
+    "key": "remove",
+    "translate": { "en": "Remove", "fr": "Enlever" }
+  }, {
+    "key": "are.you.sure.remove",
+    "translate": {"en": "Are you sure you want remove this ?", "fr": "Es tu sûre de vouloir l'enlever ?" }
+  },{
+    "key": "title",
+    "translate": {"en": "Title", "fr": "Titre"}
+  }, {
+    "key": "no.title",
+    "translate": {"en": "No title!", "fr": "Pas de titre !"}
+  }, {
+    "key": "subtitle",
+    "translate": {"en": "Subtitle", "fr": "Sous-titre"}
+  }, {
+    "key": "no.subtitle",
+    "translate": {"en": "No subtitle!", "fr": "Pas de sous titre !"}
+  }, {
+    "key": "no.description",
+    "translate": {"en": "No description!", "fr": "Pas de description !" }
+  }, {
+    "key": "description",
+    "translate": { "en": "Image description", "fr": "Description de l'image"}
+  }, {
+    "key": "manage.images",
+    "translate": { "en": "Manage images", "fr": "Gestion des images"}
+  }, {
+    "key": "edit.email",
+    "translate": { "en": "Email edit", "fr": "Édition de l'email" }
+  }, {
+    "key": "zoom",
+    "translate": { "en": "Zoom", "fr": "Zoom" }
+  }, {
+    "key": "zoom.in",
+    "translate": { "en": "Zoom in", "fr": "Plus petit" }
+  }, {
+    "key": "zoom.out",
+    "translate": { "en": "Zoom out", "fr": "Plus grand" }
+  }, {
+    "key": "rotate.flip",
+    "translate": { "en": "Rotate and flip", "fr": "Rotation et flip" }
+  }, {
+    "key": "rotate.left",
+    "translate": { "en": "Left rotation", "fr": "Rotation à gauche" }
+  }, {
+    "key": "rotate.right",
+    "translate": { "en": "Right rotation", "fr": "Rotation à droite" }
+  }, {
+    "key": "flip.horizontal",
+    "translate": { "en": "Horizontal flip", "fr": "Flip horizontal" }
+  }, {
+    "key": "flip.vertical",
+    "translate": { "en": "Vertical flip", "fr": "Flip vertical" }
+  }, {
+    "key": "aspect.ratio.management",
+    "translate": { "en": "Manage aspect ratio", "fr": "Gestion du ratio" }
+  }, {
+    "key": "aspect.ratio.contain.within",
+    "translate": { "en": "Keep the selecting box inside image", "fr": "Garde la boite de sélection à l'interieur de l'image" }
+  }, {
+    "key": "aspect.ratio.maintain",
+    "translate": { "en": "Keep selecting box ratio", "fr": "Garde le ratio de la boite de sélection" }
+  }, {
+    "key": "reset.image",
+    "translate": { "en": "Reset image", "fr": "Reset image" }
+  }, {
+    "key": "crop",
+    "translate": { "en": "Crop", "fr": "Rognage" }
+  }, {
+    "key": "crop.16.9",
+    "translate": { "en": "16/9 crop", "fr": "Rognage 16/9" }
+  }, {
+    "key": "crop.9.16",
+    "translate": { "en": "9/16 crop", "fr": "Rognage 9/16" }
+  }, {
+    "key": "crop.4.3",
+    "translate": { "en": "4/3 crop", "fr": "Rognage 4/3" }
+  }, {
+    "key": "crop.3.4",
+    "translate": { "en": "3/4 crop", "fr": "Rognage 3/4" }
+  }, {
+    "key": "crop.square",
+    "translate": { "en": "Square crop", "fr": "Rognage en carré" }
+  }, {
+    "key": "crop.original",
+    "translate": { "en": "Original crop", "fr": "Rognage original" }
+  }
+]

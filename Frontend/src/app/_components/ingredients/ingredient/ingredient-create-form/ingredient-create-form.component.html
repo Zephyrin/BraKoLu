@@ -1,0 +1,158 @@
+<mat-form-field appearance="fill"
+                class="full-width">
+  <mat-label>Qu'elle est le nouvel ingrédient ?</mat-label>
+  <mat-select cdkFocusInitial
+              [disabled]="(service.loading | async) || ingredient"
+              (selectionChange)="childNameChange($event)">
+    <mat-option *ngFor="let childName of service.ingredientChildrenNames"
+                [value]="childName.value">
+      {{childName.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<form [formGroup]="form"
+      *ngIf="form"
+      (ngSubmit)="onSubmitClick()">
+  <fieldset [disabled]="service.loading | async">
+    <fieldset *ngIf="form">
+      <mat-form-field class="full-width">
+        <mat-label>Nom</mat-label>
+        <input matInput
+               required
+               [errorStateMatcher]="matcher"
+               formControlName="name"
+               placeholder="Ex. Brewers gold"
+               value="">
+        <mat-error>
+          {{ form.get('name').errors?.serverError }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Unité</mat-label>
+        <input matInput
+               formControlName="unit"
+               placeholder="Ex. kg"
+               value="">
+        <mat-error>
+          {{ form.get('unit').errors?.serverError }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Facteur d'unité</mat-label>
+        <input matInput
+               formControlName="unitFactor"
+               type="number"
+               required
+               min=1
+               placeholder="Ex. 1000 pour passer d'un gramme à 1kg"
+               value="">
+        <mat-error>
+          {{ form.get('unitFactor').errors?.serverError }}
+        </mat-error>
+      </mat-form-field>
+      <!-- Spécification des ingrédients -->
+      <!-- Other -->
+      <div *ngIf="form.value.childName === 'other'"
+           class="flex">
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <input matInput
+                 required
+                 formControlName="type"
+                 placeholder="Ex. Tuyau"
+                 value="">
+          <mat-error>
+            {{ form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Cereal -->
+      <div *ngIf="form.value.childName === 'cereal'"
+           class="flex">
+        <mat-form-field class="full-width">
+          <mat-label>Plante</mat-label>
+          <input matInput
+                 required
+                 formControlName="plant"
+                 placeholder="Ex. Orge"
+                 value="">
+          <mat-error>
+            {{ form.get('plant').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <mat-select required
+                      formControlName="type">
+            <mat-option *ngFor="let childName of service.cerealTypes"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Format</mat-label>
+          <mat-select required
+                      formControlName="format">
+            <mat-option *ngFor="let childName of service.cerealFormats"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ form.get('format').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>EBC</mat-label>
+          <input matInput
+                 required
+                 formControlName="ebc"
+                 type="number"
+                 min=1
+                 placeholder="Ex. Aucune idée..."
+                 value="">
+          <mat-error>
+            {{ form.get('ebc').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Houblon -->
+
+      <!-- Fin des spécifications -->
+      <mat-form-field class="full-width">
+        <mat-label>Commentaire</mat-label>
+        <textarea matInput
+                  formControlName="comment"
+                  placeholder="Ex: Houblon amérisant universel."></textarea>
+        <mat-error>
+          {{ form.get('comment').errors?.serverError }}
+        </mat-error>
+      </mat-form-field>
+    </fieldset>
+    <div mat-dialog-actions
+         class="flex-reverse">
+      <button mat-button
+              [disabled]="!form || form.invalid"
+              type="submit"
+              (click)="onSubmitClick()">Sauvegarder</button>
+      <button mat-button
+              type="button"
+              (click)="onCancelClick()">Annuler</button>
+    </div>
+  </fieldset>
+</form>
+<div mat-dialog-actions
+     *ngIf="!form"
+     class="flex-reverse">
+  <button mat-button
+          disabled
+          (click)="onSubmitClick()">Sauvegarder</button>
+  <button mat-button
+          [disabled]="service.loading | async"
+          type="button"
+          (click)="onCancelClick()">Annuler</button>
+</div>
