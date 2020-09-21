@@ -122,6 +122,7 @@ class IngredientStockController extends AbstractFOSRestController
             $this->ingredient
         );
         $insertData = $form->getData();
+        $this->manageDates($insertData);
         $this->entityManager->persist($insertData);
 
         $this->entityManager->flush();
@@ -188,7 +189,7 @@ class IngredientStockController extends AbstractFOSRestController
      *      , description="La direction du tri.")
      * @QueryParam(name="sortBy"
      *      , requirements="(id|creationDate|quantity|price|state|orderedDate|receivedDate|endedDate|ingredient.id|ingredient.name|ingredient.comment|ingredient.unit|ingredient.unitFactor)"
-     *      , default="name"
+     *      , default="state"
      *      , description="Le tri est organisé sur les attributs de la classe et de la classe liée ingredient.")
      * @QueryParam(name="search"
      *      , nullable=true
@@ -268,7 +269,8 @@ class IngredientStockController extends AbstractFOSRestController
 
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this);
-
+        $updateData = $form->getData();
+        $this->manageDates($updateData);
         $this->entityManager->flush();
 
         return $this->view(null, Response::HTTP_NO_CONTENT);
@@ -328,5 +330,25 @@ class IngredientStockController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $ingredient;
+    }
+
+    private function manageDates(IngredientStock $stock)
+    {
+        switch ($stock->getState()) {
+            case 'ordered':
+                $stock->setOrderedDate(new DateTime());
+                break;
+            case 'stocked':
+                $stock->setOrderedDate(new DateTime());
+                $stock->setReceivedDate(new DateTime());
+                break;
+            case 'sold_out':
+                $stock->setOrderedDate(new DateTime());
+                $stock->setReceivedDate(new DateTime());
+                $stock->setEndedDate(new DateTime());
+                break;
+            default:
+                break;
+        }
     }
 }

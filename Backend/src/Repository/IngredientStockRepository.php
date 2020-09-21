@@ -15,6 +15,8 @@ use FOS\RestBundle\Request\ParamFetcher;
  */
 class IngredientStockRepository extends ServiceEntityRepository
 {
+    use AbstractRepository;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, IngredientStock::class);

@@ -6,6 +6,7 @@ use App\Repository\IngredientStockRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Entity(repositoryClass=IngredientStockRepository::class)
@@ -53,18 +54,21 @@ class IngredientStock
     /**
      * @ORM\Column(type="date", nullable=true)
      * @SerializedName("orderedDate")
+     * @Type("DateTime<'Y-m-d'>")
      */
     private $orderedDate;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @SerializedName("receivedDate")
+     * @Type("DateTime<'Y-m-d'>")
      */
     private $receivedDate;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @SerializedName("endedDate")
+     * @Type("DateTime<'Y-m-d'>")
      */
     private $endedDate;
 

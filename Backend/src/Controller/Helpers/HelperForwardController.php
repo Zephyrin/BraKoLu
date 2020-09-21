@@ -32,7 +32,7 @@ trait HelperForwardController
                 ["data" => $data[$name], "id" => $id, "clearMissing" => $clearData]
             );
             $data[$name] = $id;
-        } else if (isset($data[$name]) && $data[$name] != null) {
+        } else if (isset($data[$name]) && $data[$name] != null && !is_int($data[$name])) {
             $response = $this->forward(
                 "App\Controller\IngredientController::post",
                 ['data' => $data[$name]]

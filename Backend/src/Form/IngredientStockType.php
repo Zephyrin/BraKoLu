@@ -21,8 +21,6 @@ class IngredientStockType extends AbstractType
             ->add("quantity")
             ->add("price")
             ->add("state")
-            ->add("orderedDate")
-            ->add("receivedDate")
             ->add(
                 'ingredient',
                 EntityType::class,
