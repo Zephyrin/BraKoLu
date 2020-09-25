@@ -1,8 +1,7 @@
-import { Subscription } from 'rxjs';
+import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
@@ -11,44 +10,19 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss']
 })
-export class IngredientsDesktopComponent implements OnInit, OnDestroy {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> {
   displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor'];
-  private subscribeLoading: Subscription;
-  private serviceEndUpdateSubscription: Subscription;
+
   dataSource: any;
-  @Input() service: IngredientService;
   @ViewChild('matTable') matTable: MatTable<any>;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
-    public dialog: MatDialog) { }
-
-  ngOnInit(): void {
-    this.subscribeLoading = this.service.loading.subscribe(data => {
-      if (data) {
-        if (!this.service.errors.hasErrors) {
-          this.dialog.closeAll();
-        }
-      }
-    });
-    this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
-      if (data === true) {
-        this.dataSource = new MatTableDataSource(this.service.model);
-        this.dataSource.sort = this.sort;
-      }
-    });
+    public dialog: MatDialog) {
+    super(dialog, IngredientCreateFormComponent);
   }
 
-  ngOnDestroy(): void {
-    if (this.subscribeLoading) { this.subscribeLoading.unsubscribe(); }
-    if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
+  public endUpdate() {
+    this.dataSource = new MatTableDataSource(this.service.model);
+    this.dataSource.sort = this.sort;
   }
-
-  openCreateDialog(): void {
-    const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '20em' });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-    });
-  }
-
 }

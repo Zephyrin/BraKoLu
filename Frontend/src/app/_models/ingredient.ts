@@ -4,7 +4,7 @@ export abstract class Ingredient {
   name: string;
   comment: string;
   unit: string;
-  unitFactor: string;
+  unitFactor: number;
   childName: string;
 
   public constructor(ingredient: Ingredient | undefined) {

@@ -1,28 +1,103 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormErrors } from '@app/_helpers/form-error';
 import { HttpService } from '@app/_services/http.service';
 import { Subject } from 'rxjs';
 
 export interface IService {
+  /**
+   * Permet de savoir si l'interface est en mode édition ou non.
+   */
   edit: boolean;
+  /**
+   * Permet de savoir si l'interface est doit fichier les données pour cause de chargement.
+   * Lors de l'initialisation, d'une création, d'une mise à jour ou d'une suppression.
+   */
   loading: Subject<boolean>;
+  /**
+   * Les données sous forme de tableau.
+   */
+  model: any;
+  /**
+   * Le formulaire de création.
+   */
   form: FormGroup;
+  /**
+   * Permet de dire à l'interface que la création, mise à jour ou la suppression est terminée
+   * et qu'il peut mettre à jour la vue.
+   */
   endUpdate: Subject<boolean>;
+  /**
+   * Charge l'intégralité des données, utilisé par défaut.
+   * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
+   */
   load(): void;
 
+  /**
+   * Détermine si un attribut est présent dans un objet value.
+   *
+   * @param name Le nom de l'attribut que l'on cherche dans l'objet value
+   * @param value L'objet qui doit-être présent dans la liste.
+   */
   has(name: string, value: any | undefined): boolean;
 
+  /**
+   * Détermine si un attribut est en erreur ou non dans le formulaire form.
+   *
+   * @param name Le nom de l'attribut potentielement en erreur.
+   */
   hasError(name: string): boolean;
+
+  /**
+   * Récupère l'erreur de l'attribut name dans le formulaire form.
+   *
+   * @param name Le nom de l'attribut qui possède une erreur.
+   */
   getError(name: string): string;
+
+  /**
+   * Retourne true si le formulaire possède une erreur.
+   */
   hasErrors(): boolean;
 
+  /**
+   * Récupère l'attribut name de l'objet value. Correspond à value->name.
+   *
+   * @param name Le nom de l'attribut que l'on cherche dans value.
+   * @param value L'objet qui doit possèder l'attribut name.
+   */
   get(name: string, value: any | undefined): any;
 
+  /**
+   *
+   * @param name Le nom de l'attribut qui sera mis à jour.
+   * @param value L'objet à mettre à jour.
+   * @param newValue La nouvelle valeur que prendra l'attribut name dans l'objet value.
+   */
   update(name: string, value: any, newValue: any): void;
 
+  /**
+   * Crée une instance d'un objet. À définir pour chaque classe qui instancie celle-ci.
+   */
   create(): any;
 
-  setForm(form: FormGroup);
+  /**
+   * Créer le formulaire de création ou de mise à jour.
+   *
+   * @param formBuilder Le créateur de formulaire donné par la vue. Permet de définir les champs qui seront suivis
+   * par le formulaire.
+   * @param value La valeur en question (permet de réaliser un update ou une création par copie)
+   */
+  createForm(formBuilder: FormBuilder, value: any);
+
+  /**
+   * Supprime le formulaire à la fin de l'utilisation.
+   */
+  deleteForm();
+}
+
+export interface ValueViewChild {
+  value: string;
+  viewValue: string;
 }
 
 export abstract class CService<T> implements IService {
@@ -61,10 +136,6 @@ export abstract class CService<T> implements IService {
 
   public has(name: string, value: T | undefined): boolean {
     return value && value[name];
-  }
-
-  public setForm(form: FormGroup) {
-    this.form = form;
   }
 
   public hasError(name: string): boolean {
@@ -115,12 +186,12 @@ export abstract class CService<T> implements IService {
   protected end(serverError?: any | undefined) {
     if (serverError) {
       this.errors.formatError(serverError);
-      if (this.form) {
+      if (this.form && serverError.error?.errors) {
         serverError.error.errors.forEach(error => {
           Object.keys(error.children).forEach(prop => {
             const formControl = this.form.get(prop);
             if (formControl && error.children[prop].errors) {
-              // activate the error message
+              // activate error message
               error.children[prop].errors.forEach(message => {
                 formControl.setErrors({
                   serverError: message
@@ -183,4 +254,15 @@ export abstract class CService<T> implements IService {
     }
     this.end();
   }
+
+  public createForm(formBuilder: FormBuilder, value: T): void {
+    this.createFormBasedOn(formBuilder, value);
+    this.form.patchValue(value);
+  }
+
+  public deleteForm(): void {
+    this.form = undefined;
+  }
+
+  public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
 }

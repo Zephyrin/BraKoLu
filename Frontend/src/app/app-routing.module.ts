@@ -1,3 +1,4 @@
+import { StockComponent } from './_components/stock/stock.component';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 
 import { NgModule } from '@angular/core';
@@ -15,6 +16,7 @@ const routerOptions: ExtraOptions = {
 const routes: Routes = [
   { path: '', component: IngredientsComponent },
   { path: 'ingredients', component: IngredientsComponent },
+  { path: 'stock', component: StockComponent },
 ];
 
 @NgModule({

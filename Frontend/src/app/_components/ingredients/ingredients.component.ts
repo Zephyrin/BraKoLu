@@ -1,31 +1,18 @@
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { BaseComponent } from '@app/_components/base-component';
 
 @Component({
   selector: 'app-ingredients',
   templateUrl: './ingredients.component.html',
   styleUrls: ['./ingredients.component.scss']
 })
-export class IngredientsComponent implements OnInit, OnDestroy {
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+export class IngredientsComponent extends BaseComponent {
+
   constructor(
-    private breakpointObserver: BreakpointObserver,
-    public service: IngredientService,
-    public dialog: MatDialog) { }
-
-  ngOnInit(): void {
-    this.service.load();
-  }
-
-  ngOnDestroy() {
-    this.service.edit = false;
+    protected breakpointObserver: BreakpointObserver,
+    public service: IngredientService) {
+    super(breakpointObserver, service);
   }
 }

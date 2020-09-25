@@ -30,6 +30,10 @@ import { MatTableModule } from '@angular/material/table';
 import { IngredientsDesktopComponent } from './_components/ingredients/ingredients-desktop/ingredients-desktop.component';
 import { IngredientsMobileComponent } from './_components/ingredients/ingredients-mobile/ingredients-mobile.component';
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
+import { StockComponent } from './_components/stock/stock.component';
+import { StockCreateComponent } from './_components/stock/stock-create/stock-create.component';
+import { StockDesktopComponent } from './_components/stock-desktop/stock-desktop/stock-desktop.component';
+import { StockMobileComponent } from './_components/stock-mobile/stock-mobile/stock-mobile.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { IngredientCreateFormComponent } from './_components/ingredients/ingredi
     ToolsEditComponent,
     IngredientsDesktopComponent,
     IngredientsMobileComponent,
-    IngredientCreateFormComponent
+    IngredientCreateFormComponent,
+    StockComponent,
+    StockCreateComponent,
+    StockDesktopComponent,
+    StockMobileComponent
   ],
   imports: [
     BrowserModule,

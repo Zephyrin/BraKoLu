@@ -1,10 +1,9 @@
-import { Cereal } from './../../../_models/cereal';
-import { Other } from './../../../_models/other';
+import { ChildBaseComponent } from '@app/_components/child-base-component';
+import { Cereal } from '@app/_models/cereal';
+import { Other } from '@app/_models/other';
 import { Ingredient } from '@app/_models';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { Subscription } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 @Component({
@@ -12,37 +11,10 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
   templateUrl: './ingredients-mobile.component.html',
   styleUrls: ['./ingredients-mobile.component.scss']
 })
-export class IngredientsMobileComponent implements OnInit, OnDestroy {
-  private subscribeLoading: Subscription;
-  private serviceEndUpdateSubscription: Subscription;
-  @Input() service: IngredientService;
-  constructor(public dialog: MatDialog) { }
+export class IngredientsMobileComponent extends ChildBaseComponent<IngredientCreateFormComponent> {
 
-  ngOnInit(): void {
-    this.subscribeLoading = this.service.loading.subscribe(data => {
-      if (data) {
-        if (!this.service.errors.hasErrors) {
-          this.dialog.closeAll();
-        }
-      }
-    });
-    this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
-      if (data === true) {
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscribeLoading) { this.subscribeLoading.unsubscribe(); }
-    if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
-  }
-
-  openCreateDialog(): void {
-    const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '20em' });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-    });
+  constructor(public dialog: MatDialog) {
+    super(dialog, IngredientCreateFormComponent);
   }
 
   getTitle(element: Ingredient): string {

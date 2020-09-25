@@ -2,7 +2,7 @@
                 class="full-width">
   <mat-label>Qu'elle est le nouvel ingrédient ?</mat-label>
   <mat-select cdkFocusInitial
-              [disabled]="(service.loading | async) || ingredient"
+              [disabled]="(service.loading | async) || value"
               (selectionChange)="childNameChange($event)">
     <mat-option *ngFor="let childName of service.ingredientChildrenNames"
                 [value]="childName.value">
@@ -10,21 +10,21 @@
     </mat-option>
   </mat-select>
 </mat-form-field>
-<form [formGroup]="form"
-      *ngIf="form"
+<form [formGroup]="service.form"
+      *ngIf="service.form"
       (ngSubmit)="onSubmitClick()">
   <fieldset [disabled]="service.loading | async">
-    <fieldset *ngIf="form">
+    <fieldset *ngIf="service.form">
       <mat-form-field class="full-width">
         <mat-label>Nom</mat-label>
         <input matInput
                required
-               [errorStateMatcher]="matcher"
                formControlName="name"
                placeholder="Ex. Brewers gold"
                value="">
         <mat-error>
-          {{ form.get('name').errors?.serverError }}
+          <!-- TODO mettre en forme cette appel pour la faire plus courte -->
+          {{ service.form.get('name').errors?.serverError }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
@@ -34,7 +34,7 @@
                placeholder="Ex. kg"
                value="">
         <mat-error>
-          {{ form.get('unit').errors?.serverError }}
+          {{ service.form.get('unit').errors?.serverError }}
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
@@ -47,12 +47,13 @@
                placeholder="Ex. 1000 pour passer d'un gramme à 1kg"
                value="">
         <mat-error>
-          {{ form.get('unitFactor').errors?.serverError }}
+          {{ service.form.get('unitFactor').errors?.serverError }}
         </mat-error>
       </mat-form-field>
       <!-- Spécification des ingrédients -->
+      <!-- Todo créer un composant factory -->
       <!-- Other -->
-      <div *ngIf="form.value.childName === 'other'"
+      <div *ngIf="service.form.value.childName === 'other'"
            class="flex">
         <mat-form-field class="full-width">
           <mat-label>Type</mat-label>
@@ -62,12 +63,12 @@
                  placeholder="Ex. Tuyau"
                  value="">
           <mat-error>
-            {{ form.get('type').errors?.serverError }}
+            {{ service.form.get('type').errors?.serverError }}
           </mat-error>
         </mat-form-field>
       </div>
       <!-- Cereal -->
-      <div *ngIf="form.value.childName === 'cereal'"
+      <div *ngIf="service.form.value.childName === 'cereal'"
            class="flex">
         <mat-form-field class="full-width">
           <mat-label>Plante</mat-label>
@@ -77,7 +78,7 @@
                  placeholder="Ex. Orge"
                  value="">
           <mat-error>
-            {{ form.get('plant').errors?.serverError }}
+            {{ service.form.get('plant').errors?.serverError }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -90,7 +91,7 @@
             </mat-option>
           </mat-select>
           <mat-error>
-            {{ form.get('type').errors?.serverError }}
+            {{ service.form.get('type').errors?.serverError }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -103,7 +104,7 @@
             </mat-option>
           </mat-select>
           <mat-error>
-            {{ form.get('format').errors?.serverError }}
+            {{ service.form.get('format').errors?.serverError }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -116,7 +117,7 @@
                  placeholder="Ex. Aucune idée..."
                  value="">
           <mat-error>
-            {{ form.get('ebc').errors?.serverError }}
+            {{ service.form.get('ebc').errors?.serverError }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -129,14 +130,14 @@
                   formControlName="comment"
                   placeholder="Ex: Houblon amérisant universel."></textarea>
         <mat-error>
-          {{ form.get('comment').errors?.serverError }}
+          {{ service.form.get('comment').errors?.serverError }}
         </mat-error>
       </mat-form-field>
     </fieldset>
     <div mat-dialog-actions
          class="flex-reverse">
       <button mat-button
-              [disabled]="!form || form.invalid"
+              [disabled]="!service.form || service.form.invalid"
               type="submit"
               (click)="onSubmitClick()">Sauvegarder</button>
       <button mat-button
@@ -145,8 +146,9 @@
     </div>
   </fieldset>
 </form>
+<!-- C'est moche mais c'est parce que je suis faignant... -->
 <div mat-dialog-actions
-     *ngIf="!form"
+     *ngIf="!service.form"
      class="flex-reverse">
   <button mat-button
           disabled
