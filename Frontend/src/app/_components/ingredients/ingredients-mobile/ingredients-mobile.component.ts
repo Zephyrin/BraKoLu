@@ -1,4 +1,5 @@
 import { Cereal } from './../../../_models/cereal';
+import { Hop } from './../../../_models/hop';
 import { Other } from './../../../_models/other';
 import { Ingredient } from '@app/_models';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
@@ -38,7 +39,7 @@ export class IngredientsMobileComponent implements OnInit, OnDestroy {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '20em' });
+    const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '40em' });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }

@@ -86,6 +86,12 @@ export class IngredientCreateFormComponent implements OnInit, OnDestroy {
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('format', new FormControl('', Validators.required));
         this.form.addControl('ebc', new FormControl('', Validators.required));
+        break;
+        case 'hop':
+        this.form.addControl('type', new FormControl('', Validators.required));
+        this.form.addControl('acidAlpha', new FormControl('', Validators.required));
+        this.form.addControl('harvestYear', new FormControl('', Validators.required));
+        break;
     }
     this.form.patchValue(ingredient);
     this.service.setForm(this.form);
