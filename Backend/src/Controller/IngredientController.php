@@ -160,6 +160,8 @@ class IngredientController extends AbstractFOSRestController
         // le fichier App\Form\IngredientType.php ou les enfants App\Form\Ingredients\*.php et les annotations
         // présentent dans le fichier App\Entity\Ingredient ou les enfants App\Entity\Ingredients\*.php.
         $form = $this->createForm($this->getClassOrInstance($data), $this->getClassOrInstance($data, false));
+        // On gère les dates car elles ne sont pas automatiquement parser par jms_serializer.
+        $this->manageDate($data);
         // Avant d'associé le tableau de valeur à la classe, je supprime les champs de « travail » tel que le 
         // discriminator qui m'a permit de trouver le type d'ingrédient à instancier. 
         unset($data[$this->childName]);
@@ -454,6 +456,10 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\CerealType::class;
                 return new EntityClass\Cereal();
+            case 'hop':
+                if ($isClass)
+                    return TypeClass\HopType::class;
+                return new EntityClass\Hop();
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -476,8 +482,24 @@ class IngredientController extends AbstractFOSRestController
                 return TypeClass\OtherType::class;
             case "App\Entity\Ingredients\Cereal":
                 return TypeClass\CerealType::class;
+            case "App\Entity\Ingredients\Hop":
+                return TypeClass\HopType::class;
+
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
+        }
+    }
+
+    private function manageDate(array &$data)
+    {
+        switch ($data[$this->childName]) {
+            case 'hop':
+                if (isset($data['harvestYear'])) {
+                    $data['harvestYear'] = \DateTime::createFromFormat("Y-m-d", $data['harvestYear']);
+                }
+                break;
+            default:
+                break;
         }
     }
 }

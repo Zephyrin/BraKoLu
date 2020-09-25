@@ -8,7 +8,16 @@
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
-            "port": 9000
+            "port": 9000,
+            "ignore": [
+                "**/deprecation-contracts/**/*",
+                "**/console/**/*",
+                "**/behat/**/*",
+                "**/Debug.php",
+                "**/ClassStub.php",
+                "**/ReflectionExtractor.php",
+                "**/dependency-injection/**/*"
+            ]
         }
     ]
 }

@@ -1,8 +1,14 @@
+<!-- BOUTON AJOUTER INGREDIENT -->
+
 <button mat-button
         (click)="openCreateDialog()"
-        [matTooltip]="'Créer un nouvel ingrédient'">
+        [matTooltip]="'Ajouter un nouvel ingrédient'">
   <mat-icon>add</mat-icon>
 </button>
+
+<!----------------------------->
+<!-- TABLEAU DES INGREDIENTS -->
+
 <table mat-table
        class="full-width"
        #matTable

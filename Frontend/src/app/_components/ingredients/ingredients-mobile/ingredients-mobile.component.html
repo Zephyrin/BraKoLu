@@ -1,8 +1,10 @@
 <button mat-button
         (click)="openCreateDialog()"
-        [matTooltip]="'Créer un nouvel ingrédient'">
+        [matTooltip]="'Ajouter un nouvel ingrédient'">
   <mat-icon>add</mat-icon>
 </button>
+
+<p>Présentation 1</p>
 <div *ngFor="let element of service.model">
   <mat-card>
     <mat-card-header>
@@ -15,7 +17,7 @@
   </mat-card>
 </div>
 
-<p>Ou encore comme ça ^^</p>
+<p>Présentation 2</p>
 <mat-accordion multi>
   <mat-expansion-panel *ngFor="let element of service.model">
     <mat-expansion-panel-header>

@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill"
                 class="full-width">
-  <mat-label>Qu'elle est le nouvel ingrédient ?</mat-label>
+  <mat-label>Quel est le nouvel ingrédient ?</mat-label>
   <mat-select cdkFocusInitial
               [disabled]="(service.loading | async) || value"
               (selectionChange)="childNameChange($event)">
@@ -20,7 +20,7 @@
         <input matInput
                required
                formControlName="name"
-               placeholder="Ex. Brewers gold"
+               placeholder="Ex. Vienna"
                value="">
         <mat-error>
           <!-- TODO mettre en forme cette appel pour la faire plus courte -->
@@ -50,6 +50,7 @@
           {{ service.form.get('unitFactor').errors?.serverError }}
         </mat-error>
       </mat-form-field>
+
       <!-- Spécification des ingrédients -->
       <!-- Todo créer un composant factory -->
       <!-- Other -->
@@ -60,13 +61,14 @@
           <input matInput
                  required
                  formControlName="type"
-                 placeholder="Ex. Tuyau"
+                 placeholder="Ex. Sucre"
                  value="">
           <mat-error>
             {{ service.form.get('type').errors?.serverError }}
           </mat-error>
         </mat-form-field>
       </div>
+      
       <!-- Cereal -->
       <div *ngIf="service.form.value.childName === 'cereal'"
            class="flex">
@@ -114,7 +116,7 @@
                  formControlName="ebc"
                  type="number"
                  min=1
-                 placeholder="Ex. Aucune idée..."
+                 placeholder="saisir ici la valeur"
                  value="">
           <mat-error>
             {{ service.form.get('ebc').errors?.serverError }}
@@ -122,13 +124,13 @@
         </mat-form-field>
       </div>
       <!-- Houblon -->
-
+      
       <!-- Fin des spécifications -->
       <mat-form-field class="full-width">
         <mat-label>Commentaire</mat-label>
         <textarea matInput
                   formControlName="comment"
-                  placeholder="Ex: Houblon amérisant universel."></textarea>
+                  placeholder="..."></textarea>
         <mat-error>
           {{ service.form.get('comment').errors?.serverError }}
         </mat-error>
