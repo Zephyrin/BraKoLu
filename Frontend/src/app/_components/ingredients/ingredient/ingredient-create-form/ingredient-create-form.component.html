@@ -124,7 +124,43 @@
         </mat-form-field>
       </div>
       <!-- Houblon -->
-
+      <div *ngIf="service.form.value.childName === 'hop'"
+           class="flex">
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <input matInput
+                 required
+                 formControlName="type"
+                 placeholder="Ex. Sucre"
+                 value="">
+          <mat-error>
+            {{ service.form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Acid Alpha</mat-label>
+          <input matInput
+                 required
+                 formControlName="acidAlpha"
+                 placeholder="Ex. ???"
+                 value="">
+          <mat-error>
+            {{ service.form.get('acidAlpha').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Année de la récolte</mat-label>
+          <input matInput
+                 required
+                 formControlName="harvestYear"
+                 placeholder="Ex. 2020"
+                 type="date"
+                 value="">
+          <mat-error>
+            {{ service.form.get('harvestYear').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
       <!-- Fin des spécifications -->
       <mat-form-field class="full-width">
         <mat-label>Commentaire</mat-label>

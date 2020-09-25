@@ -11,7 +11,8 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 export class IngredientService extends CService<Ingredient>{
   public ingredientChildrenNames: ValueViewChild[] = [
     { value: 'other', viewValue: 'Autre' },
-    { value: 'cereal', viewValue: 'Céréal' }
+    { value: 'cereal', viewValue: 'Céréal' },
+    { value: 'hop', viewValue: 'Houblon' }
   ];
 
   public cerealTypes: ValueViewChild[] = [
@@ -60,6 +61,12 @@ export class IngredientService extends CService<Ingredient>{
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('format', new FormControl('', Validators.required));
         this.form.addControl('ebc', new FormControl('', Validators.required));
+        break;
+      case 'hop':
+        this.form.addControl('type', new FormControl('', Validators.required));
+        this.form.addControl('acidAlpha', new FormControl('', Validators.required));
+        this.form.addControl('harvestYear', new FormControl('', Validators.required));
+        break;
     }
   }
 }
