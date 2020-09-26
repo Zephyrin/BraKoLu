@@ -53,22 +53,8 @@
 
       <!-- Spécification des ingrédients -->
       <!-- Todo créer un composant factory -->
-      <!-- Other -->
-      <div *ngIf="service.form.value.childName === 'other'"
-           class="flex">
-        <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <input matInput
-                 required
-                 formControlName="type"
-                 placeholder="Ex. Sucre"
-                 value="">
-          <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
 
+      <!------------->
       <!-- Cereal -->
       <div *ngIf="service.form.value.childName === 'cereal'"
            class="flex">
@@ -123,8 +109,52 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <!-- Houblon -->
+
+      <!--------->
+      <!-- Hop -->
       <div *ngIf="service.form.value.childName === 'hop'"
+           class="flex">
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <mat-select required
+                      formControlName="type">
+            <mat-option *ngFor="let childName of service.hopTypes"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ service.form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Acid Alpha</mat-label>
+          <input matInput
+                 required
+                 formControlName="acidAlpha"
+                 placeholder="Saisir ici la valeur"
+                 value="">
+          <mat-error>
+            {{ service.form.get('acidAlpha').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Année de récolte</mat-label>
+          <input matInput
+                 required
+                 formControlName="harvestYear"
+                 placeholder="Saisir ici la date"
+                 type="date"
+                 value="">
+          <mat-error>
+            {{ service.form.get('harvestYear').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!----------->
+      <!-- Other -->
+      <div *ngIf="service.form.value.childName === 'other'"
            class="flex">
         <mat-form-field class="full-width">
           <mat-label>Type</mat-label>
@@ -137,30 +167,8 @@
             {{ service.form.get('type').errors?.serverError }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Acid Alpha</mat-label>
-          <input matInput
-                 required
-                 formControlName="acidAlpha"
-                 placeholder="Ex. ???"
-                 value="">
-          <mat-error>
-            {{ service.form.get('acidAlpha').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Année de la récolte</mat-label>
-          <input matInput
-                 required
-                 formControlName="harvestYear"
-                 placeholder="Ex. 2020"
-                 type="date"
-                 value="">
-          <mat-error>
-            {{ service.form.get('harvestYear').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
       </div>
+
       <!-- Fin des spécifications -->
       <mat-form-field class="full-width">
         <mat-label>Commentaire</mat-label>
@@ -172,6 +180,7 @@
         </mat-error>
       </mat-form-field>
     </fieldset>
+
     <div mat-dialog-actions
          class="flex-reverse">
       <button mat-button
@@ -183,7 +192,9 @@
               (click)="onCancelClick()">Annuler</button>
     </div>
   </fieldset>
+
 </form>
+
 <!-- C'est moche mais c'est parce que je suis faignant... -->
 <div mat-dialog-actions
      *ngIf="!service.form"

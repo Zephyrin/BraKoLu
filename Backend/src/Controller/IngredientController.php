@@ -452,14 +452,15 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\OtherType::class;
                 return new EntityClass\Other();
-            case 'cereal':
+                case 'hop':
+                    if ($isClass)
+                        return TypeClass\HopType::class;
+                    return new EntityClass\Hop();
+                case 'cereal':
                 if ($isClass)
                     return TypeClass\CerealType::class;
                 return new EntityClass\Cereal();
-            case 'hop':
-                if ($isClass)
-                    return TypeClass\HopType::class;
-                return new EntityClass\Hop();
+            
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -480,11 +481,11 @@ class IngredientController extends AbstractFOSRestController
         switch (get_class($existingClass)) {
             case "App\Entity\Ingredients\Other":
                 return TypeClass\OtherType::class;
-            case "App\Entity\Ingredients\Cereal":
+                case "App\Entity\Ingredients\Hop":
+                    return TypeClass\HopType::class;
+               case "App\Entity\Ingredients\Cereal":
                 return TypeClass\CerealType::class;
-            case "App\Entity\Ingredients\Hop":
-                return TypeClass\HopType::class;
-
+            
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
         }

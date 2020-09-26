@@ -1,3 +1,6 @@
+
+<!-- CONTENEUR PAGE APPLICATION -->
+
 <mat-sidenav-container class="sidenav-container"
                        fullscreen>
   <mat-sidenav #drawer
@@ -12,17 +15,18 @@
          routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true}"
-         routerLink="">Accueil à définir</a>
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="ingredients">Ingrédients</a>
+         routerLink="">Ventes</a>
       <a mat-list-item
          routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true }"
          routerLink="stock">Stock</a>
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link"
+         [routerLinkActiveOptions]="{ exact: true }"
+         routerLink="ingredients">Ingrédients</a>
+      
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -33,9 +37,9 @@
               (click)="drawer.toggle()"
               *ngIf="(isHandset$ | async)"
               [matTooltip]="'Afficher le menu'">
-        <mat-icon [attr.aria-label]="'Afficher le bouton'">menu</mat-icon>
+        <mat-icon [attr.aria-label]="'Afficher le bouton'">Menu</mat-icon>
       </button>
-      <p class="align-content-center title ml-auto mr-auto">BraKoLu</p>
+      <p class="align-content-center title ml-auto mr-auto">BRA.TOOL kiletrobien</p>
     </mat-toolbar>
 
     <!-- Add Content Here -->
