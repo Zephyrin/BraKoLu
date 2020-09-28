@@ -1,15 +1,19 @@
 
-<!-- CONTENEUR PAGE APPLICATION -->
+<!-- FOND DE PAGE APPLICATION -->
 
 <mat-sidenav-container class="sidenav-container"
                        fullscreen>
+
+<!-- MENU DE GAUCHE -->                       
   <mat-sidenav #drawer
                class="sidenav"
                [fixedInViewport]="(isHandset$ | async) === false"
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="(isHandset$ | async) === false">
+
     <mat-toolbar>Menu</mat-toolbar>
+    
     <mat-nav-list>
       <a mat-list-item
          routerLinkActive="active-link"
@@ -26,10 +30,16 @@
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true }"
          routerLink="ingredients">Ingrédients</a>
-      
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link"
+         [routerLinkActiveOptions]="{ exact: true }"
+         routerLink="ingredients">Options</a>      
     </mat-nav-list>
+
   </mat-sidenav>
   <mat-sidenav-content>
+    
     <mat-toolbar color="primary">
       <button type="button"
               aria-label="Toggle sidenav"
@@ -39,7 +49,16 @@
               [matTooltip]="'Afficher le menu'">
         <mat-icon [attr.aria-label]="'Afficher le bouton'">Menu</mat-icon>
       </button>
-      <p class="align-content-center title ml-auto mr-auto">BRA.TOOL kiletrobien</p>
+
+      <!-- Bandeau de titre -->
+      <p class="align-content-center title ml-auto mr-auto">
+        <a href="https://fontmeme.com/fr/polices-de-graffitis/">
+          <img src="https://fontmeme.com/permalink/200928/ce02daf1f2a52e09acc11c4b780b9852.png" 
+          alt="polices-de-graffitis" 
+          border="0">
+        </a>
+      </p>
+
     </mat-toolbar>
 
     <!-- Add Content Here -->

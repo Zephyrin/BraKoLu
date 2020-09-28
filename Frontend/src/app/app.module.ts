@@ -47,7 +47,7 @@ import { StockMobileComponent } from './_components/stock-mobile/stock-mobile/st
     StockComponent,
     StockCreateComponent,
     StockDesktopComponent,
-    StockMobileComponent
+    StockMobileComponent,
   ],
   imports: [
     BrowserModule,

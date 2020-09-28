@@ -3,7 +3,7 @@
       (ngSubmit)="onSubmitClick()">
   <fieldset [disabled]="service.loading | async">
     <mat-form-field class="full-width">
-      <mat-label>Qu'elle est l'ingrédient ?</mat-label>
+      <mat-label>Quel est l'ingrédient ?</mat-label>
       <mat-select cdkFocusInitial
                   formControlName="ingredient">
         <mat-option *ngFor="let ingredient of ingredientService.model"
@@ -56,7 +56,7 @@
     <button mat-button
             [disabled]="!service.form || service.form.invalid"
             type="submit"
-            (click)="onSubmitClick()">Sauvegarder</button>
+            (click)="onSubmitClick()">Ajouter</button>
     <button mat-button
             type="button"
             (click)="onCancelClick()">Annuler</button>

@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Entity\Ingredients;
+
+use App\Repository\BottleRepository;
+use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Ingredient;
+use JMS\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
+/**
+ * @ORM\Entity(repositoryClass=BottleRepository::class)
+ */
+class Bottle
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $volume;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $color;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getVolume(): ?int
+    {
+        return $this->volume;
+    }
+
+    public function setVolume(int $volume): self
+    {
+        $this->volume = $volume;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+}

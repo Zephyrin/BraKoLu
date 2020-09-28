@@ -23,6 +23,7 @@
                placeholder="Ex. Vienna"
                value="">
         <mat-error>
+          
           <!-- TODO mettre en forme cette appel pour la faire plus courte -->
           {{ service.form.get('name').errors?.serverError }}
         </mat-error>
@@ -44,7 +45,7 @@
                type="number"
                required
                min=1
-               placeholder="Ex. 1000 pour passer d'un gramme à 1kg"
+               placeholder="Ex. 1000 pour passer de gramme à kg"
                value="">
         <mat-error>
           {{ service.form.get('unitFactor').errors?.serverError }}
@@ -169,7 +170,54 @@
         </mat-form-field>
       </div>
 
+      <!------------>
+      <!-- Bottle -->
+      <div *ngIf="service.form.value.childName === 'bottle'"
+           class="flex">
+
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <input matInput
+                 required
+                 formControlName="type"
+                 placeholder="long neck"
+                 value="">
+          <mat-error>
+            {{ service.form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Volume</mat-label>
+          <input matInput
+                 required
+                 formControlName="volume"
+                 placeholder="mL"
+                 value="">
+          <mat-error>
+            {{ service.form.get('volume').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Couleur</mat-label>
+          <input matInput
+                 required
+                 formControlName="color"
+                 placeholder="Saisir ici la couleur"
+                 type="date"
+                 value="">
+          <mat-error>
+            {{ service.form.get('color').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      
+      
       <!-- Fin des spécifications -->
+
+
       <mat-form-field class="full-width">
         <mat-label>Commentaire</mat-label>
         <textarea matInput
@@ -186,7 +234,7 @@
       <button mat-button
               [disabled]="!service.form || service.form.invalid"
               type="submit"
-              (click)="onSubmitClick()">Sauvegarder</button>
+              (click)="onSubmitClick()">Ajouter</button>
       <button mat-button
               type="button"
               (click)="onCancelClick()">Annuler</button>
@@ -195,13 +243,13 @@
 
 </form>
 
-<!-- C'est moche mais c'est parce que je suis faignant... -->
+<!-- C'est moche mais c'est parce que je suis fainéant... -->
 <div mat-dialog-actions
      *ngIf="!service.form"
      class="flex-reverse">
   <button mat-button
           disabled
-          (click)="onSubmitClick()">Sauvegarder</button>
+          (click)="onSubmitClick()">Ajouter</button>
   <button mat-button
           [disabled]="service.loading | async"
           type="button"

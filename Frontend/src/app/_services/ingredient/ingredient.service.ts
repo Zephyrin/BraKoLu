@@ -2,7 +2,7 @@ import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms'
 import { IngredientFactory } from '@app/_models/ingredientFactory';
 import { IngredientHttpService } from './ingredient-http.service';
 import { Injectable } from '@angular/core';
-import { Ingredient, Other, Cereal } from '@app/_models';
+import { Ingredient, Other, Cereal, Hop, Bottle} from '@app/_models';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 
 @Injectable({
@@ -10,10 +10,11 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 })
 export class IngredientService extends CService<Ingredient>{
   public ingredientChildrenNames: ValueViewChild[] = [
-    { value: 'other', viewValue: 'Autre' },
     { value: 'cereal', viewValue: 'Céréale' },
-    { value: 'hop', viewValue: 'Houblon' }
-  ];
+    { value: 'hop', viewValue: 'Houblon' },
+    { value: 'other', viewValue: 'Autre' },
+    { value: 'bottle', viewValue: 'Bouteille' }
+      ];
 
   public cerealTypes: ValueViewChild[] = [
     { value: 'malt', viewValue: 'Malt' },
@@ -58,10 +59,8 @@ export class IngredientService extends CService<Ingredient>{
       comment: [''],
       childName: ['']
     });
+    
     switch (value.childName) {
-      case 'other':
-        this.form.addControl('type', new FormControl('', Validators.required));
-        break;
       case 'cereal':
         this.form.addControl('format', new FormControl('', Validators.required));  
         this.form.addControl('plant', new FormControl('', Validators.required));
@@ -72,6 +71,14 @@ export class IngredientService extends CService<Ingredient>{
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('acidAlpha', new FormControl('', Validators.required));
         this.form.addControl('harvestYear', new FormControl('', Validators.required));
+        break;
+      case 'other':
+        this.form.addControl('type', new FormControl('', Validators.required));
+        break;
+      case 'bottle':
+        this.form.addControl('type', new FormControl('', Validators.required));
+        this.form.addControl('volume', new FormControl('', Validators.required));
+        this.form.addControl('color', new FormControl('', Validators.required));
         break;
     }
   }

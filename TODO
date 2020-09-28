@@ -1,0 +1,63 @@
+BDD :
+
+    Comment vérifier son contenu et supprimer les entrées inutiles, créés, paraît par erreur fortuite...
+
+BACKEND : 
+
+    ajout de tous les enfants ingrédients
+
+    controler bonne éxecution de :  bottle
+    
+    --------------------------
+    
+    
+
+FRONTEND :
+
+    Général :
+
+        Rajout du favicon logo BRAKOLU
+
+    Menu latéral gauche :
+    
+        IDLE
+                
+    Page Options : 
+    
+        Création
+        Bouton slide pour masquer ou non la page Ingrédients
+        
+    Page Vente : 
+    
+        Création avec tab (liste des brassins / suivi / carte de fidelité (contiendra la liste des clients avec bouton + pour ajout)
+        
+    Page Inventaire :
+        
+        Rajouter tab pour (dans l'ordre) : Céréales / Houblons / Levures / Autres / Embouteillage (famille d'affichage représentant bouteilles, cartons, capsules et étiquettes)
+        
+    Page Ingrédients : 
+    
+        Il doit y avoir une barre de recherche qui recherche dans tous les champs en haut à droite du bouton +
+        ajout d'un bouton pour supprimer un ingrédient de la liste (sur ouverture popup avec gros warning !!!)
+        
+    Ingredient create :
+    
+        Le bouton ajouter n'est pas necessaire tant que l'on a pas sélectionné le type d'ingrédient
+    
+        La fenêtre 'quel est le nouvel ingrédient ?' doit être plus large pour permettre l'affichage complet de cette phrase
+        
+    Page stock :
+    
+        Les informations de date doivent être plus conscises : hh/mm - jj/mm/aa
+        Réfléchir au différents états possibles (voir flo lulu ko ensemble)
+        Permettre la modification du stock grâce à un bouton +/- qui ouvre un popup pour effectuer la correction
+        
+    Projet :
+    
+    Déplacer dans l'arborescence stock-modile et desktop vers \stock
+    
+        
+        
+
+
+
