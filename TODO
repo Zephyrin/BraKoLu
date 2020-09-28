@@ -1,13 +1,21 @@
+TODO:
+    Mettre le TODO sur Github :) 
+
 BDD :
 
     Comment vérifier son contenu et supprimer les entrées inutiles, créés, paraît par erreur fortuite...
+    Rep: Pour le moment nous sommes en dev du coup plus on a de valeur dans la base de données, mieux c'est.
+        On peut voir l'état de la base de données via des petits plugin sur Firefox ou Chrome pour regarder des base
+        sqlite3. https://addons.mozilla.org/fr/firefox/addon/sqlite-manager-webext/
 
 BACKEND : 
 
     ajout de tous les enfants ingrédients
 
     controler bonne éxecution de :  bottle
-    
+        Via les tests fonctionnelles liées au Backend. (features/Ingredient/XXX)
+        * Éteindre tout les serveurs PHP pour utiliser le serveur de test via : symfony server:stop 
+        * Lancer les tests fonctionnelles avec : vendor/bin/behat features/ --stop-on-failure
     --------------------------
     
     
@@ -39,12 +47,18 @@ FRONTEND :
     
         Il doit y avoir une barre de recherche qui recherche dans tous les champs en haut à droite du bouton +
         ajout d'un bouton pour supprimer un ingrédient de la liste (sur ouverture popup avec gros warning !!!)
+
+        Flo, je m'occupe de ça prochainement, ça permettra d'avoir une base pour tout le reste. J'essaie d'en faire un truc générique pour 
+        que l'on puisse l'utiliser de partout.
         
     Ingredient create :
     
         Le bouton ajouter n'est pas necessaire tant que l'on a pas sélectionné le type d'ingrédient
+            Il est normalement grisé tant que le formulaire n'est pas valide. On ne peut donc pas valider. Il est dérangeant de voir des boutons apparaître et disparaître.
+            De la même manière, il serai peut-être interessant de laisser les champs liés aux ingrédients affiché dans la fenêtre de création.
     
         La fenêtre 'quel est le nouvel ingrédient ?' doit être plus large pour permettre l'affichage complet de cette phrase
+            Done.
         
     Page stock :
     
@@ -54,7 +68,6 @@ FRONTEND :
         
     Projet :
     
-    Déplacer dans l'arborescence stock-modile et desktop vers \stock
     
         
         

@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
  *      "cereal" = "App\Entity\Ingredients\Cereal"
  *      , "other" = "App\Entity\Ingredients\Other"
  *      , "hop" = "App\Entity\Ingredients\Hop"
+ *      , "bottle" = "App\Entity\Ingredients\Bottle"
  * })
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  * @DiscriminatorMap(
@@ -32,6 +33,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
  *    "cereal"="App\Entity\Ingredients\Cereal"
  *    , "other"="App\Entity\Ingredients\Other"
  *    , "hop"="App\Entity\Ingredients\Hop"
+ *    , "bottle" = "App\Entity\Ingredients\Bottle"
  * })
  */
 abstract class Ingredient

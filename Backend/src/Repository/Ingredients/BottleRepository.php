@@ -2,7 +2,7 @@
 
 namespace App\Repository\Ingredients;
 
-use App\Entity\Bottle;
+use App\Entity\Ingredients\Bottle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -32,8 +32,8 @@ import { IngredientsMobileComponent } from './_components/ingredients/ingredient
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
 import { StockComponent } from './_components/stock/stock.component';
 import { StockCreateComponent } from './_components/stock/stock-create/stock-create.component';
-import { StockDesktopComponent } from './_components/stock-desktop/stock-desktop/stock-desktop.component';
-import { StockMobileComponent } from './_components/stock-mobile/stock-mobile/stock-mobile.component';
+import { StockDesktopComponent } from './_components/stock/stock-desktop/stock-desktop/stock-desktop.component';
+import { StockMobileComponent } from './_components/stock/stock-mobile/stock-mobile/stock-mobile.component';
 
 @NgModule({
   declarations: [

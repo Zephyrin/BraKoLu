@@ -27,7 +27,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '20em' });
+    const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }

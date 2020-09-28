@@ -2,7 +2,7 @@
 
 namespace App\Entity\Ingredients;
 
-use App\Repository\BottleRepository;
+use App\Repository\Ingredients\BottleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
 use JMS\Serializer\Annotation\SerializedName;
@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=BottleRepository::class)
  */
-class Bottle
+class Bottle extends Ingredient
 {
     /**
      * @ORM\Id

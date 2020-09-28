@@ -23,7 +23,7 @@
                placeholder="Ex. Vienna"
                value="">
         <mat-error>
-          
+
           <!-- TODO mettre en forme cette appel pour la faire plus courte -->
           {{ service.form.get('name').errors?.serverError }}
         </mat-error>
@@ -205,16 +205,15 @@
                  required
                  formControlName="color"
                  placeholder="Saisir ici la couleur"
-                 type="date"
                  value="">
           <mat-error>
             {{ service.form.get('color').errors?.serverError }}
           </mat-error>
         </mat-form-field>
       </div>
-      
-      
-      
+
+
+
       <!-- Fin des spécifications -->
 
 
