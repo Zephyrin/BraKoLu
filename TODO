@@ -4,7 +4,7 @@ TODO:
 BDD :
 
     Comment vérifier son contenu et supprimer les entrées inutiles, créés, paraît par erreur fortuite...
-    Rep: Pour le moment nous sommes en dev du coup plus on a de valeur dans la base de données, mieux c'est.
+    -> Rep: Pour le moment nous sommes en dev du coup plus on a de valeur dans la base de données, mieux c'est.
         On peut voir l'état de la base de données via des petits plugin sur Firefox ou Chrome pour regarder des base
         sqlite3. https://addons.mozilla.org/fr/firefox/addon/sqlite-manager-webext/
 
@@ -56,17 +56,18 @@ FRONTEND :
         Le bouton ajouter n'est pas necessaire tant que l'on a pas sélectionné le type d'ingrédient
             Il est normalement grisé tant que le formulaire n'est pas valide. On ne peut donc pas valider. Il est dérangeant de voir des boutons apparaître et disparaître.
             De la même manière, il serai peut-être interessant de laisser les champs liés aux ingrédients affiché dans la fenêtre de création.
-    
-        La fenêtre 'quel est le nouvel ingrédient ?' doit être plus large pour permettre l'affichage complet de cette phrase
-            Done.
         
     Page stock :
     
         Les informations de date doivent être plus conscises : hh/mm - jj/mm/aa
         Réfléchir au différents états possibles (voir flo lulu ko ensemble)
         Permettre la modification du stock grâce à un bouton +/- qui ouvre un popup pour effectuer la correction
+        Affichage du prix au poids
+        Il y a un soucis avec l'affichage du prix car ce sont souvent des nombres à virgule....
         
     Projet :
+
+        Mettre à jour le DIA compte tenu de la création des ingredients enfants
     
     
         

@@ -45,10 +45,10 @@ export class FormErrors {
     if (error.status === 500) {
       this.hasFatalError = true;
       this.fatalError = '... :S Internal server error.<br /><br/>'
-        + 'We will take a look very soon.'
+        + 'We will take a look very soon ou pas.'
         + 'You can try again in some hours.<br/><br/>'
         + 'If it will still show this error consider to sent an email to:<br/>'
-        + 'damortien@gmail.com';
+        + 'cametonneraisquejereponde@gmail.com';
     } else if (error.status === 404) {
       this.message = 'The resource is not on the server<br/>'
         + error.statusText + ' ' + error.url;

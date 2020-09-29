@@ -25,6 +25,7 @@
         <mat-error>
 
           <!-- TODO mettre en forme cette appel pour la faire plus courte -->
+          <!-- Par exemple mettre un comboBox kg/gr qui implicitement mets le bon facteur d'unité ???? -->
           {{ service.form.get('name').errors?.serverError }}
         </mat-error>
       </mat-form-field>
@@ -177,11 +178,13 @@
 
         <mat-form-field class="full-width">
           <mat-label>Type</mat-label>
-          <input matInput
-                 required
-                 formControlName="type"
-                 placeholder="long neck"
-                 value="">
+          <mat-select required
+            formControlName="type">
+            <mat-option *ngFor="let childName of service.bottleType"
+              [value]="childName.value">
+              {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
           <mat-error>
             {{ service.form.get('type').errors?.serverError }}
           </mat-error>
@@ -189,11 +192,13 @@
 
         <mat-form-field class="full-width">
           <mat-label>Volume</mat-label>
-          <input matInput
-                 required
-                 formControlName="volume"
-                 placeholder="mL"
-                 value="">
+          <mat-select required
+            formControlName="volume">
+            <mat-option *ngFor="let childName of service.bottleVolume"
+              [value]="childName.value">
+              {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
           <mat-error>
             {{ service.form.get('volume').errors?.serverError }}
           </mat-error>

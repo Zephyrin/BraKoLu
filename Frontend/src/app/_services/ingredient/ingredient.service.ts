@@ -33,6 +33,18 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'extrait', viewValue: 'Extrait' }
   ];
 
+  public bottleType: ValueViewChild[] = [
+    { value: 'long_neck', viewValue: 'Long Neck' },
+    { value: 'champenoise', viewValue: 'Champenoise' },
+  ];
+
+  public bottleVolume: ValueViewChild[] = [
+    { value: '75', viewValue: '75 cL' },
+    { value: '33', viewValue: '33 cL' },
+  ];
+
+
+
   constructor(
     private h: IngredientHttpService) {
     super(h);

@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Bottle extends Ingredient
 {
+    const TYPES = ['long_neck', 'champenoise'];
+    const VOLUME = ['75', '33'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
