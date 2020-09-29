@@ -2,30 +2,19 @@
 
 namespace App\Entity\Ingredients;
 
-use App\Repository\BoxRepository;
+use App\Entity\Ingredient;
+use App\Repository\Ingredients\BoxRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BoxRepository::class)
  */
-class Box
+class Box extends Ingredient
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
     /**
      * @ORM\Column(type="integer")
      */
     private $Capacity;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCapacity(): ?int
     {

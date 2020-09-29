@@ -17,7 +17,7 @@ export class IngredientFactory {
         return new Bottle(ingredient as Bottle);
       case 'box':
         return new Box(ingredient as Box);
-        default:        
+      default:
         throw new Error('Que faire avec ' + ingredient.childName + ', j\'ai besoin d\'aide !!');
     }
   }

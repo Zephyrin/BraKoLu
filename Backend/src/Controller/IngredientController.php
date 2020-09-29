@@ -435,7 +435,7 @@ class IngredientController extends AbstractFOSRestController
      * @param [type] $data les données envoyées par le serveur.
      * @param boolean $isClass Si $isClass = true alors retourne le nom de la 
      *  classe sinon retourne une nouvelle instance de la classe.
-     * @return string|Ing\Other|Ing\Cereal
+     * @return string|Ing\Other|Ing\Cereal|Ing\Bottle|Ing\Box
      * @throws PreconditionFailedHttpException
      */
     private function getClassOrInstance($data, bool $isClass = true)
@@ -452,19 +452,22 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\OtherType::class;
                 return new EntityClass\Other();
-                case 'hop':
-                    if ($isClass)
-                        return TypeClass\HopType::class;
-                    return new EntityClass\Hop();
-                case 'cereal':
+            case 'hop':
+                if ($isClass)
+                    return TypeClass\HopType::class;
+                return new EntityClass\Hop();
+            case 'cereal':
                 if ($isClass)
                     return TypeClass\CerealType::class;
                 return new EntityClass\Cereal();
-                case 'bottle':
+            case 'bottle':
                 if ($isClass)
                     return TypeClass\BottleType::class;
                 return new EntityClass\Bottle();
-            
+            case 'box':
+                if ($isClass)
+                    return TypeClass\BoxType::class;
+                return new EntityClass\Box();
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -491,7 +494,8 @@ class IngredientController extends AbstractFOSRestController
                 return TypeClass\CerealType::class;
             case "App\Entity\Ingredients\Bottle":
                 return TypeClass\BottleType::class;
-            
+            case "App\Entity\Ingredients\Box":
+                return TypeClass\BoxType::class;
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
         }

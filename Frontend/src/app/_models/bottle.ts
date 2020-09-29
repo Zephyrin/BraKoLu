@@ -3,7 +3,7 @@ import { Ingredient } from './ingredient';
 export class Bottle extends Ingredient {
   type: string;
   volume: number;
-  color: string;  
+  color: string;
 
   public constructor(bottle: Bottle | undefined) {
     super(bottle);
@@ -20,7 +20,7 @@ export class Bottle extends Ingredient {
     const data = super.toJSON();
     if (this.type) { data[`type`] = this.type; }
     if (this.volume) { data[`volume`] = this.volume; }
-    if (this.color) {data[`color`] = this.color; }
+    if (this.color) { data[`color`] = this.color; }
     return data;
   }
 }
