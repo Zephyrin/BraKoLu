@@ -1,0 +1,21 @@
+<mat-select (selectionChange)="paginate.updatePageSize($event.value)"
+            [value]="paginate.numberOfItemsPerPage()"
+            class="auto-width">
+  <mat-option [value]="10">10</mat-option>
+  <mat-option [value]="20">20</mat-option>
+  <mat-option [value]="100">100</mat-option>
+  <mat-option [value]="0">Désactivé</mat-option>
+</mat-select>
+
+<span class="text-muted">Nombre d'élément : {{paginate.totalViewItems()}} / {{paginate.totalItems()}}
+</span>
+<button mat-button
+        [ngClass]="{'disabled': !paginate.hasThisCalculatePage(-1) }"
+        (click)="paginate.previousPage()">
+  <mat-icon>chevron_left</mat-icon>
+</button>
+<button mat-button
+        [ngClass]="{'disabled': !paginate.hasThisCalculatePage(1) }"
+        (click)="paginate.nextPage()">
+  <mat-icon>chevron_right</mat-icon>
+</button>

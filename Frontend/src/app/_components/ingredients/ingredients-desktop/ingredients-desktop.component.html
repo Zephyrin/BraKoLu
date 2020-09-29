@@ -4,7 +4,7 @@
         (click)="openCreateDialog()"
         [matTooltip]="'Ajouter un nouvel ingrédient'">
   <mat-icon>add_circle_outline</mat-icon>
-  <mat-label>  Ajouter un ingrédient à la liste de base</mat-label>
+  <mat-label> Ajouter un ingrédient à la liste de base</mat-label>
 </button>
 
 <p></p>
@@ -53,3 +53,4 @@
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<app-pagination [paginate]="service.paginate"></app-pagination>

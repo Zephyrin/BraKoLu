@@ -1,3 +1,4 @@
+import { IPaginate, Paginate } from './ipaginate';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormErrors } from '@app/_helpers/form-error';
 import { HttpService } from '@app/_services/http.service';
@@ -26,6 +27,11 @@ export interface IService {
    * et qu'il peut mettre à jour la vue.
    */
   endUpdate: Subject<boolean>;
+
+  /**
+   * Permet de gérer la pagination de la liste de données.
+   */
+  paginate: IPaginate;
   /**
    * Charge l'intégralité des données, utilisé par défaut.
    * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
@@ -101,6 +107,7 @@ export interface ValueViewChild {
 }
 
 export abstract class CService<T> implements IService {
+  //#region Attributes IService
   public model: T[];
   public loading = new Subject<boolean>();
   private loadingSource = false;
@@ -115,17 +122,30 @@ export abstract class CService<T> implements IService {
   protected edit$ = false;
 
   protected workingOn: T;
-
+  //#endregion
+  //#region Attributes IPaginate
+  public paginate = new Paginate();
+  //#endregion
   public constructor(
     protected http: HttpService<T>
   ) {
     this.edit = false;
+    this.paginate.changePageSubject.subscribe(x => {
+      if (x === true) {
+        this.load();
+      }
+    });
   }
 
+  //#region Abstract IService
   abstract createCpy(value: T): T;
   abstract create(): T;
+  public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
+  //#endregion
   public load(): void {
-    this.http.getAll(null).subscribe(response => {
+    const httpParams = this.paginate.initPaginationParams(null);
+    this.http.getAll(httpParams).subscribe(response => {
+      this.paginate.setParametersFromResponse(response.headers);
       this.model = response.body.map((x) => this.createCpy(x));
       this.end();
     }, err => {
@@ -133,7 +153,7 @@ export abstract class CService<T> implements IService {
       this.end(err);
     });
   }
-
+  //#region IService
   public has(name: string, value: T | undefined): boolean {
     return value && value[name];
   }
@@ -263,6 +283,5 @@ export abstract class CService<T> implements IService {
   public deleteForm(): void {
     this.form = undefined;
   }
-
-  public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
+  //#endregion
 }

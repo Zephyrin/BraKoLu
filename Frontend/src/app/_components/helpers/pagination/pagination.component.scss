@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  align-items: center;
+  flex-direction: revert;
+}
+
+.mat-select {
+  width: auto;
+  margin-left: auto;
+}
+::ng-deep .auto-width{
+    .mat-form-field {
+        width: auto !important;
+    }
+    .mat-select-value {
+        max-width: 100%;
+        width: auto;
+    }
+}
