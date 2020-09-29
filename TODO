@@ -44,6 +44,8 @@ FRONTEND :
         Rajouter tab pour (dans l'ordre) : Céréales / Houblons / Levures / Autres / Embouteillage (famille d'affichage représentant bouteilles, cartons, capsules et étiquettes)
         
     Page Ingrédients : 
+
+        HOP -> seulement spécifié l'année de production et non la date compléte lors de la création 
     
         Il doit y avoir une barre de recherche qui recherche dans tous les champs en haut à droite du bouton +
         ajout d'un bouton pour supprimer un ingrédient de la liste (sur ouverture popup avec gros warning !!!)

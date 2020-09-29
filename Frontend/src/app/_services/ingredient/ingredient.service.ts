@@ -2,7 +2,7 @@ import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms'
 import { IngredientFactory } from '@app/_models/ingredientFactory';
 import { IngredientHttpService } from './ingredient-http.service';
 import { Injectable } from '@angular/core';
-import { Ingredient, Other, Cereal, Hop, Bottle } from '@app/_models';
+import { Ingredient, Other, Cereal, Hop, Bottle, Box } from '@app/_models';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 
 @Injectable({
@@ -13,7 +13,8 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'cereal', viewValue: 'Céréale' },
     { value: 'hop', viewValue: 'Houblon' },
     { value: 'other', viewValue: 'Autre' },
-    { value: 'bottle', viewValue: 'Bouteille' }
+    { value: 'bottle', viewValue: 'Bouteille' },
+    { value: 'box', viewValue: 'Carton' }
   ];
 
   public cerealTypes: ValueViewChild[] = [
@@ -90,6 +91,9 @@ export class IngredientService extends CService<Ingredient>{
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('volume', new FormControl('', Validators.required));
         this.form.addControl('color', new FormControl('', Validators.required));
+        break;
+      case 'box':
+        this.form.addControl('capacity', new FormControl('', Validators.required));
         break;
     }
   }
