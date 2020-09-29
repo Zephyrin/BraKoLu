@@ -89,12 +89,12 @@ export class Paginate implements IPaginate {
   }
 
   updatePageSize(limit: number): void {
-    if (limit && limit >= 0) {
-      this.pagination.enabled = true;
-      this.pagination.paginationLimit = limit;
-      this.changePageSubject.next(true);
+    if (limit && limit > 0) {
+      if (this.pagination.paginationLimit !== limit) {
+        this.pagination.paginationLimit = limit;
+        this.changePageSubject.next(true);
+      }
     } else {
-      this.pagination.paginationLimit = 0;
       this.disabled();
     }
   }
@@ -112,17 +112,17 @@ export class Paginate implements IPaginate {
     return this.hasThisPage(this.pagination.paginationPage + addOrMinus);
   }
   isEnabled(): boolean {
-    return this.pagination.enabled;
+    return this.pagination.paginationLimit > 0;
   }
   enabled(): void {
-    if (!this.pagination.enabled) {
-      this.pagination.enabled = true;
+    if (this.pagination.paginationLimit <= 0) {
+      this.pagination.paginationLimit = 10;
       this.changePageSubject.next(true);
     }
   }
   disabled(): void {
-    if (this.pagination.enabled) {
-      this.pagination.enabled = false;
+    if (this.pagination.paginationLimit > 0) {
+      this.pagination.paginationLimit = 0;
       this.changePageSubject.next(true);
     }
   }
@@ -152,10 +152,8 @@ export class Paginate implements IPaginate {
     this.pagination.paginationLimit = parseInt(ret === null ? '0' : ret, undefined);
     if (this.pagination.paginationLimit === undefined
       || this.pagination.paginationLimit <= 0) {
-      this.pagination.enabled = false;
       this.pagination.lastPage = 1;
     } else {
-      this.pagination.enabled = true;
       this.pagination.lastPage = Math.ceil(
         this.pagination.totalCount / this.pagination.paginationLimit
       );

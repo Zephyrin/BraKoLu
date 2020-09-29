@@ -5,5 +5,4 @@ export class Pagination {
   public paginationLimit = 10;
   public lastPage = 1;
   public firstPage = 1;
-  public enabled = true;
 }
