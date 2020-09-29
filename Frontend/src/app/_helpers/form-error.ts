@@ -35,7 +35,7 @@ export class FormErrors {
   }
 
   formatError(error, controls = null) {
-    this.message = error.error.message;
+    this.message = error.error?.message;
     this.hasMessage = this.message !== undefined;
     this.errors = [];
     this.hasErrors = [];

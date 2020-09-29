@@ -47,7 +47,78 @@
     <td mat-cell
         *matCellDef="let element"> {{element.comment}} </td>
   </ng-container>
+  <!-- Spécifique aux sous ingrédients -->
+  <ng-container matColumnDef="type">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="type"> Type </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['type']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="plant">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="plant"> Plante </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['plant']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="format">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="format"> Format </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['format']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="ebc">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="ebc"> EBC </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['ebc']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="volume">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="volume"> Volume </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['volume']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="color">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="color"> Couleur </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['color']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="capacity">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="capacity"> Capacité </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['capacity']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="acidAlpha">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="acidAlpha"> Acid-Alpha </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['acidAlpha']}} </td>
+  </ng-container>
+  <ng-container matColumnDef="harvestYear">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="harvestYear"> Année de la récolte </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element['harvestYear']}} </td>
+  </ng-container>
 
+  <ng-container matColumnDef="childName">
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="childName"> Category </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.childName}} </td>
+  </ng-container>
   <tr mat-header-row
       *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
