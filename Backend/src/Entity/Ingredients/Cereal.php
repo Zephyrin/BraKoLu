@@ -38,7 +38,7 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="integer")
-     * @SerializedName("EBC")
+     * @SerializedName("ebc")
      */
     private $EBC;
 

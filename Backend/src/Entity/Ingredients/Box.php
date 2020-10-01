@@ -14,16 +14,16 @@ class Box extends Ingredient
     /**
      * @ORM\Column(type="integer")
      */
-    private $Capacity;
+    private $capacity;
 
     public function getCapacity(): ?int
     {
-        return $this->Capacity;
+        return $this->capacity;
     }
 
-    public function setCapacity(int $Capacity): self
+    public function setCapacity(int $capacity): self
     {
-        $this->Capacity = $Capacity;
+        $this->capacity = $capacity;
 
         return $this;
     }

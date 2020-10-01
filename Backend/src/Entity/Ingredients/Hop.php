@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Hop extends Ingredient
 {
-    const TYPES = ['pellets_t90', 'cônes'];
+    const TYPES = ['pellets_t90', 'cones'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
