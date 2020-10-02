@@ -1,17 +1,18 @@
-import { filter } from 'rxjs/operators';
+import { filter, startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-ingredients-desktop',
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss']
 })
-export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements AfterViewInit {
   displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName',
     'type'
     ,   /* cereal */ 'plant', 'format', 'ebc'
@@ -27,6 +28,13 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
   constructor(
     public dialog: MatDialog) {
     super(dialog, IngredientCreateFormComponent);
+  }
+
+  ngAfterViewInit(): void {
+    merge(this.sort.sortChange)
+      .pipe(tap(() => {
+        this.service.sort.change(this.sort.active, this.sort.direction);
+      })).subscribe();
   }
 
   public endUpdate() {

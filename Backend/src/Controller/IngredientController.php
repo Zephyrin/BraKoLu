@@ -8,6 +8,11 @@ use App\Entity\Ingredients as EntityClass;
 use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use App\Controller\Helpers\HelperController;
+use App\Repository\Ingredients\BottleRepository;
+use App\Repository\Ingredients\BoxRepository;
+use App\Repository\Ingredients\CerealRepository;
+use App\Repository\Ingredients\HopRepository;
+use App\Repository\Ingredients\OtherRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -60,6 +65,42 @@ class IngredientController extends AbstractFOSRestController
     private $ingredientRepository;
 
     /**
+     * Récupère spécifiquement les bouteilles depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var BottleRepository
+     */
+    private $bottleRepository;
+    /**
+     * Récupère spécifiquement les boites depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var BoxRepository
+     */
+    private $boxRepository;
+    /**
+     * Récupère spécifiquement les céréals depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var CerealRepository
+     */
+    private $cerealRepository;
+    /**
+     * Récupère spécifiquement les houblons depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var HopRepository
+     */
+    private $hopRepository;
+    /**
+     * Récupère spécifiquement les autres ingrédients depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var OtherRepository
+     */
+    private $otherRepository;
+
+    /**
      * Permet de gérer les erreurs liées à la validation d'entités.
      * Surtout utiliser dans HelperController.php.
      * 
@@ -84,10 +125,20 @@ class IngredientController extends AbstractFOSRestController
     public function __construct(
         EntityManagerInterface $entityManager,
         IngredientRepository $ingredientRepository,
+        BottleRepository $bottleRepository,
+        BoxRepository $boxRepository,
+        CerealRepository $cerealRepository,
+        HopRepository $hopRepository,
+        OtherRepository $otherRepository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
         $this->ingredientRepository = $ingredientRepository;
+        $this->bottleRepository = $bottleRepository;
+        $this->boxRepository = $boxRepository;
+        $this->cerealRepository = $cerealRepository;
+        $this->hopRepository = $hopRepository;
+        $this->otherRepository = $otherRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
@@ -262,12 +313,15 @@ class IngredientController extends AbstractFOSRestController
      *      , default="asc"
      *      , description="La direction du tri.")
      * @QueryParam(name="sortBy"
-     *      , requirements="(id|name|comment|unit|unitFactor)"
+     *      , requirements="(id|name|comment|unit|unitFactor|childName|type|plant|format|ebc|volume|color|capacity|acidAlpha|harvestYear)"
      *      , default="name"
      *      , description="Le tri est organiser sur l'id, le nom ou les commentaires.")
      * @QueryParam(name="search"
      *      , nullable=true
      *      , description="Recherche dans la base sur le nom ou les commentaires.")
+     * @QueryParam(name="selectChild"
+     *      , nullable=true
+     *      , description="Sélectionne un type d'ingrédient particulier.")
      *
      * @param ParamFetcher $paramFetcher
      * @return View
@@ -276,7 +330,33 @@ class IngredientController extends AbstractFOSRestController
     {
         // La fonction setPaginateToView est créée dans le helperController et est dépendante du helper
         // AbstractRepository.
-        return $this->setPaginateToView($this->ingredientRepository->findAllPagination($paramFetcher), $this);
+        $selectChild = $paramFetcher->get('selectChild');
+        $returnView = null;
+        if ($selectChild != null) {
+            switch ($selectChild) {
+                case 'other':
+                    $returnView = $this->otherRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'bottle':
+                    $returnView = $this->bottleRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'box':
+                    $returnView = $this->boxRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'hop':
+                    $returnView = $this->hopRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'cereal':
+                    $returnView = $this->cerealRepository->findAllPagination($paramFetcher);
+                    break;
+                default:
+                    $returnView = $this->ingredientRepository->findAllPagination($paramFetcher);
+                    break;
+            }
+        } else {
+            $returnView = $this->ingredientRepository->findAllPagination($paramFetcher);
+        }
+        return $this->setPaginateToView($returnView, $this);
     }
 
     /**

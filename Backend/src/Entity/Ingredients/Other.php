@@ -11,15 +11,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Other extends Ingredient
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * @ORM\Column(type="string", length=512)
      */
     private $type;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function getType(): ?string
     {

@@ -24,10 +24,6 @@ class IngredientRepository extends ServiceEntityRepository
 
     public function findAllPagination(ParamFetcher $paramFetcher)
     {
-        $page = $paramFetcher->get('page');
-        $limit = $paramFetcher->get('limit');
-        $sort = $paramFetcher->get('sort');
-        $sortBy = $paramFetcher->get('sortBy');
         $search = $paramFetcher->get('search');
         $query = $this->createQueryBuilder('e');
         if ($search != null)
@@ -35,6 +31,6 @@ class IngredientRepository extends ServiceEntityRepository
                 '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search)'
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
-        return $this->resultCount($query, $page, $limit, $sort, $sortBy);
+        return $this->resultCount($query, $paramFetcher);
     }
 }

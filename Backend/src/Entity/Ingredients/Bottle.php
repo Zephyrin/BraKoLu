@@ -18,13 +18,6 @@ class Bottle extends Ingredient
     const VOLUME = ['75', '33'];
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $volume;
@@ -34,15 +27,15 @@ class Bottle extends Ingredient
      */
     private $type;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @ORM\Column(type="string", length=30)
      */
     private $color;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getVolume(): ?int
     {

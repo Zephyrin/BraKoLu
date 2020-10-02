@@ -16,6 +16,11 @@ class Box extends Ingredient
      */
     private $capacity;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function getCapacity(): ?int
     {
         return $this->capacity;

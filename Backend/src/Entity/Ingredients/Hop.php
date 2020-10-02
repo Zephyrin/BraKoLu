@@ -14,12 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Hop extends Ingredient
 {
     const TYPES = ['pellets_t90', 'cones'];
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\Column(type="string", length=25)
@@ -39,9 +33,9 @@ class Hop extends Ingredient
      */
     private $harvest_year;
 
-    public function getId(): ?int
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
     }
 
     public function getType(): ?string

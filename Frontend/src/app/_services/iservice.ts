@@ -1,3 +1,4 @@
+import { ISortable, Sortable } from './isort';
 import { IPaginate, Paginate } from './ipaginate';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormErrors } from '@app/_helpers/form-error';
@@ -32,6 +33,12 @@ export interface IService {
    * Permet de gérer la pagination de la liste de données.
    */
   paginate: IPaginate;
+
+  /**
+   * Permet de gérer l'entête des tables pour trier par le nom de la colonne.
+   */
+  sort: ISortable;
+
   /**
    * Charge l'intégralité des données, utilisé par défaut.
    * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
@@ -126,11 +133,19 @@ export abstract class CService<T> implements IService {
   //#region Attributes IPaginate
   public paginate = new Paginate();
   //#endregion
+  //#region Sort ISort
+  public sort = new Sortable();
+  //#endregion
   public constructor(
     protected http: HttpService<T>
   ) {
     this.edit = false;
     this.paginate.changePageSubject.subscribe(x => {
+      if (x === true) {
+        this.load();
+      }
+    });
+    this.sort.changePageSubject.subscribe(x => {
       if (x === true) {
         this.load();
       }
@@ -143,7 +158,8 @@ export abstract class CService<T> implements IService {
   public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
   //#endregion
   public load(): void {
-    const httpParams = this.paginate.initPaginationParams(null);
+    let httpParams = this.paginate.initPaginationParams(null);
+    httpParams = this.sort.initSortParams(httpParams);
     this.http.getAll(httpParams).subscribe(response => {
       this.paginate.setParametersFromResponse(response.headers);
       this.model = response.body.map((x) => this.createCpy(x));

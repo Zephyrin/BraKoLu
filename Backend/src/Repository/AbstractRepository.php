@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use FOS\RestBundle\Request\ParamFetcher;
 
 trait AbstractRepository
 {
@@ -103,11 +104,12 @@ trait AbstractRepository
 
   public function resultCount(
     QueryBuilder $query,
-    int $page,
-    int $limit,
-    string $sort,
-    string $sortBy
+    ParamFetcher $paramFetcher
   ) {
+    $page = $paramFetcher->get('page');
+    $limit = $paramFetcher->get('limit');
+    $sort = $paramFetcher->get('sort');
+    $sortBy = $paramFetcher->get('sortBy');
     $page = $this->getPage($page);
     $limit = $this->getLimit($limit);
     $offset = $this->getOffset($page, $limit);
