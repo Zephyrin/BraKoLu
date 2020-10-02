@@ -17,7 +17,7 @@ export class StockService extends CService<IngredientStock>{
   ];
   constructor(
     private h: StockHttpService) {
-    super(h);
+    super(h, undefined);
   }
 
   public create(): IngredientStock {

@@ -9,8 +9,7 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { merge } from 'rxjs';
-import { Console } from 'console';
-import { MatChipListChange, MatChipSelectionChange } from '@angular/material/chips';
+import { MatChipSelectionChange } from '@angular/material/chips';
 
 @Component({
   selector: 'app-ingredients-desktop',
