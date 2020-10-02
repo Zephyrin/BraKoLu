@@ -1,4 +1,7 @@
-import { filter, startWith, switchMap, map, catchError, tap } from 'rxjs/operators';
+import { IngredientChildrenSelected } from '@app/_models/ingredient-search';
+import { IngredientSearchService } from '@app/_services/ingredient/ingredient-search.service';
+import { IngredientService } from '@app/_services/ingredient/ingredient.service';
+import { tap } from 'rxjs/operators';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,6 +9,8 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { merge } from 'rxjs';
+import { Console } from 'console';
+import { MatChipListChange, MatChipSelectionChange } from '@angular/material/chips';
 
 @Component({
   selector: 'app-ingredients-desktop',
@@ -30,6 +35,27 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     super(dialog, IngredientCreateFormComponent);
   }
 
+  // Helper pour passer de IService à IngredientService
+  get getService() { return this.service as IngredientService; }
+  get getSearch() { return this.service.search as IngredientSearchService; }
+
+  public selectIngredientChange(child: IngredientChildrenSelected) {
+    this.getSearch.updateSelected(child);
+  }
+
+  public selectionChange($evt: MatChipSelectionChange) {
+    if ($evt.selected === true) {
+      $evt.source.color = 'accent';
+    } else {
+      // On ne peut pas changer la couleur lorsque celui-ci n'est pas sélectionné...
+      $evt.source.color = 'primary';
+    }
+
+  }
+
+  public chipSelectionChange($evt: MatChipSelectionChange) {
+    console.log($evt);
+  }
   ngAfterViewInit(): void {
     merge(this.sort.sortChange)
       .pipe(tap(() => {

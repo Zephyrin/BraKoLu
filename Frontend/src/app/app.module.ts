@@ -22,6 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
@@ -74,7 +75,8 @@ import { PaginationComponent } from './_components/helpers/pagination/pagination
     MatTableModule,
     MatSelectModule,
     MatSortModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatChipsModule
   ],
   providers: [
   ],

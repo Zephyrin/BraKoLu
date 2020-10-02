@@ -8,7 +8,15 @@
 </button>
 
 <p></p>
-
+<mat-chip-list aria-label="Sélection des types d'ingrédients"
+               [multiple]="true"
+               (change)="selectionChange($event)"
+               [selectable]="true">
+  <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
+            [selected]="childName.selected"
+            (selectionChange)="selectionChange($event)"
+            (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
+</mat-chip-list>
 <!----------------------------->
 <!-- TABLEAU DES INGREDIENTS -->
 

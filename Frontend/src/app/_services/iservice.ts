@@ -1,3 +1,4 @@
+import { ISearch } from './isearch';
 import { ISortable, Sortable } from './isort';
 import { IPaginate, Paginate } from './ipaginate';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -38,6 +39,11 @@ export interface IService {
    * Permet de gérer l'entête des tables pour trier par le nom de la colonne.
    */
   sort: ISortable;
+
+  /**
+   * Permet de gérer la recherche ou de créer des filtres d'affichage.
+   */
+  search: ISearch;
 
   /**
    * Charge l'intégralité des données, utilisé par défaut.
@@ -136,8 +142,12 @@ export abstract class CService<T> implements IService {
   //#region Sort ISort
   public sort = new Sortable();
   //#endregion
+  //#region Search
+  public search: ISearch;
+  //#endregion
   public constructor(
-    protected http: HttpService<T>
+    protected http: HttpService<T>,
+    private $search: ISearch | undefined
   ) {
     this.edit = false;
     this.paginate.changePageSubject.subscribe(x => {
@@ -150,6 +160,14 @@ export abstract class CService<T> implements IService {
         this.load();
       }
     });
+    this.search = $search;
+    if (this.search) {
+      this.search.changePageSubject.subscribe(x => {
+        if (x === true) {
+          this.load();
+        }
+      });
+    }
   }
 
   //#region Abstract IService
@@ -160,6 +178,9 @@ export abstract class CService<T> implements IService {
   public load(): void {
     let httpParams = this.paginate.initPaginationParams(null);
     httpParams = this.sort.initSortParams(httpParams);
+    if (this.search) {
+      httpParams = this.search.initSearchParams(httpParams);
+    }
     this.http.getAll(httpParams).subscribe(response => {
       this.paginate.setParametersFromResponse(response.headers);
       this.model = response.body.map((x) => this.createCpy(x));

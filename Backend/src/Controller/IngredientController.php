@@ -319,7 +319,7 @@ class IngredientController extends AbstractFOSRestController
      * @QueryParam(name="search"
      *      , nullable=true
      *      , description="Recherche dans la base sur le nom ou les commentaires.")
-     * @QueryParam(name="selectChild"
+     * @QueryParam(name="selectChildren"
      *      , nullable=true
      *      , description="Sélectionne un type d'ingrédient particulier.")
      *
@@ -330,10 +330,10 @@ class IngredientController extends AbstractFOSRestController
     {
         // La fonction setPaginateToView est créée dans le helperController et est dépendante du helper
         // AbstractRepository.
-        $selectChild = $paramFetcher->get('selectChild');
+        $selectChildren = $paramFetcher->get('selectChildren');
         $returnView = null;
-        if ($selectChild != null) {
-            switch ($selectChild) {
+        if ($selectChildren != null) {
+            switch ($selectChildren) {
                 case 'other':
                     $returnView = $this->otherRepository->findAllPagination($paramFetcher);
                     break;

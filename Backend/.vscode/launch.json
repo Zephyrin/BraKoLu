@@ -16,7 +16,9 @@
                 "**/Debug.php",
                 "**/ClassStub.php",
                 "**/ReflectionExtractor.php",
-                "**/dependency-injection/**/*"
+                "**/dependency-injection/**/*",
+                "**/stopwatch/**/*",
+                "**/Descriptor/**/*"
             ]
         }
     ]

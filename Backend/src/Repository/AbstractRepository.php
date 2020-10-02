@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
 use FOS\RestBundle\Request\ParamFetcher;
 
 trait AbstractRepository

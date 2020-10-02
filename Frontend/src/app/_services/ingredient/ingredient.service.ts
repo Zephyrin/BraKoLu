@@ -1,3 +1,4 @@
+import { IngredientSearchService } from './ingredient-search.service';
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { IngredientFactory } from '@app/_models/ingredientFactory';
 import { IngredientHttpService } from './ingredient-http.service';
@@ -48,7 +49,8 @@ export class IngredientService extends CService<Ingredient>{
 
   constructor(
     private h: IngredientHttpService) {
-    super(h);
+    super(h, new IngredientSearchService());
+    (this.search as IngredientSearchService).setListIngredient(this.ingredientChildrenNames);
   }
 
   public create(): Ingredient {
