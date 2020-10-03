@@ -1,22 +1,42 @@
 <!-- BOUTON AJOUTER INGREDIENT -->
+<div class="inline-header">
+  <button mat-icon-button
+          (click)="openCreateDialog()"
+          [matTooltip]="'Ajouter un nouvel ingrédient'">
+    <mat-icon>add_circle_outline</mat-icon>
+    <mat-label>Ajouter un ingrédient à la liste de base</mat-label>
+  </button>
 
-<button mat-button
-        (click)="openCreateDialog()"
-        [matTooltip]="'Ajouter un nouvel ingrédient'">
-  <mat-icon>add_circle_outline</mat-icon>
-  <mat-label> Ajouter un ingrédient à la liste de base</mat-label>
-</button>
+  <form [formGroup]="searchForm">
+    <mat-form-field>
+      <mat-label>Recherche</mat-label>
+      <input matInput
+             id="searchText"
+             formControlName="search"
+             type="search"
+             aria-label="Recherche">
+      <button for="searchText"
+              mat-icon-button
+              matSuffix
+              type="submit"
+              (click)="search()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
 
-<p></p>
-<mat-chip-list aria-label="Sélection des types d'ingrédients"
-               [multiple]="true"
-               (change)="selectionChange($event)"
-               [selectable]="true">
-  <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
-            [selected]="childName.selected"
-            (selectionChange)="selectionChange($event)"
-            (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
-</mat-chip-list>
+  </form>
+</div>
+<div class="inline-center">
+  <mat-chip-list aria-label="Sélection des types d'ingrédients"
+                 [multiple]="true"
+                 (change)="selectionChange($event)"
+                 [selectable]="true">
+    <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
+              [selected]="childName.selected"
+              (selectionChange)="selectionChange($event)"
+              (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
+  </mat-chip-list>
+</div>
 <!----------------------------->
 <!-- TABLEAU DES INGREDIENTS -->
 
@@ -25,107 +45,13 @@
        #matTable
        matSort
        [dataSource]="dataSource">
-
-  <ng-container matColumnDef="name">
+  <ng-container *ngFor="let header of getService.headers"
+                [matColumnDef]="header.value">
     <th mat-header-cell
         *matHeaderCellDef
-        mat-sort-header="name"> Nom </th>
+        [mat-sort-header]="header.value"> {{header.viewValue}} </th>
     <td mat-cell
-        *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
-  <ng-container matColumnDef="unit">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="unit"> Unité </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.unit}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="unitFactor">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="unitFactor"> Facteur d'unité </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.unitFactor}} </td>
-  </ng-container>
-  <ng-container matColumnDef="comment">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="comment"> Commentaire </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.comment}} </td>
-  </ng-container>
-  <!-- Spécifique aux sous ingrédients -->
-  <ng-container matColumnDef="type">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="type"> Type </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['type']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="plant">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="plant"> Plante </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['plant']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="format">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="format"> Format </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['format']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="ebc">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="ebc"> EBC </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['ebc']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="volume">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="volume"> Volume </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['volume']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="color">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="color"> Couleur </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['color']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="capacity">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="capacity"> Capacité </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['capacity']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="acidAlpha">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="acidAlpha"> Acid-Alpha </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['acidAlpha']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="harvestYear">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="harvestYear"> Année de la récolte </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element['harvestYear']}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="childName">
-    <th mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header="childName"> Category </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.childName}} </td>
+        *matCellDef="let element"> {{element[header.value]}} </td>
   </ng-container>
   <tr mat-header-row
       *matHeaderRowDef="displayedColumns"></tr>

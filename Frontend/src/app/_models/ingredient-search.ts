@@ -1,7 +1,7 @@
 import { ValueViewChild } from '@app/_services/iservice';
 export class IngredientSearch {
   selectChildren = [];
-
+  searchValue = '';
 }
 
 export class IngredientChildrenSelected implements ValueViewChild {

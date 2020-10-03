@@ -1,3 +1,4 @@
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { IngredientChildrenSelected } from '@app/_models/ingredient-search';
 import { IngredientSearchService } from '@app/_services/ingredient/ingredient-search.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
@@ -5,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { merge } from 'rxjs';
@@ -16,7 +17,7 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss']
 })
-export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements AfterViewInit {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName',
     'type'
     ,   /* cereal */ 'plant', 'format', 'ebc'
@@ -25,12 +26,14 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     ,   /* hop */ 'acidAlpha', 'harvestYear'
   ];
 
-  private allSubIngredients: string[] = ['other', 'cereal', 'bottle', 'box', 'hop'];
   dataSource: any;
   @ViewChild('matTable') matTable: MatTable<any>;
   @ViewChild(MatSort) sort: MatSort;
+  searchForm: FormGroup;
+
   constructor(
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private formBuilder: FormBuilder) {
     super(dialog, IngredientCreateFormComponent);
   }
 
@@ -52,8 +55,11 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
 
   }
 
-  public chipSelectionChange($evt: MatChipSelectionChange) {
-    console.log($evt);
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.searchForm = this.formBuilder.group({
+      search: [this.getSearch.ingredientSearch.searchValue]
+    });
   }
   ngAfterViewInit(): void {
     merge(this.sort.sortChange)
@@ -76,9 +82,9 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
       .filter((ingredient, i, arr) => arr.findIndex(t => t.childName === ingredient.childName) === i)
       .map(x => x.childName);
     let countTypeIn = 0;
-    this.allSubIngredients.forEach(element => {
-      if (childNames.indexOf(element) < 0) {
-        switch (element) {
+    this.getService.ingredientChildrenNames.forEach(element => {
+      if (childNames.indexOf(element.value) < 0) {
+        switch (element.value) {
           case 'other':
             countTypeIn++;
             break;
@@ -152,5 +158,9 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     if (index < 0) {
       this.displayedColumns.push(name);
     }
+  }
+
+  search(): void {
+    this.getSearch.updateSearch(this.searchForm.value.search);
   }
 }

@@ -11,7 +11,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     public dialog: MatDialog,
     protected componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
       if (data === true) {
         this.endUpdate();

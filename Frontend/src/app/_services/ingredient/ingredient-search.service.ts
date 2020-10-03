@@ -21,6 +21,14 @@ export class IngredientSearchService implements ISearch {
     child.selected = !child.selected;
     this.changePageSubject.next(true);
   }
+
+  public updateSearch(search: string) {
+    if (this.ingredientSearch.searchValue !== search) {
+      this.ingredientSearch.searchValue = search;
+      this.changePageSubject.next(true);
+    }
+  }
+
   initSearchParams(httpParams: HttpParams): HttpParams {
     if (httpParams == null) { httpParams = new HttpParams(); }
     if (this.ingredientSearch.selectChildren.length > 0) {
@@ -36,6 +44,12 @@ export class IngredientSearchService implements ISearch {
           selected.toString());
       }
     }
+    if (this.ingredientSearch.searchValue.length > 0) {
+      httpParams = httpParams.append(
+        'search',
+        this.ingredientSearch.searchValue
+      );
+    }
     return httpParams;
   }
 
@@ -44,6 +58,11 @@ export class IngredientSearchService implements ISearch {
 
     } else {
       this.ingredientSearch.selectChildren = [];
+    }
+    if (params && params.hasOwnProperty('search')) {
+      this.ingredientSearch.searchValue = params.search;
+    } else {
+      this.ingredientSearch.searchValue = '';
     }
   }
 }

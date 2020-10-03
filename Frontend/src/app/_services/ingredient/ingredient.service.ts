@@ -18,6 +18,23 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'box', viewValue: 'Carton' }
   ];
 
+  public headers: ValueViewChild[] = [
+    { value: 'name', viewValue: 'Nom' },
+    { value: 'unit', viewValue: 'Unité' },
+    { value: 'unitFactor', viewValue: 'Facteur d\'unité' },
+    { value: 'comment', viewValue: 'Commentaire' },
+    { value: 'type', viewValue: 'Type' },
+    { value: 'plant', viewValue: 'Plante' },
+    { value: 'format', viewValue: 'Format' },
+    { value: 'ebc', viewValue: 'EBC' },
+    { value: 'volume', viewValue: 'Volume' },
+    { value: 'color', viewValue: 'Couleur' },
+    { value: 'capacity', viewValue: 'Capacité' },
+    { value: 'acidAlpha', viewValue: 'Acid-Alpha' },
+    { value: 'harvestYear', viewValue: 'Année de la récolte' },
+    { value: 'childName', viewValue: 'Catégory' }
+  ];
+
   public cerealTypes: ValueViewChild[] = [
     { value: 'malt', viewValue: 'Malt' },
     { value: 'cru', viewValue: 'Cru' }
