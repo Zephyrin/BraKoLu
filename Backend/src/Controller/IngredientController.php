@@ -165,12 +165,12 @@ class IngredientController extends AbstractFOSRestController
         $this->entityManager = $entityManager;
         $this->ingredientRepository = $ingredientRepository;
         $this->bottleRepository = $bottleRepository;
+        $this->bottleTopRepository = $bottleTopRepository;
         $this->boxRepository = $boxRepository;
         $this->cerealRepository = $cerealRepository;
         $this->hopRepository = $hopRepository;
-        $this->otherRepository = $otherRepository;
         $this->kegRepository = $kegRepository;
-        $this->bottleTopRepository = $bottleTopRepository;
+        $this->otherRepository = $otherRepository;
         $this->yeastRepository = $yeastRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
@@ -346,7 +346,7 @@ class IngredientController extends AbstractFOSRestController
      *      , default="asc"
      *      , description="La direction du tri.")
      * @QueryParam(name="sortBy"
-     *      , requirements="(id|name|comment|unit|unitFactor|childName|type|plant|format|ebc|volume|color|capacity|acidAlpha|harvestYear)"
+     *      , requirements="(id|name|comment|unit|unitFactor|childName|type|plant|format|ebc|volume|color|capacity|acidAlpha|harvestYear|productionYear|size)"
      *      , default="name"
      *      , description="Le tri est organiser sur l'id, le nom ou les commentaires.")
      * @QueryParam(name="search"
@@ -367,29 +367,29 @@ class IngredientController extends AbstractFOSRestController
         $returnView = null;
         if ($selectChildren != null) {
             switch ($selectChildren) {
-                case 'other':
-                    $returnView = $this->otherRepository->findAllPagination($paramFetcher);
-                    break;
                 case 'bottle':
                     $returnView = $this->bottleRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'bottleTop':
+                    $returnView = $this->bottleTopRepository->findAllPagination($paramFetcher);
                     break;
                 case 'box':
                     $returnView = $this->boxRepository->findAllPagination($paramFetcher);
                     break;
-                case 'hop':
-                    $returnView = $this->hopRepository->findAllPagination($paramFetcher);
-                    break;
                 case 'cereal':
                     $returnView = $this->cerealRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'hop':
+                    $returnView = $this->hopRepository->findAllPagination($paramFetcher);
                     break;
                 case 'keg':
                     $returnView = $this->kegRepository->findAllPagination($paramFetcher);
                     break;
+                case 'other':
+                    $returnView = $this->otherRepository->findAllPagination($paramFetcher);
+                    break;
                 case 'yeast':
                     $returnView = $this->yeastRepository->findAllPagination($paramFetcher);
-                    break;
-                case 'bottleTop':
-                    $returnView = $this->bottleTopRepository->findAllPagination($paramFetcher);
                     break;
                 default:
                     $returnView = $this->ingredientRepository->findAllPagination($paramFetcher);
@@ -467,6 +467,7 @@ class IngredientController extends AbstractFOSRestController
         $existing = $this->getById($id);
 
         $form = $this->createForm($this->getIngredientType($existing), $existing);
+        $this->manageDate($data);
         unset($data[$this->childName]);
 
         $form->submit($data, $clearMissing);
@@ -566,6 +567,30 @@ class IngredientController extends AbstractFOSRestController
         // Si il n'existe pas, je lui dis que ça ne va pas avec l'exception 
         // PreconditionFailedHttpException.
         switch ($data[$this->childName]) {
+            case 'bottle':
+                if ($isClass)
+                    return TypeClass\BottleType::class;
+                return new EntityClass\Bottle();
+            case 'bottleTop':
+                if ($isClass)
+                    return TypeClass\BottleTopType::class;
+                return new EntityClass\BottleTop();
+            case 'box':
+                if ($isClass)
+                    return TypeClass\BoxType::class;
+                return new EntityClass\Box();
+            case 'cereal':
+                if ($isClass)
+                    return TypeClass\CerealType::class;
+                return new EntityClass\Cereal();
+            case 'hop':
+                if ($isClass)
+                    return TypeClass\HopType::class;
+                return new EntityClass\Hop();
+            case 'keg':
+                if ($isClass)
+                    return TypeClass\KegType::class;
+                return new EntityClass\Keg();
             case 'other':
                 // Le childName s'appel « other »
                 // Si je recherche la classe, je lui retourne la classe, sinon je lui retourne le type qui 
@@ -574,34 +599,10 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\OtherType::class;
                 return new EntityClass\Other();
-            case 'hop':
-                if ($isClass)
-                    return TypeClass\HopType::class;
-                return new EntityClass\Hop();
-            case 'cereal':
-                if ($isClass)
-                    return TypeClass\CerealType::class;
-                return new EntityClass\Cereal();
-            case 'bottle':
-                if ($isClass)
-                    return TypeClass\BottleType::class;
-                return new EntityClass\Bottle();
-            case 'box':
-                if ($isClass)
-                    return TypeClass\BoxType::class;
-                return new EntityClass\Box();
-            case 'keg':
-                if ($isClass)
-                    return TypeClass\KegType::class;
-                return new EntityClass\Keg();
             case 'yeast':
                 if ($isClass)
                     return TypeClass\YeastType::class;
                 return new EntityClass\Yeast();
-            case 'bottleTop':
-                if ($isClass)
-                    return TypeClass\BottleTopType::class;
-                return new EntityClass\BottleTop();
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -620,22 +621,22 @@ class IngredientController extends AbstractFOSRestController
         // Je récupère le nom de la classe de l'élément retourné par la base de données
         // Puis je retourne le type qui permet de réaliser la validation.
         switch (get_class($existingClass)) {
-            case "App\Entity\Ingredients\Other":
-                return TypeClass\OtherType::class;
-            case "App\Entity\Ingredients\Hop":
-                return TypeClass\HopType::class;
-            case "App\Entity\Ingredients\Cereal":
-                return TypeClass\CerealType::class;
             case "App\Entity\Ingredients\Bottle":
                 return TypeClass\BottleType::class;
-            case "App\Entity\Ingredients\Box":
-                return TypeClass\BoxType::class;
-            case "App\Entity\Ingredients\Keg":
-                return TypeClass\KegType::class;
-            case "App\Entity\Ingredients\Yeast":
-                return TypeClass\YeastType::class;
             case "App\Entity\Ingredients\BottleTop":
                 return TypeClass\BottleTopType::class;
+            case "App\Entity\Ingredients\Box":
+                return TypeClass\BoxType::class;
+            case "App\Entity\Ingredients\Cereal":
+                return TypeClass\CerealType::class;
+            case "App\Entity\Ingredients\Hop":
+                return TypeClass\HopType::class;
+            case "App\Entity\Ingredients\Keg":
+                return TypeClass\KegType::class;
+            case "App\Entity\Ingredients\Other":
+                return TypeClass\OtherType::class;
+            case "App\Entity\Ingredients\Yeast":
+                return TypeClass\YeastType::class;
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
         }

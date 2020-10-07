@@ -30,7 +30,7 @@ class YeastRepository extends ServiceEntityRepository
         if ($search != null)
             $query = $query->andWhere(
                 '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search OR LOWER(e.type) LIKE :search OR' +
-                    ' LOWER(e.color) LIKE :search)'
+                    ' LOWER(e.productionYear) LIKE :search)'
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         return $this->resultCount($query, $paramFetcher);

@@ -5,8 +5,6 @@ namespace App\Entity\Ingredients;
 use App\Repository\Ingredients\BottleTopRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
-use JMS\Serializer\Annotation\SerializedName;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BottleTopRepository::class)
@@ -14,12 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class BottleTop extends Ingredient
 {
     const SIZES = ['26', '29'];
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\Column(type="integer")
@@ -31,9 +23,9 @@ class BottleTop extends Ingredient
      */
     private $color;
 
-    public function getId(): ?int
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
     }
 
     public function getSize(): ?int

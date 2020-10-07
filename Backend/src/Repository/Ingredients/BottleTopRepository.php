@@ -17,7 +17,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 class BottleTopRepository extends ServiceEntityRepository
 {
     use AbstractRepository;
-    
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BottleTop::class);
@@ -29,7 +29,7 @@ class BottleTopRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('e');
         if ($search != null)
             $query = $query->andWhere(
-                '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search OR LOWER(e.type) LIKE :search OR' +
+                '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search OR LOWER(e.size) LIKE :search OR' +
                     ' LOWER(e.color) LIKE :search)'
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');

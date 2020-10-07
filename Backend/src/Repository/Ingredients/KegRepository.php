@@ -17,7 +17,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 class KegRepository extends ServiceEntityRepository
 {
     use AbstractRepository;
-    
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Keg::class);
@@ -29,8 +29,8 @@ class KegRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('e');
         if ($search != null)
             $query = $query->andWhere(
-                '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search OR LOWER(e.type) LIKE :search OR' +
-                    ' LOWER(e.color) LIKE :search)'
+                '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search OR LOWER(e.volume) LIKE :search OR' +
+                    ' LOWER(e.head) LIKE :search)'
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         return $this->resultCount($query, $paramFetcher);

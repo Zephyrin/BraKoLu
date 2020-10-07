@@ -20,22 +20,28 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="childName", type="string")
  * @ORM\DiscriminatorMap({
- *      "cereal" = "App\Entity\Ingredients\Cereal"
- *      , "other" = "App\Entity\Ingredients\Other"
- *      , "hop" = "App\Entity\Ingredients\Hop"
- *      , "bottle" = "App\Entity\Ingredients\Bottle"
+ *      "bottle" = "App\Entity\Ingredients\Bottle"
+ *      , "bottleTop" = "App\Entity\Ingredients\BottleTop"
  *      , "box" = "App\Entity\Ingredients\Box"
+ *      , "cereal" = "App\Entity\Ingredients\Cereal"
+ *      , "hop" = "App\Entity\Ingredients\Hop"
+ *      , "keg" = "App\Entity\Ingredients\Keg"
+ *      , "other" = "App\Entity\Ingredients\Other"
+ *      , "yeast" = "App\Entity\Ingredients\Yeast"
  * })
  * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
  * @DiscriminatorMap(
  *  typeProperty="childName"
  *  , fieldName="childName"
  *  , mapping={
- *    "cereal"="App\Entity\Ingredients\Cereal"
- *    , "other"="App\Entity\Ingredients\Other"
- *    , "hop"="App\Entity\Ingredients\Hop"
- *    , "bottle" = "App\Entity\Ingredients\Bottle"
- *    , "box" = "App\Entity\Ingredients\Box"
+ *      "bottle" = "App\Entity\Ingredients\Bottle"
+ *      , "bottleTop" = "App\Entity\Ingredients\BottleTop"
+ *      , "box" = "App\Entity\Ingredients\Box"
+ *      , "cereal" = "App\Entity\Ingredients\Cereal"
+ *      , "hop" = "App\Entity\Ingredients\Hop"
+ *      , "keg" = "App\Entity\Ingredients\Keg"
+ *      , "other" = "App\Entity\Ingredients\Other"
+ *      , "yeast" = "App\Entity\Ingredients\Yeast"
  * })
  */
 abstract class Ingredient
