@@ -13,6 +13,7 @@ use App\Repository\Ingredients\BoxRepository;
 use App\Repository\Ingredients\CerealRepository;
 use App\Repository\Ingredients\HopRepository;
 use App\Repository\Ingredients\OtherRepository;
+use App\Repository\Ingredients\KegRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -101,6 +102,14 @@ class IngredientController extends AbstractFOSRestController
     private $otherRepository;
 
     /**
+     * Récupère spécifiquement les autres ingrédients depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var KegRepository
+     */
+    private $kegRepository;
+
+    /**
      * Permet de gérer les erreurs liées à la validation d'entités.
      * Surtout utiliser dans HelperController.php.
      * 
@@ -130,6 +139,7 @@ class IngredientController extends AbstractFOSRestController
         CerealRepository $cerealRepository,
         HopRepository $hopRepository,
         OtherRepository $otherRepository,
+        KegRepository $kegRepository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
@@ -139,6 +149,7 @@ class IngredientController extends AbstractFOSRestController
         $this->cerealRepository = $cerealRepository;
         $this->hopRepository = $hopRepository;
         $this->otherRepository = $otherRepository;
+        $this->kegRepository = $kegRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
@@ -349,6 +360,9 @@ class IngredientController extends AbstractFOSRestController
                 case 'cereal':
                     $returnView = $this->cerealRepository->findAllPagination($paramFetcher);
                     break;
+                case 'keg':
+                    $returnView = $this->kegRepository->findAllPagination($paramFetcher);
+                    break;
                 default:
                     $returnView = $this->ingredientRepository->findAllPagination($paramFetcher);
                     break;
@@ -548,6 +562,10 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\BoxType::class;
                 return new EntityClass\Box();
+            case 'keg':
+                if ($isClass)
+                    return TypeClass\KegType::class;
+                return new EntityClass\Keg();
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -576,6 +594,8 @@ class IngredientController extends AbstractFOSRestController
                 return TypeClass\BottleType::class;
             case "App\Entity\Ingredients\Box":
                 return TypeClass\BoxType::class;
+            case "App\Entity\Ingredients\Keg":
+                return TypeClass\KegType::class;
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
         }
