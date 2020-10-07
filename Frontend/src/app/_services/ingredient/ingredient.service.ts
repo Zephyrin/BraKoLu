@@ -15,7 +15,8 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'hop', viewValue: 'Houblon' },
     { value: 'other', viewValue: 'Autre' },
     { value: 'bottle', viewValue: 'Bouteille' },
-    { value: 'box', viewValue: 'Carton' }
+    { value: 'box', viewValue: 'Carton' },
+    { value: 'keg', viewValue: 'Fût' }
   ];
 
   public headers: ValueViewChild[] = [
@@ -32,11 +33,12 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'capacity', viewValue: 'Capacité' },
     { value: 'acidAlpha', viewValue: 'Acid-Alpha' },
     { value: 'harvestYear', viewValue: 'Année de la récolte' },
-    { value: 'childName', viewValue: 'Catégory' }
+    { value: 'childName', viewValue: 'Catégory' },
+    { value: 'head', viewValue: 'Tête' }
   ];
 
   public cerealTypes: ValueViewChild[] = [
-    { value: 'malt', viewValue: 'Malt' },
+    { value: 'malt', viewValue: 'Malté' },
     { value: 'cru', viewValue: 'Cru' }
   ];
 
@@ -62,6 +64,15 @@ export class IngredientService extends CService<Ingredient>{
     { value: '33', viewValue: '33 cL' },
   ];
 
+  public kegVolume: ValueViewChild[] = [
+    { value: '20', viewValue: '20 L' },
+    { value: '30', viewValue: '30 L' },
+  ];
+
+  public kegHead: ValueViewChild[] = [
+    { value: 'A', viewValue: 'Type A' },
+    { value: 'S', viewValue: 'Type S' },
+  ];
 
 
   constructor(
@@ -113,6 +124,10 @@ export class IngredientService extends CService<Ingredient>{
         break;
       case 'box':
         this.form.addControl('capacity', new FormControl('', Validators.required));
+        break;
+      case 'keg':
+        this.form.addControl('volume', new FormControl('', Validators.required));
+        this.form.addControl('head', new FormControl('', Validators.required));
         break;
     }
   }

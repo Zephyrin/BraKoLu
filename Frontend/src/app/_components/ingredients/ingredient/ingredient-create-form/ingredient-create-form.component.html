@@ -172,6 +172,42 @@
         </mat-form-field>
       </div>
 
+      <!--------->
+      <!-- Keg -->
+
+      <div *ngIf="service.form.value.childName === 'keg'"
+           class="flex">
+           
+        <mat-form-field class="full-width">
+          <mat-label>Volume</mat-label>
+          <mat-select required
+                      formControlName="volume">
+            <mat-option *ngFor="let childName of service.kegVolume"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ service.form.get('volume').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Tête</mat-label>
+          <mat-select required
+                      formControlName="head">
+            <mat-option *ngFor="let childName of service.kegHead"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ service.form.get('head').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
       <!------------>
       <!-- Bottle -->
       <div *ngIf="service.form.value.childName === 'bottle'"

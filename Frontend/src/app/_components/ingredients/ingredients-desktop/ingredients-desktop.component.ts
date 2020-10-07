@@ -22,8 +22,9 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     'type'
     ,   /* cereal */ 'plant', 'format', 'ebc'
     ,   /* bottle */ 'volume', 'color'
-    , /* box */ 'capacity'
+    ,   /* box */ 'capacity'
     ,   /* hop */ 'acidAlpha', 'harvestYear'
+    ,   /* keg */ 'volume', 'head'
   ];
 
   dataSource: any;
@@ -107,6 +108,11 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
             this.removeColumn('acidAlpha');
             this.removeColumn('harvestYear');
             break;
+            case 'keg':
+              countTypeIn++;
+              this.removeColumn('volume');
+              this.removeColumn('head');
+              break;            
           default:
             break;
         }
@@ -139,6 +145,10 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
           this.addColumn('type');
           this.addColumn('acidAlpha');
           this.addColumn('harvestYear');
+          break;
+        case 'keg':
+          this.addColumn('volume');
+          this.addColumn('head');
           break;
         default:
           break;
