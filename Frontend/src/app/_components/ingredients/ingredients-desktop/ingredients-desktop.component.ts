@@ -18,8 +18,7 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   styleUrls: ['./ingredients-desktop.component.scss']
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName',
-    'type'
+  displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName','type'
     ,   /* cereal */ 'plant', 'format', 'ebc'
     ,   /* bottle */ 'volume', 'color'
     ,   /* box */ 'capacity'

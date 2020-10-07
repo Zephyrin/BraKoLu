@@ -1,6 +1,7 @@
+<!-- TITRE DE LA POPUP -->
 <mat-form-field appearance="fill"
                 class="full-width">
-  <mat-label>Quel est le nouvel ingrédient ?</mat-label>
+  <mat-label> Ajouter ingrédient</mat-label>
   <mat-select cdkFocusInitial
               [disabled]="(service.loading | async) || value"
               (selectionChange)="childNameChange($event)">
@@ -9,12 +10,17 @@
       {{childName.viewValue}}
     </mat-option>
   </mat-select>
+
 </mat-form-field>
+
+<!-- FORMULAIRE -->
 <form [formGroup]="service.form"
       *ngIf="service.form"
       (ngSubmit)="onSubmitClick()">
   <fieldset [disabled]="service.loading | async">
     <fieldset *ngIf="service.form">
+
+      <!-- NOM -->
       <mat-form-field class="full-width">
         <mat-label>Nom</mat-label>
         <input matInput
@@ -23,12 +29,13 @@
                placeholder="Ex. Vienna"
                value="">
         <mat-error>
-
-          <!-- TODO mettre en forme cette appel pour la faire plus courte -->
-          <!-- Par exemple mettre un comboBox kg/gr qui implicitement mets le bon facteur d'unité ???? -->
           {{ service.form.get('name').errors?.serverError }}
         </mat-error>
       </mat-form-field>
+
+      <!-- UNITE + FACTEUR UNITE -->
+      <!-- TODO mettre en forme cette appel pour la faire plus courte -->
+      <!-- Par exemple mettre un comboBox kg/gr qui implicitement mets le bon facteur d'unité ???? -->
       <mat-form-field class="full-width">
         <mat-label>Unité</mat-label>
         <input matInput
@@ -39,6 +46,7 @@
           {{ service.form.get('unit').errors?.serverError }}
         </mat-error>
       </mat-form-field>
+
       <mat-form-field class="full-width">
         <mat-label>Facteur d'unité</mat-label>
         <input matInput
@@ -52,6 +60,7 @@
           {{ service.form.get('unitFactor').errors?.serverError }}
         </mat-error>
       </mat-form-field>
+      
 
       <!-- Spécification des ingrédients -->
       <!-- Todo créer un composant factory -->
@@ -336,8 +345,6 @@
       </div>
 
       <!-- Fin des spécifications -->
-
-
       <mat-form-field class="full-width">
         <mat-label>Commentaire</mat-label>
         <textarea matInput
@@ -349,6 +356,7 @@
       </mat-form-field>
     </fieldset>
 
+    <!-- 2 BOUTONS DU BAS -->
     <div mat-dialog-actions
          class="flex-reverse">
       <button mat-button
@@ -363,7 +371,7 @@
 
 </form>
 
-<!-- C'est moche mais c'est parce que je suis fainéant... -->
+<!-- C'est moche mais c'est parce que je suis fainéant..  PAS COMPRIS ???? . -->
 <div mat-dialog-actions
      *ngIf="!service.form"
      class="flex-reverse">
