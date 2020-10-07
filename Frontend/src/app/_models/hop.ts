@@ -26,10 +26,6 @@ export class Hop extends Ingredient {
       } else {
         data[`harvestYear`] =
           this.harvestYear.getFullYear()
-          + '-'
-          + (this.harvestYear.getMonth() + 1)
-          + '-'
-          + this.harvestYear.getDay();
       }
     }
     return data;

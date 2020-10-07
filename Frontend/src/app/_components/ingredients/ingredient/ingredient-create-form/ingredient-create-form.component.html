@@ -156,6 +156,37 @@
       </div>
 
       <!----------->
+      <!-- Yeast -->
+      <div *ngIf="service.form.value.childName === 'yeast'"
+           class="flex">
+        <mat-form-field class="full-width">
+          <mat-label>Type</mat-label>
+          <mat-select required
+                      formControlName="type">
+            <mat-option *ngFor="let childName of service.yeastTypes"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ service.form.get('type').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="full-width">
+          <mat-label>Année de production</mat-label>
+          <input matInput
+                 required
+                 formControlName="productionYear"
+                 placeholder="Saisir ici l'année de production"
+                 type="date">
+          <mat-error>
+            {{ service.form.get('productionYear').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!----------->
       <!-- Other -->
       <div *ngIf="service.form.value.childName === 'other'"
            class="flex">
@@ -174,7 +205,6 @@
 
       <!--------->
       <!-- Keg -->
-
       <div *ngIf="service.form.value.childName === 'keg'"
            class="flex">
            
@@ -238,6 +268,38 @@
           </mat-select>
           <mat-error>
             {{ service.form.get('volume').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Couleur</mat-label>
+          <input matInput
+                 required
+                 formControlName="color"
+                 placeholder="Saisir ici la couleur"
+                 value="">
+          <mat-error>
+            {{ service.form.get('color').errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!--------------->
+      <!-- BottleTop -->
+      <div *ngIf="service.form.value.childName === 'bottleTop'"
+           class="flex">
+
+        <mat-form-field class="full-width">
+          <mat-label>Taille</mat-label>
+          <mat-select required
+                      formControlName="size">
+            <mat-option *ngFor="let childName of service.bottleTopSize"
+                        [value]="childName.value">
+              {{childName.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{ service.form.get('size').errors?.serverError }}
           </mat-error>
         </mat-form-field>
 

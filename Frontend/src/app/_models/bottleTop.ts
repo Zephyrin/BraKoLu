@@ -1,14 +1,14 @@
 import { Ingredient } from './ingredient';
 
-export class Bottle_Top extends Ingredient {
+export class BottleTop extends Ingredient {
   size: number;
   color: string;
 
-  public constructor(bottle_top: Bottle_Top | undefined) {
-    super(bottle_top);
-    if (bottle_top) {
-      this.size = bottle_top.size;
-      this.color = bottle_top.color;
+  public constructor(bottleTop: BottleTop | undefined) {
+    super(bottleTop);
+    if (bottleTop) {
+      this.size = bottleTop.size;
+      this.color = bottleTop.color;
     } else {
       this.childName = 'bottle top';
     }

@@ -1,12 +1,14 @@
-<!-- BOUTON AJOUTER INGREDIENT -->
+
 <div class="inline-header">
+  <!-- BOUTON AJOUTER INGREDIENT -->
   <button mat-icon-button
           (click)="openCreateDialog()"
-          [matTooltip]="'Ajouter un nouvel ingrédient'">
+          [matTooltip]="'Ajouter ingrédient type'">
     <mat-icon>add_circle_outline</mat-icon>
-    <mat-label>Ajouter un ingrédient à la liste de base</mat-label>
+    <mat-label>Ajouter ingrédient</mat-label>
   </button>
 
+  <!-- BOITE RECHERCHE -->
   <form [formGroup]="searchForm">
     <mat-form-field>
       <mat-label>Recherche</mat-label>
@@ -26,7 +28,9 @@
 
   </form>
 </div>
+
 <div class="inline-center">
+  <!-- FILTRES TYPES INGREDIENTS -->
   <mat-chip-list aria-label="Sélection des types d'ingrédients"
                  [multiple]="true"
                  (change)="selectionChange($event)"
@@ -37,9 +41,8 @@
               (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
   </mat-chip-list>
 </div>
-<!----------------------------->
-<!-- TABLEAU DES INGREDIENTS -->
 
+<!-- TABLEAU DES INGREDIENTS -->
 <table mat-table
        class="full-width"
        #matTable

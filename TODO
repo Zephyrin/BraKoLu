@@ -1,24 +1,49 @@
-TODO:
+TODO : 
+
     Mettre le TODO sur Github :) 
+
+
+<------------------------------>
+<------------------------------>
 
 BDD :
 
-    Comment vérifier son contenu et supprimer les entrées inutiles, créés, paraît par erreur fortuite...
-    -> Rep: Pour le moment nous sommes en dev du coup plus on a de valeur dans la base de données, mieux c'est.
-        On peut voir l'état de la base de données via des petits plugin sur Firefox ou Chrome pour regarder des base
-        sqlite3. https://addons.mozilla.org/fr/firefox/addon/sqlite-manager-webext/
+    Comment vérifier son contenu et supprimer les entrées inutiles, créés par erreur fortuite...
+        -> Rep: Pour le moment nous sommes en dev du coup plus on a de valeur dans la base de données, mieux c'est.
+            On peut voir l'état de la base de données via des petits plugin sur Firefox ou Chrome pour regarder des base
+            sqlite3. https://addons.mozilla.org/fr/firefox/addon/sqlite-manager-webext/
+
+
+<------------------------------>
+<------------------------------>
 
 BACKEND : 
 
-    ajout de tous les enfants ingrédients
+    Ajout de tous les enfants ingrédients
+        -> bug pour KEG
+        -> Faire liaison entre BOTTLE et BOX
 
-    controler bonne éxecution de :  bottle
-        Via les tests fonctionnelles liées au Backend. (features/Ingredient/XXX)
-        * Éteindre tout les serveurs PHP pour utiliser le serveur de test via : symfony server:stop 
-        * Lancer les tests fonctionnelles avec : vendor/bin/behat features/ --stop-on-failure
-    --------------------------
-    
-    
+    ---------------------------
+
+    SRC/Controller/Enum -> que faire avec ça ?
+
+    ---------------------------
+
+    Procédure de test:
+
+        -> écriture dans dossier Feature en cours
+
+            -> Dans le cas de Box, attente liaison spécifique avec Bottle (voir DIA)
+            -> Dans le cas de Other = sans objet donc pas nécessaire ?
+
+        -> éxecuter les tests
+                Via les tests fonctionnelles liées au Backend. (features/Ingredient/XXX) :
+                    * Éteindre tout les serveurs PHP pour utiliser le serveur de test via : symfony server:stop 
+                    * Lancer les tests fonctionnels avec : vendor/bin/behat features/ --stop-on-failure
+
+
+<------------------------------>
+<------------------------------>    
 
 FRONTEND :
 
@@ -37,7 +62,7 @@ FRONTEND :
         
     Page Vente : 
     
-        Création avec tab (liste des brassins / suivi / carte de fidelité (contiendra la liste des clients avec bouton + pour ajout)
+        Création de la page avec tab (liste des brassins / suivi / carte de fidelité (contiendra la liste des clients avec bouton + pour ajout)
         
     Page Inventaire :
         
@@ -47,17 +72,7 @@ FRONTEND :
 
         HOP -> seulement spécifié l'année de production et non la date compléte lors de la création 
     
-        Il doit y avoir une barre de recherche qui recherche dans tous les champs en haut à droite du bouton +
         ajout d'un bouton pour supprimer un ingrédient de la liste (sur ouverture popup avec gros warning !!!)
-
-        Flo, je m'occupe de ça prochainement, ça permettra d'avoir une base pour tout le reste. J'essaie d'en faire un truc générique pour 
-        que l'on puisse l'utiliser de partout.
-        
-    Ingredient create :
-    
-        Le bouton ajouter n'est pas necessaire tant que l'on a pas sélectionné le type d'ingrédient
-            Il est normalement grisé tant que le formulaire n'est pas valide. On ne peut donc pas valider. Il est dérangeant de voir des boutons apparaître et disparaître.
-            De la même manière, il serai peut-être interessant de laisser les champs liés aux ingrédients affiché dans la fenêtre de création.
         
     Page stock :
     
@@ -69,7 +84,7 @@ FRONTEND :
         
     Projet :
 
-        Mettre à jour le DIA compte tenu de la création des ingredients enfants
+        Mettre à jour le DIA compte tenu de la création des ingredients enfants 
     
     
         

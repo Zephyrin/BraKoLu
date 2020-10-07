@@ -14,6 +14,8 @@ use App\Repository\Ingredients\CerealRepository;
 use App\Repository\Ingredients\HopRepository;
 use App\Repository\Ingredients\OtherRepository;
 use App\Repository\Ingredients\KegRepository;
+use App\Repository\Ingredients\BottleTopRepository;
+use App\Repository\Ingredients\YeastRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -102,12 +104,28 @@ class IngredientController extends AbstractFOSRestController
     private $otherRepository;
 
     /**
-     * Récupère spécifiquement les autres ingrédients depuis la base de données.
+     * Récupère spécifiquement les fûts depuis la base de données.
      * Permet une recherche plus fine.
      *
      * @var KegRepository
      */
     private $kegRepository;
+
+    /**
+     * Récupère spécifiquement les levures depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var YeastRepository
+     */
+    private $yeastRepository;
+
+    /**
+     * Récupère spécifiquement les capsules depuis la base de données.
+     * Permet une recherche plus fine.
+     *
+     * @var BottleTopRepository
+     */
+    private $bottleTopRepository;
 
     /**
      * Permet de gérer les erreurs liées à la validation d'entités.
@@ -140,6 +158,8 @@ class IngredientController extends AbstractFOSRestController
         HopRepository $hopRepository,
         OtherRepository $otherRepository,
         KegRepository $kegRepository,
+        BottleTopRepository $bottleTopRepository,
+        YeastRepository $yeastRepository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
@@ -150,6 +170,8 @@ class IngredientController extends AbstractFOSRestController
         $this->hopRepository = $hopRepository;
         $this->otherRepository = $otherRepository;
         $this->kegRepository = $kegRepository;
+        $this->bottleTopRepository = $bottleTopRepository;
+        $this->yeastRepository = $yeastRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
@@ -363,6 +385,12 @@ class IngredientController extends AbstractFOSRestController
                 case 'keg':
                     $returnView = $this->kegRepository->findAllPagination($paramFetcher);
                     break;
+                case 'yeast':
+                    $returnView = $this->yeastRepository->findAllPagination($paramFetcher);
+                    break;
+                case 'bottleTop':
+                    $returnView = $this->bottleTopRepository->findAllPagination($paramFetcher);
+                    break;
                 default:
                     $returnView = $this->ingredientRepository->findAllPagination($paramFetcher);
                     break;
@@ -566,6 +594,14 @@ class IngredientController extends AbstractFOSRestController
                 if ($isClass)
                     return TypeClass\KegType::class;
                 return new EntityClass\Keg();
+            case 'yeast':
+                if ($isClass)
+                    return TypeClass\YeastType::class;
+                return new EntityClass\Yeast();
+            case 'bottleTop':
+                if ($isClass)
+                    return TypeClass\BottleTopType::class;
+                return new EntityClass\BottleTop();
             default:
                 throw new PreconditionFailedHttpException('childName field is needed. RTFD !');
         }
@@ -596,6 +632,10 @@ class IngredientController extends AbstractFOSRestController
                 return TypeClass\BoxType::class;
             case "App\Entity\Ingredients\Keg":
                 return TypeClass\KegType::class;
+            case "App\Entity\Ingredients\Yeast":
+                return TypeClass\YeastType::class;
+            case "App\Entity\Ingredients\BottleTop":
+                return TypeClass\BottleTopType::class;
             default:
                 throw new PreconditionFailedHttpException('Wrong type. RTFD !');
         }
@@ -606,7 +646,12 @@ class IngredientController extends AbstractFOSRestController
         switch ($data[$this->childName]) {
             case 'hop':
                 if (isset($data['harvestYear'])) {
-                    $data['harvestYear'] = \DateTime::createFromFormat("Y-m-d", $data['harvestYear']);
+                    $data['harvestYear'] = \DateTime::createFromFormat("Y", $data['harvestYear']);
+                }
+                break;
+            case 'yeast':
+                if (isset($data['productionYear'])) {
+                    $data['productionYear'] = \DateTime::createFromFormat("Y-m", $data['productionYear']);
                 }
                 break;
             default:

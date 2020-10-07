@@ -16,7 +16,9 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'other', viewValue: 'Autre' },
     { value: 'bottle', viewValue: 'Bouteille' },
     { value: 'box', viewValue: 'Carton' },
-    { value: 'keg', viewValue: 'Fût' }
+    { value: 'keg', viewValue: 'Fût' },
+    { value: 'yeast', viewValue: 'Levure' },
+    { value: 'bottleTop', viewValue: 'Capsule' }
   ];
 
   public headers: ValueViewChild[] = [
@@ -34,6 +36,8 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'acidAlpha', viewValue: 'Acid-Alpha' },
     { value: 'harvestYear', viewValue: 'Année de la récolte' },
     { value: 'childName', viewValue: 'Catégory' },
+    { value: 'size', viewValue: 'Taille' },
+    { value: 'productionYear', viewValue: 'Année de production' },
     { value: 'head', viewValue: 'Tête' }
   ];
 
@@ -74,6 +78,15 @@ export class IngredientService extends CService<Ingredient>{
     { value: 'S', viewValue: 'Type S' },
   ];
 
+  public yeastType: ValueViewChild[] = [
+    { value: 'dry', viewValue: 'Séche' },
+    { value: 'liquid', viewValue: 'Liquide' },
+  ];
+
+  public bottleTopSize: ValueViewChild[] = [
+    { value: '26', viewValue: '26 mm' },
+    { value: '29', viewValue: '29 mm' },
+  ];
 
   constructor(
     private h: IngredientHttpService) {
@@ -128,6 +141,14 @@ export class IngredientService extends CService<Ingredient>{
       case 'keg':
         this.form.addControl('volume', new FormControl('', Validators.required));
         this.form.addControl('head', new FormControl('', Validators.required));
+        break;
+        case 'yeast':
+          this.form.addControl('type', new FormControl('', Validators.required));
+          this.form.addControl('productionYear', new FormControl('', Validators.required));
+          break;
+      case 'bottleTop':
+        this.form.addControl('size', new FormControl('', Validators.required));
+        this.form.addControl('color', new FormControl('', Validators.required));
         break;
     }
   }
