@@ -163,7 +163,7 @@
           <mat-label>Type</mat-label>
           <mat-select required
                       formControlName="type">
-            <mat-option *ngFor="let childName of service.yeastTypes"
+            <mat-option *ngFor="let childName of service.yeastType"
                         [value]="childName.value">
               {{childName.viewValue}}
             </mat-option>
