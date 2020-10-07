@@ -11,14 +11,14 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 })
 export class IngredientService extends CService<Ingredient>{
   public ingredientChildrenNames: ValueViewChild[] = [
+    { value: 'bottle', viewValue: 'Bouteille' },
+    { value: 'bottleTop', viewValue: 'Capsule' },
+    { value: 'box', viewValue: 'Carton' },
     { value: 'cereal', viewValue: 'Céréale' },
     { value: 'hop', viewValue: 'Houblon' },
-    { value: 'other', viewValue: 'Autre' },
-    { value: 'bottle', viewValue: 'Bouteille' },
-    { value: 'box', viewValue: 'Carton' },
     { value: 'keg', viewValue: 'Fût' },
+    { value: 'other', viewValue: 'Autre' },
     { value: 'yeast', viewValue: 'Levure' },
-    { value: 'bottleTop', viewValue: 'Capsule' }
   ];
 
   public headers: ValueViewChild[] = [
@@ -125,7 +125,10 @@ export class IngredientService extends CService<Ingredient>{
       case 'hop':
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('acidAlpha', new FormControl('', Validators.required));
-        this.form.addControl('harvestYear', new FormControl('', Validators.required));
+        this.form.addControl('harvestYear', new FormControl('',
+          [Validators.required,
+          Validators.pattern('^[0-9]{4}$')
+          ]));
         break;
       case 'other':
         this.form.addControl('type', new FormControl('', Validators.required));
@@ -142,10 +145,14 @@ export class IngredientService extends CService<Ingredient>{
         this.form.addControl('volume', new FormControl('', Validators.required));
         this.form.addControl('head', new FormControl('', Validators.required));
         break;
-        case 'yeast':
-          this.form.addControl('type', new FormControl('', Validators.required));
-          this.form.addControl('productionYear', new FormControl('', Validators.required));
-          break;
+      case 'yeast':
+        this.form.addControl('type', new FormControl('', Validators.required));
+        this.form.addControl('productionYear',
+          new FormControl('',
+            [Validators.required,
+            Validators.pattern('^[0-9]{4}-(0[1-9])|(1[0-2])$')
+            ]));
+        break;
       case 'bottleTop':
         this.form.addControl('size', new FormControl('', Validators.required));
         this.form.addControl('color', new FormControl('', Validators.required));

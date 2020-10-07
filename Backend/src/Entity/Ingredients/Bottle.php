@@ -27,15 +27,15 @@ class Bottle extends Ingredient
      */
     private $type;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * @ORM\Column(type="string", length=30)
      */
     private $color;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function getVolume(): ?int
     {

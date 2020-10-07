@@ -23,7 +23,7 @@ export class Cereal extends Ingredient {
     if (this.plant) { data[`plant`] = this.plant; }
     if (this.type) { data[`type`] = this.type; }
     if (this.format) { data[`format`] = this.format; }
-    if (this.ebc) { data[`EBC`] = this.ebc; }
+    if (this.ebc) { data[`ebc`] = this.ebc; }
     return data;
   }
 }

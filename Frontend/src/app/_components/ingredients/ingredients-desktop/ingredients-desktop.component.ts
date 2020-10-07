@@ -18,15 +18,18 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   styleUrls: ['./ingredients-desktop.component.scss']
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName','type'
-    ,   /* cereal */ 'plant', 'format', 'ebc'
-    ,   /* bottle */ 'volume', 'color'
-    ,   /* box */ 'capacity'
-    ,   /* hop */ 'acidAlpha', 'harvestYear'
-    ,   /* keg */ 'volume', 'head'
-    ,   /* yeast */ 'type', 'liquid'
-    ,   /* bottleTop */ 'size', 'color'
-  ];
+  displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName'];
+  // , /* Other, Cereal, Yeast, bottle and Hop */ 'type'
+  // ,   /* cereal */ 'plant', 'format', 'ebc'
+  // /* bottle */
+  // ,   /* box */ 'capacity'
+  // ,   /* hop */ 'acidAlpha', 'harvestYear'
+  // ,   /* keg */ 'head'
+  // ,   /* yeast */ 'type', 'productionYear'
+  // ,   /* bottleTop */ 'size'
+  // , /* bottle and keg */ 'volume'
+  // , /* bottle and bottleTop */ 'color'
+  // ];
 
   dataSource: any;
   @ViewChild('matTable') matTable: MatTable<any>;
@@ -109,27 +112,25 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
             this.removeColumn('acidAlpha');
             this.removeColumn('harvestYear');
             break;
-            case 'keg':
-              countTypeIn++;
-              this.removeColumn('volume');
-              this.removeColumn('head');
-              break;      
-            case 'bottleTop':
-              countTypeIn++;
-              this.removeColumn('size');
-              this.removeColumn('color');
-              break;   
-            case 'yeast':
-              countTypeIn++;
-              this.removeColumn('type');
-              this.removeColumn('productionYear');
-              break;         
+          case 'keg':
+            this.removeColumn('volume');
+            this.removeColumn('head');
+            break;
+          case 'bottleTop':
+            this.removeColumn('size');
+            this.removeColumn('color');
+            break;
+          case 'yeast':
+            countTypeIn++;
+            this.removeColumn('type');
+            this.removeColumn('productionYear');
+            break;
           default:
             break;
         }
       }
     });
-    if (countTypeIn >= 4) {
+    if (countTypeIn >= 5) {
       this.removeColumn('type');
     }
 

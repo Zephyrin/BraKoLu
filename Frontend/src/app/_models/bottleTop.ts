@@ -10,7 +10,7 @@ export class BottleTop extends Ingredient {
       this.size = bottleTop.size;
       this.color = bottleTop.color;
     } else {
-      this.childName = 'bottle top';
+      this.childName = 'bottleTop';
     }
   }
 

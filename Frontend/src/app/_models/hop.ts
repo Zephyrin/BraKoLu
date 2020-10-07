@@ -25,7 +25,7 @@ export class Hop extends Ingredient {
         data[`harvestYear`] = this.harvestYear;
       } else {
         data[`harvestYear`] =
-          this.harvestYear.getFullYear()
+          this.harvestYear.getFullYear();
       }
     }
     return data;

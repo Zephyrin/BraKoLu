@@ -1,4 +1,3 @@
-
 <div class="inline-header">
   <!-- BOUTON AJOUTER INGREDIENT -->
   <button mat-icon-button
@@ -53,7 +52,12 @@
         *matHeaderCellDef
         [mat-sort-header]="header.value"> {{header.viewValue}} </th>
     <td mat-cell
-        *matCellDef="let element"> {{element[header.value]}} </td>
+        *matCellDef="let element">
+      <span *ngIf="header.value !== 'harvestYear' && header.value !== 'productionYear'"> {{element[header.value]}}
+      </span>
+      <span *ngIf="header.value === 'harvestYear'"> {{element[header.value] | date: 'y'}} </span>
+      <span *ngIf="header.value === 'productionYear'"> {{element[header.value] | date: 'MM-y' }} </span>
+    </td>
   </ng-container>
   <tr mat-header-row
       *matHeaderRowDef="displayedColumns"></tr>

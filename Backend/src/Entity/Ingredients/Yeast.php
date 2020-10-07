@@ -5,6 +5,7 @@ namespace App\Entity\Ingredients;
 use App\Repository\Ingredients\YeastRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
+use JMS\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=YeastRepository::class)
@@ -20,6 +21,7 @@ class Yeast extends Ingredient
 
     /**
      * @ORM\Column(type="date")
+     * @SerializedName("productionYear")
      */
     private $productionYear;
 
