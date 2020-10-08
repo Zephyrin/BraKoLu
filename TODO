@@ -21,11 +21,15 @@ BACKEND :
 
     Ajout de tous les enfants ingrédients
         -> bug pour KEG
-        -> Faire liaison entre BOTTLE et BOX
+        -> --- Faire liaison entre BOTTLE et BOX --- Suivi Github
 
     ---------------------------
 
-    SRC/Controller/Enum -> que faire avec ça ?
+    --- SRC/Controller/Enum -> que faire avec ça ? --- Suivi Github
+        Ça va permettre dans un certain futur (à déterminer) de supprimer tout ce qui est paramètrage de la vue
+        pour ne mettre que des paramètres venant du serveur. Une fois cela fais, la vue ne fera qu'afficher des données
+        provenant du serveur. On ne se préoccupera uniquement de l'affichage de ces données.
+        Pour le moment tu prends en main l'outil et on verra par la suite pour supprimer les enum du front.
 
     ---------------------------
 
@@ -33,14 +37,22 @@ BACKEND :
 
         -> écriture dans dossier Feature en cours
 
-            -> Dans le cas de Box, attente liaison spécifique avec Bottle (voir DIA)
-            -> Dans le cas de Other = sans objet donc pas nécessaire ?
+            -> Dans le cas de Box, attente liaison spécifique avec Bottle (voir DIA) 
+                -> Tu peux essayer de mettre ça en place, ou on le fait la prochaine fois que l'on bosse dessus ensemble
+                -> On peut aussi écrire les tests avant d'avoir la fonctionnalité. C'est une très bonne pratique.
 
-        -> éxecuter les tests
+            -> Dans le cas de Other = sans objet donc pas nécessaire ?
+                -> Si il faut tout de même réaliser des tests dessus. Au moins pour voir si on :
+                    - le crée
+                    - le met à jour
+                    - le récupère
+                    - le supprime
+
+        -> --- éxecuter les tests --- Suivi Github
                 Via les tests fonctionnelles liées au Backend. (features/Ingredient/XXX) :
                     * Éteindre tout les serveurs PHP pour utiliser le serveur de test via : symfony server:stop 
                     * Lancer les tests fonctionnels avec : vendor/bin/behat features/ --stop-on-failure
-
+                        Depuis le répertoire Backend.
 
 <------------------------------>
 <------------------------------>    
@@ -49,12 +61,12 @@ FRONTEND :
 
     Général :
 
-        Rajout du favicon logo BRAKOLU
+        --- Rajout du favicon logo BRAKOLU --- Suivi Github
 
     Menu latéral gauche :
     
-        Plutôt que de mettre un titre sur chaque page, il suffit de colorer dans le menu l'item correspondant à la page où l'on est
-            -> ou de rajouter une fléche enfin un truc visuel dans le menu suffit bien
+        --- Plutôt que de mettre un titre sur chaque page, il suffit de colorer dans le menu l'item correspondant à la page où l'on est
+            -> ou de rajouter une fléche enfin un truc visuel dans le menu suffit bien --- Suivi Github
                 
     Page Options : 
     
