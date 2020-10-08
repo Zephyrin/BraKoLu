@@ -1,5 +1,8 @@
-import { StockComponent } from './_components/stock/stock.component';
+import { VenteComponent } from './_components/vente/vente.component';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
+import { StockComponent } from './_components/stock/stock.component';
+import { OptionComponent } from './_components/option/option.component';
+
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ExtraOptions } from '@angular/router';
@@ -14,9 +17,10 @@ const routerOptions: ExtraOptions = {
 };
 
 const routes: Routes = [
-  { path: '', component: IngredientsComponent },
+  { path: 'sale', component: VenteComponent },
   { path: 'ingredients', component: IngredientsComponent },
   { path: 'stock', component: StockComponent },
+  { path: 'option', component: OptionComponent },
 ];
 
 @NgModule({

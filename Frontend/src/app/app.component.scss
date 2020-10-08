@@ -1,4 +1,17 @@
 .mat-toolbar.mat-primary {
-    background: #b25845;
-    color: #4091f1;;
+  color: #4091f1;;
+  background: #b25845;
+  }
+
+// Couleur du menu latéral gauche
+.left_menu {
+  color: #4091f1;
+  background-color: #b25845;
+  }
+
+// Couleur de l'item actif
+.active-link {
+  color: #4091f1;
+  font-weight: bold!important;
+  background-color: #d39e2d;
   }

@@ -36,6 +36,8 @@ import { StockCreateComponent } from './_components/stock/stock-create/stock-cre
 import { StockDesktopComponent } from './_components/stock/stock-desktop/stock-desktop/stock-desktop.component';
 import { StockMobileComponent } from './_components/stock/stock-mobile/stock-mobile/stock-mobile.component';
 import { PaginationComponent } from './_components/helpers/pagination/pagination.component';
+import { OptionComponent } from './_components/option/option.component';
+import { VenteComponent } from './_components/vente/vente.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { PaginationComponent } from './_components/helpers/pagination/pagination
     StockDesktopComponent,
     StockMobileComponent,
     PaginationComponent,
+    OptionComponent,
+    VenteComponent,
   ],
   imports: [
     BrowserModule,

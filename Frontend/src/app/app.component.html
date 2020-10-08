@@ -15,26 +15,37 @@
     <mat-toolbar>Menu</mat-toolbar>
     
     <mat-nav-list>
-      <a mat-list-item
-         routerLinkActive="active-link"
+      <mat-list-item>  
+      <mat-icon  matListIcon>euro_symbol</mat-icon>
+      <a routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true}"
-         routerLink="">Ventes</a>
-      <a mat-list-item
-         routerLinkActive="active-link"
+         routerLink="sale"> Ventes</a>
+         </mat-list-item>
+
+      <mat-list-item>  
+      <mat-icon  matListIcon>shopping_basket</mat-icon>
+      <a routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="stock">Stock</a>
-      <a mat-list-item
-         routerLinkActive="active-link"
+         routerLink="stock"> Stock</a>
+         </mat-list-item>
+
+      <mat-list-item>  
+      <mat-icon  matListIcon>edit</mat-icon>
+      <a routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="ingredients">Ingrédients</a>
-      <a mat-list-item
-         routerLinkActive="active-link"
+         routerLink="ingredients"> Ingrédients</a>
+         </mat-list-item>
+
+      <mat-list-item>  
+      <mat-icon  matListIcon>settings</mat-icon>
+      <a routerLinkActive="active-link"
          class="hover-link"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="ingredients">Options</a>      
+         routerLink="option"> Options</a> 
+        </mat-list-item>
     </mat-nav-list>
 
   </mat-sidenav>

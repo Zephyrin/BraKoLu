@@ -53,7 +53,8 @@ FRONTEND :
 
     Menu latéral gauche :
     
-        IDLE
+        Plutôt que de mettre un titre sur chaque page, il suffit de colorer dans le menu l'item correspondant à la page où l'on est
+            -> ou de rajouter une fléche enfin un truc visuel dans le menu suffit bien
                 
     Page Options : 
     
