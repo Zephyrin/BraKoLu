@@ -1,10 +1,9 @@
-
 <!-- FOND DE PAGE APPLICATION -->
 
 <mat-sidenav-container class="sidenav-container"
                        fullscreen>
 
-<!-- MENU DE GAUCHE -->                       
+  <!-- MENU DE GAUCHE -->
   <mat-sidenav #drawer
                class="sidenav"
                [fixedInViewport]="(isHandset$ | async) === false"
@@ -13,44 +12,44 @@
                [opened]="(isHandset$ | async) === false">
 
     <mat-toolbar>Menu</mat-toolbar>
-    
+
     <mat-nav-list>
-      <mat-list-item>  
-      <mat-icon  matListIcon>euro_symbol</mat-icon>
-      <a routerLinkActive="active-link"
-         class="hover-link"
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link left-menu"
          [routerLinkActiveOptions]="{ exact: true}"
-         routerLink="sale"> Ventes</a>
-         </mat-list-item>
+         routerLink="sale">
+        <mat-icon matListIcon>euro_symbol</mat-icon> Ventes
+      </a>
 
-      <mat-list-item>  
-      <mat-icon  matListIcon>shopping_basket</mat-icon>
-      <a routerLinkActive="active-link"
-         class="hover-link"
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link left-menu"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="stock"> Stock</a>
-         </mat-list-item>
+         routerLink="stock">
+        <mat-icon matListIcon>shopping_basket</mat-icon> Stock
+      </a>
 
-      <mat-list-item>  
-      <mat-icon  matListIcon>edit</mat-icon>
-      <a routerLinkActive="active-link"
-         class="hover-link"
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link left-menu"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="ingredients"> Ingrédients</a>
-         </mat-list-item>
+         routerLink="ingredients">
+        <mat-icon matListIcon>edit</mat-icon> Ingrédients
+      </a>
 
-      <mat-list-item>  
-      <mat-icon  matListIcon>settings</mat-icon>
-      <a routerLinkActive="active-link"
-         class="hover-link"
+      <a mat-list-item
+         routerLinkActive="active-link"
+         class="hover-link left-menu"
          [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="option"> Options</a> 
-        </mat-list-item>
+         routerLink="option">
+        <mat-icon matListIcon>settings</mat-icon> Options
+      </a>
     </mat-nav-list>
 
   </mat-sidenav>
   <mat-sidenav-content>
-    
+
     <mat-toolbar color="primary">
       <button type="button"
               aria-label="Toggle sidenav"
@@ -64,9 +63,9 @@
       <!-- Bandeau de titre -->
       <p class="align-content-center title ml-auto mr-auto">
         <a href="https://fontmeme.com/fr/polices-de-graffitis/">
-          <img src="https://fontmeme.com/permalink/200928/ce02daf1f2a52e09acc11c4b780b9852.png" 
-          alt="polices-de-graffitis" 
-          border="0">
+          <img src="https://fontmeme.com/permalink/200928/ce02daf1f2a52e09acc11c4b780b9852.png"
+               alt="polices-de-graffitis"
+               border="0">
         </a>
       </p>
 

@@ -1,17 +1,19 @@
 .mat-toolbar.mat-primary {
-  color: #4091f1;;
+  color: #4091f1;
   background: #b25845;
   }
 
 // Couleur du menu latéral gauche
-.left_menu {
+.sidenav, .left-menu {
   color: #4091f1;
-  background-color: #b25845;
   }
 
 // Couleur de l'item actif
-.active-link {
-  color: #4091f1;
-  font-weight: bold!important;
-  background-color: #d39e2d;
+mat-toolbar, .active-link {
+  color: #3e92f1;
+  background-color: #b2584580;
   }
+
+.mat-list-item:hover, a:hover {
+  background-color: #b2584530;
+}
