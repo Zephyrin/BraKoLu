@@ -1,9 +1,3 @@
-<!-- TITRE DE LA PAGE -->
-<mat-toolbar color="primary">
-   <p class="align-content-center title ml-auto mr-auto">Gestion de la base de données ingrédients</p>
-</mat-toolbar>
-
-
 <div class="container"
      *ngIf="(isHandset$ | async) === true">
   <!-- mode portable -->
@@ -15,3 +9,4 @@
      *ngIf="(isHandset$ | async) !== true">
   <!-- mode ordinateur -->
   <app-ingredients-desktop [service]="service"></app-ingredients-desktop>
+</div>

@@ -63,9 +63,10 @@ class EnumCerealController extends AbstractFOSRestController
         switch ($name) {
             case 'formats':
                 return $this->view(Cereal::FORMATS);
+            case 'types':
+                    return $this->view(Cereal::TYPES);
             default:
                 break;
-        }
-        return $this->view(Cereal::TYPES);
+        }        
     }
 }

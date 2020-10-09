@@ -1,18 +1,11 @@
-<!-- TITRE DE LA PAGE -->
-<mat-toolbar color="primary">
-  <p class="align-content-center title ml-auto mr-auto">Gestion du stock</p>
-</mat-toolbar>
-
 <div class="container"
      *ngIf="(isHandset$ | async) === true">
-
   <!-- mode portable -->
   <app-stock-mobile [service]="service"></app-stock-mobile>
 </div>
+
 <div class="container vertical-scroll"
      *ngIf="(isHandset$ | async) !== true">
-     
   <!-- mode ordinateur -->
   <app-stock-desktop [service]="service"></app-stock-desktop>
-  <app-stock-mobile [service]="service"></app-stock-mobile>
 </div>

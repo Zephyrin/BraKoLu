@@ -1,11 +1,3 @@
-TODO : 
-
-    Mettre le TODO sur Github :) 
-
-
-<------------------------------>
-<------------------------------>
-
 BDD :
 
     Comment vérifier son contenu et supprimer les entrées inutiles, créés par erreur fortuite...
@@ -19,68 +11,14 @@ BDD :
 
 BACKEND : 
 
-    Ajout de tous les enfants ingrédients
         -> bug pour KEG
-        -> --- Faire liaison entre BOTTLE et BOX --- Suivi Github
-
-    ---------------------------
-
-    --- SRC/Controller/Enum -> que faire avec ça ? --- Suivi Github
-        Ça va permettre dans un certain futur (à déterminer) de supprimer tout ce qui est paramètrage de la vue
-        pour ne mettre que des paramètres venant du serveur. Une fois cela fais, la vue ne fera qu'afficher des données
-        provenant du serveur. On ne se préoccupera uniquement de l'affichage de ces données.
-        Pour le moment tu prends en main l'outil et on verra par la suite pour supprimer les enum du front.
-
-    ---------------------------
-
-    Procédure de test:
-
-        -> écriture dans dossier Feature en cours
-
-            -> Dans le cas de Box, attente liaison spécifique avec Bottle (voir DIA) 
-                -> Tu peux essayer de mettre ça en place, ou on le fait la prochaine fois que l'on bosse dessus ensemble
-                -> On peut aussi écrire les tests avant d'avoir la fonctionnalité. C'est une très bonne pratique.
-
-            -> Dans le cas de Other = sans objet donc pas nécessaire ?
-                -> Si il faut tout de même réaliser des tests dessus. Au moins pour voir si on :
-                    - le crée
-                    - le met à jour
-                    - le récupère
-                    - le supprime
-
-        -> --- éxecuter les tests --- Suivi Github
-                Via les tests fonctionnelles liées au Backend. (features/Ingredient/XXX) :
-                    * Éteindre tout les serveurs PHP pour utiliser le serveur de test via : symfony server:stop 
-                    * Lancer les tests fonctionnels avec : vendor/bin/behat features/ --stop-on-failure
-                        Depuis le répertoire Backend.
 
 <------------------------------>
 <------------------------------>    
 
 FRONTEND :
 
-    Général :
-
-        --- Rajout du favicon logo BRAKOLU --- Suivi Github
-
-    Menu latéral gauche :
-    
-        --- Plutôt que de mettre un titre sur chaque page, il suffit de colorer dans le menu l'item correspondant à la page où l'on est
-            -> ou de rajouter une fléche enfin un truc visuel dans le menu suffit bien --- Suivi Github
                 
-    Page Options : 
-    
-        Création
-        Bouton slide pour masquer ou non la page Ingrédients
-        
-    Page Vente : 
-    
-        Création de la page avec tab (liste des brassins / suivi / carte de fidelité (contiendra la liste des clients avec bouton + pour ajout)
-        
-    Page Inventaire :
-        
-        Rajouter tab pour (dans l'ordre) : Céréales / Houblons / Levures / Autres / Embouteillage (famille d'affichage représentant bouteilles, cartons, capsules et étiquettes)
-        
     Page Ingrédients : 
 
         HOP -> seulement spécifié l'année de production et non la date compléte lors de la création 
@@ -94,14 +32,3 @@ FRONTEND :
         Permettre la modification du stock grâce à un bouton +/- qui ouvre un popup pour effectuer la correction
         Affichage du prix au poids
         Il y a un soucis avec l'affichage du prix car ce sont souvent des nombres à virgule....
-        
-    Projet :
-
-        Mettre à jour le DIA compte tenu de la création des ingredients enfants 
-    
-    
-        
-        
-
-
-
