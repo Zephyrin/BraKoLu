@@ -23,7 +23,7 @@ class Yeast extends Ingredient
      * @ORM\Column(type="date")
      * @SerializedName("productionYear")
      */
-    private $productionYear;
+    private $production_year;
 
     public function __construct()
     {
@@ -44,12 +44,12 @@ class Yeast extends Ingredient
 
     public function getProductionYear(): ?\DateTimeInterface
     {
-        return $this->productionYear;
+        return $this->production_year;
     }
 
-    public function setProductionYear(\DateTimeInterface $productionYear): self
+    public function setProductionYear(\DateTimeInterface $production_year): self
     {
-        $this->productionYear = $productionYear;
+        $this->production_year = $production_year;
 
         return $this;
     }

@@ -19,7 +19,6 @@
       (ngSubmit)="onSubmitClick()">
   <fieldset [disabled]="service.loading | async">
     <fieldset *ngIf="service.form">
-
       <!-- NOM -->
       <mat-form-field class="full-width">
         <mat-label>Nom</mat-label>
@@ -162,8 +161,8 @@
           <mat-error>
             {{ service.form.get('harvestYear').errors?.serverError }}
           </mat-error>
-          <mat-error *ngIf="service.form.get('productionYear').errors?.pattern">
-            Le format de la date n'est pas valide. J'attend juste 2020 (Année)
+          <mat-error *ngIf="service.form.get('harvestYear').errors?.pattern">
+            Le format de la date n'est pas valide. J'attends juste l'année.
           </mat-error>
         </mat-form-field>
       </div>
@@ -198,7 +197,7 @@
             {{ service.form.get('productionYear').errors?.serverError }}
           </mat-error>
           <mat-error *ngIf="service.form.get('productionYear').errors?.pattern">
-            Le format de la date n'est pas valide. J'attend 2020-04 (Année-mois)
+            Le format de la date n'est pas valide. J'attends l'année-mois.
           </mat-error>
         </mat-form-field>
       </div>
