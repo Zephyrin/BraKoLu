@@ -18,7 +18,8 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   styleUrls: ['./ingredients-desktop.component.scss']
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['name', 'comment', 'unit', 'unitFactor', 'childName'];
+  displayedColumns: string[] = [];
+  // 'name', 'comment', 'unit', 'unitFactor', 'childName'];
   // , /* Other, Cereal, Yeast, bottle and Hop */ 'type'
   // ,   /* cereal */ 'plant', 'format', 'ebc'
   // /* bottle */
@@ -87,6 +88,12 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
       .filter((ingredient, i, arr) => arr.findIndex(t => t.childName === ingredient.childName) === i)
       .map(x => x.childName);
     let countTypeIn = 0;
+    // On ajoute les communs
+    this.addColumn('name');
+    this.addColumn('comment');
+    this.addColumn('unit');
+    this.addColumn('unitFactor');
+    this.addColumn('childName');
     this.getService.ingredientChildrenNames.forEach(element => {
       if (childNames.indexOf(element.value) < 0) {
         switch (element.value) {

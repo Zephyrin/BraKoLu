@@ -52,6 +52,11 @@ export interface IService {
   load(): void;
 
   /**
+   * Initialise les enums du service. Comme par example la liste des types céréales ou leurs formats.
+   */
+  initEnums(): void;
+
+  /**
    * Détermine si un attribut est présent dans un objet value.
    *
    * @param name Le nom de l'attribut que l'on cherche dans l'objet value
@@ -174,8 +179,11 @@ export abstract class CService<T> implements IService {
   abstract createCpy(value: T): T;
   abstract create(): T;
   public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
+
+  public abstract initEnums();
   //#endregion
   public load(): void {
+    this.initEnums();
     let httpParams = this.paginate.initPaginationParams(null);
     httpParams = this.sort.initSortParams(httpParams);
     if (this.search) {

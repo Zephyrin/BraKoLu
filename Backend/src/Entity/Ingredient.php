@@ -46,6 +46,36 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
  */
 abstract class Ingredient
 {
+    const CHILDREN_NAMES = [
+        ['value' => 'bottle', 'viewValue' => 'Bouteille'],
+        ['value' => 'bottleTop', 'viewValue' => 'Capsule'],
+        ['value' => 'box', 'viewValue' => 'Carton'],
+        ['value' => 'cereal', 'viewValue' => 'Céréale'],
+        ['value' => 'hop', 'viewValue' => 'Houblon'],
+        ['value' => 'keg', 'viewValue' => 'Fût'],
+        ['value' => 'other', 'viewValue' => 'Autre'],
+        ['value' => 'yeast', 'viewValue' => 'Levure']
+    ];
+
+    const HEADERS = [
+        ['value' => 'name', 'viewValue' => 'Nom'],
+        ['value' => 'unit', 'viewValue' => 'Unité'],
+        ['value' => 'unitFactor', 'viewValue' => 'Facteur d\'unité'],
+        ['value' => 'comment', 'viewValue' => 'Commentaire'],
+        ['value' => 'type', 'viewValue' => 'Type'],
+        ['value' => 'plant', 'viewValue' => 'Plante'],
+        ['value' => 'format', 'viewValue' => 'Format'],
+        ['value' => 'ebc', 'viewValue' => 'EBC'],
+        ['value' => 'volume', 'viewValue' => 'Volume'],
+        ['value' => 'color', 'viewValue' => 'Couleur'],
+        ['value' => 'capacity', 'viewValue' => 'Capacité'],
+        ['value' => 'acidAlpha', 'viewValue' => 'Acid-Alpha'],
+        ['value' => 'harvestYear', 'viewValue' => 'Année de la récolte'],
+        ['value' => 'childName', 'viewValue' => 'Catégory'],
+        ['value' => 'size', 'viewValue' => 'Taille'],
+        ['value' => 'productionYear', 'viewValue' => 'Année de production'],
+        ['value' => 'head', 'viewValue' => 'Tête']
+    ];
     /**
      * @var int|null
      *

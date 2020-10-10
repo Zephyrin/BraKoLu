@@ -20,6 +20,10 @@ export class StockService extends CService<IngredientStock>{
     super(h, undefined);
   }
 
+  public initEnums(): void {
+
+  }
+
   public create(): IngredientStock {
     return new IngredientStock(undefined);
   }

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Ingredients;
 
+use App\Entity\EnumHelper;
 use App\Repository\Ingredients\BottleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
@@ -14,16 +15,33 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Bottle extends Ingredient
 {
-    const TYPES = ['long_neck', 'champenoise'];
-    const VOLUME = ['75', '33'];
+    const TYPES = [
+        ['value' => 'long_neck', 'viewValue' => 'Long Neck'],
+        ['value' => 'champenoise', 'viewValue' => 'Champenoise']
+    ];
+    const VOLUME = [
+        ['value' => 75, 'viewValue' => '75 cL'],
+        ['value' => 33, 'viewValue' => '33 cL']
+    ];
 
+    public static function getTypes()
+    {
+        return EnumHelper::getEnum(Bottle::TYPES);
+    }
+
+    public static function getVolumes()
+    {
+        return EnumHelper::getEnum(Bottle::VOLUME);
+    }
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Choice(callback="getVolumes", message="Sélectionne un volume correct.")
      */
     private $volume;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Assert\Choice(callback="getTypes", message="Sélectionne un type correct.")
      */
     private $type;
 

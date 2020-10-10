@@ -5,6 +5,7 @@ namespace App\Entity\Ingredients;
 use App\Repository\Ingredients\CerealRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
+use App\Entity\EnumHelper;
 use JMS\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,10 +15,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Cereal extends Ingredient
 {
     // TODO à traduire en anglais
-    const TYPES = ['malt', 'cru'];
+    const TYPES = [
+        ['value' => 'malt', 'viewValue' => 'Malté'],
+        ['value' => 'cru', 'viewValue' => 'Cru']
+    ];
 
     // TODO à traduire en anglais
-    const FORMATS = ['grain', 'flocon', 'extrait'];
+    const FORMATS = [
+        ['value' => 'seed', 'viewValue' => 'Grain'],
+        ['value' => 'flake', 'viewValue' => 'Flocon'],
+        ['value' => 'extract', 'viewValue' => 'Extrait']
+    ];
+
+    public static function getTypes()
+    {
+        return EnumHelper::getEnum(Cereal::TYPES);
+    }
+
+    public static function getFormats()
+    {
+        return EnumHelper::getEnum(Cereal::FORMATS);
+    }
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -26,13 +44,13 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices=Cereal::TYPES, message="Sélectionne un type correct.")
+     * @Assert\Choice(callback="getTypes", message="Sélectionne un type correct.")
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices=Cereal::FORMATS, message="Sélectionne un type correct.")
+     * @Assert\Choice(callback="getFormats", message="Sélectionne un type correct.")
      */
     private $format;
 

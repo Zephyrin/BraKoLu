@@ -3,95 +3,91 @@ import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms'
 import { IngredientFactory } from '@app/_models/ingredientFactory';
 import { IngredientHttpService } from './ingredient-http.service';
 import { Injectable } from '@angular/core';
-import { Ingredient, Other, Cereal, Hop, Bottle, Box } from '@app/_models';
+import { Ingredient } from '@app/_models';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService extends CService<Ingredient>{
-  public ingredientChildrenNames: ValueViewChild[] = [
-    { value: 'bottle', viewValue: 'Bouteille' },
-    { value: 'bottleTop', viewValue: 'Capsule' },
-    { value: 'box', viewValue: 'Carton' },
-    { value: 'cereal', viewValue: 'Céréale' },
-    { value: 'hop', viewValue: 'Houblon' },
-    { value: 'keg', viewValue: 'Fût' },
-    { value: 'other', viewValue: 'Autre' },
-    { value: 'yeast', viewValue: 'Levure' },
-  ];
+  public ingredientChildrenNames: ValueViewChild[] = [];
 
-  public headers: ValueViewChild[] = [
-    { value: 'name', viewValue: 'Nom' },
-    { value: 'unit', viewValue: 'Unité' },
-    { value: 'unitFactor', viewValue: 'Facteur d\'unité' },
-    { value: 'comment', viewValue: 'Commentaire' },
-    { value: 'type', viewValue: 'Type' },
-    { value: 'plant', viewValue: 'Plante' },
-    { value: 'format', viewValue: 'Format' },
-    { value: 'ebc', viewValue: 'EBC' },
-    { value: 'volume', viewValue: 'Volume' },
-    { value: 'color', viewValue: 'Couleur' },
-    { value: 'capacity', viewValue: 'Capacité' },
-    { value: 'acidAlpha', viewValue: 'Acid-Alpha' },
-    { value: 'harvestYear', viewValue: 'Année de la récolte' },
-    { value: 'childName', viewValue: 'Catégory' },
-    { value: 'size', viewValue: 'Taille' },
-    { value: 'productionYear', viewValue: 'Année de production' },
-    { value: 'head', viewValue: 'Tête' }
-  ];
+  public headers: ValueViewChild[] = [];
 
-  public cerealTypes: ValueViewChild[] = [
-    { value: 'malt', viewValue: 'Malté' },
-    { value: 'cru', viewValue: 'Cru' }
-  ];
+  public cerealTypes: ValueViewChild[] = [];
 
-  public hopTypes: ValueViewChild[] = [
-    { value: 'pellets_t90', viewValue: 'Pellets T90' },
-    { value: 'pellets_t45', viewValue: 'Pellets T45' },
-    { value: 'cones', viewValue: 'Cônes' }
-  ];
+  public hopTypes: ValueViewChild[] = [];
 
-  public cerealFormats: ValueViewChild[] = [
-    { value: 'grain', viewValue: 'Grain' },
-    { value: 'flocon', viewValue: 'Flocon' },
-    { value: 'extrait', viewValue: 'Extrait' }
-  ];
+  public cerealFormats: ValueViewChild[] = [];
 
-  public bottleType: ValueViewChild[] = [
-    { value: 'long_neck', viewValue: 'Long Neck' },
-    { value: 'champenoise', viewValue: 'Champenoise' },
-  ];
+  public bottleType: ValueViewChild[] = [];
 
-  public bottleVolume: ValueViewChild[] = [
-    { value: '75', viewValue: '75 cL' },
-    { value: '33', viewValue: '33 cL' },
-  ];
+  public bottleVolume: ValueViewChild[] = [];
 
-  public kegVolume: ValueViewChild[] = [
-    { value: '20', viewValue: '20 L' },
-    { value: '30', viewValue: '30 L' },
-  ];
+  public kegVolume: ValueViewChild[] = [];
 
-  public kegHead: ValueViewChild[] = [
-    { value: 'A', viewValue: 'Type A' },
-    { value: 'S', viewValue: 'Type S' },
-  ];
+  public kegHead: ValueViewChild[] = [];
 
-  public yeastType: ValueViewChild[] = [
-    { value: 'dry', viewValue: 'Séche' },
-    { value: 'liquid', viewValue: 'Liquide' },
-  ];
+  public yeastType: ValueViewChild[] = [];
 
-  public bottleTopSize: ValueViewChild[] = [
-    { value: '26', viewValue: '26 mm' },
-    { value: '29', viewValue: '29 mm' },
-  ];
+  public bottleTopSize: ValueViewChild[] = [];
 
   constructor(
     private h: IngredientHttpService) {
     super(h, new IngredientSearchService());
-    (this.search as IngredientSearchService).setListIngredient(this.ingredientChildrenNames);
+  }
+
+  /**
+   * Initialise toutes les énumérations d'ingredient.service.
+   */
+  public initEnums(): void {
+    this.initEnum(this.cerealTypes, 'cereal', 'types');
+    this.initEnum(this.cerealFormats, 'cereal', 'formats');
+    this.initEnum(this.bottleType, 'bottle', 'types');
+    this.initEnum(this.bottleVolume, 'bottle', 'volume');
+    this.initEnum(this.bottleTopSize, 'bottleTop', 'sizes');
+    this.initEnum(this.hopTypes, 'hop', 'types');
+    this.initEnum(this.kegHead, 'keg', 'head');
+    this.initEnum(this.kegVolume, 'keg', 'volume');
+    this.initEnum(this.yeastType, 'yeast', 'types');
+    this.initEnum(this.ingredientChildrenNames, undefined, 'childrenNames', this.upadteListIngredientSearch);
+    this.initEnum(this.headers, undefined, 'headers');
+  }
+
+  /**
+   * Permet de mettre à jour le tableau ValueViewChild en se basant sur l'enum reçu du serveur.
+   *
+   * @param enumVal Le tableau de l'enum que l'on souhaite mettre à jour avec les résultats de la requête http.
+   * Par example this.headers ou this.hopTypes.
+   * @param childName Le nom du sous ingrédients ou undefined si l'on souhaite aller uniquement sur un ingrédient.
+   * @param enumName Le nom de l'enum que l'on souhaite récupérer de la base de données.
+   * @param callback Une fonction permettant de mettre à jour d'autre module sur le retoure de la requête.
+   */
+  private initEnum(
+    enumVal: ValueViewChild[],
+    childName: string,
+    enumName: string,
+    callback: (search: IngredientSearchService, n: ValueViewChild[]) => void = null
+  ): void {
+    if (enumVal === undefined || enumVal.length === 0) {
+      this.h.getEnum(childName, enumName).subscribe(response => {
+        response.forEach(elt => {
+          enumVal.push(elt);
+        });
+        if (callback !== null) {
+          callback(this.search as IngredientSearchService, enumVal);
+        }
+      });
+    }
+  }
+
+  /**
+   * Met à jour la liste des sous ingrédients dans le module de recherche.
+   * Vue que c'est utilisé dans un callback, je n'arrive pas à utiliser « this » du coup je passe directement le module
+   * à la fonction. C'est temporaire tant qu'il n'y en a pas d'autre.
+   */
+  private upadteListIngredientSearch(search: IngredientSearchService, n: ValueViewChild[]): void {
+    search.setListIngredient(n);
   }
 
   public create(): Ingredient {

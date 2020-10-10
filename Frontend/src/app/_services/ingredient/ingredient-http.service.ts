@@ -1,8 +1,11 @@
+import { ValueViewChild } from '@app/_services/iservice';
 import { Ingredient } from '@app/_models';
 import { HttpService } from '@app/_services/http.service';
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +27,11 @@ export class IngredientHttpService extends HttpService<Ingredient> {
   updatePath() { return this.path; }
 
   deletePath() { return this.path; }
+
+  public getEnum(name: string, enums: string): Observable<ValueViewChild[]> {
+    if (name !== undefined) {
+      return this.http.get<ValueViewChild[]>(`${environment.apiUrl}/ingredients/${name}/enum/${enums}`);
+    }
+    return this.http.get<ValueViewChild[]>(`${environment.apiUrl}/ingredients/enum/${enums}`);
+  }
 }

@@ -18,7 +18,9 @@
                 "**/ReflectionExtractor.php",
                 "**/dependency-injection/**/*",
                 "**/stopwatch/**/*",
-                "**/Descriptor/**/*"
+                "**/Descriptor/**/*",
+                "**/Mapping/**/*"
+
             ]
         }
     ]

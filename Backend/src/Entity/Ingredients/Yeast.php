@@ -2,20 +2,30 @@
 
 namespace App\Entity\Ingredients;
 
+use App\Entity\EnumHelper;
 use App\Repository\Ingredients\YeastRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
 use JMS\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=YeastRepository::class)
  */
 class Yeast extends Ingredient
 {
-    const TYPES = ['dry', 'liquid'];
+    const TYPES = [
+        ['value' => 'dry', 'viewValue' => 'Sèche'],
+        ['value' => 'liquid', 'viewValue' => 'Liquide']
+    ];
 
+    public static function getTypes()
+    {
+        return EnumHelper::getEnum(Yeast::TYPES);
+    }
     /**
      * @ORM\Column(type="string", length=30)
+     * @Assert\Choice(callback="getTypes", message="Sélectionne un type correct.")
      */
     private $type;
 

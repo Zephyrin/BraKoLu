@@ -2,6 +2,7 @@
 
 namespace App\Entity\Ingredients;
 
+use App\Entity\EnumHelper;
 use App\Repository\Ingredients\HopRepository;
 use App\Entity\Ingredient;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,11 +14,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Hop extends Ingredient
 {
-    const TYPES = ['pellets_t90', 'pellets_t45', 'cones'];
+    const TYPES = [
+        ['value' => 'pellets_t90', 'viewValue' => 'Pellets T90'],
+        ['value' => 'pellets_t45', 'viewValue' => 'Pellets T45'],
+        ['value' => 'cones', 'viewValue' => 'Cônes']
+    ];
 
+    public static function getTypes()
+    {
+        return EnumHelper::getEnum(Hop::TYPES);
+    }
     /**
      * @ORM\Column(type="string", length=25)
-     * @Assert\Choice(choices=Hop::TYPES, message="Sélectionne un type correct.")
+     * @Assert\Choice(callback="getTypes", message="Sélectionne un type correct.")
      */
     private $type;
 

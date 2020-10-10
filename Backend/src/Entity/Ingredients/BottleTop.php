@@ -2,19 +2,29 @@
 
 namespace App\Entity\Ingredients;
 
+use App\Entity\EnumHelper;
 use App\Repository\Ingredients\BottleTopRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Ingredient;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BottleTopRepository::class)
  */
 class BottleTop extends Ingredient
 {
-    const SIZES = ['26', '29'];
+    const SIZES = [
+        ['value' => 26, 'viewValue' => '26 mm'],
+        ['value' => 29, 'viewValue' => '29 mm']
+    ];
 
+    public static function getSizes()
+    {
+        return EnumHelper::getEnum(BottleTop::SIZES);
+    }
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Choice(callback="getTypes", message="Sélectionne une taille correct.")
      */
     private $size;
 
