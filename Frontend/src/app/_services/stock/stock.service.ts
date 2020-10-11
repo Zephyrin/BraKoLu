@@ -9,6 +9,7 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
   providedIn: 'root'
 })
 export class StockService extends CService<IngredientStock>{
+
   public states: ValueViewChild[] = [
     { value: 'created', viewValue: 'Créé' },
     { value: 'ordered', viewValue: 'Commandé' },
@@ -30,6 +31,10 @@ export class StockService extends CService<IngredientStock>{
 
   public createCpy(stock: IngredientStock): IngredientStock {
     return new IngredientStock(stock);
+  }
+
+  public getDisplay(name: string, value: IngredientStock) {
+    throw new Error('Method not implemented.');
   }
 
   public createFormBasedOn(formBuilder: FormBuilder, value: IngredientStock): void {

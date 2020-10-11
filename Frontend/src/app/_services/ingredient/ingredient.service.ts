@@ -1,3 +1,11 @@
+import { Yeast } from './../../_models/yeast';
+import { Other } from './../../_models/other';
+import { Keg } from './../../_models/keg';
+import { Hop } from './../../_models/hop';
+import { Cereal } from './../../_models/cereal';
+import { Box } from './../../_models/box';
+import { BottleTop } from './../../_models/bottleTop';
+import { Bottle } from './../../_models/bottle';
 import { IngredientSearchService } from './ingredient-search.service';
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { IngredientFactory } from '@app/_models/ingredientFactory';
@@ -5,6 +13,7 @@ import { IngredientHttpService } from './ingredient-http.service';
 import { Injectable } from '@angular/core';
 import { Ingredient } from '@app/_models';
 import { CService, ValueViewChild } from '@app/_services/iservice';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +23,27 @@ export class IngredientService extends CService<Ingredient>{
 
   public headers: ValueViewChild[] = [];
 
-  public cerealTypes: ValueViewChild[] = [];
-
-  public hopTypes: ValueViewChild[] = [];
-
-  public cerealFormats: ValueViewChild[] = [];
-
   public bottleType: ValueViewChild[] = [];
 
   public bottleVolume: ValueViewChild[] = [];
 
-  public kegVolume: ValueViewChild[] = [];
+  public bottleTopSize: ValueViewChild[] = [];
+
+  public cerealFormats: ValueViewChild[] = [];
+
+  public cerealTypes: ValueViewChild[] = [];
+
+  public hopTypes: ValueViewChild[] = [];
 
   public kegHead: ValueViewChild[] = [];
 
+  public kegVolume: ValueViewChild[] = [];
+
   public yeastType: ValueViewChild[] = [];
 
-  public bottleTopSize: ValueViewChild[] = [];
-
   constructor(
-    private h: IngredientHttpService) {
+    private h: IngredientHttpService,
+    public datepipe: DatePipe) {
     super(h, new IngredientSearchService());
   }
 
@@ -102,6 +112,111 @@ export class IngredientService extends CService<Ingredient>{
     return IngredientFactory.createCpy(ingredient);
   }
 
+  public getDisplay(name: string, value: Ingredient): any {
+    if (value === undefined || name === undefined) {
+      return undefined;
+    }
+    if (name === 'childName') {
+      return this.findInValueViewChild(this.ingredientChildrenNames, value[name]);
+    }
+    switch (value.childName) {
+      case 'bottle':
+        return this.getDisplayBottle(name, value as Bottle);
+      case 'bottleTop':
+        return this.getDisplayBottleTop(name, value as BottleTop);
+      case 'box':
+        return this.getDisplayBox(name, value as Box);
+      case 'cereal':
+        return this.getDisplayCereal(name, value as Cereal);
+      case 'hop':
+        return this.getDisplayHop(name, value as Hop);
+      case 'keg':
+        return this.getDisplayKeg(name, value as Keg);
+      case 'other':
+        break;
+      case 'yeast':
+        return this.getDisplayYeast(name, value as Yeast);
+      default:
+        break;
+    }
+    return value[name];
+  }
+  //#region Affichage par type d'ingrédient
+  private getDisplayBottle(name: string, value: Bottle): any {
+    switch (name) {
+      case 'type':
+        return this.findInValueViewChild(this.bottleType, value[name]);
+      case 'volume':
+        return this.findInValueViewChild(this.bottleVolume, value[name].toString());
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayBottleTop(name: string, value: BottleTop): any {
+    switch (name) {
+      case 'size':
+        return this.findInValueViewChild(this.bottleTopSize, value[name].toString());
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayBox(name: string, value: Box): any {
+    switch (name) {
+      case 'bottle':
+        // TODO
+        break;
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayCereal(name: string, value: Cereal): any {
+    switch (name) {
+      case 'format':
+        return this.findInValueViewChild(this.cerealFormats, value[name]);
+      case 'type':
+        return this.findInValueViewChild(this.cerealTypes, value[name]);
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayHop(name: string, value: Hop): any {
+    switch (name) {
+      case 'harvestYear':
+        return this.datepipe.transform(value[name], 'y');
+      case 'type':
+        return this.findInValueViewChild(this.hopTypes, value[name]);
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayKeg(name: string, value: Keg): any {
+    switch (name) {
+      case 'head':
+        return this.findInValueViewChild(this.kegHead, value[name]);
+      case 'volume':
+        return this.findInValueViewChild(this.kegVolume, value[name].toString());
+      default:
+        break;
+    }
+    return value[name];
+  }
+  private getDisplayYeast(name: string, value: Yeast): any {
+    switch (name) {
+      case 'productionYear':
+        return this.datepipe.transform(value[name], 'y-MM');
+      case 'type':
+        return this.findInValueViewChild(this.yeastType, value[name].toString());
+      default:
+        break;
+    }
+    return value[name];
+  }
+  //#endregion
   public createFormBasedOn(formBuilder: FormBuilder, value: Ingredient): void {
     this.form = formBuilder.group({
       id: [''],

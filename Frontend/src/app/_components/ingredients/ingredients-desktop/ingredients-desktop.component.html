@@ -53,10 +53,11 @@
         [mat-sort-header]="header.value"> {{header.viewValue}} </th>
     <td mat-cell
         *matCellDef="let element">
-      <span *ngIf="header.value !== 'harvestYear' && header.value !== 'productionYear'"> {{element[header.value]}}
+      <span> {{ service.getDisplay(header.value, element) }} </span>
+      <!--       <span *ngIf="header.value !== 'harvestYear' && header.value !== 'productionYear'"> {{element[header.value]}}
       </span>
       <span *ngIf="header.value === 'harvestYear'"> {{element[header.value] | date: 'y'}} </span>
-      <span *ngIf="header.value === 'productionYear'"> {{element[header.value] | date: 'y-MM' }} </span>
+      <span *ngIf="header.value === 'productionYear'"> {{element[header.value] | date: 'y-MM' }} </span> -->
     </td>
   </ng-container>
   <tr mat-header-row

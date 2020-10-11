@@ -92,6 +92,15 @@ export interface IService {
   get(name: string, value: any | undefined): any;
 
   /**
+   * Récupère l'attribut name de l'objet value pour l'afficher. Correspond à value->name | date: 'Y'.
+   * Ou encore hopType[value->name]->viewValue.
+   * Permet d'afficher la valeur à afficher plutôt que la clef.
+   * @param name Le nom de l'attribut que l'on cherche dans value.
+   * @param value L'objet qui doit possèder l'attribut name.
+   */
+  getDisplay(name: string, value: any | undefined): any;
+
+  /**
    *
    * @param name Le nom de l'attribut qui sera mis à jour.
    * @param value L'objet à mettre à jour.
@@ -117,6 +126,11 @@ export interface IService {
    * Supprime le formulaire à la fin de l'utilisation.
    */
   deleteForm();
+
+  /**
+   * Recherche dans un tableau de ValueViewChild la valeur et retourne la valeur de la vue.
+   */
+  findInValueViewChild(valueViewChild: ValueViewChild[], value: string): string;
 }
 
 export interface ValueViewChild {
@@ -181,6 +195,8 @@ export abstract class CService<T> implements IService {
   public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
 
   public abstract initEnums();
+
+  public abstract getDisplay(name: string, value: T): any;
   //#endregion
   public load(): void {
     this.initEnums();
@@ -329,4 +345,11 @@ export abstract class CService<T> implements IService {
     this.form = undefined;
   }
   //#endregion
+  public findInValueViewChild(valueViewChild: ValueViewChild[], value: string): string {
+    const find = valueViewChild.find(elt => elt.value === value);
+    if (find) {
+      return find.viewValue;
+    }
+    return undefined;
+  }
 }

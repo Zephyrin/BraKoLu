@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
+import { DatePipe } from '@angular/common';
 
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
@@ -83,6 +84,7 @@ import { VenteComponent } from './_components/vente/vente.component';
     MatChipsModule
   ],
   providers: [
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
