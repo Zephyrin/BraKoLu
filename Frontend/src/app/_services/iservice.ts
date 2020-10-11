@@ -357,7 +357,7 @@ export abstract class CService<T> implements IService {
     this.form = undefined;
   }
   //#endregion
-  public findInValueViewChild(valueViewChild: ValueViewChild[], value: string): string {
+  public findInValueViewChild(valueViewChild: ValueViewChild[], value: any): string {
     const find = valueViewChild.find(elt => elt.value === value);
     if (find) {
       return find.viewValue;

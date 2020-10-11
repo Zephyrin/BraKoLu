@@ -9,9 +9,9 @@ export class IngredientChildrenSelected implements ValueViewChild {
   viewValue: string;
   selected: boolean;
 
-  constructor(valueViewChild: ValueViewChild) {
+  constructor(valueViewChild: ValueViewChild, selected: boolean) {
     this.value = valueViewChild.value;
     this.viewValue = valueViewChild.viewValue;
-    this.selected = false;
+    this.selected = selected;
   }
 }

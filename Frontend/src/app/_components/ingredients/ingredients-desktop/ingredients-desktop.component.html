@@ -42,6 +42,6 @@
 
 <!-- TABLEAU DES INGREDIENTS -->
 <app-table [service]="service"
-           [dataSource]="dataSource"></app-table>
+           #tableComponent></app-table>
 
 <app-pagination [paginate]="service.paginate"></app-pagination>

@@ -1,15 +1,12 @@
+import { TableComponent } from '@app/_components/helpers/table/table.component';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { IngredientChildrenSelected } from '@app/_models/ingredient-search';
 import { IngredientSearchService } from '@app/_services/ingredient/ingredient-search.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { tap } from 'rxjs/operators';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { merge } from 'rxjs';
 import { MatChipSelectionChange } from '@angular/material/chips';
 
 @Component({
@@ -17,11 +14,9 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss']
 })
-export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit {
 
-  dataSource: any;
-  @ViewChild('matTable') matTable: MatTable<any>;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('tableComponent') tableComponent: TableComponent;
   searchForm: FormGroup;
 
   constructor(
@@ -54,19 +49,12 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
       search: [this.getSearch.ingredientSearch.searchValue]
     });
   }
-  ngAfterViewInit(): void {
-    merge(this.sort.sortChange)
-      .pipe(tap(() => {
-        this.service.sort.change(this.sort.active, this.sort.direction);
-      })).subscribe();
-  }
+
 
   public endUpdate() {
     this.selectColumnToDisplay();
-    this.dataSource = new MatTableDataSource(this.service.model);
-    this.selectColumnToDisplay();
 
-    this.dataSource.sort = this.sort;
+    this.tableComponent.endUpdate();
   }
 
   protected selectColumnToDisplay(): void {

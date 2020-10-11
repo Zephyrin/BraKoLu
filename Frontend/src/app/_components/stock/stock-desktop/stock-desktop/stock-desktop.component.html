@@ -8,5 +8,5 @@
 
 <!-- TABLEAU DU STOCK -->
 <app-table [service]="service"
-           [dataSource]="dataSource"></app-table>
+           #Table></app-table>
 <app-pagination [paginate]="service.paginate"></app-pagination>

@@ -82,7 +82,7 @@ export class IngredientService extends CService<Ingredient>{
         response.forEach(elt => {
           enumVal.push(elt);
         });
-        if (callback !== null) {
+        if (callback !== null && callback !== undefined) {
           callback(this, enumVal);
         }
       });
@@ -94,8 +94,8 @@ export class IngredientService extends CService<Ingredient>{
    * Vue que c'est utilisé dans un callback, je n'arrive pas à utiliser « this » du coup je passe directement le module
    * à la fonction. C'est temporaire tant qu'il n'y en a pas d'autre.
    */
-  private upadteListIngredientSearch(search: IngredientService, n: ValueViewChild[]): void {
-    (search.search as IngredientSearchService).setListIngredient(n);
+  private upadteListIngredientSearch(t: IngredientService, n: ValueViewChild[]): void {
+    (t.search as IngredientSearchService).setListIngredient(n);
   }
 
   private updateDisplayedNames(t: IngredientService, n: ValueViewChild[]): void {
@@ -151,7 +151,7 @@ export class IngredientService extends CService<Ingredient>{
       case 'type':
         return this.findInValueViewChild(this.bottleType, value[name]);
       case 'volume':
-        return this.findInValueViewChild(this.bottleVolume, value[name].toString());
+        return this.findInValueViewChild(this.bottleVolume, value[name]);
       default:
         break;
     }
@@ -160,7 +160,7 @@ export class IngredientService extends CService<Ingredient>{
   private getDisplayBottleTop(name: string, value: BottleTop): any {
     switch (name) {
       case 'size':
-        return this.findInValueViewChild(this.bottleTopSize, value[name].toString());
+        return this.findInValueViewChild(this.bottleTopSize, value[name]);
       default:
         break;
     }
@@ -203,7 +203,7 @@ export class IngredientService extends CService<Ingredient>{
       case 'head':
         return this.findInValueViewChild(this.kegHead, value[name]);
       case 'volume':
-        return this.findInValueViewChild(this.kegVolume, value[name].toString());
+        return this.findInValueViewChild(this.kegVolume, value[name]);
       default:
         break;
     }
@@ -214,7 +214,7 @@ export class IngredientService extends CService<Ingredient>{
       case 'productionYear':
         return this.datepipe.transform(value[name], 'y-MM');
       case 'type':
-        return this.findInValueViewChild(this.yeastType, value[name].toString());
+        return this.findInValueViewChild(this.yeastType, value[name]);
       default:
         break;
     }

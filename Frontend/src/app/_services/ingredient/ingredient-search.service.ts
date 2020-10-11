@@ -13,12 +13,15 @@ export class IngredientSearchService implements ISearch {
 
   public setListIngredient(ingredientChildrenNames: ValueViewChild[]) {
     ingredientChildrenNames.forEach(x => {
-      this.ingredientSearch.selectChildren.push(new IngredientChildrenSelected(x));
+      const saveStatusStr = localStorage.getItem('ingredientSearch_' + x.value);
+      const saveStatus = saveStatusStr === undefined || saveStatusStr === null ? false : JSON.parse(saveStatusStr);
+      this.ingredientSearch.selectChildren.push(new IngredientChildrenSelected(x, saveStatus));
     });
   }
 
   public updateSelected(child: IngredientChildrenSelected) {
     child.selected = !child.selected;
+    localStorage.setItem('ingredientSearch_' + child.value, JSON.stringify(child.selected));
     this.changePageSubject.next(true);
   }
 

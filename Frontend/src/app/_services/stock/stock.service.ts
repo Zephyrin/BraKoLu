@@ -13,14 +13,6 @@ export class StockService extends CService<IngredientStock>{
 
   public states: ValueViewChild[] = [];
 
-  /* headers: ValueViewChild[] = [
-     { value: 'name', viewValue: 'Nom' },
-    { value: 'quantity', viewValue: 'Quantité' },
-    { value: 'state', viewValue: 'État' },
-    { value: 'creationDate', viewValue: 'Crée le' },
-    { value: 'orderedDate', viewValue: 'Commandé le' },
-    { value: 'endedDate', viewValue: 'Terminé le' }
-  ]; */
   constructor(
     private h: StockHttpService,
     public datepipe: DatePipe) {
