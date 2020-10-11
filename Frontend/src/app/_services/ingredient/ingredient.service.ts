@@ -38,6 +38,7 @@ export class IngredientService extends CService<Ingredient>{
   public kegVolume: ValueViewChild[] = [];
 
   public yeastType: ValueViewChild[] = [];
+  private nbEnumLeft = 0;
 
   constructor(
     private h: IngredientHttpService,
@@ -49,6 +50,7 @@ export class IngredientService extends CService<Ingredient>{
    * Initialise toutes les énumérations d'ingredient.service.
    */
   public initEnums(): void {
+    this.nbEnumLeft = 0;
     this.initEnum(this.cerealTypes, 'cereal', 'types');
     this.initEnum(this.cerealFormats, 'cereal', 'formats');
     this.initEnum(this.bottleType, 'bottle', 'types');
@@ -60,6 +62,9 @@ export class IngredientService extends CService<Ingredient>{
     this.initEnum(this.yeastType, 'yeast', 'types');
     this.initEnum(this.ingredientChildrenNames, undefined, 'childrenNames', this.upadteListIngredientSearch);
     this.initEnum(this.headers, undefined, 'headers', this.updateDisplayedNames);
+    if (this.nbEnumLeft <= 0) {
+      this.initEnumDone.next(true);
+    }
   }
 
   /**
@@ -78,12 +83,17 @@ export class IngredientService extends CService<Ingredient>{
     callback: (search: IngredientService, n: ValueViewChild[]) => void = null
   ): void {
     if (enumVal === undefined || enumVal.length === 0) {
+      this.nbEnumLeft++;
       this.h.getEnum(childName, enumName).subscribe(response => {
         response.forEach(elt => {
           enumVal.push(elt);
         });
         if (callback !== null && callback !== undefined) {
           callback(this, enumVal);
+        }
+        this.nbEnumLeft--;
+        if (this.nbEnumLeft <= 0) {
+          this.initEnumDone.next(true);
         }
       });
     }

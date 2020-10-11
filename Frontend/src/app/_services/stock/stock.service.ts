@@ -12,7 +12,7 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 export class StockService extends CService<IngredientStock>{
 
   public states: ValueViewChild[] = [];
-
+  private nbEnumLeft = 0;
   constructor(
     private h: StockHttpService,
     public datepipe: DatePipe) {
@@ -20,20 +20,34 @@ export class StockService extends CService<IngredientStock>{
   }
 
   public initEnums(): void {
+    this.nbEnumLeft = 0;
     if (this.states.length === 0) {
+      this.nbEnumLeft++;
       this.h.getEnum('states').subscribe(response => {
         response.forEach(elt => {
           this.states.push(elt);
         });
+        this.nbEnumLeft--;
+        if (this.nbEnumLeft <= 0) {
+          this.initEnumDone.next(true);
+        }
       });
     }
     if (this.headers.length === 0) {
+      this.nbEnumLeft++;
       this.h.getEnum('headers').subscribe(response => {
         response.forEach(elt => {
           this.headers.push(elt);
           this.displayedColumns.push(elt.value);
         });
+        this.nbEnumLeft--;
+        if (this.nbEnumLeft <= 0) {
+          this.initEnumDone.next(true);
+        }
       });
+    }
+    if (this.nbEnumLeft <= 0) {
+      this.initEnumDone.next(true);
     }
   }
 

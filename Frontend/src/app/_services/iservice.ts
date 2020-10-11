@@ -176,6 +176,7 @@ export abstract class CService<T> implements IService {
   //#region Search
   public search: ISearch;
   //#endregion
+  protected initEnumDone = new Subject<boolean>();
   public constructor(
     protected http: HttpService<T>,
     private $search: ISearch | undefined
@@ -199,6 +200,11 @@ export abstract class CService<T> implements IService {
         }
       });
     }
+    this.initEnumDone.subscribe(x => {
+      if (x === true) {
+        this.load$();
+      }
+    });
   }
 
   //#region Abstract IService
@@ -212,6 +218,9 @@ export abstract class CService<T> implements IService {
   //#endregion
   public load(): void {
     this.initEnums();
+  }
+
+  private load$(): void {
     let httpParams = this.paginate.initPaginationParams(null);
     httpParams = this.sort.initSortParams(httpParams);
     if (this.search) {
