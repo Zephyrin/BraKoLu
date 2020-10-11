@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StockHttpService } from './stock-http.service';
 
@@ -10,19 +11,38 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 })
 export class StockService extends CService<IngredientStock>{
 
-  public states: ValueViewChild[] = [
-    { value: 'created', viewValue: 'Créé' },
-    { value: 'ordered', viewValue: 'Commandé' },
-    { value: 'stocked', viewValue: 'Reçu' },
-    { value: 'sold_out', viewValue: 'Épuisé' }
-  ];
+  public states: ValueViewChild[] = [];
+
+  /* headers: ValueViewChild[] = [
+     { value: 'name', viewValue: 'Nom' },
+    { value: 'quantity', viewValue: 'Quantité' },
+    { value: 'state', viewValue: 'État' },
+    { value: 'creationDate', viewValue: 'Crée le' },
+    { value: 'orderedDate', viewValue: 'Commandé le' },
+    { value: 'endedDate', viewValue: 'Terminé le' }
+  ]; */
   constructor(
-    private h: StockHttpService) {
+    private h: StockHttpService,
+    public datepipe: DatePipe) {
     super(h, undefined);
   }
 
   public initEnums(): void {
-
+    if (this.states.length === 0) {
+      this.h.getEnum('states').subscribe(response => {
+        response.forEach(elt => {
+          this.states.push(elt);
+        });
+      });
+    }
+    if (this.headers.length === 0) {
+      this.h.getEnum('headers').subscribe(response => {
+        response.forEach(elt => {
+          this.headers.push(elt);
+          this.displayedColumns.push(elt.value);
+        });
+      });
+    }
   }
 
   public create(): IngredientStock {
@@ -33,10 +53,6 @@ export class StockService extends CService<IngredientStock>{
     return new IngredientStock(stock);
   }
 
-  public getDisplay(name: string, value: IngredientStock) {
-    throw new Error('Method not implemented.');
-  }
-
   public createFormBasedOn(formBuilder: FormBuilder, value: IngredientStock): void {
     this.form = formBuilder.group({
       id: [''],
@@ -45,5 +61,23 @@ export class StockService extends CService<IngredientStock>{
       state: ['', Validators.required],
       ingredient: ['', Validators.required]
     });
+  }
+
+  public getDisplay(name: string, value: IngredientStock): any {
+    switch (name) {
+      case 'name':
+        return value.ingredient.name;
+      case 'quantity':
+        return value.quantityCalc() + ' ' + value.ingredient.unit;
+      case 'state':
+        return this.findInValueViewChild(this.states, value[name]);
+      case 'creationDate':
+      case 'orderedDate':
+      case 'endedDate':
+        return this.datepipe.transform(value[name], 'y-MM-dd');
+      default:
+        break;
+    }
+    return value[name];
   }
 }

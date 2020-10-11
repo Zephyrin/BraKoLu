@@ -46,6 +46,16 @@ export interface IService {
   search: ISearch;
 
   /**
+   * La liste des entêtes pour les tableaux.
+   */
+  headers: ValueViewChild[];
+
+  /**
+   * La liste des entêtes à afficher pour les tableaux.
+   */
+  displayedColumns: string[];
+
+  /**
    * Charge l'intégralité des données, utilisé par défaut.
    * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
    */
@@ -146,6 +156,8 @@ export abstract class CService<T> implements IService {
   public errors = new FormErrors();
   public form: FormGroup;
   public endUpdate = new Subject<boolean>();
+  public headers: ValueViewChild[] = [];
+  public displayedColumns: string[] = [];
 
   public set edit(edit: boolean) {
     this.edit$ = edit;

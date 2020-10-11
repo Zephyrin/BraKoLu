@@ -18,19 +18,6 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   styleUrls: ['./ingredients-desktop.component.scss']
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = [];
-  // 'name', 'comment', 'unit', 'unitFactor', 'childName'];
-  // , /* Other, Cereal, Yeast, bottle and Hop */ 'type'
-  // ,   /* cereal */ 'plant', 'format', 'ebc'
-  // /* bottle */
-  // ,   /* box */ 'capacity'
-  // ,   /* hop */ 'acidAlpha', 'harvestYear'
-  // ,   /* keg */ 'head'
-  // ,   /* yeast */ 'type', 'productionYear'
-  // ,   /* bottleTop */ 'size'
-  // , /* bottle and keg */ 'volume'
-  // , /* bottle and bottleTop */ 'color'
-  // ];
 
   dataSource: any;
   @ViewChild('matTable') matTable: MatTable<any>;
@@ -184,16 +171,16 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
   }
 
   removeColumn(name: string): void {
-    const index = this.displayedColumns.indexOf(name);
+    const index = this.service.displayedColumns.indexOf(name);
     if (index >= 0) {
-      this.displayedColumns.splice(index, 1);
+      this.service.displayedColumns.splice(index, 1);
     }
   }
 
   addColumn(name: string): void {
-    const index = this.displayedColumns.indexOf(name);
+    const index = this.service.displayedColumns.indexOf(name);
     if (index < 0) {
-      this.displayedColumns.push(name);
+      this.service.displayedColumns.push(name);
     }
   }
 

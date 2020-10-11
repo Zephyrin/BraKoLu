@@ -11,7 +11,6 @@ import { StockCreateComponent } from '@app/_components/stock/stock-create/stock-
   styleUrls: ['./stock-desktop.component.scss']
 })
 export class StockDesktopComponent extends ChildBaseComponent<StockCreateComponent> {
-  displayedColumns: string[] = ['name', 'quantity', 'state', 'creationDate', 'orderedDate', 'endedDate'];
   dataSource: any;
   @ViewChild('matTable') matTable: MatTable<any>;
   @ViewChild(MatSort) sort: MatSort;

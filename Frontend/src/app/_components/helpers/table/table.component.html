@@ -1,0 +1,20 @@
+<table mat-table
+       class="full-width"
+       #matTable
+       matSort
+       [dataSource]="dataSource">
+  <ng-container *ngFor="let header of service.headers"
+                [matColumnDef]="header.value">
+    <th mat-header-cell
+        *matHeaderCellDef
+        [mat-sort-header]="header.value"> {{header.viewValue}} </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <span> {{ service.getDisplay(header.value, element) }} </span>
+    </td>
+  </ng-container>
+  <tr mat-header-row
+      *matHeaderRowDef="service.displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: service.displayedColumns;"></tr>
+</table>

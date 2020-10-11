@@ -21,8 +21,6 @@ import { DatePipe } from '@angular/common';
 export class IngredientService extends CService<Ingredient>{
   public ingredientChildrenNames: ValueViewChild[] = [];
 
-  public headers: ValueViewChild[] = [];
-
   public bottleType: ValueViewChild[] = [];
 
   public bottleVolume: ValueViewChild[] = [];
@@ -61,7 +59,7 @@ export class IngredientService extends CService<Ingredient>{
     this.initEnum(this.kegVolume, 'keg', 'volume');
     this.initEnum(this.yeastType, 'yeast', 'types');
     this.initEnum(this.ingredientChildrenNames, undefined, 'childrenNames', this.upadteListIngredientSearch);
-    this.initEnum(this.headers, undefined, 'headers');
+    this.initEnum(this.headers, undefined, 'headers', this.updateDisplayedNames);
   }
 
   /**
@@ -77,7 +75,7 @@ export class IngredientService extends CService<Ingredient>{
     enumVal: ValueViewChild[],
     childName: string,
     enumName: string,
-    callback: (search: IngredientSearchService, n: ValueViewChild[]) => void = null
+    callback: (search: IngredientService, n: ValueViewChild[]) => void = null
   ): void {
     if (enumVal === undefined || enumVal.length === 0) {
       this.h.getEnum(childName, enumName).subscribe(response => {
@@ -85,7 +83,7 @@ export class IngredientService extends CService<Ingredient>{
           enumVal.push(elt);
         });
         if (callback !== null) {
-          callback(this.search as IngredientSearchService, enumVal);
+          callback(this, enumVal);
         }
       });
     }
@@ -96,8 +94,14 @@ export class IngredientService extends CService<Ingredient>{
    * Vue que c'est utilisé dans un callback, je n'arrive pas à utiliser « this » du coup je passe directement le module
    * à la fonction. C'est temporaire tant qu'il n'y en a pas d'autre.
    */
-  private upadteListIngredientSearch(search: IngredientSearchService, n: ValueViewChild[]): void {
-    search.setListIngredient(n);
+  private upadteListIngredientSearch(search: IngredientService, n: ValueViewChild[]): void {
+    (search.search as IngredientSearchService).setListIngredient(n);
+  }
+
+  private updateDisplayedNames(t: IngredientService, n: ValueViewChild[]): void {
+    n.forEach(elt => {
+      t.displayedColumns.push(elt.value);
+    });
   }
 
   public create(): Ingredient {

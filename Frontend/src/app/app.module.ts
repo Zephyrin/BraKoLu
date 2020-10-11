@@ -39,6 +39,7 @@ import { StockMobileComponent } from './_components/stock/stock-mobile/stock-mob
 import { PaginationComponent } from './_components/helpers/pagination/pagination.component';
 import { OptionComponent } from './_components/option/option.component';
 import { VenteComponent } from './_components/vente/vente.component';
+import { TableComponent } from './_components/helpers/table/table.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { VenteComponent } from './_components/vente/vente.component';
     PaginationComponent,
     OptionComponent,
     VenteComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

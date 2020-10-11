@@ -13,11 +13,27 @@ use JMS\Serializer\Annotation\Type;
  */
 class IngredientStock
 {
-    const STATES_CREATED = 'created';
-    const STATES_ORDERED = 'ordered';
-    const STATES_STOCKED = 'stocked';
-    const STATES_SOLD_OUT = 'sold_out';
-    const STATES = ['created', 'ordered', 'stocked', 'sold_out'];
+    const STATES = [
+        ['value' => 'created', 'viewValue' => 'Crée'],
+        ['value' => 'ordered', 'viewValue' => 'Commandé'],
+        ['value' => 'stocked', 'viewValue' => 'Reçu'],
+        ['value' => 'sold_out', 'viewValue' => 'Épuisé']
+    ];
+
+    const HEADERS = [
+        ['value' => 'name', 'viewValue' => 'Nom'],
+        ['value' => 'quantity', 'viewValue' => 'Quantité'],
+        ['value' => 'state', 'viewValue' => 'État'],
+        ['value' => 'creationDate', 'viewValue' => 'Crée le'],
+        ['value' => 'orderedDate', 'viewValue' => 'Commandé le'],
+        ['value' => 'endedDate', 'viewValue' => 'Terminé le']
+    ];
+
+    public static function getStates()
+    {
+        return EnumHelper::getEnum(IngredientStock::STATES);
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -46,7 +62,7 @@ class IngredientStock
 
     /**
      * @ORM\Column(type="string", length=10)
-     * @Assert\Choice(choices=IngredientStock::STATES, message="Sélectionne un status correct.")
+     * @Assert\Choice(callback="getStates", message="Sélectionne un status correct.")
      * @Assert\NotBlank(message="The state should not be null")
      */
     private $state;
