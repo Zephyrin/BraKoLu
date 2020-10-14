@@ -8,6 +8,7 @@ use App\Entity\Ingredients as EntityClass;
 use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use App\Controller\Helpers\HelperController;
+use App\Controller\Helpers\HelperForwardController;
 use App\Repository\Ingredients\BottleRepository;
 use App\Repository\Ingredients\BoxRepository;
 use App\Repository\Ingredients\CerealRepository;
@@ -52,6 +53,11 @@ class IngredientController extends AbstractFOSRestController
      * Utilise les fonctionnalités écritent dans HelperController.
      */
     use HelperController;
+
+    /**
+     * Utilise les fonctionnalités écritent dans HelperForwardController.
+     */
+    use HelperForwardController;
 
     /**
      * Est l'utilitaire d'accès à la base de données.
@@ -137,7 +143,7 @@ class IngredientController extends AbstractFOSRestController
 
     /* Simplify les rennomages de masse. Un seul endroit où changer le nom des champs. */
     private $childName = "childName";
-
+    private $bottle = "bottle";
     /**
      * Le constructeur du controlleur. 
      * J'utilise de l'injection de dépendance en nommant correctement les variables.
@@ -238,6 +244,10 @@ class IngredientController extends AbstractFOSRestController
      */
     public function post(array $data)
     {
+        $responseBottle = null;
+        if ($data[$this->childName] == 'box') {
+            $responseBottle = $this->createOrUpdateIngredient($data, $this->bottle);
+        }
         // Ici je crée une form qui permet d'associer les attributs de $data dans un nouvelle objet de type Ingrédient.
         // Ce formulaire utilise aussi un type de formulaire qui lié à la classe va lui permettre de faire la validation
         // des données. Ce formulaire sait si ce champs ne doit pas être null ou tout autre truc que l'on définie dans 
@@ -254,7 +264,15 @@ class IngredientController extends AbstractFOSRestController
         // Et l'on regarde si le formulaire comporte des erreurs.
         // Si c'est le cas, une exception est levée avec la réponse à l'intérieur. On a pas besoin de tester le retour
         // et le serveur est capable de renvoyer la réponse correctement.
-        $this->validationError($form, $this);
+        if ($data[$this->childName] == 'box')
+            $this->validationErrorWithChild(
+                $form,
+                $this,
+                $responseBottle,
+                $this->bottle
+            );
+        else
+            $this->validationError($form, $this);
         // Permet d'avoir la classe Ingredient instancié avec les données mise à jour lors du submit.
         $insertData = $form->getData();
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity\Ingredients;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Entity\EnumHelper;
 use App\Repository\Ingredients\BottleRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,9 +52,16 @@ class Bottle extends Ingredient
      */
     private $color;
 
+    /**
+     * @SerializedName("boxes")
+     * @ORM\OneToMany(targetEntity=Box::class, mappedBy="bottle", orphanRemoval=true)
+     */
+    private $boxes;
+
     public function __construct()
     {
         parent::__construct();
+        $this->boxes = new ArrayCollection();
     }
 
     public function getVolume(): ?int
@@ -87,6 +96,37 @@ class Bottle extends Ingredient
     public function setColor(string $color): self
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Box[]
+     */
+    public function getBoxes(): Collection
+    {
+        return $this->boxes;
+    }
+
+    public function addBox(Box $box): self
+    {
+        if (!$this->boxes->contains($box)) {
+            $this->boxes[] = $box;
+            $box->setBottle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBox(Box $box): self
+    {
+        if ($this->boxes->contains($box)) {
+            $this->boxes->removeElement($box);
+            // set the owning side to null (unless already changed)
+            if ($box->getBottle() === $this) {
+                $box->setBottle(null);
+            }
+        }
 
         return $this;
     }

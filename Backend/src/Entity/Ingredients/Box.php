@@ -16,6 +16,12 @@ class Box extends Ingredient
      */
     private $capacity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="boxes")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $bottle;
+
     public function __construct()
     {
         parent::__construct();
@@ -29,6 +35,18 @@ class Box extends Ingredient
     public function setCapacity(int $capacity): self
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getBottle(): ?Bottle
+    {
+        return $this->bottle;
+    }
+
+    public function setBottle(?Bottle $bottle): self
+    {
+        $this->bottle = $bottle;
 
         return $this;
     }
