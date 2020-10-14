@@ -337,6 +337,16 @@
       <div *ngIf="service.form.value.childName === 'box'"
            class="flex">
         <mat-form-field class="full-width">
+          <mat-label>Bouteille</mat-label>
+          <mat-select formControlName="bottle">
+            <mat-option *ngFor="let bottle of service.allBottles"
+                        [value]="bottle">
+              {{bottle.name}}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+        <mat-form-field class="full-width">
           <mat-label>Capacité</mat-label>
           <input matInput
                  formControlName="capacity"

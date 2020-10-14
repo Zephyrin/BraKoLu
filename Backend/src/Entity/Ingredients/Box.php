@@ -17,7 +17,7 @@ class Box extends Ingredient
     private $capacity;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="boxes")
+     * @ORM\ManyToOne(targetEntity=Bottle::class, inversedBy="boxes")
      * @ORM\JoinColumn(nullable=true)
      */
     private $bottle;

@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Yeast } from '@app/_models/yeast';
 import { Other } from '@app/_models/other';
 import { Keg } from '@app/_models/keg';
@@ -38,6 +39,8 @@ export class IngredientService extends CService<Ingredient>{
   public kegVolume: ValueViewChild[] = [];
 
   public yeastType: ValueViewChild[] = [];
+
+  public allBottles: Ingredient[] = [];
   private nbEnumLeft = 0;
 
   constructor(
@@ -119,6 +122,16 @@ export class IngredientService extends CService<Ingredient>{
   }
 
   public createWithChildName(childName: string): Ingredient {
+    if (childName === 'box') {
+      // On charge les bouteilles à ce moment là. Pas besoin de le faire à un autre moment.
+      // On peut aussi optimiser la récupération, mais je ne pense pas que ça vaille coup.
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('limit', '0');
+      httpParams = httpParams.append('selectChildren', 'bottle');
+      this.h.getAll(httpParams).subscribe(response => {
+        this.allBottles = response.body.map((x) => new Bottle(x as Bottle));
+      });
+    }
     return IngredientFactory.createNew(childName);
   }
 
@@ -179,8 +192,7 @@ export class IngredientService extends CService<Ingredient>{
   private getDisplayBox(name: string, value: Box): any {
     switch (name) {
       case 'bottle':
-        // TODO
-        break;
+        return value[name]?.name;
       default:
         break;
     }
@@ -265,6 +277,7 @@ export class IngredientService extends CService<Ingredient>{
         break;
       case 'box':
         this.form.addControl('capacity', new FormControl('', Validators.required));
+        this.form.addControl('bottle', new FormControl());
         break;
       case 'keg':
         this.form.addControl('volume', new FormControl('', Validators.required));

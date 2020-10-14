@@ -1,4 +1,14 @@
 
+// import material icon from local directory
+// install via npm install material-design-icons J'ai l'impression que c'est le
+// même que celui en dessous. Pour le moment inutile. À voir si on le supprime
+// Ajout de nouveaux icones
+//@import '~material-design-icons/iconfont/material-icons.css';
+// install via npm install material-icons
+@import '~material-icons/iconfont/material-icons.css';
+
+// Roboto fontface intsall via npm install roboto-fontface
+@import "~roboto-fontface/css/roboto/roboto-fontface.css";
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
@@ -8,7 +18,7 @@
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 $custom-typography: mat-typography-config(
-  $font-family: 'CmmercialScript BT'
+  $font-family: 'Roboto'
 );
 @include mat-core($custom-typography);
 

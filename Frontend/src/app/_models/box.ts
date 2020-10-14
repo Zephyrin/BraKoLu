@@ -20,7 +20,7 @@ export class Box extends Ingredient {
   toJSON() {
     const data = super.toJSON();
     if (this.capacity) { data[`capacity`] = this.capacity; }
-    if (this.bottle) { data[`bottle`] = this.bottle.toJSON(); }
+    if (this.bottle) { data[`bottle`] = this.bottle.toJSON(true); }
     return data;
   }
 }

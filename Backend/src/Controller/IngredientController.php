@@ -264,7 +264,7 @@ class IngredientController extends AbstractFOSRestController
         // Et l'on regarde si le formulaire comporte des erreurs.
         // Si c'est le cas, une exception est levée avec la réponse à l'intérieur. On a pas besoin de tester le retour
         // et le serveur est capable de renvoyer la réponse correctement.
-        if ($data[$this->childName] == 'box')
+        if ($responseBottle != null)
             $this->validationErrorWithChild(
                 $form,
                 $this,

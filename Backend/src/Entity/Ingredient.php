@@ -74,7 +74,8 @@ abstract class Ingredient
         ['value' => 'childName', 'viewValue' => 'Catégory'],
         ['value' => 'size', 'viewValue' => 'Taille'],
         ['value' => 'productionYear', 'viewValue' => 'Année de production'],
-        ['value' => 'head', 'viewValue' => 'Tête']
+        ['value' => 'head', 'viewValue' => 'Tête'],
+        ['value' => 'bottle', 'viewValue' => 'Bouteille']
     ];
     /**
      * @var int|null

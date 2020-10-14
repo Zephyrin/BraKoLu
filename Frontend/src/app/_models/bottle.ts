@@ -16,8 +16,9 @@ export class Bottle extends Ingredient {
     }
   }
 
-  toJSON() {
+  toJSON(useId = false) {
     const data = super.toJSON();
+    if (useId && this.id) { data[`id`] = this.id; }
     if (this.type) { data[`type`] = this.type; }
     if (this.volume) { data[`volume`] = this.volume; }
     if (this.color) { data[`color`] = this.color; }
