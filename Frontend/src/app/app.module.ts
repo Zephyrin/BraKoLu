@@ -40,7 +40,6 @@ import { PaginationComponent } from './_components/helpers/pagination/pagination
 import { OptionComponent } from './_components/option/option.component';
 import { VenteComponent } from './_components/vente/vente.component';
 import { TableComponent } from './_components/helpers/table/table.component';
-import { HeaderComponent } from './_components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +58,6 @@ import { HeaderComponent } from './_components/header/header.component';
     OptionComponent,
     VenteComponent,
     TableComponent,
-    HeaderComponent,
   ],
   imports: [
     BrowserModule,

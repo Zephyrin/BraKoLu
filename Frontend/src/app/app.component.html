@@ -12,7 +12,10 @@
                [opened]="(isHandset$ | async) === false">
 
     <mat-toolbar>
-      <mat-icon matListIcon>menu</mat-icon>Menu
+      <img matListIcon
+           alt="Bra.Tool Menu"
+           src="assets/bra.tool.ico"
+           style="height: 1em" /> Menu
     </mat-toolbar>
 
     <mat-nav-list>
@@ -48,20 +51,36 @@
         <mat-icon matListIcon>settings</mat-icon>Options
       </a>
     </mat-nav-list>
-    
+
   </mat-sidenav>
 
   <mat-sidenav-content>
-
-    <!-- Add Content Here -->
-  <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
-
+    <mat-toolbar>
       <!-- HEADER -->
-  <app-header></app-header>
+      <button type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              class="btn-bra-tool"
+              (click)="drawer.toggle()"
+              *ngIf="(isHandset$ | async)"
+              matTooltip="Affiche le menu Bra">
+        <img matListIcon
+             alt="Bra.Tool Menu"
+             src="assets/bra.tool.ico"
+             style="height: 1em" />
+      </button>
+
+      <img class="title"
+           src="./assets/dark/banner_BRATOOL.svg" />
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
 
 
-    <router-outlet></router-outlet>
-  </main>
+
+
+      <router-outlet></router-outlet>
+    </main>
 
   </mat-sidenav-content>
 

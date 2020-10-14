@@ -1,6 +1,5 @@
 .mat-toolbar.mat-primary {
   color: #4091f1;
-  background: #b25845;
   }
 
 // Couleur du menu latéral gauche
@@ -11,9 +10,17 @@
 // Couleur de l'item actif
 mat-toolbar, .active-link {
   color: #3e92f1;
-  background-color: #b2584580;
   }
 
 .mat-list-item:hover, a:hover {
-  background-color: #b2584530;
+}
+
+.title {
+  margin-left: auto!important;
+  margin-right: auto!important;
+  align-content: center!important;
+}
+
+.btn-bra-tool{
+  margin-left: -1em;
 }
