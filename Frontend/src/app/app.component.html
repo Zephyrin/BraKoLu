@@ -48,35 +48,20 @@
         <mat-icon matListIcon>settings</mat-icon>Options
       </a>
     </mat-nav-list>
-
+    
   </mat-sidenav>
+
   <mat-sidenav-content>
 
-    <mat-toolbar color="primary">
-      <button type="button"
-              aria-label="Toggle sidenav"
-              mat-icon-button
-              (click)="drawer.toggle()"
-              *ngIf="(isHandset$ | async)"
-              [matTooltip]="'Afficher le menu'">
-        <mat-icon [attr.aria-label]="'Afficher le bouton'">Menu</mat-icon>
-      </button>
-
-      <!-- Bandeau de titre -->
-      <p class="align-content-center title ml-auto mr-auto">
-        <a href="https://fontmeme.com/fr/polices-de-graffitis/">
-          <img src="https://fontmeme.com/permalink/200928/ce02daf1f2a52e09acc11c4b780b9852.png"
-               alt="polices-de-graffitis"
-               border="0">
-        </a>
-      </p>
-
-    </mat-toolbar>
-
     <!-- Add Content Here -->
-    <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
-      <router-outlet></router-outlet>
-    </main>
+  <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
+
+      <!-- HEADER -->
+  <app-header></app-header>
+
+
+    <router-outlet></router-outlet>
+  </main>
 
   </mat-sidenav-content>
 
