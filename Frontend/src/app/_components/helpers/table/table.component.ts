@@ -1,9 +1,12 @@
+import { ValueViewChild } from '@app/_services/iservice';
 import { MatSort } from '@angular/material/sort';
 import { IService } from '@app/_services/iservice';
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { CdkDragDrop, CdkDragStart, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import 'hammerjs';
 
 @Component({
   selector: 'app-table',
@@ -18,6 +21,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.dataSource.sort = this.sort;
   }
 
   ngAfterViewInit(): void {
@@ -30,6 +34,15 @@ export class TableComponent implements OnInit, AfterViewInit {
   public endUpdate() {
     this.dataSource = new MatTableDataSource(this.service.model);
     this.dataSource.sort = this.sort;
-
   }
+
+  dropListDropped(event: CdkDragDrop<ValueViewChild>) {
+    if (event) {
+      moveItemInArray(this.service.displayedColumns, event.previousIndex, event.currentIndex);
+      moveItemInArray(this.service.headers, event.previousIndex, event.currentIndex);
+      console.log(event.previousIndex, event.currentIndex);
+      this.endUpdate();
+    }
+  }
+
 }

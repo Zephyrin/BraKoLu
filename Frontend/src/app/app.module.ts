@@ -40,6 +40,7 @@ import { PaginationComponent } from './_components/helpers/pagination/pagination
 import { OptionComponent } from './_components/option/option.component';
 import { VenteComponent } from './_components/vente/vente.component';
 import { TableComponent } from './_components/helpers/table/table.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { TableComponent } from './_components/helpers/table/table.component';
     MatSelectModule,
     MatSortModule,
     MatExpansionModule,
-    MatChipsModule
+    MatChipsModule,
+    DragDropModule
   ],
   providers: [
     DatePipe
