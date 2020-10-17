@@ -35,7 +35,7 @@
           <mat-icon>update</mat-icon>
         </button>
         <button mat-icon-button
-                (click)="openDeleteDialog(row)"
+                (click)="openDeleteDialog(row, service.getDisplay('name', row))"
                 [attr.aria-label]="'Supprime ' + service.getDisplay('name',row)">
           <mat-icon>delete</mat-icon>
         </button>

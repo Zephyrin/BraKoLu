@@ -50,9 +50,9 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
   }
 
-  openDeleteDialog(element: any): void {
+  openDeleteDialog(element: any, title: string): void {
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as RemoveDialogComponent).title = element.name;
+    (dialogRef.componentInstance as RemoveDialogComponent).title = title;
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.data === true) {
         this.service.update(undefined, element, null);
