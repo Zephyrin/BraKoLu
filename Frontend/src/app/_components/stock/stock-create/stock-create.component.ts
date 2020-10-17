@@ -1,4 +1,4 @@
-import { IngredientStock } from '@app/_models/ingredientStock';
+import { Ingredient } from '@app/_models';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { FormBuilder } from '@angular/forms';
 import { StockService } from '@app/_services/stock/stock.service';
@@ -23,8 +23,10 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent {
   }
 
   init() {
-    this.ingredientService.load();
-    const stock = new IngredientStock(undefined);
-    this.createFormBasedOn(stock);
+    this.ingredientService.load(true);
+  }
+
+  compareIngredient(c1: Ingredient, c2: Ingredient): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }

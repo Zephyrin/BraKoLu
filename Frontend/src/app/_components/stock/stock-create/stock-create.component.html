@@ -1,16 +1,21 @@
 <form [formGroup]="service.form"
       *ngIf="service.form"
       (ngSubmit)="onSubmitClick()">
-  <fieldset [disabled]="service.loading | async">
+  <fieldset [disabled]="service.loadingSource || ingredientService.loadingSource"
+            [ngStyle]="{'pointer-events':service.loadingSource || ingredientService.loadingSource ? 'none' : 'auto' }">
     <mat-form-field class="full-width">
       <mat-label>Quel est l'ingrédient ?</mat-label>
       <mat-select cdkFocusInitial
-                  formControlName="ingredient">
+                  formControlName="ingredient"
+                  [compareWith]="compareIngredient">
         <mat-option *ngFor="let ingredient of ingredientService.model"
                     [value]="ingredient">
           {{ingredient.name}}
         </mat-option>
       </mat-select>
+      <mat-error>
+        {{service.form.get('quantity').errors?.serverError}}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>Quantité</mat-label>
@@ -54,11 +59,12 @@
   <div mat-dialog-actions
        class="flex-reverse">
     <button mat-button
-            [disabled]="!service.form || service.form.invalid"
+            [disabled]="!service.form || service.form.invalid || service.loadingSource || ingredientService.loadingSource"
             type="submit"
             (click)="onSubmitClick()">Ajouter</button>
     <button mat-button
             type="button"
             (click)="onCancelClick()">Annuler</button>
   </div>
+
 </form>

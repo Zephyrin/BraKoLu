@@ -1,28 +1,28 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
-import { IngredientCreateFormComponent } from '@app/_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
 import { ValueViewChild } from '@app/_services/iservice';
 import { MatSort } from '@angular/material/sort';
 import { IService } from '@app/_services/iservice';
-import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, TemplateRef, Inject } from '@angular/core';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import 'hammerjs';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
+export class TableComponent extends ChildBaseComponent<any> implements OnInit, AfterViewInit {
   @Input() service: IService;
   dataSource: any = [];
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public dialog: MatDialog) {
-    super(dialog, IngredientCreateFormComponent);
+  constructor(
+    public dialog: MatDialog) {
+    super(dialog, undefined);
   }
 
   ngOnInit(): void {

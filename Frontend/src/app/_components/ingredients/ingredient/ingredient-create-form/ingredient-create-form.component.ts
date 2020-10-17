@@ -23,6 +23,9 @@ export class IngredientCreateFormComponent extends ChildCreateFormBaseComponent 
     super(dialogRef, service, formBuilder);
   }
 
+  public create() {
+  }
+
   childNameChange($evt): void {
     let newIngredient: Ingredient;
     newIngredient = this.service.createWithChildName($evt.value);

@@ -14,7 +14,7 @@ import { MatChipSelectionChange } from '@angular/material/chips';
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss']
 })
-export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
 
   @ViewChild('tableComponent') tableComponent: TableComponent;
   searchForm: FormGroup;
@@ -48,6 +48,10 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     this.searchForm = this.formBuilder.group({
       search: [this.getSearch.ingredientSearch.searchValue]
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.tableComponent.UpdateComponentOrTemplateRef(IngredientCreateFormComponent);
   }
 
 

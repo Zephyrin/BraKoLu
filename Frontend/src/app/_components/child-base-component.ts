@@ -13,6 +13,10 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     public dialog: MatDialog,
     protected componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
 
+  public UpdateComponentOrTemplateRef(componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) {
+    this.componentOrTemplateRef = componentOrTemplateRef;
+  }
+
   public ngOnInit(): void {
     this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
       if (data === true) {
@@ -30,6 +34,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
+    (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).create();
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }

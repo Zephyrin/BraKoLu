@@ -59,7 +59,7 @@ export interface IService {
    * Charge l'intégralité des données, utilisé par défaut.
    * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
    */
-  load(): void;
+  load(all: boolean): void;
 
   /**
    * Initialise les enums du service. Comme par example la liste des types céréales ou leurs formats.
@@ -152,7 +152,7 @@ export abstract class CService<T> implements IService {
   //#region Attributes IService
   public model: T[];
   public loading = new Subject<boolean>();
-  private loadingSource = false;
+  public loadingSource = false;
   public errors = new FormErrors();
   public form: FormGroup;
   public endUpdate = new Subject<boolean>();
@@ -177,6 +177,7 @@ export abstract class CService<T> implements IService {
   public search: ISearch;
   //#endregion
   protected initEnumDone = new Subject<boolean>();
+  private loadAll = false;
   public constructor(
     protected http: HttpService<T>,
     private $search: ISearch | undefined
@@ -216,23 +217,28 @@ export abstract class CService<T> implements IService {
 
   public abstract getDisplay(name: string, value: T): any;
   //#endregion
-  public load(): void {
+  public load(all: boolean = false): void {
+    this.loadAll = all;
+    this.start();
     this.initEnums();
   }
 
   private load$(): void {
-    let httpParams = this.paginate.initPaginationParams(null);
-    httpParams = this.sort.initSortParams(httpParams);
-    if (this.search) {
-      httpParams = this.search.initSearchParams(httpParams);
+    let httpParams = null;
+    if (!this.loadAll) {
+      httpParams = this.paginate.initPaginationParams(null);
+      httpParams = this.sort.initSortParams(httpParams);
+      if (this.search) {
+        httpParams = this.search.initSearchParams(httpParams);
+      }
     }
     this.http.getAll(httpParams).subscribe(response => {
       this.paginate.setParametersFromResponse(response.headers);
       this.model = response.body.map((x) => this.createCpy(x));
-      this.end();
+      this.end(true);
     }, err => {
       this.model = [];
-      this.end(err);
+      this.end(true, err);
     });
   }
   //#region IService
@@ -291,7 +297,7 @@ export abstract class CService<T> implements IService {
     return true;
   }
 
-  protected end(serverError?: any | undefined) {
+  protected end(wasUpdate: boolean, serverError?: any | undefined) {
     if (serverError) {
       this.errors.formatError(serverError);
       if (this.form && serverError.error?.errors) {
@@ -309,7 +315,7 @@ export abstract class CService<T> implements IService {
           });
         });
       }
-    } else {
+    } else if (wasUpdate) {
       this.errors = new FormErrors();
       this.workingOn = undefined;
       this.endUpdate.next(true);
@@ -324,18 +330,18 @@ export abstract class CService<T> implements IService {
       const dataToSent = this.createCpy(model);
       this.http.create(dataToSent).subscribe(data => {
         this.model.push(this.createCpy(data));
-        this.end();
+        this.end(true);
       }, error => {
-        this.end(error);
+        this.end(true, error);
       });
     } else {
       this.http.update(model[name].toString(), model).subscribe(data => {
         Object.keys(model).forEach(key => {
           this.workingOn[key] = model[key];
         });
-        this.end();
+        this.end(true);
       }, error => {
-        this.end(error);
+        this.end(true, error);
       });
     }
   }
@@ -349,11 +355,11 @@ export abstract class CService<T> implements IService {
         if (error.status === 404) {
           this.sliceWorkingOn();
         } else {
-          this.end(error);
+          this.end(true, error);
         }
       });
     } else {
-      this.end(undefined);
+      this.end(true, undefined);
     }
   }
 
@@ -362,7 +368,7 @@ export abstract class CService<T> implements IService {
     if (index >= 0) {
       this.model.splice(index, 1);
     }
-    this.end();
+    this.end(true);
   }
 
   public createForm(formBuilder: FormBuilder, value: T): void {

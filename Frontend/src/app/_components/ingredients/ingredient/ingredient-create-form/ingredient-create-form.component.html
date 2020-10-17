@@ -3,7 +3,7 @@
                 class="full-width">
   <mat-label> Ajouter ingrédient</mat-label>
   <mat-select cdkFocusInitial
-              [disabled]="(service.loading | async) || value"
+              [disabled]="service.loadingSource || value"
               [value]="value?.childName"
               (selectionChange)="childNameChange($event)">
     <mat-option *ngFor="let childName of service.ingredientChildrenNames"
@@ -18,7 +18,8 @@
 <form [formGroup]="service.form"
       *ngIf="service.form"
       (ngSubmit)="onSubmitClick()">
-  <fieldset [disabled]="service.loading | async">
+  <fieldset [disabled]="service.loadingSource"
+            [ngStyle]="{'pointer-events':service.loadingSource ? 'none' : 'auto' }">
     <fieldset *ngIf="service.form">
       <!-- NOM -->
       <mat-form-field class="full-width">

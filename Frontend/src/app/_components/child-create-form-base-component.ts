@@ -54,6 +54,11 @@ export class ChildCreateFormBaseComponent implements OnInit, OnDestroy {
     this.service.createForm(this.formBuilder, value);
   }
 
+  public create() {
+    const value = this.service.create();
+    this.createFormBasedOn(value);
+  }
+
   public update(value: any) {
     this.createFormBasedOn(value);
   }
