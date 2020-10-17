@@ -42,6 +42,9 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
     if (index < 0) {
       this.service.displayedColumns.push('action');
     }
+    else if (index < this.service.displayedColumns.length - 1) {
+      moveItemInArray(this.service.displayedColumns, index, this.service.displayedColumns.length - 1);
+    }
     this.dataSource.sort = this.sort;
   }
 
