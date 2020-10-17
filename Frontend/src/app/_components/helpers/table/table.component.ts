@@ -5,7 +5,7 @@ import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/cor
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { CdkDragDrop, CdkDragStart, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import 'hammerjs';
 
 @Component({
@@ -39,8 +39,10 @@ export class TableComponent implements OnInit, AfterViewInit {
   dropListDropped(event: CdkDragDrop<ValueViewChild>) {
     if (event) {
       moveItemInArray(this.service.displayedColumns, event.previousIndex, event.currentIndex);
-      moveItemInArray(this.service.headers, event.previousIndex, event.currentIndex);
-      console.log(event.previousIndex, event.currentIndex);
+      const elt = this.service.displayedColumns[event.currentIndex];
+      const index = this.service.headers.findIndex(x => x.value === elt);
+      moveItemInArray(this.service.headers, index, event.currentIndex);
+      localStorage.setItem(this.service.constructor.name + '_headers', JSON.stringify(this.service.headers));
       this.endUpdate();
     }
   }

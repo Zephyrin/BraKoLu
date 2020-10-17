@@ -111,7 +111,23 @@ export class IngredientService extends CService<Ingredient>{
     (t.search as IngredientSearchService).setListIngredient(n);
   }
 
+  /**
+   * Met à jour la liste des ingrédients que l'on pourra afficher. Utiliser par la suite dans ingredient-desktop.component.
+   * La liste est mise à jour pour n'afficher que les colonnes qui comportent des données retournées par le serveur.
+   *
+   * À l'initialisation, on en profite pour rétablir l'ordre des colonnes de la vue.
+   */
   private updateDisplayedNames(t: IngredientService, n: ValueViewChild[]): void {
+    // Information sauvegarder dans table.component.ts lorsque l'utilisateur change l'ordre des colonnes.
+    const storedNames = JSON.parse(localStorage.getItem(t.constructor.name + '_headers'));
+    if (storedNames != null) {
+      storedNames.forEach((value, index) => {
+        const indexN = n.findIndex(x => x.value === value.value);
+        if (indexN !== index) {
+          n.splice(index, 0, n.splice(indexN, 1)[0]);
+        }
+      });
+    }
     n.forEach(elt => {
       t.displayedColumns.push(elt.value);
     });
