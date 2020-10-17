@@ -1,3 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
+import { ChildBaseComponent } from '@app/_components/child-base-component';
+import { IngredientCreateFormComponent } from '@app/_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
 import { ValueViewChild } from '@app/_services/iservice';
 import { MatSort } from '@angular/material/sort';
 import { IService } from '@app/_services/iservice';
@@ -13,12 +16,14 @@ import 'hammerjs';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, AfterViewInit {
+export class TableComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
   @Input() service: IService;
   dataSource: any = [];
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) {
+    super(dialog, IngredientCreateFormComponent);
+  }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -33,6 +38,10 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   public endUpdate() {
     this.dataSource = new MatTableDataSource(this.service.model);
+    const index = this.service.displayedColumns.findIndex(x => x === 'action');
+    if (index < 0) {
+      this.service.displayedColumns.push('action');
+    }
     this.dataSource.sort = this.sort;
   }
 

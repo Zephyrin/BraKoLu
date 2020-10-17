@@ -37,7 +37,7 @@ export abstract class HttpService<T> {
 
   delete(id: string): Observable<{}> {
     return this.http.delete(
-      `${environment.apiUrl}/${this.deletePath}/${id}`)
+      `${environment.apiUrl}/${this.deletePath()}/${id}`)
       .pipe(catchError(this.handleError));
   }
 

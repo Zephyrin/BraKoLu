@@ -22,6 +22,26 @@
       <span> {{ service.getDisplay(header.value, element) }} </span>
     </td>
   </ng-container>
+  <ng-container matColumnDef="action">
+    <th mat-header-cell
+        *matHeaderCellDef>
+    </th>
+    <td mat-cell
+        *matCellDef="let row">
+      <div class="action-container">
+        <button mat-icon-button
+                (click)="openUpdateDialog(row)"
+                [attr.aria-label]="'Met à jour ' + service.getDisplay('name',row)">
+          <mat-icon>update</mat-icon>
+        </button>
+        <button mat-icon-button
+                (click)="openDeleteDialog(row)"
+                [attr.aria-label]="'Supprime ' + service.getDisplay('name',row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
   <tr mat-header-row
       class="tr-box"
       *matHeaderRowDef="service.displayedColumns"></tr>

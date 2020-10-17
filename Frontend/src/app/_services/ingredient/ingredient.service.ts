@@ -138,16 +138,6 @@ export class IngredientService extends CService<Ingredient>{
   }
 
   public createWithChildName(childName: string): Ingredient {
-    if (childName === 'box') {
-      // On charge les bouteilles à ce moment là. Pas besoin de le faire à un autre moment.
-      // On peut aussi optimiser la récupération, mais je ne pense pas que ça vaille coup.
-      let httpParams = new HttpParams();
-      httpParams = httpParams.append('limit', '0');
-      httpParams = httpParams.append('selectChildren', 'bottle');
-      this.h.getAll(httpParams).subscribe(response => {
-        this.allBottles = response.body.map((x) => new Bottle(x as Bottle));
-      });
-    }
     return IngredientFactory.createNew(childName);
   }
 
@@ -268,6 +258,18 @@ export class IngredientService extends CService<Ingredient>{
       comment: [''],
       childName: ['']
     });
+    if (value.childName === 'box') {
+      // On charge les bouteilles à ce moment là. Pas besoin de le faire à un autre moment.
+      // On peut aussi optimiser la récupération, mais je ne pense pas que ça vaille coup.
+      if (this.allBottles?.length === 0) {
+        let httpParams = new HttpParams();
+        httpParams = httpParams.append('limit', '0');
+        httpParams = httpParams.append('selectChildren', 'bottle');
+        this.h.getAll(httpParams).subscribe(response => {
+          this.allBottles = response.body.map((x) => new Bottle(x as Bottle));
+        });
+      }
+    }
     switch (value.childName) {
       case 'cereal':
         this.form.addControl('format', new FormControl('', Validators.required));

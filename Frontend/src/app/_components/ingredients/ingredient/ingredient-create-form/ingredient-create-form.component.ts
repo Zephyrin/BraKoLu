@@ -1,3 +1,4 @@
+import { Bottle } from '@app/_models/bottle';
 import { ValueViewChild } from '@app/_services/iservice';
 import { ChildCreateFormBaseComponent } from '@app/_components/child-create-form-base-component';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
@@ -32,5 +33,9 @@ export class IngredientCreateFormComponent extends ChildCreateFormBaseComponent 
       newIngredient.unitFactor = this.service.form.value.unitFactor;
     }
     this.createFormBasedOn(newIngredient);
+  }
+
+  compareBottle(c1: Bottle, c2: Bottle): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }

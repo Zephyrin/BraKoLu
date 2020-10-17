@@ -483,13 +483,25 @@ class IngredientController extends AbstractFOSRestController
     public function putOrPatch(array $data, bool $clearMissing, string $id)
     {
         $existing = $this->getById($id);
-
+        $responseBottle = null;
+        if ($data[$this->childName] == 'box') {
+            $responseBottle = $this->createOrUpdateIngredient($data, $this->bottle);
+        }
         $form = $this->createForm($this->getIngredientType($existing), $existing);
         $this->manageDate($data);
         unset($data[$this->childName]);
 
         $form->submit($data, $clearMissing);
-        $this->validationError($form, $this);
+
+        if ($responseBottle != null)
+            $this->validationErrorWithChild(
+                $form,
+                $this,
+                $responseBottle,
+                $this->bottle
+            );
+        else
+            $this->validationError($form, $this);
 
         // Si besoin de récuperer l'instance et d'appliquer des modifications via le code.
         // $insertData = $form->getData();

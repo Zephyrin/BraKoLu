@@ -11,6 +11,7 @@ export class RemoveDialogComponent implements OnInit {
   loading = false;
   submitted = false;
   errors = new FormErrors();
+  title: string;
 
   constructor(
     public dialogRef: MatDialogRef<RemoveDialogComponent>,

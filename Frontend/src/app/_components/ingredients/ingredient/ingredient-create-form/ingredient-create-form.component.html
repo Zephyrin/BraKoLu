@@ -4,6 +4,7 @@
   <mat-label> Ajouter ingrédient</mat-label>
   <mat-select cdkFocusInitial
               [disabled]="(service.loading | async) || value"
+              [value]="value?.childName"
               (selectionChange)="childNameChange($event)">
     <mat-option *ngFor="let childName of service.ingredientChildrenNames"
                 [value]="childName.value">
@@ -338,13 +339,17 @@
            class="flex">
         <mat-form-field class="full-width">
           <mat-label>Bouteille</mat-label>
-          <mat-select formControlName="bottle">
+          <mat-select formControlName="bottle"
+                      [compareWith]="compareBottle">
+            <mat-option [value]="undefined">Sans bouteille</mat-option>
             <mat-option *ngFor="let bottle of service.allBottles"
                         [value]="bottle">
               {{bottle.name}}
             </mat-option>
           </mat-select>
-
+          <mat-error>
+            {{ service.form.get('bottle').errors?.serverError }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Capacité</mat-label>
@@ -378,8 +383,14 @@
          class="flex-reverse">
       <button mat-button
               [disabled]="!service.form || service.form.invalid"
+              *ngIf="!value"
               type="submit"
               (click)="onSubmitClick()">Ajouter</button>
+      <button mat-button
+              *ngIf="value"
+              [disabled]="!service.form || service.form.invalid"
+              type="submit"
+              (click)="onSubmitClick()">Modifier</button>
       <button mat-button
               type="button"
               (click)="onCancelClick()">Annuler</button>
@@ -393,8 +404,13 @@
      *ngIf="!service.form"
      class="flex-reverse">
   <button mat-button
+          *ngIf="!value"
           disabled
           (click)="onSubmitClick()">Ajouter</button>
+  <button mat-button
+          *ngIf="value"
+          disabled
+          (click)="onSubmitClick()">Modifier</button>
   <button mat-button
           [disabled]="service.loading | async"
           type="button"

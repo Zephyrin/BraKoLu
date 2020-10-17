@@ -24,7 +24,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { DatePipe } from '@angular/common';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
 import { ToolsEditComponent } from './_components/tools/tools-edit/tools-edit.component';
@@ -85,7 +85,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatSortModule,
     MatExpansionModule,
     MatChipsModule,
-    DragDropModule
+    DragDropModule,
+    MatCheckboxModule
   ],
   providers: [
     DatePipe

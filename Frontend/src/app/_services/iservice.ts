@@ -260,15 +260,21 @@ export abstract class CService<T> implements IService {
   public update(name: string, value: T, newValue: any): void {
     if (this.start() === true) {
       this.workingOn = value;
-      if (newValue === undefined) {
+      if (newValue === undefined || newValue === null) {
         this.delete(value);
       } else {
         if (this.workingOn) {
           const id = 'id';
-          const model: any = {};
-          model[id] = this.workingOn[id];
-          model[name] = newValue;
-          this.updateOrCreate(model);
+          if (newValue[id]) {
+            // On utilise le mode avec l'objet entier.
+            this.updateOrCreate(newValue);
+          } else {
+            // On utilise qu'une partie de l'objet.
+            const model: any = {};
+            model[id] = this.workingOn[id];
+            model[name] = newValue;
+            this.updateOrCreate(model);
+          }
         } else {
           this.updateOrCreate(newValue);
         }
@@ -324,7 +330,9 @@ export abstract class CService<T> implements IService {
       });
     } else {
       this.http.update(model[name].toString(), model).subscribe(data => {
-        this.workingOn = this.createCpy(model);
+        Object.keys(model).forEach(key => {
+          this.workingOn[key] = model[key];
+        });
         this.end();
       }, error => {
         this.end(error);

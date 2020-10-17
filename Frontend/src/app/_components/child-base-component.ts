@@ -1,7 +1,9 @@
+import { RemoveDialogComponent } from './helpers/remove-dialog/remove-dialog.component';
+import { ChildCreateFormBaseComponent } from '@app/_components/child-create-form-base-component';
 import { MatDialog } from '@angular/material/dialog';
 import { IService } from '@app/_services/iservice';
 import { Subscription } from 'rxjs';
-import { OnInit, OnDestroy, Input, TemplateRef } from '@angular/core';
+import { OnInit, OnDestroy, Input, TemplateRef, Component } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
@@ -30,6 +32,25 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+      }
+    });
+  }
+
+  openUpdateDialog(element: any): void {
+    const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+    (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
+  }
+
+  openDeleteDialog(element: any): void {
+    const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
+    (dialogRef.componentInstance as RemoveDialogComponent).title = element.name;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.data === true) {
+        this.service.update(undefined, element, null);
       }
     });
   }

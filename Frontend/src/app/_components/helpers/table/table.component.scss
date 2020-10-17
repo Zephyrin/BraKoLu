@@ -24,16 +24,20 @@
 .header.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-
-/* .header {
-  border: solid 1px #ccc;
-  min-height: 60px;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-  display: block;
+.action-container {
+  display: flex;
+  justify-content: right;
 }
- */
+
+.action-container {
+  button {
+  opacity: 0.5;
+  }
+  button:hover {
+    opacity: 1;
+  }
+}
+
 .header-box {
   cursor: move;
 }
