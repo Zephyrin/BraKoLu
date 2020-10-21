@@ -87,7 +87,7 @@ export class IngredientService extends CService<Ingredient>{
   ): void {
     if (enumVal === undefined || enumVal.length === 0) {
       this.nbEnumLeft++;
-      this.h.getEnum(childName, enumName).subscribe(response => {
+      this.h.getEnums(childName, enumName).subscribe(response => {
         response.forEach(elt => {
           enumVal.push(elt);
         });

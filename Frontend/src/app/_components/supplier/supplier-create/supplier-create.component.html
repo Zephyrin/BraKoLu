@@ -1,0 +1,33 @@
+<form [formGroup]="service.form"
+      *ngIf="service.form"
+      (ngSubmit)="onSubmitClick()">
+  <fieldset [disabled]="service.loadingSource"
+            [ngStyle]="{'pointer-events':service.loadingSource ? 'none' : 'auto' }">
+    <mat-form-field class="full-width">
+      <mat-label>Nom</mat-label>
+      <input matInput
+             required
+             formControlName="name"
+             placeholder="Ex: J'en connais pas."
+             value="">
+      <mat-error>
+        {{service.form.get('name').errors?.serverError}}
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+  <div mat-dialog-actions
+       class="flex-reverse">
+    <button mat-button
+            *ngIf="!value"
+            [disabled]="!service.form || service.form.invalid || service.loadingSource"
+            type="submit"
+            (click)="onSubmitClick()">Ajouter</button>
+    <button mat-button
+            *ngIf="value"
+            [disabled]="!service.form || service.form.invalid || service.loadingSource"
+            (click)="onSubmitClick()">Modifier</button>
+    <button mat-button
+            type="button"
+            (click)="onCancelClick()">Annuler</button>
+  </div>
+</form>

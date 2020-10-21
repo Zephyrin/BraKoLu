@@ -61,7 +61,10 @@
     <button mat-button
             [disabled]="!service.form || service.form.invalid || service.loadingSource || ingredientService.loadingSource"
             type="submit"
-            (click)="onSubmitClick()">Ajouter</button>
+            (click)="onSubmitClick()">
+      <ng-container *ngIf="!value">Ajouter</ng-container>
+      <ng-container *ngIf="value">Modifier</ng-container>
+    </button>
     <button mat-button
             type="button"
             (click)="onCancelClick()">Annuler</button>

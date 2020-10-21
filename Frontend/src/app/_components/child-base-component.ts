@@ -24,8 +24,10 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
         this.dialog.closeAll();
       }
     });
+    this.init();
   }
 
+  public init(): void { }
   public endUpdate() { }
 
   ngOnDestroy(): void {

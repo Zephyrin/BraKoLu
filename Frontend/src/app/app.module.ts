@@ -41,6 +41,8 @@ import { OptionComponent } from './_components/option/option.component';
 import { VenteComponent } from './_components/vente/vente.component';
 import { TableComponent } from './_components/helpers/table/table.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SupplierDesktopComponent } from './_components/supplier/supplier-desktop/supplier-desktop.component';
+import { SupplierCreateComponent } from './_components/supplier/supplier-create/supplier-create.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     OptionComponent,
     VenteComponent,
     TableComponent,
+    SupplierDesktopComponent,
+    SupplierCreateComponent,
   ],
   imports: [
     BrowserModule,

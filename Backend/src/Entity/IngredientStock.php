@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IngredientStockRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\SerializedName;
@@ -93,6 +95,16 @@ class IngredientStock
      * @ORM\JoinColumn(nullable=false)
      */
     private $ingredient;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Supplier::class, inversedBy="ingredientStocks")
+     */
+    private $Suppliers;
+
+    public function __construct()
+    {
+        $this->Suppliers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -191,6 +203,32 @@ class IngredientStock
     public function setIngredient(?Ingredient $ingredient): self
     {
         $this->ingredient = $ingredient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Supplier[]
+     */
+    public function getSuppliers(): Collection
+    {
+        return $this->Suppliers;
+    }
+
+    public function addSupplier(Supplier $supplier): self
+    {
+        if (!$this->Suppliers->contains($supplier)) {
+            $this->Suppliers[] = $supplier;
+        }
+
+        return $this;
+    }
+
+    public function removeSupplier(Supplier $supplier): self
+    {
+        if ($this->Suppliers->contains($supplier)) {
+            $this->Suppliers->removeElement($supplier);
+        }
 
         return $this;
     }

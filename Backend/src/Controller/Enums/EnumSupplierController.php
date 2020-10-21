@@ -2,7 +2,7 @@
 
 namespace App\Controller\Enums;
 
-use App\Entity\IngredientStock;
+use App\Entity\Supplier;
 use App\Serializer\FormErrorSerializer;
 use Behat\Behat\HelperContainer\Exception\NotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -19,30 +19,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 
 /**
- * Class EnumStockController
+ * Class EnumSupplierController
  * @package App\Controller\Enums
  * 
- * @Route("api/ingredient/stock")
- * @SWG\Tag(name="Ingredients' enums")
+ * @Route("api/supplier")
+ * @SWG\Tag(name="Suppliers' enums")
  */
-class EnumStockController extends AbstractFOSRestController
+class EnumSupplierController extends AbstractFOSRestController
 {
     /**
      * @Route("/enum/{name}",
-     *  name="api_enum_ingredient_stock_get",
+     *  name="api_enum_suppliers_get",
      *  methods={"GET"},
      *  requirements={
-     *      "name": "(states|headers)"
+     *      "name": "(headers)"
      * })
      * 
      * @SWG\Get(
-     *  summary="Récupère les valeurs possible des énumérations States ou Header du stock.",
+     *  summary="Récupère les valeurs possible des énumérations Header des fournisseurs.",
      *  produces={"application/json"},
      *  @SWG\Parameter(
      *          name="name",
      *          type="string",
      *          required=true,
-     *          description="On cherche soit la liste des états du stock soit la liste de tout les entêtes possible.",
+     *          description="On cherche la liste de toutes les entêtes possible.",
      *          in="path")
      * )
      * @SWG\Response(
@@ -62,10 +62,8 @@ class EnumStockController extends AbstractFOSRestController
     public function getEnumsAction(string $name)
     {
         switch ($name) {
-            case 'states':
-                return $this->view(IngredientStock::STATES);
             case 'headers':
-                return $this->view(IngredientStock::HEADERS);
+                return $this->view(Supplier::HEADERS);
             default:
                 break;
         }

@@ -2,16 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\IngredientStock;
-use App\Entity\Ingredient;
 use App\Entity\Supplier;
+use App\Entity\IngredientStock;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class IngredientStockType extends AbstractType
+class SupplierType extends AbstractType
 {
 
     public function buildForm(
@@ -20,18 +18,11 @@ class IngredientStockType extends AbstractType
     ) {
         $builder
             ->add("id")
-            ->add("quantity")
-            ->add("price")
-            ->add("state")
+            ->add("name")
             ->add(
-                'ingredient',
-                EntityType::class,
-                ['class' => Ingredient::class, 'required' => true]
-            )
-            ->add(
-                'suppliers',
+                'ingredientStocks',
                 CollectionType::class,
-                ['entry_type' => Supplier::class]
+                ['entry_type' => IngredientStock::class]
             );
     }
 
@@ -39,7 +30,7 @@ class IngredientStockType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => IngredientStock::class,
+                'data_class'         => Supplier::class,
                 'allow_extra_fields' => false,
                 'csrf_protection'    => false,
             ]

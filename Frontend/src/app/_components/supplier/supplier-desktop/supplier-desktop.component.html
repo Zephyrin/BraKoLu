@@ -1,0 +1,13 @@
+<div class="inline-header">
+  <!-- BOUTON AJOUTER Fournisseur -->
+  <button mat-button
+          (click)="openCreateDialog()"
+          [matTooltip]="'Ajouter un fournisseur'">
+    <mat-icon>add_circle_outline</mat-icon>
+    <mat-label> Ajouter un fournisseur</mat-label>
+  </button>
+</div>
+<!-- TABLEAU des fournisseurs -->
+<app-table [service]="service"
+           #Table></app-table>
+<app-pagination [paginate]="service.paginate"></app-pagination>

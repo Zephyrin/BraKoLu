@@ -9,3 +9,4 @@ export * from './bottleTop';
 export * from './yeast';
 export * from './ingredientFactory';
 export * from './ingredientStock';
+export * from './supplier';

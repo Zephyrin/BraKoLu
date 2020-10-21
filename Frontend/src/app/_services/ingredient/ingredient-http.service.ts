@@ -28,7 +28,7 @@ export class IngredientHttpService extends HttpService<Ingredient> {
 
   deletePath() { return this.path; }
 
-  public getEnum(name: string, enums: string): Observable<ValueViewChild[]> {
+  public getEnums(name: string, enums: string): Observable<ValueViewChild[]> {
     if (name !== undefined) {
       return this.http.get<ValueViewChild[]>(`${environment.apiUrl}/ingredients/${name}/enum/${enums}`);
     }

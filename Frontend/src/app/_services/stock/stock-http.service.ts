@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { environment } from './../../../environments/environment';
+import { environment } from '@app/../environments/environment';
 import { IngredientStock } from '@app/_models';
 import { HttpService } from '@app/_services/http.service';
 
@@ -27,8 +27,4 @@ export class StockHttpService extends HttpService<IngredientStock> {
   updatePath() { return this.path; }
 
   deletePath() { return this.path; }
-
-  getEnum(enumName: string): Observable<ValueViewChild[]> {
-    return this.http.get<ValueViewChild[]>(`${environment.apiUrl}/ingredient/stock/enum/${enumName}`);
-  }
 }

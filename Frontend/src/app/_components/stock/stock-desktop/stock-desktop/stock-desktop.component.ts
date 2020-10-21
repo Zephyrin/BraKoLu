@@ -1,3 +1,4 @@
+import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ import { StockCreateComponent } from '@app/_components/stock/stock-create/stock-
 })
 export class StockDesktopComponent extends ChildBaseComponent<StockCreateComponent> implements AfterViewInit {
   @ViewChild('Table') tableComponent: TableComponent;
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, public serviceSupplier: SupplierService) {
     super(dialog, StockCreateComponent);
   }
 
@@ -22,5 +23,9 @@ export class StockDesktopComponent extends ChildBaseComponent<StockCreateCompone
 
   public endUpdate() {
     this.tableComponent.endUpdate();
+  }
+
+  public init() {
+    this.serviceSupplier.load(false);
   }
 }

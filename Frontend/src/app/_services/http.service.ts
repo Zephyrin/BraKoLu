@@ -1,3 +1,5 @@
+import { ValueViewChild } from './iservice';
+
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
@@ -39,6 +41,10 @@ export abstract class HttpService<T> {
     return this.http.delete(
       `${environment.apiUrl}/${this.deletePath()}/${id}`)
       .pipe(catchError(this.handleError));
+  }
+
+  getEnum(enumName: string): Observable<ValueViewChild[]> {
+    return this.http.get<ValueViewChild[]>(`${environment.apiUrl}/${this.getPath()}/enum/${enumName}`);
   }
 
 

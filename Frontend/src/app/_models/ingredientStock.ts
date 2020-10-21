@@ -1,5 +1,6 @@
 import { IngredientFactory } from './ingredientFactory';
-import { Ingredient } from '@app/_models';
+import { Supplier } from './supplier';
+import { Ingredient } from './ingredient';
 
 export class IngredientStock {
   id: number;
@@ -10,8 +11,10 @@ export class IngredientStock {
   orderedDate: Date;
   endedDate: Date;
   ingredient: Ingredient;
+  suppliers: Supplier[];
 
-  public constructor(stock: IngredientStock | undefined) {
+  public constructor(stock: IngredientStock | undefined, createSupplier = false) {
+    this.suppliers = new Array();
     if (stock && stock !== null) {
       this.id = stock.id;
       if (stock.creationDate) {
@@ -27,6 +30,13 @@ export class IngredientStock {
         this.endedDate = new Date(stock.endedDate);
       }
       this.ingredient = IngredientFactory.createCpy(stock.ingredient);
+      if (stock.suppliers) {
+        if (createSupplier === true) {
+          stock.suppliers.forEach(supplier => this.suppliers.push(new Supplier(supplier, false)));
+        } else {
+          stock.suppliers.forEach(supplier => this.suppliers.push(supplier));
+        }
+      }
     }
   }
 
@@ -34,13 +44,18 @@ export class IngredientStock {
     return this.quantity / this.ingredient.unitFactor;
   }
 
-  toJSON() {
+  toJSON(includeSupplier = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
     if (this.quantity) { data[`quantity`] = this.quantity; }
     if (this.price) { data[`price`] = this.price; }
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
+    if (includeSupplier === true) {
+      const suppliers = new Array();
+      this.suppliers.forEach(supplier => suppliers.push(supplier.toJSON(false)));
+      data[`suppliers`] = suppliers;
+    }
     return data;
   }
 }

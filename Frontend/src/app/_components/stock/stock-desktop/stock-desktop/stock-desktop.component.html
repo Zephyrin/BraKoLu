@@ -1,12 +1,19 @@
-<!-- BOUTON AJOUTER INGREDIENT -->
-<button mat-button
-        (click)="openCreateDialog()"
-        [matTooltip]="'Ajouter ingrédient au stock'">
-  <mat-icon>add_circle_outline</mat-icon>
-  <mat-label> Ajouter un ingrédient au stock</mat-label>
-</button>
-
-<!-- TABLEAU DU STOCK -->
-<app-table [service]="service"
-           #Table></app-table>
-<app-pagination [paginate]="service.paginate"></app-pagination>
+<div class="tab">
+  <div class="auto">
+    <div class="inline-header">
+      <!-- BOUTON AJOUTER INGREDIENT -->
+      <button mat-button
+              (click)="openCreateDialog()"
+              [matTooltip]="'Ajouter ingrédient au stock'">
+        <mat-icon>add_circle_outline</mat-icon>
+        <mat-label> Ajouter un ingrédient au stock</mat-label>
+      </button>
+    </div>
+    <!-- TABLEAU DU STOCK -->
+    <app-table [service]="service"
+               #Table></app-table>
+    <app-pagination [paginate]="service.paginate"></app-pagination>
+  </div>
+  <app-supplier-desktop [service]="serviceSupplier"
+                        class="initial"></app-supplier-desktop>
+</div>
