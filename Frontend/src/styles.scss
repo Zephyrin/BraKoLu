@@ -9,9 +9,10 @@
 
 // Roboto fontface intsall via npm install roboto-fontface
 @import "~roboto-fontface/css/roboto/roboto-fontface.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
+/* @import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -34,11 +35,15 @@ $brakolu-warn: mat-palette($mat-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $brakolu-theme: mat-light-theme($brakolu-primary, $brakolu-accent, $brakolu-warn);
 
+$custom-background-color: #fff6e8;
+$background: map-get($brakolu-theme, background);
+$background: map_merge($background, (background: $custom-background-color));
+$brakolu-theme: map_merge($brakolu-theme, (background: $background));
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($brakolu-theme);
-
+ */
 /* You can add global styles to this file, and also import other style files */
 
 html { scroll-behavior: smooth; }
@@ -58,4 +63,15 @@ form {
 .flex-reverse {
   display: flex;
   flex-flow: row-reverse;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Todo à mettre dans des fichiers que l'on comprendra par la suite...
+.inline-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }

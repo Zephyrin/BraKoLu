@@ -20,365 +20,366 @@
       (ngSubmit)="onSubmitClick()">
   <fieldset [disabled]="service.loadingSource"
             [ngStyle]="{'pointer-events':service.loadingSource ? 'none' : 'auto' }">
-    <fieldset *ngIf="service.form">
-      <!-- NOM -->
-      <mat-form-field class="full-width">
-        <mat-label>Nom</mat-label>
-        <input matInput
-               required
-               formControlName="name"
-               placeholder="Ex. Vienna"
-               value="">
-        <mat-error>
-          {{ service.form.get('name').errors?.serverError }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- UNITE + FACTEUR UNITE -->
-      <!-- TODO mettre en forme cette appel pour la faire plus courte -->
-      <!-- Par exemple mettre un comboBox kg/gr qui implicitement mets le bon facteur d'unité ???? -->
-      <mat-form-field class="full-width">
-        <mat-label>Unité</mat-label>
-        <input matInput
-               formControlName="unit"
-               placeholder="Ex. kg"
-               value="">
-        <mat-error>
-          {{ service.form.get('unit').errors?.serverError }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Facteur d'unité</mat-label>
-        <input matInput
-               formControlName="unitFactor"
-               type="number"
-               required
-               min=1
-               placeholder="Ex. 1000 pour passer de gramme à kg"
-               value="">
-        <mat-error>
-          {{ service.form.get('unitFactor').errors?.serverError }}
-        </mat-error>
-      </mat-form-field>
-
-
-      <!-- Spécification des ingrédients -->
-      <!-- Todo créer un composant factory -->
-
-      <!------------->
-      <!-- Cereal -->
-      <div *ngIf="service.form.value.childName === 'cereal'"
-           class="flex">
+    <mat-dialog-content>
+      <fieldset *ngIf="service.form">
+        <!-- NOM -->
         <mat-form-field class="full-width">
-          <mat-label>Plante</mat-label>
+          <mat-label>Nom</mat-label>
           <input matInput
                  required
-                 formControlName="plant"
-                 placeholder="Ex. Orge"
+                 formControlName="name"
+                 placeholder="Ex. Vienna"
                  value="">
           <mat-error>
-            {{ service.form.get('plant').errors?.serverError }}
+            {{ service.form.get('name').errors?.serverError }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <mat-select required
-                      formControlName="type">
-            <mat-option *ngFor="let childName of service.cerealTypes"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Format</mat-label>
-          <mat-select required
-                      formControlName="format">
-            <mat-option *ngFor="let childName of service.cerealFormats"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('format').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>EBC</mat-label>
-          <input matInput
-                 required
-                 formControlName="ebc"
-                 type="number"
-                 min=1
-                 placeholder="saisir ici la valeur"
-                 value="">
-          <mat-error>
-            {{ service.form.get('ebc').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
 
-      <!--------->
-      <!-- Hop -->
-      <div *ngIf="service.form.value.childName === 'hop'"
-           class="flex">
+        <!-- UNITE + FACTEUR UNITE -->
+        <!-- TODO mettre en forme cette appel pour la faire plus courte -->
+        <!-- Par exemple mettre un comboBox kg/gr qui implicitement mets le bon facteur d'unité ???? -->
         <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <mat-select required
-                      formControlName="type">
-            <mat-option *ngFor="let childName of service.hopTypes"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
+          <mat-label>Unité</mat-label>
+          <input matInput
+                 formControlName="unit"
+                 placeholder="Ex. kg"
+                 value="">
           <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
+            {{ service.form.get('unit').errors?.serverError }}
           </mat-error>
         </mat-form-field>
+
         <mat-form-field class="full-width">
-          <mat-label>Acid Alpha</mat-label>
+          <mat-label>Facteur d'unité</mat-label>
           <input matInput
-                 formControlName="acidAlpha"
+                 formControlName="unitFactor"
                  type="number"
                  required
                  min=1
-                 placeholder="Saisir ici le % d'acide alpha"
+                 placeholder="Ex. 1000 pour passer de gramme à kg"
                  value="">
           <mat-error>
-            {{ service.form.get('acidAlpha').errors?.serverError }}
+            {{ service.form.get('unitFactor').errors?.serverError }}
           </mat-error>
         </mat-form-field>
+
+
+        <!-- Spécification des ingrédients -->
+        <!-- Todo créer un composant factory -->
+
+        <!------------->
+        <!-- Cereal -->
+        <div *ngIf="service.form.value.childName === 'cereal'"
+             class="flex">
+          <mat-form-field class="full-width">
+            <mat-label>Plante</mat-label>
+            <input matInput
+                   required
+                   formControlName="plant"
+                   placeholder="Ex. Orge"
+                   value="">
+            <mat-error>
+              {{ service.form.get('plant').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <mat-select required
+                        formControlName="type">
+              <mat-option *ngFor="let childName of service.cerealTypes"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('type').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Format</mat-label>
+            <mat-select required
+                        formControlName="format">
+              <mat-option *ngFor="let childName of service.cerealFormats"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('format').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>EBC</mat-label>
+            <input matInput
+                   required
+                   formControlName="ebc"
+                   type="number"
+                   min=1
+                   placeholder="saisir ici la valeur"
+                   value="">
+            <mat-error>
+              {{ service.form.get('ebc').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!--------->
+        <!-- Hop -->
+        <div *ngIf="service.form.value.childName === 'hop'"
+             class="flex">
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <mat-select required
+                        formControlName="type">
+              <mat-option *ngFor="let childName of service.hopTypes"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('type').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Acid Alpha</mat-label>
+            <input matInput
+                   formControlName="acidAlpha"
+                   type="number"
+                   required
+                   min=1
+                   placeholder="Saisir ici le % d'acide alpha"
+                   value="">
+            <mat-error>
+              {{ service.form.get('acidAlpha').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Année de récolte</mat-label>
+            <input matInput
+                   required
+                   formControlName="harvestYear"
+                   placeholder="Saisir ici l'année de récolte: 2020"
+                   type="month"
+                   pattern="[0-9]{4}">
+            <mat-error>
+              {{ service.form.get('harvestYear').errors?.serverError }}
+            </mat-error>
+            <mat-error *ngIf="service.form.get('harvestYear').errors?.pattern">
+              Le format de la date n'est pas valide. J'attends juste l'année.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!----------->
+        <!-- Yeast -->
+        <div *ngIf="service.form.value.childName === 'yeast'"
+             class="flex">
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <mat-select required
+                        formControlName="type">
+              <mat-option *ngFor="let childName of service.yeastType"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('type').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Année de production</mat-label>
+            <input matInput
+                   required
+                   formControlName="productionYear"
+                   placeholder="Saisir ici l'année de production: 2020-10"
+                   type="month"
+                   pattern="[0-9]{4}-(0[1-9])|(1[0-2])">
+            <mat-error>
+              {{ service.form.get('productionYear').errors?.serverError }}
+            </mat-error>
+            <mat-error *ngIf="service.form.get('productionYear').errors?.pattern">
+              Le format de la date n'est pas valide. J'attends l'année-mois.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!----------->
+        <!-- Other -->
+        <div *ngIf="service.form.value.childName === 'other'"
+             class="flex">
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <input matInput
+                   required
+                   formControlName="type"
+                   placeholder="Ex. Sucre"
+                   value="">
+            <mat-error>
+              {{ service.form.get('type').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!--------->
+        <!-- Keg -->
+        <div *ngIf="service.form.value.childName === 'keg'"
+             class="flex">
+
+          <mat-form-field class="full-width">
+            <mat-label>Volume</mat-label>
+            <mat-select required
+                        formControlName="volume">
+              <mat-option *ngFor="let childName of service.kegVolume"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('volume').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Tête</mat-label>
+            <mat-select required
+                        formControlName="head">
+              <mat-option *ngFor="let childName of service.kegHead"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('head').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <!------------>
+        <!-- Bottle -->
+        <div *ngIf="service.form.value.childName === 'bottle'"
+             class="flex">
+
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <mat-select required
+                        formControlName="type">
+              <mat-option *ngFor="let childName of service.bottleType"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('type').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Volume</mat-label>
+            <mat-select required
+                        formControlName="volume">
+              <mat-option *ngFor="let childName of service.bottleVolume"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('volume').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Couleur</mat-label>
+            <input matInput
+                   required
+                   formControlName="color"
+                   placeholder="Saisir ici la couleur"
+                   value="">
+            <mat-error>
+              {{ service.form.get('color').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!--------------->
+        <!-- BottleTop -->
+        <div *ngIf="service.form.value.childName === 'bottleTop'"
+             class="flex">
+
+          <mat-form-field class="full-width">
+            <mat-label>Taille</mat-label>
+            <mat-select required
+                        formControlName="size">
+              <mat-option *ngFor="let childName of service.bottleTopSize"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('size').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Couleur</mat-label>
+            <input matInput
+                   required
+                   formControlName="color"
+                   placeholder="Saisir ici la couleur"
+                   value="">
+            <mat-error>
+              {{ service.form.get('color').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!--------->
+        <!-- Box -->
+        <div *ngIf="service.form.value.childName === 'box'"
+             class="flex">
+          <mat-form-field class="full-width">
+            <mat-label>Bouteille</mat-label>
+            <mat-select formControlName="bottle"
+                        [compareWith]="compareBottle">
+              <mat-option [value]="undefined">Sans bouteille</mat-option>
+              <mat-option *ngFor="let bottle of service.allBottles"
+                          [value]="bottle">
+                {{bottle.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('bottle').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Capacité</mat-label>
+            <input matInput
+                   formControlName="capacity"
+                   type="number"
+                   required
+                   min=1
+                   placeholder="Saisir ici la capacité"
+                   value="">
+            <mat-error>
+              {{ service.form.get('capacity').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Fin des spécifications -->
         <mat-form-field class="full-width">
-          <mat-label>Année de récolte</mat-label>
-          <input matInput
-                 required
-                 formControlName="harvestYear"
-                 placeholder="Saisir ici l'année de récolte: 2020"
-                 type="month"
-                 pattern="[0-9]{4}">
+          <mat-label>Commentaire</mat-label>
+          <textarea matInput
+                    formControlName="comment"
+                    placeholder="..."></textarea>
           <mat-error>
-            {{ service.form.get('harvestYear').errors?.serverError }}
-          </mat-error>
-          <mat-error *ngIf="service.form.get('harvestYear').errors?.pattern">
-            Le format de la date n'est pas valide. J'attends juste l'année.
+            {{ service.form.get('comment').errors?.serverError }}
           </mat-error>
         </mat-form-field>
-      </div>
-
-      <!----------->
-      <!-- Yeast -->
-      <div *ngIf="service.form.value.childName === 'yeast'"
-           class="flex">
-        <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <mat-select required
-                      formControlName="type">
-            <mat-option *ngFor="let childName of service.yeastType"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Année de production</mat-label>
-          <input matInput
-                 required
-                 formControlName="productionYear"
-                 placeholder="Saisir ici l'année de production: 2020-10"
-                 type="month"
-                 pattern="[0-9]{4}-(0[1-9])|(1[0-2])">
-          <mat-error>
-            {{ service.form.get('productionYear').errors?.serverError }}
-          </mat-error>
-          <mat-error *ngIf="service.form.get('productionYear').errors?.pattern">
-            Le format de la date n'est pas valide. J'attends l'année-mois.
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!----------->
-      <!-- Other -->
-      <div *ngIf="service.form.value.childName === 'other'"
-           class="flex">
-        <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <input matInput
-                 required
-                 formControlName="type"
-                 placeholder="Ex. Sucre"
-                 value="">
-          <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!--------->
-      <!-- Keg -->
-      <div *ngIf="service.form.value.childName === 'keg'"
-           class="flex">
-
-        <mat-form-field class="full-width">
-          <mat-label>Volume</mat-label>
-          <mat-select required
-                      formControlName="volume">
-            <mat-option *ngFor="let childName of service.kegVolume"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('volume').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Tête</mat-label>
-          <mat-select required
-                      formControlName="head">
-            <mat-option *ngFor="let childName of service.kegHead"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('head').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-      </div>
-
-      <!------------>
-      <!-- Bottle -->
-      <div *ngIf="service.form.value.childName === 'bottle'"
-           class="flex">
-
-        <mat-form-field class="full-width">
-          <mat-label>Type</mat-label>
-          <mat-select required
-                      formControlName="type">
-            <mat-option *ngFor="let childName of service.bottleType"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('type').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Volume</mat-label>
-          <mat-select required
-                      formControlName="volume">
-            <mat-option *ngFor="let childName of service.bottleVolume"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('volume').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Couleur</mat-label>
-          <input matInput
-                 required
-                 formControlName="color"
-                 placeholder="Saisir ici la couleur"
-                 value="">
-          <mat-error>
-            {{ service.form.get('color').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!--------------->
-      <!-- BottleTop -->
-      <div *ngIf="service.form.value.childName === 'bottleTop'"
-           class="flex">
-
-        <mat-form-field class="full-width">
-          <mat-label>Taille</mat-label>
-          <mat-select required
-                      formControlName="size">
-            <mat-option *ngFor="let childName of service.bottleTopSize"
-                        [value]="childName.value">
-              {{childName.viewValue}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('size').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Couleur</mat-label>
-          <input matInput
-                 required
-                 formControlName="color"
-                 placeholder="Saisir ici la couleur"
-                 value="">
-          <mat-error>
-            {{ service.form.get('color').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!--------->
-      <!-- Box -->
-      <div *ngIf="service.form.value.childName === 'box'"
-           class="flex">
-        <mat-form-field class="full-width">
-          <mat-label>Bouteille</mat-label>
-          <mat-select formControlName="bottle"
-                      [compareWith]="compareBottle">
-            <mat-option [value]="undefined">Sans bouteille</mat-option>
-            <mat-option *ngFor="let bottle of service.allBottles"
-                        [value]="bottle">
-              {{bottle.name}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            {{ service.form.get('bottle').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Capacité</mat-label>
-          <input matInput
-                 formControlName="capacity"
-                 type="number"
-                 required
-                 min=1
-                 placeholder="Saisir ici la capacité"
-                 value="">
-          <mat-error>
-            {{ service.form.get('capacity').errors?.serverError }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- Fin des spécifications -->
-      <mat-form-field class="full-width">
-        <mat-label>Commentaire</mat-label>
-        <textarea matInput
-                  formControlName="comment"
-                  placeholder="..."></textarea>
-        <mat-error>
-          {{ service.form.get('comment').errors?.serverError }}
-        </mat-error>
-      </mat-form-field>
-    </fieldset>
-
+      </fieldset>
+    </mat-dialog-content>
     <!-- 2 BOUTONS DU BAS -->
     <div mat-dialog-actions
          class="flex-reverse">
@@ -401,6 +402,8 @@
 </form>
 
 <!-- C'est moche mais c'est parce que je suis fainéant..  PAS COMPRIS ???? . -->
+<!-- Ça fait doublons avec les boutons d'haut dessus mais je n'ai pas envie de faire un truc de sioux pour faire
+  quelques chose de jolie. -->
 <div mat-dialog-actions
      *ngIf="!service.form"
      class="flex-reverse">

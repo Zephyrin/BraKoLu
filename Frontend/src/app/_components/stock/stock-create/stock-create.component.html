@@ -1,61 +1,63 @@
 <form [formGroup]="service.form"
       *ngIf="service.form"
       (ngSubmit)="onSubmitClick()">
-  <fieldset [disabled]="service.loadingSource || ingredientService.loadingSource"
-            [ngStyle]="{'pointer-events':service.loadingSource || ingredientService.loadingSource ? 'none' : 'auto' }">
-    <mat-form-field class="full-width">
-      <mat-label>Quel est l'ingrédient ?</mat-label>
-      <mat-select cdkFocusInitial
-                  formControlName="ingredient"
-                  [compareWith]="compareIngredient">
-        <mat-option *ngFor="let ingredient of ingredientService.model"
-                    [value]="ingredient">
-          {{ingredient.name}}
-        </mat-option>
-      </mat-select>
-      <mat-error>
-        {{service.form.get('quantity').errors?.serverError}}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Quantité</mat-label>
-      <input matInput
-             required
-             formControlName="quantity"
-             placeholder="Ex: 10"
-             type="number"
-             value="">
-      <mat-error>
-        {{service.form.get('quantity').errors?.serverError}}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Prix</mat-label>
-      <input matInput
-             required
-             formControlName="price"
-             placeholder="Ex: 23"
-             type="number"
-             value="">
-      <mat-error>
-        {{service.form.get('price').errors?.serverError}}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>État</mat-label>
-      <mat-select required
-                  formControlName="state"
-                  placeholder="Ex: Commandé">
-        <mat-option *ngFor="let state of service.states"
-                    [value]="state.value">
-          {{state.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-error>
-        {{service.form.get('state').errors?.serverError}}
-      </mat-error>
-    </mat-form-field>
-  </fieldset>
+  <mat-dialog-content>
+    <fieldset [disabled]="service.loadingSource || ingredientService.loadingSource"
+              [ngStyle]="{'pointer-events':service.loadingSource || ingredientService.loadingSource ? 'none' : 'auto' }">
+      <mat-form-field class="full-width">
+        <mat-label>Quel est l'ingrédient ?</mat-label>
+        <mat-select cdkFocusInitial
+                    formControlName="ingredient"
+                    [compareWith]="compareIngredient">
+          <mat-option *ngFor="let ingredient of ingredientService.model"
+                      [value]="ingredient">
+            {{ingredient.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          {{service.form.get('quantity').errors?.serverError}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Quantité</mat-label>
+        <input matInput
+               required
+               formControlName="quantity"
+               placeholder="Ex: 10"
+               type="number"
+               value="">
+        <mat-error>
+          {{service.form.get('quantity').errors?.serverError}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Prix</mat-label>
+        <input matInput
+               required
+               formControlName="price"
+               placeholder="Ex: 23"
+               type="number"
+               value="">
+        <mat-error>
+          {{service.form.get('price').errors?.serverError}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>État</mat-label>
+        <mat-select required
+                    formControlName="state"
+                    placeholder="Ex: Commandé">
+          <mat-option *ngFor="let state of service.states"
+                      [value]="state.value">
+            {{state.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          {{service.form.get('state').errors?.serverError}}
+        </mat-error>
+      </mat-form-field>
+    </fieldset>
+  </mat-dialog-content>
   <div mat-dialog-actions
        class="flex-reverse">
     <button mat-button
