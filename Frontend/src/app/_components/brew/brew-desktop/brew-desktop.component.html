@@ -1,0 +1,16 @@
+<div class="tab">
+  <div class="auto">
+    <div class="inline-header">
+      <button mat-button
+              (click)="openCreateDialog()"
+              [matTooltip]="'Ajouter un brassin'">
+        <mat-icon>add_circle_outline</mat-icon>
+        <mat-label> Ajouter un brassin</mat-label>
+      </button>
+    </div>
+    <!-- TABLEAU DU STOCK -->
+    <app-table [service]="service"
+               #Table></app-table>
+    <app-pagination [paginate]="service.paginate"></app-pagination>
+  </div>
+</div>

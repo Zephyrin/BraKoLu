@@ -1,0 +1,11 @@
+<div class="container"
+     *ngIf="(isHandset$ | async) === true">
+  <!-- mode portable -->
+  <app-brew-mobile [service]="service"></app-brew-mobile>
+</div>
+
+<div class="container vertical-scroll"
+     *ngIf="(isHandset$ | async) !== true">
+  <!-- mode ordinateur -->
+  <app-brew-desktop [service]="service"></app-brew-desktop>
+</div>

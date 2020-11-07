@@ -1,16 +1,16 @@
-import { IngredientStock } from '@app/_models';
-import { HttpService } from '@app/_services/http.service';
-
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpService } from '@app/_services/http.service';
+import { Injectable } from '@angular/core';
+import { Brew } from '@app/_models/brew';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StockHttpService extends HttpService<IngredientStock> {
+export class BrewHttpService extends HttpService<Brew>{
 
-  private path = 'ingredient/stock';
-  private pathAll = 'ingredient/stocks';
+  private path = 'brew';
+  private pathAll = 'brews';
+
   constructor(protected http: HttpClient) {
     super(http);
   }

@@ -43,6 +43,10 @@ import { TableComponent } from './_components/helpers/table/table.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SupplierDesktopComponent } from './_components/supplier/supplier-desktop/supplier-desktop.component';
 import { SupplierCreateComponent } from './_components/supplier/supplier-create/supplier-create.component';
+import { BrewComponent } from './_components/brew/brew.component';
+import { BrewMobileComponent } from './_components/brew/brew-mobile/brew-mobile.component';
+import { BrewDesktopComponent } from './_components/brew/brew-desktop/brew-desktop.component';
+import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +67,10 @@ import { SupplierCreateComponent } from './_components/supplier/supplier-create/
     TableComponent,
     SupplierDesktopComponent,
     SupplierCreateComponent,
+    BrewComponent,
+    BrewMobileComponent,
+    BrewDesktopComponent,
+    BrewCreateComponent,
   ],
   imports: [
     BrowserModule,

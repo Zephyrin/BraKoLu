@@ -1,3 +1,4 @@
+import { BrewComponent } from './_components/brew/brew.component';
 import { VenteComponent } from './_components/vente/vente.component';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 import { StockComponent } from './_components/stock/stock.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'ingredients', component: IngredientsComponent },
   { path: 'stock', component: StockComponent },
   { path: 'option', component: OptionComponent },
+  { path: 'brew', component: BrewComponent }
 ];
 
 @NgModule({
