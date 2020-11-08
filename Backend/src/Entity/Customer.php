@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -39,6 +40,16 @@ class Customer
      * @ORM\Column(type="integer", nullable=true)
      */
     private $kegDeposit;
+
+    /**
+     * @ORM\OneToMany(targetEntity=OrderQuantity::class, mappedBy="customer")
+     */
+    private $orderQuantities;
+
+    public function __construct()
+    {
+        $this->orderQuantities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +113,37 @@ class Customer
     {
         if ($this->Customers->contains($customer)) {
             $this->Customers->removeElement($customer);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OrderQuantity[]
+     */
+    public function getOrderQuantities(): Collection
+    {
+        return $this->orderQuantities;
+    }
+
+    public function addOrderQuantity(OrderQuantity $orderQuantity): self
+    {
+        if (!$this->orderQuantities->contains($orderQuantity)) {
+            $this->orderQuantities[] = $orderQuantity;
+            $orderQuantity->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderQuantity(OrderQuantity $orderQuantity): self
+    {
+        if ($this->orderQuantities->contains($orderQuantity)) {
+            $this->orderQuantities->removeElement($orderQuantity);
+            // set the owning side to null (unless already changed)
+            if ($orderQuantity->getCustomer() === $this) {
+                $orderQuantity->setCustomer(null);
+            }
         }
 
         return $this;
