@@ -2,7 +2,7 @@
   <div class="auto">
     <div class="inline-header">
       <button mat-button
-              (click)="openCreateDialog()"
+              (click)="openCreateDialog($event)"
               [matTooltip]="'Ajouter un brassin'">
         <mat-icon>add_circle_outline</mat-icon>
         <mat-label> Ajouter un brassin</mat-label>
@@ -62,7 +62,8 @@
               <div>
                 <button mat-button
                         (click)="addIngredient(element)">
-                  <mat-icon>add</mat-icon>
+                  <mat-icon>add_circle_outline</mat-icon>
+                  <mat-label>Ajouter un ingrédient à {{element.name}}</mat-label>
                 </button>
                 <div class="element-listing"
                      *ngIf="!serviceIngredient.loadingSource">
@@ -94,7 +95,6 @@
                       </ng-container>
                     </ng-container>
                   </mat-list>
-                  <!-- Affichage des brewIngredient sous forme de tree -->
                 </div>
               </div>
             </div>
@@ -109,12 +109,12 @@
             *matCellDef="let row">
           <div class="action-container">
             <button mat-icon-button
-                    (click)="openUpdateDialog(row)"
+                    (click)="openUpdateDialog($event, row)"
                     [attr.aria-label]="'Met à jour ' + service.getDisplay('name',row)">
               <mat-icon>update</mat-icon>
             </button>
             <button mat-icon-button
-                    (click)="openDeleteDialog(row, service.getDisplay('name', row))"
+                    (click)="openDeleteDialog($event, row, service.getDisplay('name', row))"
                     [attr.aria-label]="'Supprime ' + service.getDisplay('name',row)">
               <mat-icon>delete</mat-icon>
             </button>
@@ -128,7 +128,7 @@
           *matRowDef="let row; columns: service.displayedColumns;"
           class="element-row"
           [class.expanded-row]="selected === row"
-          (click)="selected = selected === row ? null : row"></tr>
+          (click)="expandRow($event, row)"></tr>
       <tr mat-row
           *matRowDef="let row; columns: ['expandedDetail']"
           class="detail-row"></tr>

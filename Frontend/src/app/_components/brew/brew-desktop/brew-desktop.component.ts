@@ -116,4 +116,9 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
       this.inputIntervalBeforeSave = undefined;
     }, 300);
   }
+
+  expandRow(event, row: Brew) {
+    event.stopPropagation();
+    this.selected = this.selected === row ? null : row;
+  }
 }

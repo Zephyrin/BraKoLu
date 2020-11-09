@@ -35,7 +35,8 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
   }
 
-  openCreateDialog(): void {
+  openCreateDialog(event: MouseEvent): void {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).create();
     dialogRef.afterClosed().subscribe(result => {
@@ -44,7 +45,8 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     });
   }
 
-  openUpdateDialog(element: any): void {
+  openUpdateDialog(event: MouseEvent, element: any): void {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -53,7 +55,8 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
   }
 
-  openDeleteDialog(element: any, title: string): void {
+  openDeleteDialog(evt: MouseEvent, element: any, title: string): void {
+    evt.stopPropagation();
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
     (dialogRef.componentInstance as RemoveDialogComponent).title = title;
     dialogRef.afterClosed().subscribe(result => {

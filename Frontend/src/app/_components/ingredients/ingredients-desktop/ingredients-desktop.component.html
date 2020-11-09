@@ -1,7 +1,7 @@
 <div class="inline-header">
   <!-- BOUTON AJOUTER INGREDIENT -->
   <button mat-icon-button
-          (click)="openCreateDialog()"
+          (click)="openCreateDialog($event)"
           [matTooltip]="'Ajouter un ingrédient type à la base de données'">
     <mat-icon>add_circle_outline</mat-icon>
     <mat-label> Ajouter ingrédient</mat-label>
