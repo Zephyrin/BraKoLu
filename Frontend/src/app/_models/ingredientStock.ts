@@ -13,7 +13,7 @@ export class IngredientStock {
   ingredient: Ingredient;
   suppliers: Supplier[];
 
-  public constructor(stock: IngredientStock | undefined, createSupplier = false) {
+  public constructor(stock: IngredientStock | undefined) {
     this.suppliers = new Array();
     if (stock && stock !== null) {
       this.id = stock.id;
@@ -31,11 +31,7 @@ export class IngredientStock {
       }
       this.ingredient = IngredientFactory.createCpy(stock.ingredient);
       if (stock.suppliers) {
-        if (createSupplier === true) {
-          stock.suppliers.forEach(supplier => this.suppliers.push(new Supplier(supplier, false)));
-        } else {
-          stock.suppliers.forEach(supplier => this.suppliers.push(supplier));
-        }
+        stock.suppliers.forEach(supplier => this.suppliers.push(new Supplier(supplier)));
       }
     }
   }
@@ -47,13 +43,13 @@ export class IngredientStock {
   toJSON(includeSupplier = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
-    if (this.quantity) { data[`quantity`] = this.quantity; }
+    if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
     if (this.price) { data[`price`] = this.price; }
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
     if (includeSupplier === true) {
       const suppliers = new Array();
-      this.suppliers.forEach(supplier => suppliers.push(supplier.toJSON(false)));
+      this.suppliers.forEach(supplier => suppliers.push(supplier.toJSON(true)));
       data[`suppliers`] = suppliers;
     }
     return data;

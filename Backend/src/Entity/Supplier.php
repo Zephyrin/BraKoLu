@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @ORM\Entity(repositoryClass=SupplierRepository::class)
@@ -31,6 +32,7 @@ class Supplier
     /**
      * @ORM\ManyToMany(targetEntity=IngredientStock::class, mappedBy="Suppliers")
      * @SerializedName("ingredientStocks")
+     * @Exclude()
      */
     private $ingredientStocks;
 

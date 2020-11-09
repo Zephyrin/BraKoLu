@@ -42,6 +42,7 @@
 
 <!-- TABLEAU DES INGREDIENTS -->
 <app-table [service]="service"
+           [allowSelection]="allowSelection"
            #tableComponent></app-table>
 
 <app-pagination [paginate]="service.paginate"></app-pagination>

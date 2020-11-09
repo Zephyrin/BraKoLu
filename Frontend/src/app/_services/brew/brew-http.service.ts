@@ -1,7 +1,9 @@
+import { environment } from '@app/../environments/environment';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '@app/_services/http.service';
 import { Injectable } from '@angular/core';
-import { Brew } from '@app/_models/brew';
+import { Brew, BrewIngredient } from '@app/_models/brew';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +26,14 @@ export class BrewHttpService extends HttpService<Brew>{
   updatePath() { return this.path; }
 
   deletePath() { return this.path; }
+
+  public addIngredientToBrew(id: number, elt: BrewIngredient): Observable<BrewIngredient> {
+    return this.http.post<BrewIngredient>(
+      `${environment.apiUrl}/${this.updatePath()}/${id}/ingredient`, elt);
+  }
+
+  public updateIngredientToBrew(brewId: number, id: number, elt: BrewIngredient): Observable<BrewIngredient> {
+    return this.http.patch<BrewIngredient>(
+      `${environment.apiUrl}/${this.updatePath()}/${brewId}/ingredient/${id}`, elt);
+  }
 }

@@ -29,6 +29,8 @@ import { IngredientsComponent } from './_components/ingredients/ingredients.comp
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
 import { ToolsEditComponent } from './_components/tools/tools-edit/tools-edit.component';
 import { MatTableModule } from '@angular/material/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
+
 import { IngredientsDesktopComponent } from './_components/ingredients/ingredients-desktop/ingredients-desktop.component';
 import { IngredientsMobileComponent } from './_components/ingredients/ingredients-mobile/ingredients-mobile.component';
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
@@ -47,6 +49,7 @@ import { BrewComponent } from './_components/brew/brew.component';
 import { BrewMobileComponent } from './_components/brew/brew-mobile/brew-mobile.component';
 import { BrewDesktopComponent } from './_components/brew/brew-desktop/brew-desktop.component';
 import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.component';
+import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredient-create/brew-ingredient-create.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +74,7 @@ import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.
     BrewMobileComponent,
     BrewDesktopComponent,
     BrewCreateComponent,
+    BrewIngredientCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +102,8 @@ import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.
     MatExpansionModule,
     MatChipsModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CdkTreeModule,
   ],
   providers: [
     DatePipe

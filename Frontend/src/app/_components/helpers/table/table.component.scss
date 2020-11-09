@@ -42,3 +42,10 @@
   cursor: move;
 }
 
+tr:active, tr:hover, tr.selected-row {
+  background: whitesmoke;
+}
+
+tr.allow-select:hover {
+  cursor: pointer;
+}

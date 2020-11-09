@@ -9,6 +9,7 @@ import { ComponentType } from '@angular/cdk/portal';
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   private serviceEndUpdateSubscription: Subscription;
   @Input() service: IService;
+  @Input() allowSelection = false;
   constructor(
     public dialog: MatDialog,
     protected componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
@@ -21,7 +22,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
       if (data === true) {
         this.endUpdate();
-        this.dialog.closeAll();
+        //this.dialog.closeAll();
       }
     });
     this.init();

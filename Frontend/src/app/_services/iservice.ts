@@ -56,6 +56,11 @@ export interface IService {
   displayedColumns: string[];
 
   /**
+   * Permet de sélectionner un élément du model.
+   */
+  selected: any;
+
+  /**
    * Charge l'intégralité des données, utilisé par défaut.
    * On peut aussi lui donner des paramètres de pagination afin de ne sélectionner qu'un partie de celles-ci.
    */
@@ -151,6 +156,7 @@ export interface ValueViewChild {
 export abstract class CService<T> implements IService {
   //#region Attributes IService
   public model: T[];
+  public selected: T;
   public loading = new Subject<boolean>();
   public loadingSource = false;
   public errors = new FormErrors();

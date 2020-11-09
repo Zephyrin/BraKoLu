@@ -3,7 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { BrewHttpService } from './brew-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 import { Injectable } from '@angular/core';
-import { Brew } from '@app/_models/brew';
+import { Brew, BrewIngredient as BrewIngredient } from '@app/_models/brew';
+import { Ingredient, IngredientStock } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +84,32 @@ export class BrewService extends CService<Brew> {
         break;
     }
     return value[name];
+  }
+
+  public addIngredientToBrew(brew: Brew, ingredient: Ingredient) {
+    const ingredientToBrew = new BrewIngredient(undefined);
+    ingredientToBrew.brew = brew;
+    ingredientToBrew.stock = new IngredientStock(undefined);
+    ingredientToBrew.stock.ingredient = ingredient;
+    ingredientToBrew.stock.quantity = ingredientToBrew.quantity;
+    ingredientToBrew.stock.state = 'created';
+    (this.http as BrewHttpService).addIngredientToBrew(brew.id, ingredientToBrew).subscribe(response => {
+      ingredientToBrew.id = response.id;
+      brew.brewIngredients.push(ingredientToBrew);
+      this.end(true);
+    }, err => {
+      this.end(true, err);
+    });
+  }
+
+  public updateIngredientToBrew(brew: Brew, ingredient: BrewIngredient, newValue: number) {
+    const newIngredient = new BrewIngredient(undefined);
+    newIngredient.quantity = newValue;
+    (this.http as BrewHttpService).updateIngredientToBrew(brew.id, ingredient.id, newIngredient).subscribe(response => {
+      ingredient.quantity = newValue;
+      this.end(true);
+    }, err => {
+      this.end(true, err);
+    });
   }
 }

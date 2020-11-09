@@ -106,8 +106,11 @@ class IngredientStockController extends AbstractFOSRestController
      */
     public function postAction(Request $request)
     {
-        $data = $this->getDataFromJson($request, true);
+        return $this->post($this->getDataFromJson($request, true));
+    }
 
+    public function post(array $data)
+    {
         $responseIngredient = $this->createOrUpdateIngredient($data, $this->ingredient);
         $newEntity = new IngredientStock();
         // La date de création doit-être mise avant la validation. Car c'est un attribut
