@@ -5,12 +5,11 @@ Feature: Test Cereal Enum Ingredient JSON API endpoint
         Then the response code is 200
         And the response body contains JSON:
         """
-        ["grain", "flocon", "extrait"]
+        ["Grain", "Flocon", "Extrait"]
         """
         Then I request "/api/ingredients/cereal/enum/types" using HTTP GET
         Then the response code is 200
         And the response body contains JSON:
         """
-        ["malt", "cru"]
+        ["Malt"", "Cru"]
         """
-        

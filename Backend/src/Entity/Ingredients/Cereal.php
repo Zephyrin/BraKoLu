@@ -14,17 +14,28 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Cereal extends Ingredient
 {
-    // TODO à traduire en anglais
     const TYPES = [
-        ['value' => 'malt', 'viewValue' => 'Malté'],
-        ['value' => 'cru', 'viewValue' => 'Cru']
+        ['value' => 'malt', 'viewValue' => 'Malt'],
+        ['value' => 'raw', 'viewValue' => 'Cru']
     ];
 
-    // TODO à traduire en anglais
     const FORMATS = [
         ['value' => 'seed', 'viewValue' => 'Grain'],
         ['value' => 'flake', 'viewValue' => 'Flocon'],
         ['value' => 'extract', 'viewValue' => 'Extrait']
+    ];
+
+    const CATEGORY = [
+        ['value' => 'base', 'viewValue' => 'Base'],
+        ['value' => 'base (6-rows)', 'viewValue' => 'Base 6 Rangées'],
+        ['value' => 'base (maris otter)', 'viewValue' => 'Base Maris Otter'],
+        ['value' => 'base (munich)', 'viewValue' => 'Base Munich'],
+        ['value' => 'base (pilsner)', 'viewValue' => 'Base Pilsner'],
+        ['value' => 'base (Wheat)', 'viewValue' => 'Base Blé'],
+        ['value' => 'base (vienna)', 'viewValue' => 'Base Vienna'],
+        ['value' => 'crystal/caramel', 'viewValue' => 'Cristal / Caramel'],
+        ['value' => 'roasted', 'viewValue' => 'Grillé'],
+        ['value' => 'acidulated', 'viewValue' => 'Acid']
     ];
 
     public static function getTypes()
@@ -33,6 +44,11 @@ class Cereal extends Ingredient
     }
 
     public static function getFormats()
+    {
+        return EnumHelper::getEnum(Cereal::FORMATS);
+    }
+
+    public static function getCategorys()
     {
         return EnumHelper::getEnum(Cereal::FORMATS);
     }
@@ -50,7 +66,13 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(callback="getFormats", message="Sélectionne un type correct.")
+     * @Assert\Choice(callback="getFormats", message="Sélectionne une catégorie correcte.")
+     */
+    private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(callback="getCategorys", message="Sélectionne un format correct.")
      */
     private $format;
 
@@ -97,6 +119,18 @@ class Cereal extends Ingredient
     public function setFormat(string $format): self
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

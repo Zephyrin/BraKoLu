@@ -12,7 +12,8 @@ Feature: Test Cereal Ingredient JSON API endpoint
             "type": "malt",
             "plant": "une plant",
             "format": "grain",
-            "EBC": 10
+            "EBC": 10,
+            "category": "base"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -28,7 +29,8 @@ Feature: Test Cereal Ingredient JSON API endpoint
             "type": "cru",
             "plant": "une plant",
             "format": "extrait",
-            "EBC": 15
+            "EBC": 15,
+            "category": "base"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -46,7 +48,8 @@ Feature: Test Cereal Ingredient JSON API endpoint
             "type": "malté",
             "plant": "une plant",
             "format": "grains",
-            "EBC": 10
+            "EBC": 10,
+            "category": "basic"
         }
         """
         When I request "/api/ingredient" using HTTP POST
@@ -74,9 +77,13 @@ Feature: Test Cereal Ingredient JSON API endpoint
                             "Sélectionne un type correct."
                         ]
                     },
-                    "EBC": []
+                    "EBC": [],
+                    "category": {
+                        "errors": [
+                            "Sélectionne une catégorie correcte."
+                        ]
+                    }
                 }
             }]
         }
-        """
-        
+        """    
