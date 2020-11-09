@@ -267,9 +267,11 @@ class BrewIngredientController extends AbstractFOSRestController
     {
         $existing = $this->getById($id);
         $brew = $this->getBrewById($brewId);
-        if ($brew->getState() != 'archived' || $brew->getState() != 'complete') {
+        if ($brew->getState() == 'archived' || $brew->getState() == 'complete') {
             throw new Exception("L'état du brassin ne permet plus de modifier ");
         }
+        if ($existing->getStock()->getQuantity() == null)
+            $this->entityManager->remove($existing->getStock());
         $this->entityManager->remove($existing);
         $this->entityManager->flush();
         return $this->view(null, Response::HTTP_NO_CONTENT);

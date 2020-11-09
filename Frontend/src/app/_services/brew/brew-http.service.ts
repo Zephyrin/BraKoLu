@@ -36,4 +36,9 @@ export class BrewHttpService extends HttpService<Brew>{
     return this.http.patch<BrewIngredient>(
       `${environment.apiUrl}/${this.updatePath()}/${brewId}/ingredient/${id}`, elt);
   }
+
+  public deleteIngredientToBrew(brewId: number, id: number): Observable<BrewIngredient> {
+    return this.http.delete<BrewIngredient>(
+      `${environment.apiUrl}/${this.updatePath()}/${brewId}/ingredient/${id}`);
+  }
 }

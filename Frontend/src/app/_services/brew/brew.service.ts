@@ -112,4 +112,20 @@ export class BrewService extends CService<Brew> {
       this.end(true, err);
     });
   }
+
+  public deleteIngredientToBrew(brew: Brew, ingredient: BrewIngredient) {
+    (this.http as BrewHttpService).deleteIngredientToBrew(brew.id, ingredient.id).subscribe(response => {
+      const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
+      if (index >= 0) { brew.brewIngredients.splice(index, 1); }
+      this.end(true);
+    }, err => {
+      if (err.code === 404) {
+        const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
+        if (index >= 0) { brew.brewIngredients.splice(index, 1); }
+        this.end(true);
+      } else {
+        this.end(true, err);
+      }
+    })
+  }
 }

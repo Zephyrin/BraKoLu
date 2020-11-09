@@ -59,44 +59,9 @@
               De la même manière lorsque l'on met à jour la quantité met en utilisant le patch.
               -->
               <!-- Ajoute un nouvel ingrédient au brassin. -->
-              <div>
-                <button mat-button
-                        (click)="addIngredient(element)">
-                  <mat-icon>add_circle_outline</mat-icon>
-                  <mat-label>Ajouter un ingrédient à {{element.name}}</mat-label>
-                </button>
-                <div class="element-listing"
-                     *ngIf="!serviceIngredient.loadingSource">
-                  <mat-list>
-                    <ng-container *ngFor="let children of serviceIngredient.ingredientChildrenNames">
-                      <ng-container *ngIf="hasChildren(element, children.value)">
-                        <div mat-subheader>
-                          {{children.viewValue}}
-                        </div>
-                        <mat-list-item *ngFor="let brewIngredient of getChildren(element, children.value)">
-                          <div mat-line>
-                            <!-- use a disabled button to provide padding for tree leaf -->
-                            <button mat-icon-button
-                                    disabled></button>
-                            {{brewIngredient.stock.ingredient.brewView()}}
-                            <mat-form-field>
-                              <mat-label>Quantité ({{brewIngredient.stock.ingredient.unit}})</mat-label>
-                              <input matInput
-                                     [placeholder]="'Ex: 23 ' + brewIngredient.stock.ingredient.unit"
-                                     type="number"
-                                     (change)="updateIngredient($event, element, brewIngredient)"
-                                     [value]="brewIngredient.quantity">
-                            </mat-form-field>
-                            <button mat-icon-button>
-                              <mat-icon>delete</mat-icon>
-                            </button>
-                          </div>
-                        </mat-list-item>
-                      </ng-container>
-                    </ng-container>
-                  </mat-list>
-                </div>
-              </div>
+              <app-brew-ingredient-desktop [brew]="element"
+                                           [ingredientService]="serviceIngredient"
+                                           [brewService]="service"></app-brew-ingredient-desktop>
             </div>
           </div>
         </td>

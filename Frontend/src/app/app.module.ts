@@ -50,6 +50,7 @@ import { BrewMobileComponent } from './_components/brew/brew-mobile/brew-mobile.
 import { BrewDesktopComponent } from './_components/brew/brew-desktop/brew-desktop.component';
 import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.component';
 import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredient-create/brew-ingredient-create.component';
+import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-desktop.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredien
     BrewDesktopComponent,
     BrewCreateComponent,
     BrewIngredientCreateComponent,
+    BrewIngredientDesktopComponent,
   ],
   imports: [
     BrowserModule,

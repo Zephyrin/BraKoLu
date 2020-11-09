@@ -1,7 +1,3 @@
-import { BrewService } from '@app/_services/brew/brew.service';
-import { BrewIngredientCreateComponent } from './../brew-ingredient-create/brew-ingredient-create.component';
-import { IngredientsDesktopComponent } from './../../ingredients/ingredients-desktop/ingredients-desktop.component';
-import { BrewIngredient } from './../../../_models/brew';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { tap } from 'rxjs/operators';
 import { merge } from 'rxjs';
@@ -35,7 +31,6 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
   @ViewChild(MatSort) sort: MatSort;
   public selected: Brew | null;
 
-  private inputIntervalBeforeSave;
   constructor(
     public dialog: MatDialog,
     public serviceIngredient: IngredientService) {
@@ -74,50 +69,7 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
     }
   }
 
-  hasChildren(element: Brew, childrenName: string): boolean {
-    if (element) {
-      const length = element.brewIngredients.filter(c => c.stock.ingredient.childName === childrenName).length;
-      if (length > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  getChildren(element: Brew, childrenName: string): BrewIngredient[] {
-    if (element) {
-      const arr = element.brewIngredients.filter(c => c.stock.ingredient.childName === childrenName);
-      if (arr.length > 0) {
-        return arr;
-      }
-    }
-    return undefined;
-  }
-
-  addIngredient(element: Brew) {
-    if (element) {
-      const dialogRef = this.dialog.open(BrewIngredientCreateComponent, { minWidth: '30em' });
-      (dialogRef.componentInstance as unknown as BrewIngredientCreateComponent).ingredientService = this.serviceIngredient;
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          (this.service as BrewService).addIngredientToBrew(element, result);
-        }
-      });
-    }
-  }
-
-  updateIngredient(evt, element: Brew, ingredient: BrewIngredient) {
-    if (this.inputIntervalBeforeSave) {
-      clearInterval(this.inputIntervalBeforeSave);
-    }
-    this.inputIntervalBeforeSave = setInterval(() => {
-      clearInterval(this.inputIntervalBeforeSave);
-      (this.service as BrewService).updateIngredientToBrew(element, ingredient, evt.srcElement.value);
-      this.inputIntervalBeforeSave = undefined;
-    }, 300);
-  }
-
-  expandRow(event, row: Brew) {
+  expandRow(event: MouseEvent, row: Brew) {
     event.stopPropagation();
     this.selected = this.selected === row ? null : row;
   }
