@@ -55,8 +55,8 @@
                 </div>
               </div>
               <!-- On part sur de l'auto-save, plus ergonomic.
-              À chaque ajout, on ajoute directement la ligne dans le brassin en utilisant le patch.
-              De la même manière lorsque l'on met à jour la quantité.
+              À chaque ajout, on ajoute directement la ligne dans le brassin en utilisant le post sur l'ingredient du brassin.
+              De la même manière lorsque l'on met à jour la quantité met en utilisant le patch.
               -->
               <!-- Ajoute un nouvel ingrédient au brassin. -->
               <div>
@@ -77,7 +77,7 @@
                             <!-- use a disabled button to provide padding for tree leaf -->
                             <button mat-icon-button
                                     disabled></button>
-                            {{brewIngredient.stock.ingredient.name}}
+                            {{brewIngredient.stock.ingredient.brewView()}}
                             <mat-form-field>
                               <mat-label>Quantité ({{brewIngredient.stock.ingredient.unit}})</mat-label>
                               <input matInput

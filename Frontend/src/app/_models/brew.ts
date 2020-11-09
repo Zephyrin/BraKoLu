@@ -1,4 +1,3 @@
-import { timeoutWith } from 'rxjs/operators';
 import { IngredientStock } from './ingredientStock';
 export class Brew {
   id: number;
@@ -98,7 +97,9 @@ export class BrewIngredient {
     if (value && value !== null) {
       this.id = value.id;
       this.brew = value.brew;
-      this.stock = value.stock;
+      if (value.stock) {
+        this.stock = new IngredientStock(value.stock);
+      }
       this.quantity = value.quantity;
     }
   }

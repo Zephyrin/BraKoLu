@@ -24,4 +24,8 @@ export class Bottle extends Ingredient {
     if (this.color) { data[`color`] = this.color; }
     return data;
   }
+
+  brewView(): string {
+    return this.name + ' ' + this.color;
+  }
 }
