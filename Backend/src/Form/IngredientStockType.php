@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\BrewStock;
 use App\Entity\IngredientStock;
 use App\Entity\Ingredient;
 use App\Entity\Supplier;
@@ -32,6 +33,11 @@ class IngredientStockType extends AbstractType
                 'suppliers',
                 CollectionType::class,
                 ['entry_type' => Supplier::class]
+            )
+            ->add(
+                'brewStocks',
+                CollectionType::class,
+                ['entry_type' => BrewStock::class]
             );
     }
 

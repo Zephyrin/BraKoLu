@@ -11,3 +11,48 @@
         (click)="pronostic()">
   <mat-icon>mediation</mat-icon>Pronostic !
 </button>
+<div *ngIf="service.pronostic"
+     class="pronostic">
+  <button mat-button
+          class="add">
+    <mat-icon>add_circle_outline</mat-icon>
+    <mat-label>Ajouter un ingrédient à la commande</mat-label>
+  </button>
+  <mat-list>
+
+    <mat-list-item *ngFor="let stock of service.pronostic.stocks">
+
+      <div mat-line
+           *ngIf="stock.state === 'created'">
+        {{stock.ingredient.brewView()}}
+        <mat-form-field>
+          <mat-label>Quantité ({{stock.ingredient.unit}})</mat-label>
+          <input matInput
+                 [placeholder]="'Ex: 23 ' + stock.ingredient.unit"
+                 type="number"
+                 [value]="stock.quantity">
+        </mat-form-field>
+        <button mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div mat-line
+           *ngIf="stock.state !== 'created'">
+        {{stock.ingredient.brewView()}}
+      </div>
+      <div mat-line>
+        <ng-container *ngFor="let brew of stock.brewStocks">
+          {{brew.brew.name}} ({{brew.quantity}})
+        </ng-container>
+      </div>
+      <div mat-line></div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+
+  </mat-list>
+  <button mat-button
+          class="save">
+    <mat-icon>save</mat-icon>
+    <mat-label>Lancer la commande !</mat-label>
+  </button>
+</div>

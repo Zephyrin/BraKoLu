@@ -157,7 +157,7 @@ class OrderController extends AbstractFOSRestController
      */
     public function pronostic(Request $request, ParamFetcher $paramFetcher)
     {
-        $brews = explode(",", $paramFetcher->get('brews'));
+        $brews = $paramFetcher->get('brews');
         $order = new Order();
         // On stock l'id de l'igredient et ça quantité.
         $ingredientsQuantity = [];
@@ -171,7 +171,7 @@ class OrderController extends AbstractFOSRestController
                     $stock->setQuantity($stock->getQuantity() + $ingredient->getQuantity());
                     $brewStock = new BrewStock();
                     $brewStock->setQuantity($ingredient->getQuantity());
-                    $brewStock->setStock($stock);
+                    $stock->addBrewStock($brewStock);
                     $dbBrew->addBrewStock($brewStock);
                 } else {
                     $stocks = $this->stockRepository->findAvalaibleStock($ingredient->getIngredient()->getId());
@@ -192,10 +192,12 @@ class OrderController extends AbstractFOSRestController
                             } else {
                                 $brewStock = new BrewStock();
                                 $brewStock->setBrew($dbBrew);
-                                $brewStock->setStock($stock);
+
                                 $brewStock->setQuantity($quantity - $stockQuantity);
+                                // Doit-être sauvegarder
+                                $stock->addBrewStock($brewStock);
                                 // Ne doit pas être sauvegardé car ne pointe pas sur la bonne commande.
-                                $stock->setOrder($order);
+                                $order->addStock($stock);
                                 $quantity = $quantity - ($quantity - $stockQuantity);
                             }
                             if ($quantity == 0) break;

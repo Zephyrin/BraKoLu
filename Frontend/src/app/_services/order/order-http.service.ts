@@ -31,7 +31,7 @@ export class OrderHttpService extends HttpService<Order>{
   public getPronostic(brews: Brew[]): Observable<Order> {
     let params = new HttpParams();
     for (const brew of brews) {
-      params = params.append('brews', `${brew.id}`);
+      params = params.append('brews[]', `${brew.id}`);
     }
 
     return this.http.get<Order>(

@@ -86,7 +86,7 @@ export class OrderService extends CService<Order> {
 
   public getPronostic(brews: Brew[]) {
     (this.http as OrderHttpService).getPronostic(brews).subscribe(response => {
-      this.pronostic = response;
+      this.pronostic = new Order(response);
     }, err => {
       this.end(true, err);
     });
