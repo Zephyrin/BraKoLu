@@ -1,3 +1,5 @@
+import { OrderPronosticComponent } from './_components/order/order-pronostic/order-pronostic.component';
+import { OrderComponent } from './_components/order/order.component';
 import { BrewComponent } from './_components/brew/brew.component';
 import { VenteComponent } from './_components/vente/vente.component';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
@@ -22,7 +24,9 @@ const routes: Routes = [
   { path: 'ingredients', component: IngredientsComponent },
   { path: 'stock', component: StockComponent },
   { path: 'option', component: OptionComponent },
-  { path: 'brew', component: BrewComponent }
+  { path: 'brew', component: BrewComponent },
+  { path: 'command', component: OrderComponent },
+  { path: 'create-command', component: OrderPronosticComponent }
 ];
 
 @NgModule({

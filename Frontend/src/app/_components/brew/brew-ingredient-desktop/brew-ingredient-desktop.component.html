@@ -16,11 +16,11 @@
             <!-- use a disabled button to provide padding for tree leaf -->
             <button mat-icon-button
                     disabled></button>
-            {{brewIngredient.stock.ingredient.brewView()}}
+            {{brewIngredient.ingredient.brewView()}}
             <mat-form-field>
-              <mat-label>Quantité ({{brewIngredient.stock.ingredient.unit}})</mat-label>
+              <mat-label>Quantité ({{brewIngredient.ingredient.unit}})</mat-label>
               <input matInput
-                     [placeholder]="'Ex: 23 ' + brewIngredient.stock.ingredient.unit"
+                     [placeholder]="'Ex: 23 ' + brewIngredient.ingredient.unit"
                      type="number"
                      (change)="updateIngredient($event, brewIngredient)"
                      [value]="brewIngredient.quantity">

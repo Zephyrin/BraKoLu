@@ -1,0 +1,11 @@
+<div class="container"
+     *ngIf="(isHandset$ | async) === true">
+  <!-- mode portable -->
+  <app-order-mobile></app-order-mobile>
+</div>
+
+<div class="container vertical-scroll"
+     *ngIf="(isHandset$ | async) !== true">
+  <!-- mode ordinateur -->
+  <app-order-desktop [service]="service"></app-order-desktop>
+</div>

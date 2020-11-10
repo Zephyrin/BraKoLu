@@ -27,9 +27,9 @@ class BrewType extends AbstractType
             ->add("started")
             ->add("ended")
             ->add(
-                'BrewIngredient',
+                'brewIngredients',
                 CollectionType::class,
-                ['class' => BrewIngredient::class]
+                ['entry_type' => BrewIngredient::class]
             );
     }
 

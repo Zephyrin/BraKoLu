@@ -1,3 +1,5 @@
+import { IngredientFactory } from './ingredientFactory';
+import { Ingredient } from '@app/_models';
 import { IngredientStock } from './ingredientStock';
 export class Brew {
   id: number;
@@ -89,11 +91,40 @@ export class Brew {
 export class BrewIngredient {
   id: number;
   brew: Brew;
-  stock: IngredientStock;
+  ingredient: Ingredient;
   quantity: number;
 
   public constructor(value: BrewIngredient | undefined) {
     this.quantity = 0;
+    if (value && value !== null) {
+      this.id = value.id;
+      this.brew = value.brew;
+      if (value.ingredient) {
+        this.ingredient = IngredientFactory.createCpy(value.ingredient);
+      }
+      this.quantity = value.quantity;
+    }
+  }
+
+  toJSON() {
+    const data = {};
+    if (this.id) { data[`id`] = this.id; }
+    if (this.ingredient) { data[`ingredient`] = this.ingredient.toJSON(); }
+    if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
+    return data;
+  }
+}
+
+export class BrewStock {
+  id: number;
+  brew: Brew;
+  stock: IngredientStock;
+  quantity: number;
+  apply: boolean;
+
+  public constructor(value: BrewStock | undefined) {
+    this.quantity = 0;
+    this.apply = false;
     if (value && value !== null) {
       this.id = value.id;
       this.brew = value.brew;
@@ -107,8 +138,10 @@ export class BrewIngredient {
   toJSON() {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
-    if (this.stock) { data[`stock`] = this.stock.toJSON(true); }
+    if (this.stock) { data[`stock`] = this.stock.toJSON(); }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
+    if (this.apply !== undefined) { data[`apply`] = this.apply; }
     return data;
   }
 }
+

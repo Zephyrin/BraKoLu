@@ -105,10 +105,16 @@ class Brew
      */
     private $brewIngredients;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="brew", orphanRemoval=true)
+     */
+    private $brewStocks;
+
     public function __construct()
     {
         $this->created = new \DateTime();
         $this->brewIngredients = new ArrayCollection();
+        $this->brewStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,6 +255,37 @@ class Brew
             // set the owning side to null (unless already changed)
             if ($BrewIngredient->getBrew() === $this) {
                 $BrewIngredient->setBrew(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewStock[]
+     */
+    public function getBrewStocks(): Collection
+    {
+        return $this->brewStocks;
+    }
+
+    public function addBrewStock(BrewStock $brewStock): self
+    {
+        if (!$this->brewStocks->contains($brewStock)) {
+            $this->brewStocks[] = $brewStock;
+            $brewStock->setBrew($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrewStock(BrewStock $brewStock): self
+    {
+        if ($this->brewStocks->contains($brewStock)) {
+            $this->brewStocks->removeElement($brewStock);
+            // set the owning side to null (unless already changed)
+            if ($brewStock->getBrew() === $this) {
+                $brewStock->setBrew(null);
             }
         }
 

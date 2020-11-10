@@ -1,0 +1,13 @@
+<mat-selection-list #brews>
+  <ng-container *ngFor="let brew of brewService.model">
+    <mat-list-option *ngIf="brew.state === 'created' || brew.state === 'planning'"
+                     [value]="brew">
+      {{brew.name}} - {{brew.created }} - {{brew.state}}
+    </mat-list-option>
+  </ng-container>
+</mat-selection-list>
+
+<button mat-button
+        (click)="pronostic()">
+  <mat-icon>mediation</mat-icon>Pronostic !
+</button>

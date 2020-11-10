@@ -89,10 +89,8 @@ export class BrewService extends CService<Brew> {
   public addIngredientToBrew(brew: Brew, ingredient: Ingredient) {
     const ingredientToBrew = new BrewIngredient(undefined);
     ingredientToBrew.brew = brew;
-    ingredientToBrew.stock = new IngredientStock(undefined);
-    ingredientToBrew.stock.ingredient = ingredient;
-    ingredientToBrew.stock.quantity = ingredientToBrew.quantity;
-    ingredientToBrew.stock.state = 'created';
+    ingredientToBrew.ingredient = ingredient;
+    ingredientToBrew.quantity = ingredientToBrew.quantity;
     (this.http as BrewHttpService).addIngredientToBrew(brew.id, ingredientToBrew).subscribe(response => {
       ingredientToBrew.id = response.id;
       brew.brewIngredients.push(ingredientToBrew);
@@ -126,6 +124,6 @@ export class BrewService extends CService<Brew> {
       } else {
         this.end(true, err);
       }
-    })
+    });
   }
 }

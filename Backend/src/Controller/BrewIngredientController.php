@@ -65,7 +65,7 @@ class BrewIngredientController extends AbstractFOSRestController
     private $formErrorSerializer;
 
     private $brew = 'brew';
-    private $stock = 'stock';
+    private $ingredient = 'ingredient';
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -122,7 +122,7 @@ class BrewIngredientController extends AbstractFOSRestController
         $data = $this->getDataFromJson($request, true);
         $brew = $this->getBrewById($id);
         $response[] = $this->createOrUpdate($data, $this->brew, "BrewController", false, false);
-        $response[] = $this->createOrUpdate($data, $this->stock, "IngredientStockController");
+        $response[] = $this->createOrUpdate($data, $this->ingredient, "IngredientController", false, false);
         $newEntity = new BrewIngredient();
         $newEntity->setBrew($brew);
         $form = $this->createForm(BrewIngredientType::class, $newEntity);
@@ -215,7 +215,7 @@ class BrewIngredientController extends AbstractFOSRestController
         $form = $this->createForm(BrewIngredientType::class, $existing);
         // Suppression des liens avec les autres objets qui ne peuvent pas être mise à jour par cet élément.
         if (isset($data[$this->brew])) unset($data[$this->brew]);
-        if (isset($data[$this->stock])) unset($data[$this->stock]);
+        if (isset($data[$this->ingredient])) unset($data[$this->ingredient]);
 
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this);
@@ -234,7 +234,7 @@ class BrewIngredientController extends AbstractFOSRestController
      * })
      * 
      * @SWG\Delete(
-     *     summary="Supprime l'ingrédient du brassin et le stock si le brassin est en creation ou validé. Ne peut pas être annulé.",
+     *     summary="Supprime l'ingrédient du brassin et le ingredient si le brassin est en creation ou validé. Ne peut pas être annulé.",
      *     @SWG\Parameter(
      *          name="id",
      *          in="path",
@@ -270,8 +270,6 @@ class BrewIngredientController extends AbstractFOSRestController
         if ($brew->getState() == 'archived' || $brew->getState() == 'complete') {
             throw new Exception("L'état du brassin ne permet plus de modifier ");
         }
-        if ($existing->getStock()->getQuantity() == null)
-            $this->entityManager->remove($existing->getStock());
         $this->entityManager->remove($existing);
         $this->entityManager->flush();
         return $this->view(null, Response::HTTP_NO_CONTENT);

@@ -51,6 +51,11 @@ import { BrewDesktopComponent } from './_components/brew/brew-desktop/brew-deskt
 import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.component';
 import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredient-create/brew-ingredient-create.component';
 import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-desktop.component';
+import { OrderComponent } from './_components/order/order.component';
+import { OrderDesktopComponent } from './_components/order/order-desktop/order-desktop.component';
+import { OrderMobileComponent } from './_components/order/order-mobile/order-mobile.component';
+import { OrderCreateComponent } from './_components/order/order-create/order-create.component';
+import { OrderPronosticComponent } from './_components/order/order-pronostic/order-pronostic.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +82,12 @@ import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredie
     BrewCreateComponent,
     BrewIngredientCreateComponent,
     BrewIngredientDesktopComponent,
+    OrderComponent,
+    OrderDesktopComponent,
+    OrderMobileComponent,
+    OrderCreateComponent,
+    OrderPronosticComponent,
+
   ],
   imports: [
     BrowserModule,

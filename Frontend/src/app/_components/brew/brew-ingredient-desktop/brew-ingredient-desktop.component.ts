@@ -38,7 +38,7 @@ export class BrewIngredientDesktopComponent implements OnInit {
 
   hasChildren(childrenName: string): boolean {
     if (this.brew) {
-      const length = this.brew.brewIngredients.filter(c => c.stock.ingredient.childName === childrenName).length;
+      const length = this.brew.brewIngredients.filter(c => c.ingredient.childName === childrenName).length;
       if (length > 0) {
         return true;
       }
@@ -48,7 +48,7 @@ export class BrewIngredientDesktopComponent implements OnInit {
 
   getChildren(childrenName: string): BrewIngredient[] {
     if (this.brew) {
-      const arr = this.brew.brewIngredients.filter(c => c.stock.ingredient.childName === childrenName);
+      const arr = this.brew.brewIngredients.filter(c => c.ingredient.childName === childrenName);
       if (arr.length > 0) {
         return arr;
       }
@@ -70,7 +70,7 @@ export class BrewIngredientDesktopComponent implements OnInit {
   deleteIngredient(evt: MouseEvent, ingredient: BrewIngredient) {
     evt.stopPropagation();
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as RemoveDialogComponent).title = ingredient.stock.ingredient.brewView();
+    (dialogRef.componentInstance as RemoveDialogComponent).title = ingredient.ingredient.brewView();
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.data === true) {
         this.brewService.deleteIngredientToBrew(this.brew, ingredient);

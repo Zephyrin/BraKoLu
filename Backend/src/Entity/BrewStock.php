@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BrewIngredientRepository;
+use App\Repository\BrewStockRepository;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Exclude;
 
 /**
- * @ORM\Entity(repositoryClass=BrewIngredientRepository::class)
+ * @ORM\Entity(repositoryClass=BrewStockRepository::class)
  */
-class BrewIngredient
+class BrewStock
 {
     /**
      * @ORM\Id
@@ -24,17 +23,21 @@ class BrewIngredient
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Brew::class, inversedBy="brewIngredients")
+     * @ORM\ManyToOne(targetEntity=Brew::class, inversedBy="brewStocks")
      * @ORM\JoinColumn(nullable=false)
-     * @Exclude()
      */
     private $brew;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="brewIngredients")
+     * @ORM\ManyToOne(targetEntity=IngredientStock::class, inversedBy="brewStocks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ingredient;
+    private $stock;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $apply;
 
     public function getId(): ?int
     {
@@ -65,14 +68,26 @@ class BrewIngredient
         return $this;
     }
 
-    public function getIngredient(): ?Ingredient
+    public function getStock(): ?IngredientStock
     {
-        return $this->ingredient;
+        return $this->stock;
     }
 
-    public function setIngredient(?Ingredient $ingredient): self
+    public function setStock(?IngredientStock $stock): self
     {
-        $this->ingredient = $ingredient;
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getApply(): ?bool
+    {
+        return $this->apply;
+    }
+
+    public function setApply(bool $apply): self
+    {
+        $this->apply = $apply;
 
         return $this;
     }

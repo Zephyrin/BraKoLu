@@ -101,17 +101,32 @@ class IngredientStock
     private $suppliers;
 
     /**
-     * @ORM\OneToMany(targetEntity=BrewIngredient::class, mappedBy="stock", orphanRemoval=true)
-     * @Exclude()
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="stocks")
      */
-    private $brewIngredients;
+    private $ordered;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="stock", orphanRemoval=true)
+     */
+    private $brewStocks;
 
     public function __construct()
     {
         $this->suppliers = new ArrayCollection();
-        $this->brewIngredients = new ArrayCollection();
+        $this->brewStocks = new ArrayCollection();
     }
 
+    public function calcFreeQuantity(): int
+    {
+        $quantity = $this->quantity;
+        if ($quantity == null)
+            $quantity = 0;
+        foreach ($this->brewStocks as $brew) {
+            if (!$brew->getApply())
+                $quantity = $quantity - $brew->getQuantity();
+        }
+        return $quantity;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -239,31 +254,43 @@ class IngredientStock
         return $this;
     }
 
-    /**
-     * @return Collection|BrewIngredient[]
-     */
-    public function getbrewIngredients(): Collection
+    public function getOrdered(): ?Order
     {
-        return $this->brewIngredients;
+        return $this->ordered;
     }
 
-    public function addBrewIngredient(BrewIngredient $BrewIngredient): self
+    public function setOrdered(?Order $ordered): self
     {
-        if (!$this->brewIngredients->contains($BrewIngredient)) {
-            $this->brewIngredients[] = $BrewIngredient;
-            $BrewIngredient->setStock($this);
+        $this->ordered = $ordered;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewStock[]
+     */
+    public function getBrewStocks(): Collection
+    {
+        return $this->brewStocks;
+    }
+
+    public function addBrewStock(BrewStock $brewStock): self
+    {
+        if (!$this->brewStocks->contains($brewStock)) {
+            $this->brewStocks[] = $brewStock;
+            $brewStock->setStock($this);
         }
 
         return $this;
     }
 
-    public function removeBrewIngredient(BrewIngredient $BrewIngredient): self
+    public function removeBrewStock(BrewStock $brewStock): self
     {
-        if ($this->brewIngredients->contains($BrewIngredient)) {
-            $this->brewIngredients->removeElement($BrewIngredient);
+        if ($this->brewStocks->contains($brewStock)) {
+            $this->brewStocks->removeElement($brewStock);
             // set the owning side to null (unless already changed)
-            if ($BrewIngredient->getStock() === $this) {
-                $BrewIngredient->setStock(null);
+            if ($brewStock->getStock() === $this) {
+                $brewStock->setStock(null);
             }
         }
 

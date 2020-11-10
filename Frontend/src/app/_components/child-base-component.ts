@@ -8,6 +8,7 @@ import { ComponentType } from '@angular/cdk/portal';
 
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   private serviceEndUpdateSubscription: Subscription;
+  private afterClosedSubscription: Subscription;
   @Input() service: IService;
   @Input() allowSelection = false;
   constructor(
@@ -33,24 +34,27 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
+    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
   }
 
   openCreateDialog(event: MouseEvent): void {
     event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).create();
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
   }
 
   openUpdateDialog(event: MouseEvent, element: any): void {
     event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
   }
@@ -59,10 +63,11 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     evt.stopPropagation();
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
     (dialogRef.componentInstance as RemoveDialogComponent).title = title;
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result && result.data === true) {
         this.service.update(undefined, element, null);
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
   }
 }

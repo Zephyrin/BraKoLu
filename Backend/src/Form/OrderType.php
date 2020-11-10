@@ -2,16 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Brew;
-use App\Entity\BrewIngredient;
-use App\Entity\Ingredient;
+use App\Entity\Order;
+use App\Entity\IngredientStock;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class BrewIngredientType extends AbstractType
+class OrderType extends AbstractType
 {
 
     public function buildForm(
@@ -20,16 +18,10 @@ class BrewIngredientType extends AbstractType
     ) {
         $builder
             ->add("id")
-            ->add("quantity")
             ->add(
-                'brew',
-                EntityType::class,
-                ['class' => Brew::class, 'required' => true]
-            )
-            ->add(
-                'ingredient',
-                EntityType::class,
-                ['class' => Ingredient::class, 'required' => true]
+                'stocks',
+                CollectionType::class,
+                ['class' => IngredientStock::class]
             );
     }
 
@@ -37,7 +29,7 @@ class BrewIngredientType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => BrewIngredient::class,
+                'data_class'         => Order::class,
                 'allow_extra_fields' => false,
                 'csrf_protection'    => false,
             ]
