@@ -1,58 +1,144 @@
-<mat-selection-list #brews>
-  <ng-container *ngFor="let brew of brewService.model">
-    <mat-list-option *ngIf="brew.state === 'created' || brew.state === 'planning'"
-                     [value]="brew">
-      {{brew.name}} - {{brew.created }} - {{brew.state}}
-    </mat-list-option>
-  </ng-container>
-</mat-selection-list>
+<div class="flex-inline">
+  <div class="brew-container">
+    <mat-selection-list class="brew-list"
+                        cdkDropList
+                        #brews
+                        (cdkDropListDropped)="drop($event)">
+      <mat-list-option *ngFor="let brew of brewList"
+                       [value]="brew"
+                       cdkDrag
+                       cdkDragBoundary=".brew-list">
+        <div class="brew-custom-placeholder"
+             *cdkDragPlaceholder></div>
+        {{brew.name}} - {{brew.created | date: 'dd-M-yyyy' }} - {{brew.state}}
+      </mat-list-option>
+    </mat-selection-list>
+    <button mat-button
+            (click)="pronostic()">
+      <mat-icon>mediation</mat-icon>Pronostic !
+    </button>
+  </div>
+  <div class="order">
+    <div *ngIf="order"
+         class="pronostic">
 
-<button mat-button
-        (click)="pronostic()">
-  <mat-icon>mediation</mat-icon>Pronostic !
-</button>
-<div *ngIf="service.pronostic"
-     class="pronostic">
-  <button mat-button
-          class="add">
-    <mat-icon>add_circle_outline</mat-icon>
-    <mat-label>Ajouter un ingrédient à la commande</mat-label>
-  </button>
-  <mat-list>
-
-    <mat-list-item *ngFor="let stock of service.pronostic.stocks">
-
-      <div mat-line
-           *ngIf="stock.state === 'created'">
-        {{stock.ingredient.brewView()}}
-        <mat-form-field>
-          <mat-label>Quantité ({{stock.ingredient.unit}})</mat-label>
-          <input matInput
-                 [placeholder]="'Ex: 23 ' + stock.ingredient.unit"
-                 type="number"
-                 [value]="stock.quantity">
-        </mat-form-field>
-        <button mat-icon-button>
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <div mat-line
-           *ngIf="stock.state !== 'created'">
-        {{stock.ingredient.brewView()}}
-      </div>
-      <div mat-line>
-        <ng-container *ngFor="let brew of stock.brewStocks">
-          {{brew.brew.name}} ({{brew.quantity}})
+      <table mat-table
+             class="full-width"
+             [dataSource]="dataSourceOrder">
+        <!-- List des ingrédients -->
+        <ng-container matColumnDef="ingredient">
+          <th mat-header-cell
+              *matHeaderCellDef> </th>
+          <td mat-cell
+              *matCellDef="let row"> {{ row.ingredient.name}}<span *ngIf="row.quantityInStock">({{ row.quantityInStock}}
+              {{row.ingredient.unit}})</span></td>
         </ng-container>
-      </div>
-      <div mat-line></div>
-      <mat-divider></mat-divider>
-    </mat-list-item>
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell
+              *matHeaderCellDef> Stock </th>
+          <td mat-cell
+              *matCellDef="let row">
+            <mat-list>
 
-  </mat-list>
-  <button mat-button
-          class="save">
-    <mat-icon>save</mat-icon>
-    <mat-label>Lancer la commande !</mat-label>
-  </button>
+              <mat-list-item *ngFor="let brew of row.brewStock">
+                <div mat-line>
+                  {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="order">
+          <th mat-header-cell
+              *matHeaderCellDef> Commande </th>
+          <td mat-cell
+              *matCellDef="let row">
+            <mat-list>
+
+              <mat-list-item>
+                <div mat-line></div>
+                <div mat-line
+                     class="brew-line">
+                  <div *ngFor="let brew of row.brewOrder"
+                       class="brew-item">
+                    <mat-form-field>
+                      <mat-label>{{brew.brew.name}}</mat-label>
+                      <input matInput
+                             [placeholder]="'Ex: 23 ' + row.ingredient.unit"
+                             type="number"
+                             [value]="brew.quantity">
+                      <span matSuffix>{{row.ingredient.unit}}</span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item>
+                <div mat-line></div>
+                <div mat-line>
+                  <mat-form-field>
+                    <mat-label>Surplus commandé</mat-label>
+                    <input matInput
+                           [placeholder]="'Ex: 23 ' + row.ingredient.unit"
+                           type="number"
+                           [value]="row.quantityMoreOrder">
+                    <span matSuffix>{{row.ingredient.unit}}</span>
+                  </mat-form-field>
+                </div>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item>
+                <div mat-line></div>
+                <div mat-line>
+                  <mat-label>Total : {{row.order.quantity + row.quantityMoreOrder}} {{row.ingredient.unit}}</mat-label>
+                  <mat-form-field>
+                    <mat-label>Prix</mat-label>
+                    <input matInput
+                           [placeholder]="'Ex: 23€'"
+                           type="number"
+                           [value]="row.order.price">
+                    <span matSuffix>€</span>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Fournisseur</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let supplier of supplierService.model"
+                                  [value]="supplier">
+                        {{supplier.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row
+            *matHeaderRowDef="['ingredient', 'stock', 'order']"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: ['ingredient', 'stock', 'order']"></tr>
+      </table>
+
+
+      <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
+      <button mat-button
+              class="add">
+        <mat-icon>add_circle_outline</mat-icon>
+        <mat-label>Ajouter un ingrédient à la commande</mat-label>
+      </button>
+      <mat-list>
+
+      </mat-list>
+      <button mat-button
+              class="save">
+        <mat-icon>save</mat-icon>
+        <mat-label>Lancer la commande !</mat-label>
+      </button>
+    </div>
+  </div>
 </div>

@@ -18,6 +18,7 @@ class OrderType extends AbstractType
     ) {
         $builder
             ->add("id")
+            ->add('state')
             ->add(
                 'stocks',
                 CollectionType::class,

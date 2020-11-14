@@ -128,6 +128,22 @@ class IngredientStock
         }
         return $quantity;
     }
+
+    public function calcFreeQuantityWithoutCreatedBrew()
+    {
+        $quantity = $this->quantity;
+        if ($quantity == null)
+            $quantity = 0;
+        foreach ($this->brewStocks as $brew) {
+            if (
+                !$brew->getApply()
+                && $brew->getBrew()->getState() != 'created'
+                && $brew->getBrew()->getState() != 'validate'
+            )
+                $quantity = $quantity - $brew->getQuantity();
+        }
+        return $quantity;
+    }
     public function getId(): ?int
     {
         return $this->id;

@@ -107,6 +107,7 @@ class Brew
 
     /**
      * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="brew", orphanRemoval=true)
+     * @SerializedName("brewStocks")
      */
     private $brewStocks;
 

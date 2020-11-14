@@ -10,6 +10,7 @@ use App\Controller\Helpers\HelperForwardController;
 use App\Entity\Brew;
 use App\Entity\BrewStock;
 use App\Entity\IngredientStock;
+use App\Entity\StockNotOrder;
 use App\Repository\BrewRepository;
 use App\Repository\IngredientStockRepository;
 use App\Serializer\FormErrorSerializer;
@@ -88,21 +89,15 @@ class OrderController extends AbstractFOSRestController
      * @SWG\Post(
      *  consumes={"application/json"},
      *  produces={"application/json"},
-     *  summary="Crée une nouvelle commande en se bassant sur des brassins sélectionnés.",
+     *  summary="Crée une nouvelle commande vide qui aura le status créé.",
      *  @SWG\Response(
      *      response=201,
      *      description="La commande a bien été inséré",
      *      @SWG\Schema(ref=@Model(type=Order::class))
      *  ),
      *  @SWG\Response(
-     *      response=422,
-     *      description="Le JSON comporte une erreur.<br/>Regarde la réponse, elle en dira plus."
-     *  ),
-     *  @SWG\Parameter(
-     *      name="Le brassin au format JSON",
-     *      in="body",
-     *      required=true,
-     *      @SWG\Schema(ref=@Model(type=Order::class))
+     *      response=302,
+     *      description="Une commande en création existe déjà."
      *  )
      * )
      * @param Request $request
@@ -111,27 +106,26 @@ class OrderController extends AbstractFOSRestController
      */
     public function postAction(Request $request)
     {
-        $data = $this->getDataFromJson($request, true);
+        $order = $this->repository->findOneBy(['state' => 'created']);
+        if ($order == null) {
+            $newEntity = new Order();
+            $newEntity->setState('created');
+            $newEntity->setCreated(new DateTime());
+            $this->entityManager->persist($newEntity);
 
-        $newEntity = new Order();
-        $form = $this->createForm(OrderType::class, $newEntity);
-        $form->submit($data, false);
-        $this->validationError(
-            $form,
-            $this
-        );
-        $insertData = $form->getData();
-        $this->entityManager->persist($insertData);
-
-        $this->entityManager->flush();
-        return $this->view($insertData, Response::HTTP_CREATED);
+            $this->entityManager->flush();
+            return $this->view($newEntity, Response::HTTP_CREATED);
+        }
+        return $this->view($order, Response::HTTP_FOUND);
     }
 
     /**
-     * @Route("/order/pronostic",
+     * @Route("/order/pronostic/{id}",
      *  name="api_order_pronostic_get",
-     *  methods={"GET"}
-     * )
+     *  methods={"GET"},
+     *  requirements={
+     *      "id": "\d+"
+     * })
      * 
      * @SWG\Get(
      *     summary="Donne pronostic de la futur commande à réaliser.",
@@ -153,73 +147,108 @@ class OrderController extends AbstractFOSRestController
      *      , description="La liste des brassing à commander.")
      *
      * @param string $id
+     * @param ParamFetcher $paramFetcher
      * @return View
      */
-    public function pronostic(Request $request, ParamFetcher $paramFetcher)
+    public function pronostic(Request $request, ParamFetcher $paramFetcher, string $id)
     {
         $brews = $paramFetcher->get('brews');
-        $order = new Order();
+        $order = $this->repository->find($id);
+        // Néttoyage de la précédentes préparation.
+        $stockNotOrders = $order->getStockNotOrders();
+        foreach ($stockNotOrders as $stockNotOrder) {
+            $this->entityManager->remove($stockNotOrder->getBrewStock());
+            $this->entityManager->remove($stockNotOrder);
+        }
+        $stocks = $order->getStocks();
+        foreach ($stocks as $stock) {
+            if ($stock->getState() == 'created')
+                $order->removeStock($stock);
+            $this->entityManager->remove($stock);
+        }
+        $this->entityManager->flush();
+        $order = $this->repository->find($id);
         // On stock l'id de l'igredient et ça quantité.
         $ingredientsQuantity = [];
-        foreach ($brews as $brew) {
-            $dbBrew = $this->getBrewById($brew);
-            foreach ($dbBrew->getBrewIngredients() as $ingredient) {
-                // Association à la volé du stock si disponible sinon création 
-                if (isset($ingredientsQuantity[$ingredient->getIngredient()->getId()])) {
-                    // On a déjà ajouté un nouvel ingrédient au stock. On utilise celui-ci.
-                    $stock = $ingredientsQuantity[$ingredient->getIngredient()->getId()];
-                    $stock->setQuantity($stock->getQuantity() + $ingredient->getQuantity());
-                    $brewStock = new BrewStock();
-                    $brewStock->setQuantity($ingredient->getQuantity());
-                    $stock->addBrewStock($brewStock);
-                    $dbBrew->addBrewStock($brewStock);
-                } else {
-                    $stocks = $this->stockRepository->findAvalaibleStock($ingredient->getIngredient()->getId());
-                    $quantity = $ingredient->getQuantity();
-                    foreach ($stocks as $stock) {
-                        // On regarde si l'ingrédient peut être contenu dans la liste des stocks.
-                        $stockQuantity = $stock->calcFreeQuantity();
-                        if ($stockQuantity > 0) {
-                            if ($stockQuantity >= $quantity) {
-                                // Il y a plus de stock que ce que l'on a besoin. On associe le brassin au stock.
-                                $brewStock = new BrewStock();
-                                $brewStock->setBrew($dbBrew);
-                                $brewStock->setStock($stock);
-                                $brewStock->setQuantity($quantity);
-                                // Ne doit pas être sauvegardé car ne pointe pas sur la bonne commande.
-                                $stock->setOrder($order);
-                                $quantity = 0;
-                            } else {
-                                $brewStock = new BrewStock();
-                                $brewStock->setBrew($dbBrew);
-
-                                $brewStock->setQuantity($quantity - $stockQuantity);
-                                // Doit-être sauvegarder
-                                $stock->addBrewStock($brewStock);
-                                // Ne doit pas être sauvegardé car ne pointe pas sur la bonne commande.
-                                $order->addStock($stock);
-                                $quantity = $quantity - ($quantity - $stockQuantity);
-                            }
-                            if ($quantity == 0) break;
-                        }
-                    }
-                    if ($quantity > 0) {
-                        // Création d'un nouveau stock.
-                        $stock = new IngredientStock();
-                        $stock->setIngredient($ingredient->getIngredient());
-                        $stock->setCreationDate(new DateTime());
-                        $stock->setQuantity($quantity);
-                        $stock->setState("created");
-                        $order->addStock($stock);
+        if ($brews != null) {
+            foreach ($brews as $brew) {
+                $dbBrew = $this->getBrewById($brew);
+                foreach ($dbBrew->getBrewIngredients() as $ingredient) {
+                    // Association à la volé du stock si disponible sinon création 
+                    if (isset($ingredientsQuantity[$ingredient->getIngredient()->getId()])) {
+                        // On a déjà ajouté un nouvel ingrédient au stock. On utilise celui-ci.
+                        $stock = $ingredientsQuantity[$ingredient->getIngredient()->getId()];
+                        $stock->setQuantity($stock->getQuantity() + $ingredient->getQuantity());
                         $brewStock = new BrewStock();
-                        $brewStock->setBrew($dbBrew);
+                        $brewStock->setApply(false);
+                        $brewStock->setQuantity($ingredient->getQuantity());
                         $stock->addBrewStock($brewStock);
-                        $brewStock->setQuantity($quantity);
-                        $ingredientsQuantity[$ingredient->getIngredient()->getId()] = $stock;
+                        $dbBrew->addBrewStock($brewStock);
+                        $this->entityManager->persist($brewStock);
+                    } else {
+                        $stocks = $this->stockRepository->findAvalaibleStock($ingredient->getIngredient()->getId());
+                        $quantity = $ingredient->getQuantity();
+                        foreach ($stocks as $stock) {
+                            // On regarde si l'ingrédient peut être contenu dans la liste des stocks.
+                            $stockQuantity = $stock->calcFreeQuantity();
+                            if ($stockQuantity > 0) {
+                                if ($stockQuantity >= $quantity) {
+                                    // Il y a plus de stock que ce que l'on a besoin. On associe le brassin au stock.
+                                    $brewStock = new BrewStock();
+                                    $dbBrew->addBrewStock($brewStock);
+                                    $brewStock->setStock($stock);
+                                    $brewStock->setQuantity($quantity);
+                                    $brewStock->setApply(false);
+                                    // Ne doit pas être sauvegardé car ne pointe pas sur la bonne commande.
+                                    $stockNotOrder = new StockNotOrder();
+                                    $order->addStockNotOrder($stockNotOrder);
+                                    $brewStock->setStockNotOrder($stockNotOrder);
+                                    $stockNotOrder->setBrewStock($brewStock);
+                                    $this->entityManager->persist($brewStock);
+                                    $this->entityManager->persist($stockNotOrder);
+                                    $quantity = 0;
+                                } else {
+                                    $brewStock = new BrewStock();
+                                    $dbBrew->addBrewStock($brewStock);
+                                    $brewStock->setApply(false);
+
+                                    $brewStock->setQuantity($quantity - $stockQuantity);
+                                    // Doit-être sauvegarder
+                                    $stock->addBrewStock($brewStock);
+                                    $this->entityManager->persist($brewStock);
+                                    // Ne doit pas être sauvegardé car ne pointe pas sur la bonne commande.
+                                    $stockNotOrder = new StockNotOrder();
+                                    $order->addStockNotOrder($stockNotOrder);
+                                    $brewStock->setStockNotOrder($stockNotOrder);
+                                    $stockNotOrder->setBrewStock($brewStock);
+                                    $this->entityManager->persist($stockNotOrder);
+                                    $quantity = $quantity - ($quantity - $stockQuantity);
+                                }
+                                if ($quantity == 0) break;
+                            }
+                        }
+                        if ($quantity > 0) {
+                            // Création d'un nouveau stock.
+                            $stock = new IngredientStock();
+                            $stock->setIngredient($ingredient->getIngredient());
+                            $stock->setCreationDate(new DateTime());
+                            $stock->setQuantity($quantity);
+                            $stock->setState("created");
+                            $order->addStock($stock);
+                            $this->entityManager->persist($stock);
+                            $brewStock = new BrewStock();
+                            $dbBrew->addBrewStock($brewStock);
+                            $brewStock->setApply(false);
+                            $stock->addBrewStock($brewStock);
+                            $brewStock->setQuantity($quantity);
+                            $this->entityManager->persist($brewStock);
+                            $ingredientsQuantity[$ingredient->getIngredient()->getId()] = $stock;
+                        }
                     }
                 }
             }
         }
+        $this->entityManager->flush();
         return $this->view($order);
     }
 
@@ -282,8 +311,8 @@ class OrderController extends AbstractFOSRestController
      *      , default="asc"
      *      , description="La direction du tri.")
      * @QueryParam(name="sortBy"
-     *      , requirements="(id|name|abv|ibu|ebc|state|producedQuantity|started|ended|created)"
-     *      , default="name"
+     *      , requirements="(id|created|state)"
+     *      , default="created"
      *      , description="Le tri est organisé sur les attributs de la classe order.")
      * @QueryParam(name="search"
      *      , nullable=true
@@ -295,6 +324,14 @@ class OrderController extends AbstractFOSRestController
     public function getAllAction(ParamFetcher $paramFetcher)
     {
         $orders = $this->repository->findAllPagination($paramFetcher);
+        foreach ($orders[0] as $order) {
+            if ($order->getState() == 'created') {
+                foreach ($order->getStockNotOrders() as $stockNotOrder) {
+                    $stock = $stockNotOrder->getBrewStock()->getStock();
+                    $stock->setQuantity($stock->calcFreeQuantityWithoutCreatedBrew());
+                }
+            }
+        }
         return $this->setPaginateToView($orders, $this);
     }
 

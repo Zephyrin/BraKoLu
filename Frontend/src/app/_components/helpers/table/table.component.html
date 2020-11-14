@@ -46,7 +46,7 @@
       class="tr-box"
       *matHeaderRowDef="service.displayedColumns"></tr>
   <tr mat-row
-      (click)="allowSelection ? service.selected = row : undefined"
+      (click)="allowSelection ? service.setSelected(row) : undefined"
       [class.selected-row]="service.selected === row"
       [class.allow-select]="allowSelection"
       *matRowDef="let row; columns: service.displayedColumns;"></tr>

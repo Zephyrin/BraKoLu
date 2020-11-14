@@ -19,7 +19,8 @@
                 "**/dependency-injection/**/*",
                 "**/stopwatch/**/*",
                 "**/Descriptor/**/*",
-                "**/Mapping/**/*"
+                "**/Mapping/**/*",
+                "**/GraphNavigator/**/*"
 
             ]
         }

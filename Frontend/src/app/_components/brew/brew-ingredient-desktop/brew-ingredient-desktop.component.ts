@@ -15,7 +15,7 @@ export class BrewIngredientDesktopComponent implements OnInit {
   @Input() brew: Brew;
   @Input() ingredientService: IngredientService;
   @Input() brewService: BrewService;
-  private inputIntervalBeforeSave: NodeJS.Timeout;
+  private inputIntervalBeforeSave: any;
 
   constructor(
     public dialog: MatDialog,

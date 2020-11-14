@@ -1,5 +1,5 @@
 import { Brew } from '@app/_models/brew';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { OrderHttpService } from './order-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
@@ -10,10 +10,12 @@ import { Order } from '@app/_models/order';
   providedIn: 'root'
 })
 export class OrderService extends CService<Order> {
+  public selectedOrders = new Array<Order>();
+  public formSelectedOrder = new FormControl(0);
+
   public states: ValueViewChild[] = [];
   private nbEnumLeft = 0;
 
-  public pronostic: Order;
   constructor(
     private h: OrderHttpService,
     public datepipe: DatePipe) {
@@ -63,14 +65,7 @@ export class OrderService extends CService<Order> {
   public createFormBasedOn(formBuilder: FormBuilder, value: Order): void {
     this.form = formBuilder.group({
       id: [''],
-      name: ['', Validators.required],
-      abv: ['', Validators.required],
-      ibu: ['', Validators.required],
-      ebc: ['', Validators.required],
-      state: ['', Validators.required],
-      producedQuantity: [''],
-      started: [''],
-      ended: [''],
+      created: ['']
     });
   }
 
@@ -78,17 +73,67 @@ export class OrderService extends CService<Order> {
     switch (name) {
       case 'created':
         return this.datepipe.transform(value[name], 'y-MM-dd');
+      case 'tabOrder':
+        if (value.id) {
+          return 'Commande ' + value.id;
+        }
+        return 'Nouvelle commande';
       default:
         break;
     }
     return value[name];
   }
 
-  public getPronostic(brews: Brew[]) {
-    (this.http as OrderHttpService).getPronostic(brews).subscribe(response => {
-      this.pronostic = new Order(response);
+  public getPronostic(brews: Brew[], order: Order, dataSource: any) {
+    (this.http as OrderHttpService).getPronostic(brews, order).subscribe(response => {
+      order.update(response);
+      dataSource.updateSource(order);
     }, err => {
       this.end(true, err);
+    });
+  }
+
+  public createOrder(): void {
+    if (this.start() === true) {
+      this.http.create(new Order(undefined)).subscribe(response => {
+        const newOrder = new Order(response);
+        this.model.push(newOrder);
+        this.selectedOrders.push(newOrder);
+        this.end(true);
+        this.formSelectedOrder.setValue(this.selectedOrders.length);
+      }, error => {
+        this.end(true, error);
+      });
+    }
+  }
+
+  public setSelected(value: Order): void {
+    const index = this.selectedOrders.findIndex(x => x.id === value?.id);
+    if (index >= 0) {
+      this.formSelectedOrder.setValue(index + 1);
+    } else {
+      this.selectedOrders.push(value);
+      this.formSelectedOrder.setValue(this.selectedOrders.length);
+    }
+  }
+
+  public setBrewList(brewList: Array<Brew>, allBrews: Array<Brew>, value: Order): void {
+    // On ajoute à la liste d'affichage les brassins déjà contenu dans la commande
+    brewList.splice(0, brewList.length - 1);
+    value.stocks.forEach(stock => {
+      stock.brewStocks.forEach(brewStock => {
+        const index = brewList.findIndex(x => x.id === brewStock.brew.id);
+        if (index < 0) {
+          brewList.push(brewStock.brew);
+        }
+      });
+    });
+    // Si la commande est au status de créé, on ajoute aussi les brassins au status crée ou planning
+    allBrews.filter(x => x.state === 'created' || x.state === 'planning').forEach(brew => {
+      const index = brewList.findIndex(x => x.id === brew.id);
+      if (index < 0) {
+        brewList.push(brew);
+      }
     });
   }
 }

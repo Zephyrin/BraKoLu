@@ -146,6 +146,11 @@ export interface IService {
    * Recherche dans un tableau de ValueViewChild la valeur et retourne la valeur de la vue.
    */
   findInValueViewChild(valueViewChild: ValueViewChild[], value: string): string;
+
+  /**
+   * Change l'élément sélectionné.
+   */
+  setSelected(value: any): void;
 }
 
 export interface ValueViewChild {
@@ -392,5 +397,9 @@ export abstract class CService<T> implements IService {
       return find.viewValue;
     }
     return undefined;
+  }
+
+  public setSelected(value: T): void {
+    this.selected = value;
   }
 }

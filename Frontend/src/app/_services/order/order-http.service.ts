@@ -1,5 +1,5 @@
 import { Brew } from '@app/_models/brew';
-import { environment } from './../../../environments/environment';
+import { environment } from '@app/../environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Order } from '@app/_models/order';
@@ -28,14 +28,14 @@ export class OrderHttpService extends HttpService<Order>{
 
   deletePath() { return this.path; }
 
-  public getPronostic(brews: Brew[]): Observable<Order> {
+  public getPronostic(brews: Brew[], order: Order): Observable<Order> {
     let params = new HttpParams();
     for (const brew of brews) {
       params = params.append('brews[]', `${brew.id}`);
     }
 
     return this.http.get<Order>(
-      `${environment.apiUrl}/${this.getPath()}/pronostic`, { params }
+      `${environment.apiUrl}/${this.getPath()}/pronostic/${order.id}`, { params }
     );
   }
 }

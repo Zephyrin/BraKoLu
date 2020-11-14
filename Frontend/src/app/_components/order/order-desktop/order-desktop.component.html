@@ -1,5 +1,23 @@
-<button mat-button
-        (click)="addOrder()">
-  <mat-icon>add_circle_outline</mat-icon>
-  <mat-label>Créer une commande</mat-label>
-</button>
+<mat-tab-group [selectedIndex]="orderService.formSelectedOrder.value"
+               mat-align-tabs="center"
+               (selectedIndexChange)="orderService.formSelectedOrder.setValue($event)">
+  <mat-tab label="Commandes">
+    <button mat-button
+            (click)="addNewOrder()">
+      <mat-icon>add_circle_outline</mat-icon>
+      <mat-label>Créer une commande</mat-label>
+    </button>
+    <app-table [service]="service"
+               class="full-width"
+               [allowSelection]="true"
+               #tableComponent></app-table>
+    <app-pagination [paginate]="service.paginate"></app-pagination>
+  </mat-tab>
+  <mat-tab *ngFor="let order of orderService.selectedOrders; let index = index"
+           [label]="service.getDisplay('tabOrder', order)">
+    <app-order-pronostic [order]="order"
+                         [brewService]="brewService"
+                         [supplierService]="supplierService"
+                         [service]="service"></app-order-pronostic>
+  </mat-tab>
+</mat-tab-group>

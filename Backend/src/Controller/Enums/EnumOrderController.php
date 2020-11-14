@@ -32,7 +32,7 @@ class EnumOrderController extends AbstractFOSRestController
      *  name="api_enum_order_get",
      *  methods={"GET"},
      *  requirements={
-     *      "name": "(headers)"
+     *      "name": "(headers|states)"
      * })
      * 
      * @SWG\Get(
@@ -64,6 +64,8 @@ class EnumOrderController extends AbstractFOSRestController
         switch ($name) {
             case 'headers':
                 return $this->view(Order::HEADERS);
+            case 'states':
+                return $this->view(Order::STATES);
             default:
                 break;
         }
