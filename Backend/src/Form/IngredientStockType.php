@@ -33,11 +33,6 @@ class IngredientStockType extends AbstractType
                 'suppliers',
                 CollectionType::class,
                 ['entry_type' => Supplier::class]
-            )
-            ->add(
-                'brewStocks',
-                CollectionType::class,
-                ['entry_type' => BrewStock::class]
             );
     }
 

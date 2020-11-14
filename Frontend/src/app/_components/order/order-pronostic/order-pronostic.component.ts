@@ -1,3 +1,4 @@
+import { StockService } from './../../../_services/stock/stock.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BrewStock, Brew } from '@app/_models/brew';
@@ -24,7 +25,9 @@ export class OrderPronosticComponent implements OnInit {
   @Input() supplierService: SupplierService;
   dataSourceOrder = new DataSourceOrder();
   brewList = new Array<Brew>();
-  constructor() {
+  private inputIntervalBeforeSave: any;
+
+  constructor(public stockService: StockService) {
   }
 
   ngOnInit(): void {
@@ -47,6 +50,34 @@ export class OrderPronosticComponent implements OnInit {
     moveItemInArray(this.brewList, event.previousIndex, event.currentIndex);
   }
 
+  updateMoreQuantity(evt: any, tableOrder: TableOrder) {
+    if (this.inputIntervalBeforeSave) {
+      clearInterval(this.inputIntervalBeforeSave);
+    }
+    this.inputIntervalBeforeSave = setInterval(() => {
+      clearInterval(this.inputIntervalBeforeSave);
+      tableOrder.order.quantity += +evt.srcElement.value;
+      tableOrder.order.quantity -= tableOrder.quantityMoreOrder;
+      tableOrder.quantityMoreOrder = +evt.srcElement.value;
+      this.inputIntervalBeforeSave = undefined;
+      this.stockService.update('quantity', tableOrder.order, tableOrder.order.quantity);
+    }, 300);
+  }
+
+  updatePrice(evt: any, tableOrder: TableOrder) {
+    if (this.inputIntervalBeforeSave) {
+      clearInterval(this.inputIntervalBeforeSave);
+    }
+    this.inputIntervalBeforeSave = setInterval(() => {
+      clearInterval(this.inputIntervalBeforeSave);
+      this.stockService.update('price', tableOrder.order, evt.srcElement.value);
+      this.inputIntervalBeforeSave = undefined;
+    }, 300);
+  }
+
+  updateSupplier(evt: any, tableOrder: TableOrder) {
+    this.stockService.update('supplier', tableOrder.order, evt.value.id);
+  }
 }
 
 export class TableOrder {
@@ -71,6 +102,7 @@ export class TableOrder {
     this.stock.push(stock);
     if (!this.quantityInStock) { this.quantityInStock = 0; }
     let quantityUsed = 0;
+    let quantityUsedByCreated = 0;
 
     stock.brewStocks.forEach(brewStock => {
       const index = this.brewList.findIndex(x => x.id === brewStock.brew.id);
@@ -79,6 +111,7 @@ export class TableOrder {
           this.brewStock.push(brewStock);
         } else {
           this.brewOrder.push(brewStock);
+          quantityUsedByCreated += brewStock.quantity;
         }
       } else {
         if (brewStock.id && !brewStock.apply) {
@@ -91,6 +124,7 @@ export class TableOrder {
     }
     if (stock.state === 'created') {
       this.order = stock;
+      this.quantityMoreOrder = this.order.quantity - quantityUsedByCreated;
     }
   }
 

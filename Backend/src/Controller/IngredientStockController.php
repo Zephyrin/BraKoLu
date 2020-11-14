@@ -268,7 +268,6 @@ class IngredientStockController extends AbstractFOSRestController
     {
         $existing = $this->getById($id);
         $form = $this->createForm(IngredientStockType::class, $existing);
-        unset($data[$this->childName]);
 
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this);
