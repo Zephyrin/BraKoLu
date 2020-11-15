@@ -1,12 +1,13 @@
+import { StockNotOrder } from './../../../_models/order';
 import { StockService } from './../../../_services/stock/stock.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BrewStock, Brew } from '@app/_models/brew';
 import { Order } from '@app/_models/order';
 import { OrderService } from '@app/_services/order/order.service';
 import { BrewService } from '@app/_services/brew/brew.service';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList } from '@angular/material/list';
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { DataSource } from '@angular/cdk/table';
 import { IngredientStock, Ingredient } from '@app/_models';
 import { CollectionViewer } from '@angular/cdk/collections';
@@ -17,7 +18,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   templateUrl: './order-pronostic.component.html',
   styleUrls: ['./order-pronostic.component.scss']
 })
-export class OrderPronosticComponent implements OnInit {
+export class OrderPronosticComponent implements OnInit, AfterViewInit {
   @ViewChild('brews') brews: MatSelectionList;
   @Input() order: Order;
   @Input() brewService: BrewService;
@@ -36,6 +37,23 @@ export class OrderPronosticComponent implements OnInit {
     this.dataSourceOrder.updateSource(this.order);
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const arrOptions = this.brews.options.toArray();
+      this.order.stocks.forEach(stock => {
+        stock.brewStocks.forEach(brewStock => {
+          const index = this.brews.selectedOptions.selected.findIndex(x => x.value.id === brewStock.brew.id);
+          if (index < 0) {
+            const value = arrOptions.find(x => x.value.id === brewStock.brew.id);
+            if (value) {
+              this.brews.selectedOptions.select(value);
+            }
+          }
+        });
+      });
+    });
+  }
+
   pronostic(): void {
     const brews = [];
     this.brewList.forEach(brew => {
@@ -50,17 +68,74 @@ export class OrderPronosticComponent implements OnInit {
     moveItemInArray(this.brewList, event.previousIndex, event.currentIndex);
   }
 
+  dropIntoBrewStock(event: CdkDragDrop<BrewStock[]>, tableOrder: TableOrder) {
+    if (event.previousContainer === event.container) {
+      return;
+    } else {
+      const brewOrder = (event.item.data as BrewStock);
+      let brewStock = tableOrder.brewStock.find(c => c.brew.id === brewOrder.id);
+      if (brewStock) {
+
+      } else {
+        brewStock = new BrewStock(undefined);
+        brewStock.brew = brewOrder.brew;
+        brewStock.stock = brewOrder.stock;
+        if (brewOrder.quantity <= tableOrder.quantityInStock) {
+          brewStock.quantity = brewOrder.quantity;
+          tableOrder.quantityInStock -= brewOrder.quantity;
+          const index = tableOrder.brewOrder.findIndex(c => c.id === brewOrder.id);
+          if (index >= 0) {
+            tableOrder.brewOrder.splice(index, 1);
+          }
+        } else {
+          brewStock.quantity = brewOrder.quantity - tableOrder.quantityInStock;
+          tableOrder.quantityInStock = 0;
+          brewOrder.quantity -= brewStock.quantity;
+        }
+        tableOrder.currentStock.quantity -= brewStock.quantity;
+        const stock = new StockNotOrder(undefined);
+        stock.brewStock = brewStock;
+        stock.order = tableOrder.order;
+        tableOrder.brewStock.push(brewStock);
+      }
+    }
+  }
+
+  dropIntoBrewOrder(event: CdkDragDrop<BrewStock[]>, tableOrder: TableOrder) {
+    if (event.previousContainer === event.container) {
+      return;
+    } else {
+      const brewStock = event.item.data;
+      const brewOrder = tableOrder.brewOrder.find(c => c.brew.id === brewStock.brew.id);
+      if (brewOrder) {
+        brewOrder.quantity += brewStock.quantity;
+        tableOrder.quantityInStock += brewStock.quantity;
+        tableOrder.currentStock.quantity += brewStock.quantity;
+        const index = tableOrder.brewStock.findIndex(c => c.id === brewStock.id);
+        if (index >= 0) {
+          tableOrder.brewStock.splice(index, 1);
+        }
+      } else {
+
+      }
+    }
+  }
+
+  compareWithId(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
   updateMoreQuantity(evt: any, tableOrder: TableOrder) {
     if (this.inputIntervalBeforeSave) {
       clearInterval(this.inputIntervalBeforeSave);
     }
     this.inputIntervalBeforeSave = setInterval(() => {
       clearInterval(this.inputIntervalBeforeSave);
-      tableOrder.order.quantity += +evt.srcElement.value;
-      tableOrder.order.quantity -= tableOrder.quantityMoreOrder;
+      tableOrder.currentStock.quantity += +evt.srcElement.value;
+      tableOrder.currentStock.quantity -= tableOrder.quantityMoreOrder;
       tableOrder.quantityMoreOrder = +evt.srcElement.value;
       this.inputIntervalBeforeSave = undefined;
-      this.stockService.update('quantity', tableOrder.order, tableOrder.order.quantity);
+      this.stockService.update('quantity', tableOrder.currentStock, tableOrder.currentStock.quantity);
     }, 300);
   }
 
@@ -70,36 +145,38 @@ export class OrderPronosticComponent implements OnInit {
     }
     this.inputIntervalBeforeSave = setInterval(() => {
       clearInterval(this.inputIntervalBeforeSave);
-      this.stockService.update('price', tableOrder.order, evt.srcElement.value);
+      this.stockService.update('price', tableOrder.currentStock, evt.srcElement.value);
       this.inputIntervalBeforeSave = undefined;
     }, 300);
   }
 
   updateSupplier(evt: any, tableOrder: TableOrder) {
-    this.stockService.update('supplier', tableOrder.order, evt.value.id);
+    this.stockService.update('supplier', tableOrder.currentStock, evt.value === null ? null : evt.value?.id);
   }
 }
 
 export class TableOrder {
   ingredient: Ingredient;
-  stock: IngredientStock[];
+  stocks: IngredientStock[];
   brewStock: BrewStock[];
   brewOrder: BrewStock[];
-  order: IngredientStock;
+  currentStock: IngredientStock;
+  order: Order;
   quantityMinOrder: number;
   quantityMoreOrder = 0;
   quantityInStock: number;
   brewList: Brew[];
-  constructor(ingredient: Ingredient, brewList: Brew[]) {
+  constructor(ingredient: Ingredient, brewList: Brew[], order: Order) {
     this.ingredient = ingredient;
-    this.stock = new Array<IngredientStock>();
+    this.stocks = new Array<IngredientStock>();
     this.brewStock = new Array<BrewStock>();
     this.brewOrder = new Array<BrewStock>();
     this.brewList = brewList;
+    this.order = order;
   }
 
   public addStock(stock: IngredientStock) {
-    this.stock.push(stock);
+    this.stocks.push(stock);
     if (!this.quantityInStock) { this.quantityInStock = 0; }
     let quantityUsed = 0;
     let quantityUsedByCreated = 0;
@@ -109,6 +186,7 @@ export class TableOrder {
       if (index >= 0) {
         if (stock.state === 'stock') {
           this.brewStock.push(brewStock);
+          quantityUsed += brewStock.quantity;
         } else {
           this.brewOrder.push(brewStock);
           quantityUsedByCreated += brewStock.quantity;
@@ -123,18 +201,19 @@ export class TableOrder {
       this.quantityInStock += stock.quantity - quantityUsed;
     }
     if (stock.state === 'created') {
-      this.order = stock;
-      this.quantityMoreOrder = this.order.quantity - quantityUsedByCreated;
+      this.currentStock = stock;
+      this.quantityMoreOrder = this.currentStock.quantity - quantityUsedByCreated;
     }
   }
 
   public addBrewStock(brewStock: BrewStock) {
-    if (this.stock.findIndex(x => x.id === brewStock.stock.id) < 0) {
-      this.stock.push(brewStock.stock);
+    if (this.stocks.findIndex(x => x.id === brewStock.stock.id) < 0) {
+      this.stocks.push(brewStock.stock);
       if (!this.quantityInStock) { this.quantityInStock = 0; }
-      this.quantityInStock = brewStock.stock.quantity;
+      this.quantityInStock += brewStock.stock.quantity;
     }
     this.brewStock.push(brewStock);
+    this.quantityInStock -= brewStock.quantity;
   }
 }
 export class DataSourceOrder extends DataSource<TableOrder> {
@@ -149,7 +228,7 @@ export class DataSourceOrder extends DataSource<TableOrder> {
       const ingredient = stock.ingredient;
       let tableIngredient = src.find(x => x.ingredient.id === ingredient.id);
       if (!tableIngredient) {
-        tableIngredient = new TableOrder(ingredient, this.brewList);
+        tableIngredient = new TableOrder(ingredient, this.brewList, order);
         src.push(tableIngredient);
       }
       tableIngredient.addStock(stock);
@@ -158,7 +237,7 @@ export class DataSourceOrder extends DataSource<TableOrder> {
       const ingredient = stockNotOrder.brewStock.stock.ingredient;
       let tableIngredient = src.find(x => x.ingredient.id === ingredient.id);
       if (!tableIngredient) {
-        tableIngredient = new TableOrder(ingredient, this.brewList);
+        tableIngredient = new TableOrder(ingredient, this.brewList, order);
         src.push(tableIngredient);
       }
       tableIngredient.addBrewStock(stockNotOrder.brewStock);

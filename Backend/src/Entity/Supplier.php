@@ -30,9 +30,7 @@ class Supplier
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=IngredientStock::class, mappedBy="Suppliers")
-     * @SerializedName("ingredientStocks")
-     * @Exclude()
+     * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="supplier")
      */
     private $ingredientStocks;
 
@@ -70,7 +68,7 @@ class Supplier
     {
         if (!$this->ingredientStocks->contains($ingredientStock)) {
             $this->ingredientStocks[] = $ingredientStock;
-            $ingredientStock->addSupplier($this);
+            $ingredientStock->setSupplier($this);
         }
 
         return $this;
@@ -80,7 +78,10 @@ class Supplier
     {
         if ($this->ingredientStocks->contains($ingredientStock)) {
             $this->ingredientStocks->removeElement($ingredientStock);
-            $ingredientStock->removeSupplier($this);
+            // set the owning side to null (unless already changed)
+            if ($ingredientStock->getSupplier() === $this) {
+                $ingredientStock->setSupplier(null);
+            }
         }
 
         return $this;

@@ -7,6 +7,11 @@
   width: 100%;
 }
 
+mat-chip-list {
+  min-height: 60px;
+  display: block;
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;

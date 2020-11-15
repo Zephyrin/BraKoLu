@@ -13,10 +13,9 @@ export class IngredientStock {
   endedDate: Date;
   ingredient: Ingredient;
   brewStocks: BrewStock[];
-  suppliers: Supplier[];
+  supplier: Supplier;
 
   public constructor(stock: IngredientStock | undefined) {
-    this.suppliers = new Array();
     this.brewStocks = new Array();
     if (stock && stock !== null) {
       this.id = stock.id;
@@ -33,8 +32,8 @@ export class IngredientStock {
         this.endedDate = new Date(stock.endedDate);
       }
       this.ingredient = IngredientFactory.createCpy(stock.ingredient);
-      if (stock.suppliers) {
-        stock.suppliers.forEach(supplier => this.suppliers.push(new Supplier(supplier)));
+      if (stock.supplier) {
+        this.supplier = new Supplier(stock.supplier);
       }
       if (stock.brewStocks) {
         stock.brewStocks.forEach(brewStock => this.brewStocks.push(new BrewStock(brewStock)));
@@ -54,9 +53,9 @@ export class IngredientStock {
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
     if (includeSupplier === true) {
-      const suppliers = new Array();
-      this.suppliers.forEach(supplier => suppliers.push(supplier.toJSON(true)));
-      data[`suppliers`] = suppliers;
+      if (this.supplier) {
+        data[`supplier`] = this.supplier.toJSON(true);
+      }
     }
     {
       const brewStocks = new Array();

@@ -96,11 +96,6 @@ class IngredientStock
     private $ingredient;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Supplier::class, inversedBy="ingredientStocks")
-     */
-    private $suppliers;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="stocks")
      */
     private $ordered;
@@ -111,9 +106,13 @@ class IngredientStock
      */
     private $brewStocks;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Supplier::class, inversedBy="ingredientStocks")
+     */
+    private $supplier;
+
     public function __construct()
     {
-        $this->suppliers = new ArrayCollection();
         $this->brewStocks = new ArrayCollection();
     }
 
@@ -245,32 +244,6 @@ class IngredientStock
         return $this;
     }
 
-    /**
-     * @return Collection|Supplier[]
-     */
-    public function getSuppliers(): Collection
-    {
-        return $this->suppliers;
-    }
-
-    public function addSupplier(Supplier $supplier): self
-    {
-        if (!$this->suppliers->contains($supplier)) {
-            $this->suppliers[] = $supplier;
-        }
-
-        return $this;
-    }
-
-    public function removeSupplier(Supplier $supplier): self
-    {
-        if ($this->suppliers->contains($supplier)) {
-            $this->suppliers->removeElement($supplier);
-        }
-
-        return $this;
-    }
-
     public function getOrdered(): ?Order
     {
         return $this->ordered;
@@ -310,6 +283,18 @@ class IngredientStock
                 $brewStock->setStock(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

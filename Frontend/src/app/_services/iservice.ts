@@ -277,12 +277,12 @@ export abstract class CService<T> implements IService {
   public update(name: string, value: T, newValue: any): void {
     if (this.start() === true) {
       this.workingOn = value;
-      if (newValue === undefined || newValue === null) {
+      if ((newValue === undefined || newValue === null) && (name === undefined || name === null)) {
         this.delete(value);
       } else {
         if (this.workingOn) {
           const id = 'id';
-          if (newValue[id]) {
+          if (newValue && newValue[id]) {
             // On utilise le mode avec l'objet entier.
             this.updateOrCreate(newValue);
           } else {

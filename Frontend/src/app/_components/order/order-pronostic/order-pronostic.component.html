@@ -38,26 +38,37 @@
               *matHeaderCellDef> Stock </th>
           <td mat-cell
               *matCellDef="let row">
-            <mat-chip-list>
+            <mat-chip-list cdkDropList
+                           [id]="'brewStock_' + row.ingredient.id"
+                           [cdkDropListConnectedTo]="['brewOrder_' + row.ingredient.id]"
+                           (cdkDropListDropped)="dropIntoBrewStock($event, row)">
 
-              <mat-chip *ngFor="let brew of row.brewStock">
+              <mat-chip *ngFor="let brew of row.brewStock"
+                        cdkDrag
+                        [cdkDragData]="brew">
                 {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
               </mat-chip>
             </mat-chip-list>
           </td>
         </ng-container>
-
+        <!-- List des ingrédients des brassins sélectionnés qui sont déjà dispo dans le stock. -->
         <ng-container matColumnDef="order">
           <th mat-header-cell
               *matHeaderCellDef> Commande </th>
           <td mat-cell
               *matCellDef="let row">
-            <mat-list>
-
+            <mat-list *ngIf="row.currentStock">
               <mat-list-item>
                 <mat-chip-list mat-line
+                               [id]="'brewOrder_' + row.ingredient.id"
+                               [cdkDropListConnectedTo]="['brewStock_' + row.ingredient.id]"
+                               cdkDropList
+                               (cdkDropListDropped)="dropIntoBrewOrder($event, row)"
                                class="brew-line">
                   <mat-chip *ngFor="let brew of row.brewOrder"
+                            cdkDrag
+                            [cdkDragData]="brew"
+                            [cdkDragDisabled]="row.quantityInStock === 0 || row.quantityInStock === undefined"
                             class="brew-item">
                     {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
                   </mat-chip>
@@ -85,7 +96,7 @@
               <mat-list-item>
                 <div mat-line></div>
                 <div mat-line>
-                  <mat-label>Total : {{row.order.quantity}} {{row.ingredient.unit}}</mat-label>
+                  <mat-label>Total : {{row.currentStock.quantity}} {{row.ingredient.unit}}</mat-label>
                   <mat-form-field>
                     <mat-label>Prix</mat-label>
                     <input matInput
@@ -94,15 +105,17 @@
                            (change)="updatePrice($event, row)"
                            [disabled]="stockService.loadingSource"
                            min="0"
-                           [value]="row.order.price">
+                           [value]="row.currentStock.price">
                     <span matSuffix>€</span>
                   </mat-form-field>
                   <mat-form-field>
                     <mat-label>Fournisseur</mat-label>
                     <mat-select [disabled]="stockService.loadingSource"
                                 (selectionChange)="updateSupplier($event, row)"
+                                [compareWith]="compareWithId"
+                                [value]="row.currentStock.supplier"
                                 (change)="updateSupplier($event, row)">
-                      <mat-option value="undefined">Sans fournisseur</mat-option>
+                      <mat-option [value]="null">Sans fournisseur</mat-option>
                       <mat-option *ngFor="let supplier of supplierService.model"
                                   [value]="supplier">
                         {{supplier.name}}
