@@ -16,6 +16,11 @@ export interface IService {
    * Lors de l'initialisation, d'une création, d'une mise à jour ou d'une suppression.
    */
   loading: Subject<boolean>;
+
+  /**
+   * La valeur direct de loading sans avoir à l'observer.
+   */
+  loadingSource: boolean;
   /**
    * Les données sous forme de tableau.
    */

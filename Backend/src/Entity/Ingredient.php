@@ -116,6 +116,7 @@ abstract class Ingredient
     /**
      * @SerializedName("ingredientStocks")
      * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="ingredient", orphanRemoval=true)
+     * @Exclude()
      */
     private $ingredientStocks;
 

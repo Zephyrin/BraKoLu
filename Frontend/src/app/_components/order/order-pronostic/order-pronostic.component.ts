@@ -74,25 +74,36 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
     } else {
       const brewOrder = (event.item.data as BrewStock);
       let brewStock: BrewStock;
+      const quantityInStock = tableOrder.quantityInStock;
+      const currentStockQuantity = tableOrder.currentStock.quantity;
+      const brewOrderQuantity = brewOrder.quantity;
+      let brewStockQuantity = 0;
       tableOrder.brewStock.forEach(bStock => {
         if (bStock.stock.ingredient.id === brewOrder.stock.ingredient.id
           && bStock.brew.id === brewOrder.brew.id) {
           brewStock = bStock;
+          brewStockQuantity = brewStock.quantity;
         }
       });
-      const obs = this.service.brewOrderToStock(brewOrder, brewStock, tableOrder.order);
-      obs?.subscribe(() => {
-        if (brewOrder.quantity <= tableOrder.quantityInStock) {
-          brewStock.quantity = brewOrder.quantity;
-          tableOrder.quantityInStock -= brewOrder.quantity;
-          brewOrder.quantity = 0;
-        } else {
-          brewStock.quantity = brewOrder.quantity - tableOrder.quantityInStock;
-          tableOrder.quantityInStock = 0;
-          brewOrder.quantity -= brewStock.quantity;
-        }
-        tableOrder.currentStock.quantity -= brewStock.quantity;
-      });
+      if (brewOrder.quantity <= tableOrder.quantityInStock) {
+        brewStock.quantity = brewOrder.quantity;
+        tableOrder.quantityInStock -= brewOrder.quantity;
+        brewOrder.quantity = 0;
+      } else {
+        brewStock.quantity = brewOrder.quantity - tableOrder.quantityInStock;
+        tableOrder.quantityInStock = 0;
+        brewOrder.quantity -= brewStock.quantity;
+      }
+      tableOrder.currentStock.quantity -= brewStock.quantity;
+      this.service.brewOrderToStock(brewOrder, brewStock, tableOrder.order);
+      /* Pour le moment crée un doublons d'appel. À voir comment faire pour gérer
+      les erreurs */
+      /* obs?.subscribe(() => { }, () => {
+        tableOrder.quantityInStock = quantityInStock;
+        tableOrder.currentStock.quantity = currentStockQuantity;
+        brewOrder.quantity = brewOrderQuantity;
+        if (brewStock) { brewStock.quantity = brewStockQuantity; }
+      }); */
     }
   }
 
@@ -102,20 +113,30 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
     } else {
       const brewStock = event.item.data;
       let brewOrder: BrewStock;
+      const brewStockQuantity = brewStock.quantity;
+      const quantityInStock = tableOrder.quantityInStock;
+      const quantityOrder = tableOrder.currentStock.quantity;
+      let brewOrderQuantity = 0;
       tableOrder.brewOrder.forEach(bOrder => {
         if (bOrder.stock.ingredient.id === brewStock.stock.ingredient.id
           && bOrder.brew.id === brewStock.brew.id) {
           brewOrder = bOrder;
+          brewOrderQuantity = brewOrder.quantity;
         }
       });
-      this.service.brewStockToOrder(brewStock, brewOrder, tableOrder.order)?.subscribe(() => {
-        if (brewOrder) {
-          brewOrder.quantity += brewStock.quantity;
-          tableOrder.quantityInStock += brewStock.quantity;
-          tableOrder.currentStock.quantity += brewStock.quantity;
-          brewStock.quantity = 0;
-        }
-      });
+      if (brewOrder) {
+        brewOrder.quantity += brewStock.quantity;
+        tableOrder.quantityInStock += brewStock.quantity;
+        tableOrder.currentStock.quantity += brewStock.quantity;
+        brewStock.quantity = 0;
+      }
+      this.service.brewStockToOrder(brewStock, brewOrder, tableOrder.order);
+      /* ?.subscribe(() => { }, err => {
+      brewStock.quantity = brewStockQuantity;
+      tableOrder.quantityInStock = quantityInStock;
+      tableOrder.currentStock.quantity = quantityOrder;
+      if (brewOrder) { brewOrder.quantity = brewOrderQuantity; }
+    }); */
     }
 
   }

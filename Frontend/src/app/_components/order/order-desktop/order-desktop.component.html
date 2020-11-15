@@ -9,7 +9,7 @@
     </button>
     <app-table [service]="service"
                class="full-width"
-               [allowSelection]="true"
+               [allowSelection]="!service.loadingSource && !brewService.loadingSource && !supplierService.loadingSource"
                #tableComponent></app-table>
     <app-pagination [paginate]="service.paginate"></app-pagination>
   </mat-tab>

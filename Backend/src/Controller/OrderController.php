@@ -421,6 +421,9 @@ class OrderController extends AbstractFOSRestController
         }
         $brewStock = $this->getBrewStokById($brewStocks['brewStock']['id']);
         $brewOrder = $this->getBrewStokById($brewStocks['brewOrder']['id']);
+        if ($brewStock->getId() == $brewOrder->getId()) {
+            $this->createConflictError("Ce sont les mêmes. Putain, mais pourquoi ?!");
+        }
         if ($brewStock->getBrew()->getId() != $brewOrder->getBrew()->getId()) {
             $this->createConflictError("Les deux BrewStocks ne correspondent pas au même brassin ! Qu'essaies tu de faire ?");
         }
@@ -485,6 +488,9 @@ class OrderController extends AbstractFOSRestController
         $brewStocks = $this->getDataFromJson($request, true);
         $brewStock = $this->getBrewStokById($brewStocks['brewStock']['id']);
         $brewOrder = $this->getBrewStokById($brewStocks['brewOrder']['id']);
+        if ($brewStock->getId() == $brewOrder->getId()) {
+            $this->createConflictError("Ce sont les mêmes. Putain, mais pourquoi ?!");
+        }
         if ($brewStock->getBrew()->getId() != $brewOrder->getBrew()->getId()) {
             $this->createConflictError("Les deux BrewStocks ne correspondent pas au même brassin ! Qu'essaies tu de faire ?");
         }
