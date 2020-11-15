@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { BrewStock } from './../../_models/brew';
 import { Brew } from '@app/_models/brew';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -104,6 +106,30 @@ export class OrderService extends CService<Order> {
       }, error => {
         this.end(true, error);
       });
+    }
+  }
+
+  public brewStockToOrder(brewStock: BrewStock, brewOrder: BrewStock, order: Order): Observable<Order> {
+    if (this.start() === true) {
+      const obs = (this.http as OrderHttpService).brewStockToOrder(brewStock, brewOrder, order);
+      obs.subscribe(repsonse => {
+        this.end(true);
+      }, error => {
+        this.end(true, error);
+      });
+      return obs;
+    }
+  }
+
+  public brewOrderToStock(brewOrder: BrewStock, brewStock: BrewStock, order: Order): Observable<Order> {
+    if (this.start() === true) {
+      const obs = (this.http as OrderHttpService).brewOrderToStock(brewOrder, brewStock, order);
+      obs.subscribe(repsonse => {
+        this.end(true);
+      }, error => {
+        this.end(true, error);
+      });
+      return obs;
     }
   }
 

@@ -15,7 +15,7 @@
     </mat-selection-list>
     <button mat-button
             (click)="pronostic()">
-      <mat-icon>mediation</mat-icon>Pronostic !
+      <mat-icon>mediation</mat-icon>Pronostique !
     </button>
   </div>
   <div class="order">
@@ -42,12 +42,13 @@
                            [id]="'brewStock_' + row.ingredient.id"
                            [cdkDropListConnectedTo]="['brewOrder_' + row.ingredient.id]"
                            (cdkDropListDropped)="dropIntoBrewStock($event, row)">
-
-              <mat-chip *ngFor="let brew of row.brewStock"
-                        cdkDrag
-                        [cdkDragData]="brew">
-                {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
-              </mat-chip>
+              <ng-container *ngFor="let brew of row.brewStock">
+                <mat-chip *ngIf="brew.quantity > 0"
+                          cdkDrag
+                          [cdkDragData]="brew">
+                  {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
+                </mat-chip>
+              </ng-container>
             </mat-chip-list>
           </td>
         </ng-container>
@@ -65,13 +66,15 @@
                                cdkDropList
                                (cdkDropListDropped)="dropIntoBrewOrder($event, row)"
                                class="brew-line">
-                  <mat-chip *ngFor="let brew of row.brewOrder"
-                            cdkDrag
-                            [cdkDragData]="brew"
-                            [cdkDragDisabled]="row.quantityInStock === 0 || row.quantityInStock === undefined"
-                            class="brew-item">
-                    {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
-                  </mat-chip>
+                  <ng-container *ngFor="let brew of row.brewOrder">
+                    <mat-chip *ngIf="brew.quantity > 0"
+                              cdkDrag
+                              [cdkDragData]="brew"
+                              [cdkDragDisabled]="row.quantityInStock === 0 || row.quantityInStock === undefined"
+                              class="brew-item">
+                      {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
+                    </mat-chip>
+                  </ng-container>
                 </mat-chip-list>
                 <mat-divider></mat-divider>
               </mat-list-item>

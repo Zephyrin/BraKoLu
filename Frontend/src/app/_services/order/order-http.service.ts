@@ -1,4 +1,4 @@
-import { Brew } from '@app/_models/brew';
+import { Brew, BrewStock } from '@app/_models/brew';
 import { environment } from '@app/../environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -38,4 +38,14 @@ export class OrderHttpService extends HttpService<Order>{
       `${environment.apiUrl}/${this.getPath()}/pronostic/${order.id}`, { params }
     );
   }
+
+  public brewStockToOrder(brewStock: BrewStock, brewOrder: BrewStock, order: Order): Observable<Order> {
+    return this.http.patch<Order>(
+      `${environment.apiUrl}/${this.updatePath()}/${order.id}/brewStockToOrder`, { brewStock, brewOrder });
+  }
+  public brewOrderToStock(brewOrder: BrewStock, brewStock: BrewStock, order: Order): Observable<Order> {
+    return this.http.patch<Order>(
+      `${environment.apiUrl}/${this.updatePath()}/${order.id}/brewOrderToStock`, { brewOrder, brewStock });
+  }
+
 }

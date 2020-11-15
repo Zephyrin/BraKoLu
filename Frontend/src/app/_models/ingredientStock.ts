@@ -36,7 +36,13 @@ export class IngredientStock {
         this.supplier = new Supplier(stock.supplier);
       }
       if (stock.brewStocks) {
-        stock.brewStocks.forEach(brewStock => this.brewStocks.push(new BrewStock(brewStock)));
+        stock.brewStocks.forEach(brewStock => {
+          const newBrewStock = new BrewStock(brewStock);
+          this.brewStocks.push(newBrewStock);
+          if (!brewStock.stock) {
+            newBrewStock.stock = this;
+          }
+        });
       }
     }
   }
@@ -45,7 +51,7 @@ export class IngredientStock {
     return this.quantity / this.ingredient.unitFactor;
   }
 
-  toJSON(includeSupplier = true) {
+  toJSON(includeSupplier = true, includeBrewStock = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
@@ -57,9 +63,9 @@ export class IngredientStock {
         data[`supplier`] = this.supplier.toJSON(true);
       }
     }
-    {
+    if (includeBrewStock) {
       const brewStocks = new Array();
-      this.brewStocks.forEach(brewStock => brewStocks.push(brewStock.toJSON()));
+      this.brewStocks.forEach(brewStock => brewStocks.push(brewStock.toJSON(false)));
       data[`brewStocks`] = brewStocks;
     }
     return data;

@@ -135,10 +135,10 @@ export class BrewStock {
     }
   }
 
-  toJSON() {
+  toJSON(includeStock = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
-    if (this.stock) { data[`stock`] = this.stock.toJSON(); }
+    if (includeStock && this.stock) { data[`stock`] = this.stock.toJSON(true, false); }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
     if (this.apply !== undefined) { data[`apply`] = this.apply; }
     return data;

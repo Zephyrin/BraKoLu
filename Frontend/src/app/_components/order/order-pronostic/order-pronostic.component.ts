@@ -73,31 +73,26 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
       return;
     } else {
       const brewOrder = (event.item.data as BrewStock);
-      let brewStock = tableOrder.brewStock.find(c => c.brew.id === brewOrder.id);
-      if (brewStock) {
-
-      } else {
-        brewStock = new BrewStock(undefined);
-        brewStock.brew = brewOrder.brew;
-        brewStock.stock = brewOrder.stock;
+      let brewStock: BrewStock;
+      tableOrder.brewStock.forEach(bStock => {
+        if (bStock.stock.ingredient.id === brewOrder.stock.ingredient.id
+          && bStock.brew.id === brewOrder.brew.id) {
+          brewStock = bStock;
+        }
+      });
+      const obs = this.service.brewOrderToStock(brewOrder, brewStock, tableOrder.order);
+      obs?.subscribe(() => {
         if (brewOrder.quantity <= tableOrder.quantityInStock) {
           brewStock.quantity = brewOrder.quantity;
           tableOrder.quantityInStock -= brewOrder.quantity;
-          const index = tableOrder.brewOrder.findIndex(c => c.id === brewOrder.id);
-          if (index >= 0) {
-            tableOrder.brewOrder.splice(index, 1);
-          }
+          brewOrder.quantity = 0;
         } else {
           brewStock.quantity = brewOrder.quantity - tableOrder.quantityInStock;
           tableOrder.quantityInStock = 0;
           brewOrder.quantity -= brewStock.quantity;
         }
         tableOrder.currentStock.quantity -= brewStock.quantity;
-        const stock = new StockNotOrder(undefined);
-        stock.brewStock = brewStock;
-        stock.order = tableOrder.order;
-        tableOrder.brewStock.push(brewStock);
-      }
+      });
     }
   }
 
@@ -106,19 +101,23 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
       return;
     } else {
       const brewStock = event.item.data;
-      const brewOrder = tableOrder.brewOrder.find(c => c.brew.id === brewStock.brew.id);
-      if (brewOrder) {
-        brewOrder.quantity += brewStock.quantity;
-        tableOrder.quantityInStock += brewStock.quantity;
-        tableOrder.currentStock.quantity += brewStock.quantity;
-        const index = tableOrder.brewStock.findIndex(c => c.id === brewStock.id);
-        if (index >= 0) {
-          tableOrder.brewStock.splice(index, 1);
+      let brewOrder: BrewStock;
+      tableOrder.brewOrder.forEach(bOrder => {
+        if (bOrder.stock.ingredient.id === brewStock.stock.ingredient.id
+          && bOrder.brew.id === brewStock.brew.id) {
+          brewOrder = bOrder;
         }
-      } else {
-
-      }
+      });
+      this.service.brewStockToOrder(brewStock, brewOrder, tableOrder.order)?.subscribe(() => {
+        if (brewOrder) {
+          brewOrder.quantity += brewStock.quantity;
+          tableOrder.quantityInStock += brewStock.quantity;
+          tableOrder.currentStock.quantity += brewStock.quantity;
+          brewStock.quantity = 0;
+        }
+      });
     }
+
   }
 
   compareWithId(c1: any, c2: any): boolean {
