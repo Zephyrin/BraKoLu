@@ -1,17 +1,20 @@
-import { StockNotOrder } from './../../../_models/order';
-import { StockService } from './../../../_services/stock/stock.service';
+import { RemoveDialogComponent } from '@app/_components/helpers/remove-dialog/remove-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { IngredientService } from '@app/_services/ingredient/ingredient.service';
+import { BrewIngredientCreateComponent } from '@app/_components/brew/brew-ingredient-create/brew-ingredient-create.component';
+import { StockService } from '@app/_services/stock/stock.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BrewStock, Brew } from '@app/_models/brew';
 import { Order } from '@app/_models/order';
 import { OrderService } from '@app/_services/order/order.service';
 import { BrewService } from '@app/_services/brew/brew.service';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { MatSelectionList } from '@angular/material/list';
 import { DataSource } from '@angular/cdk/table';
 import { IngredientStock, Ingredient } from '@app/_models';
 import { CollectionViewer } from '@angular/cdk/collections';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-pronostic',
@@ -24,11 +27,13 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
   @Input() brewService: BrewService;
   @Input() service: OrderService;
   @Input() supplierService: SupplierService;
+  @Input() ingredientService: IngredientService;
+  private afterClosedSubscription: Subscription;
   dataSourceOrder = new DataSourceOrder();
   brewList = new Array<Brew>();
   private inputIntervalBeforeSave: any;
 
-  constructor(public stockService: StockService) {
+  constructor(public stockService: StockService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -173,6 +178,41 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
   updateSupplier(evt: any, tableOrder: TableOrder) {
     this.stockService.update('supplier', tableOrder.currentStock, evt.value === null ? null : evt.value?.id);
   }
+
+  addIngredient() {
+    if (this.order) {
+      const dialogRef = this.dialog.open(BrewIngredientCreateComponent, { minWidth: '30em' });
+      (dialogRef.componentInstance as unknown as BrewIngredientCreateComponent)
+        .ingredientService = this.ingredientService;
+      this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.service.addIngredientToOrder(this.order, result, this.addIngredientSuccess, this);
+        }
+        if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+      });
+    }
+  }
+
+  addIngredientSuccess(sender: OrderPronosticComponent, ingredientStock: IngredientStock) {
+    sender.dataSourceOrder.addIngredientStock(ingredientStock, sender.order);
+  }
+
+  deleteIngredientStock(ingredientStock: IngredientStock) {
+    if (this.order) {
+      const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
+      (dialogRef.componentInstance as RemoveDialogComponent).title = ingredientStock.ingredient.name;
+      this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
+        if (result && result.data) {
+          this.service.deleteIngredientToOrder(this.order, ingredientStock, this.deleteIngredientStockSuccess, this);
+        }
+        if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+      });
+    }
+  }
+
+  deleteIngredientStockSuccess(sender: OrderPronosticComponent, id: number) {
+    sender.dataSourceOrder.deleteIngredientSource(id);
+  }
 }
 
 export class TableOrder {
@@ -236,6 +276,7 @@ export class TableOrder {
     this.quantityInStock -= brewStock.quantity;
   }
 }
+
 export class DataSourceOrder extends DataSource<TableOrder> {
   source = new BehaviorSubject<TableOrder[]>([]);
   brewList: Brew[];
@@ -264,10 +305,32 @@ export class DataSourceOrder extends DataSource<TableOrder> {
     });
     this.source.next(src);
   }
+
+  public addIngredientStock(stock: IngredientStock, order: Order) {
+    const ingredient = stock.ingredient;
+    let tableIngredient = this.source.value.find(x => x.ingredient.id === ingredient.id);
+    if (!tableIngredient) {
+      tableIngredient = new TableOrder(ingredient, this.brewList, order);
+      this.source.value.push(tableIngredient);
+      this.source.next(this.source.value);
+    }
+    tableIngredient.addStock(stock);
+  }
+
+  public deleteIngredientSource(id: number) {
+    const index = this.source.value.findIndex(x => x.currentStock.id === id);
+    if (index >= 0) {
+      this.source.value.splice(index, 1);
+      this.source.next(this.source.value);
+    }
+
+  }
+
   connect(collectionViewer: CollectionViewer): Observable<TableOrder[] | readonly TableOrder[]> {
     return this.source.asObservable();
   }
   disconnect(collectionViewer: CollectionViewer): void {
+    this.source.value.splice(0, this.source.value.length);
     this.source.complete();
   }
 }

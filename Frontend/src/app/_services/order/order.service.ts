@@ -7,6 +7,7 @@ import { OrderHttpService } from './order-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 import { Injectable } from '@angular/core';
 import { Order } from '@app/_models/order';
+import { Ingredient, IngredientStock } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -130,6 +131,34 @@ export class OrderService extends CService<Order> {
         this.end(true, error);
       });
       return obs;
+    }
+  }
+
+  public addIngredientToOrder(order: Order, ingredient: Ingredient, callback, sender: any): void {
+    if (this.start() === true) {
+      (this.http as OrderHttpService).addIngredientToOrder(order, ingredient).subscribe(response => {
+        const nIngredient = new IngredientStock(response);
+        order.stocks.push(nIngredient);
+        this.end(true);
+        if (callback) {
+          callback(sender, nIngredient);
+        }
+      }, error => {
+        this.end(true, error);
+      });
+    }
+  }
+
+  public deleteIngredientToOrder(order: Order, ingredient: IngredientStock, callback, sender: any): void {
+    if (this.start() === true) {
+      (this.http as OrderHttpService).deleteIngredientToOrder(order, ingredient).subscribe(response => {
+        this.end(true);
+        const index = order.stocks.findIndex(x => x.id === ingredient.id);
+        if (index >= 0) { order.stocks.splice(index, 1); }
+        if (callback) { callback(sender, ingredient.id); }
+      }, error => {
+        this.end(true, error);
+      });
     }
   }
 

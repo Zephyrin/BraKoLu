@@ -1,3 +1,4 @@
+import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { OrderService } from '@app/_services/order/order.service';
 import { BrewService } from '@app/_services/brew/brew.service';
@@ -19,11 +20,18 @@ export class OrderDesktopComponent extends ChildBaseComponent<OrderCreateCompone
   constructor(
     public dialog: MatDialog,
     public brewService: BrewService,
-    public supplierService: SupplierService
+    public supplierService: SupplierService,
+    public ingredientService: IngredientService
   ) {
     super(dialog, OrderCreateComponent);
     brewService.load(true);
     supplierService.load(true);
+    ingredientService.load(true);
+  }
+
+  public onDestroy() {
+    this.orderService.formSelectedOrder.setValue(0);
+    this.orderService.selectedOrders.splice(0, this.orderService.selectedOrders.length);
   }
 
   public endUpdate() {

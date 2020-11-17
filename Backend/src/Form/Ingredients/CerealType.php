@@ -20,7 +20,7 @@ class CerealType extends AbstractType
             ->add("plant")
             ->add("type")
             ->add("format")
-            ->add("EBC");
+            ->add("ebc");
     }
 
     public function configureOptions(OptionsResolver $resolver)

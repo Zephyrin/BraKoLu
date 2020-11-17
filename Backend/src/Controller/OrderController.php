@@ -11,9 +11,11 @@ use App\Entity\Brew;
 use App\Entity\BrewStock;
 use App\Entity\IngredientStock;
 use App\Entity\StockNotOrder;
+use App\Entity\Ingredient;
 use App\Repository\BrewRepository;
 use App\Repository\BrewStockRepository;
 use App\Repository\IngredientStockRepository;
+use App\Repository\IngredientRepository;
 use App\Serializer\FormErrorSerializer;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -67,6 +69,10 @@ class OrderController extends AbstractFOSRestController
      */
     private $stockRepository;
     /**
+     * @var IngredientRepository
+     */
+    private $ingredientRepository;
+    /**
      * @var FormErrorSerializer
      */
     private $formErrorSerializer;
@@ -77,6 +83,7 @@ class OrderController extends AbstractFOSRestController
         BrewRepository $brewRepository,
         BrewStockRepository $brewStockRepository,
         IngredientStockRepository $stockRepository,
+        IngredientRepository $ingredientRepository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
@@ -84,6 +91,7 @@ class OrderController extends AbstractFOSRestController
         $this->brewRepository = $brewRepository;
         $this->brewStockRepository = $brewStockRepository;
         $this->stockRepository = $stockRepository;
+        $this->ingredientRepository = $ingredientRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
@@ -516,6 +524,66 @@ class OrderController extends AbstractFOSRestController
     }
 
     /**
+     * @Route("/order/{id}/addIngredient/{idIngredient}",
+     *  name="api_order_add_ingredient_patch",
+     *  methods={"PATCH"},
+     *  requirements={
+     *      "id": "\d+",
+     *      "idIngredient": "\d+"
+     * })
+     * 
+     * @SWG\Patch(
+     *     summary="Ajoute un ingrédient à la liste de la commande.",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *          response=204,
+     *          description="La mise à jour s'est terminée avec succès."
+     *     ),
+     *     @SWG\Response(
+     *          response=422,
+     *          description="Le JSON n'est pas correct ou il y a un problème avec un champs.<BR/>
+     * Regarde la réponse pour avoir plus d'information."
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="Quelque chose n'a pas été trouvé. Comme la commande, le stock, l'ingrédient, le brassin..."
+     *     ),
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          type="string",
+     *          description="L'ID utilisé pour retrouver la ligne de la commande."
+     *     ),
+     *     @SWG\Parameter(
+     *          name="idIngredient",
+     *          in="path",
+     *          type="string",
+     *          description="L'ID utilisé pour retrouver l'ingrédient."
+     *     )
+     * )
+     * @param string $id
+     * @param string $idIngredient
+     * @param Request $request
+     * @return View|JsonResponse
+     * @throws ExceptionInterface
+     */
+    public function patchOrderAddIngredient(Request $request, string $id, string $idIngredient)
+    {
+        $order = $this->getById($id);
+        $ingredient = $this->getIngredientById($idIngredient);
+        $stock = new IngredientStock();
+        $stock->setIngredient($ingredient);
+        $stock->setCreationDate(new DateTime());
+        $stock->setQuantity(0);
+        $stock->setState("created");
+        $order->addStock($stock);
+        $this->entityManager->persist($stock);
+        $this->entityManager->flush();
+        return $this->view($stock, Response::HTTP_CREATED);
+    }
+
+    /**
      * @Route("/order/{id}",
      *  name="api_order_patch",
      *  methods={"PATCH"},
@@ -625,6 +693,57 @@ class OrderController extends AbstractFOSRestController
     }
 
     /**
+     * @Route("/order/{id}/deleteIngredient/{idIngredient}",
+     *  name="api_order_ingredient_stock_delete",
+     *  methods={"DELETE"},
+     *  requirements={
+     *      "id": "\d+",
+     *      "idIngredient": "\d+"
+     * })
+     * 
+     * @SWG\Delete(
+     *     summary="Supprime l'ingrédient de la commande. Ne peut pas être annulé.",
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          type="string",
+     *          description="L'ID utilisé pour retrouver la ligne du brassin."
+     *     ),
+     *      @SWG\Parameter(
+     *          name="idIngredient",
+     *          in="path",
+     *          type="string",
+     *          description="L'ID utilisé pour retrouver l'ingrédient stock de la commande."
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="L'ingrédient stock a bien été supprimer du stock."
+     * )
+     *
+     * @SWG\Response(
+     *     response=404,
+     *     description="La ligne du brassin n'existe pas ou l'ingrédient stock."
+     * )
+     *
+     * @param string $id
+     * @param string $idIngredient
+     * @throws Exception
+     * @return View|JsonResponse
+     */
+    public function deleteIngredientStockAction(string $id, string $idIngredient)
+    {
+        $order = $this->getById($id);
+        $ingredientStock = $this->getIngredientStockById($idIngredient);
+        if ($order->getId() != $ingredientStock->getOrdered()->getId())
+            $this->createConflictError("L'ingredient stock n'appartient pas à la commande");
+
+        $this->entityManager->remove($ingredientStock);
+        $this->entityManager->flush();
+        return $this->view(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
      * @param string $id
      *
      * @return Order
@@ -667,5 +786,35 @@ class OrderController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $brew;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Ingredient
+     * @throws NotFoundHttpException
+     */
+    private function getIngredientById(string $id)
+    {
+        $value = $this->ingredientRepository->find($id);
+        if (null === $value) {
+            throw new NotFoundHttpException();
+        }
+        return $value;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return IngredientStock
+     * @throws NotFoundHttpException
+     */
+    private function getIngredientStockById(string $id)
+    {
+        $value = $this->stockRepository->find($id);
+        if (null === $value) {
+            throw new NotFoundHttpException();
+        }
+        return $value;
     }
 }

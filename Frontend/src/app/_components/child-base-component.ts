@@ -31,10 +31,12 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   public init(): void { }
   public endUpdate() { }
+  public onDestroy() { }
 
   ngOnDestroy(): void {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
     if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+    this.onDestroy();
   }
 
   openCreateDialog(event: MouseEvent): void {
