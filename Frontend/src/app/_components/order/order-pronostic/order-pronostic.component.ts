@@ -215,6 +215,23 @@ export class OrderPronosticComponent implements OnInit, AfterViewInit {
   }
 }
 
+export class HelperTableOrder {
+  stock: IngredientStock;
+  quantity = 0;
+  idsPointerForDropList = new Array<string>();
+
+  constructor(stock: IngredientStock) {
+    let quantity = 0;
+    this.stock = stock;
+    stock.brewStocks.forEach(x => {
+      quantity += x.quantity;
+    });
+    this.quantity = stock.quantity - quantity;
+  }
+
+  public get getDropId(): string { return this.stock.state + '_' + this.stock.id; }
+}
+
 export class TableOrder {
   ingredient: Ingredient;
   stocks: IngredientStock[];
@@ -226,11 +243,17 @@ export class TableOrder {
   quantityMoreOrder = 0;
   quantityInStock: number;
   brewList: Brew[];
+
+  stocksLink: HelperTableOrder[];
+  stocksOrder: HelperTableOrder[];
+
   constructor(ingredient: Ingredient, brewList: Brew[], order: Order) {
     this.ingredient = ingredient;
     this.stocks = new Array<IngredientStock>();
     this.brewStock = new Array<BrewStock>();
     this.brewOrder = new Array<BrewStock>();
+    this.stocksLink = new Array<HelperTableOrder>();
+    this.stocksOrder = new Array<HelperTableOrder>();
     this.brewList = brewList;
     this.order = order;
   }
@@ -240,11 +263,16 @@ export class TableOrder {
     if (!this.quantityInStock) { this.quantityInStock = 0; }
     let quantityUsed = 0;
     let quantityUsedByCreated = 0;
+    if (stock.state === 'stocked') {
+      this.stocksLink.push(new HelperTableOrder(stock));
+    } else {
+      this.stocksOrder.push(new HelperTableOrder(stock));
+    }
 
     stock.brewStocks.forEach(brewStock => {
       const index = this.brewList.findIndex(x => x.id === brewStock.brew.id);
       if (index >= 0) {
-        if (stock.state === 'stock') {
+        if (stock.state === 'stocked') {
           this.brewStock.push(brewStock);
           quantityUsed += brewStock.quantity;
         } else {

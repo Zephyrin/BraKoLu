@@ -571,13 +571,33 @@ class OrderController extends AbstractFOSRestController
     public function patchOrderAddIngredient(Request $request, string $id, string $idIngredient)
     {
         $order = $this->getById($id);
+        if ($order->getState() == 'received') {
+            $this->createConflictError("La commande ne peut-être modifiée car elle est déjà reçue.");
+        }
         $ingredient = $this->getIngredientById($idIngredient);
+        // Si l'ingrédient est lié à un brassin, on ajoute les lignes BrewStock avec des quantités à 0.
         $stock = new IngredientStock();
         $stock->setIngredient($ingredient);
         $stock->setCreationDate(new DateTime());
         $stock->setQuantity(0);
-        $stock->setState("created");
+        $stock->setState($order->getState());
+        foreach ($order->getStocks() as $dbStock) {
+            if ($dbStock->getIngredient()->getId() == $idIngredient && $dbStock->getState() == $order->getState()) {
+                // On copie les BrewStocks au nouvelle ingrédient.
+                foreach ($dbStock->getBrewStock() as $brewStock) {
+                    $newBrewStock = new BrewStock();
+                    $brewStock->getBrew()->addBrewStock($brewStock);
+                    $newBrewStock->setApply(false);
+
+                    $newBrewStock->setQuantity(0);
+                    $stock->addBrewStock($brewStock);
+                    $this->entityManager->persist($brewStock);
+                }
+                break;
+            }
+        }
         $order->addStock($stock);
+
         $this->entityManager->persist($stock);
         $this->entityManager->flush();
         return $this->view($stock, Response::HTTP_CREATED);

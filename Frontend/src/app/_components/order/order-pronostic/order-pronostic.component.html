@@ -30,6 +30,126 @@
           <th mat-header-cell
               *matHeaderCellDef> </th>
           <td mat-cell
+              *matCellDef="let row"> {{ row.ingredient.name}}</td>
+        </ng-container>
+        <!-- List des ingrédients qui utilise le stock. -->
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell
+              *matHeaderCellDef> Stock </th>
+          <td mat-cell
+              *matCellDef="let row">
+            <mat-chip-list cdkDropList
+                           *ngFor="let stock of row.stocksLink"
+                           [id]="stock.getDropId"
+                           [cdkDropListConnectedTo]="['brewOrder_' + row.ingredient.id]"
+                           (cdkDropListDropped)="dropIntoBrewStock($event, row)">
+              <ng-container *ngFor="let brew of stock.stock.brewStocks">
+                <mat-chip cdkDrag
+                          [cdkDragData]="brew">
+                  {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
+                </mat-chip>
+              </ng-container>
+            </mat-chip-list>
+          </td>
+        </ng-container>
+        <!-- List des ingrédients des brassins sélectionnés qui ne sont pas dispo dans le stock. -->
+        <ng-container matColumnDef="order">
+          <th mat-header-cell
+              *matHeaderCellDef> Commande </th>
+          <td mat-cell
+              *matCellDef="let row">
+            <mat-list *ngFor="let stock of row.stocksOrder">
+              <mat-list-item *ngIf="stock.stock.brewStocks.length > 0">
+                <mat-chip-list mat-line
+                               [id]="stock.getDropId"
+                               [cdkDropListConnectedTo]="['brewStock_' + row.ingredient.id]"
+                               cdkDropList
+                               (cdkDropListDropped)="dropIntoBrewOrder($event, row)"
+                               class="brew-line">
+                  <ng-container *ngFor="let brew of stock.stock.brewStocks">
+                    <mat-chip *ngIf="brew.quantity > 0"
+                              cdkDrag
+                              [cdkDragData]="brew"
+                              [cdkDragDisabled]="row.quantityInStock === 0 || row.quantityInStock === undefined"
+                              class="brew-item">
+                      {{brew.brew.name}} ({{brew.quantity}} {{row.ingredient.unit}})
+                    </mat-chip>
+                  </ng-container>
+                </mat-chip-list>
+              </mat-list-item>
+              <mat-divider *ngIf="stock.stock.brewStocks.length > 0"></mat-divider>
+              <mat-list-item>
+                <div mat-line></div>
+                <div mat-line>
+                  <mat-form-field>
+                    <mat-label>Surplus commandé</mat-label>
+                    <input matInput
+                           [placeholder]="'Ex: 23 ' + row.ingredient.unit"
+                           type="number"
+                           (change)="updateMoreQuantity($event, row)"
+                           [disabled]="stockService.loadingSource"
+                           min="0"
+                           [value]="stock.quantity">
+                    <span matSuffix>{{row.ingredient.unit}}</span>
+                  </mat-form-field>
+                </div>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item>
+                <div mat-line></div>
+                <div mat-line>
+                  <mat-label>Total : {{stock.stock.quantity}} {{row.ingredient.unit}}</mat-label>
+                  <mat-form-field>
+                    <mat-label>Prix</mat-label>
+                    <input matInput
+                           [placeholder]="'Ex: 23€'"
+                           type="number"
+                           (change)="updatePrice($event, row)"
+                           [disabled]="stockService.loadingSource"
+                           min="0"
+                           [value]="stock.stock.price">
+                    <span matSuffix>€</span>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Fournisseur</mat-label>
+                    <mat-select [disabled]="stockService.loadingSource"
+                                (selectionChange)="updateSupplier($event, row)"
+                                [compareWith]="compareWithId"
+                                [value]="row.currentStock.supplier"
+                                (change)="updateSupplier($event, row)">
+                      <mat-option [value]="null">Sans fournisseur</mat-option>
+                      <mat-option *ngFor="let supplier of supplierService.model"
+                                  [value]="supplier">
+                        {{supplier.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button mat-icon-button
+                          (click)="deleteIngredientStock(row.currentStock)"
+                          *ngIf="row.brewOrder.length == 0">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row
+            *matHeaderRowDef="['ingredient', 'stock', 'order']"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: ['ingredient', 'stock', 'order']"></tr>
+      </table>
+
+      <table mat-table
+             class="full-width"
+             [dataSource]="dataSourceOrder">
+        <!-- List des ingrédients -->
+        <ng-container matColumnDef="ingredient">
+          <th mat-header-cell
+              *matHeaderCellDef> </th>
+          <td mat-cell
               *matCellDef="let row"> {{ row.ingredient.name}}<span *ngIf="row.quantityInStock">({{ row.quantityInStock}}
               {{row.ingredient.unit}})</span></td>
         </ng-container>
