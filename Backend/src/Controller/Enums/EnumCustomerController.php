@@ -2,7 +2,7 @@
 
 namespace App\Controller\Enums;
 
-use App\Entity\Supplier;
+use App\Entity\Customer;
 use App\Serializer\FormErrorSerializer;
 use Behat\Behat\HelperContainer\Exception\NotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -19,30 +19,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 
 /**
- * Class EnumSupplierController
+ * Class EnumCustomerController
  * @package App\Controller\Enums
  * 
- * @Route("api/supplier")
- * @SWG\Tag(name="Suppliers' enums")
+ * @Route("api/customer")
+ * @SWG\Tag(name="Customer' enums")
  */
-class EnumSupplierController extends AbstractFOSRestController
+class EnumCustomerController extends AbstractFOSRestController
 {
     /**
      * @Route("/enum/{name}",
-     *  name="api_enum_suppliers_get",
+     *  name="api_enum_customer_get",
      *  methods={"GET"},
      *  requirements={
      *      "name": "(headers)"
      * })
      * 
      * @SWG\Get(
-     *  summary="Récupère les valeurs possible des énumérations Header des fournisseurs.",
+     *  summary="Récupère les valeurs possible des énumérations Header d'un client.",
      *  produces={"application/json"},
      *  @SWG\Parameter(
      *          name="name",
      *          type="string",
      *          required=true,
-     *          description="On cherche la liste de toutes les entêtes possible.",
+     *          description="On cherche soit la liste des états du client soit la liste de tout les entêtes possible.",
      *          in="path")
      * )
      * @SWG\Response(
@@ -63,7 +63,7 @@ class EnumSupplierController extends AbstractFOSRestController
     {
         switch ($name) {
             case 'headers':
-                return $this->view(Supplier::HEADERS);
+                return $this->view(Customer::HEADERS);
             default:
                 break;
         }
