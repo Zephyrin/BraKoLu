@@ -17,6 +17,7 @@ class CerealType extends AbstractType
     ) {
         $this->buildFormIngredient($builder, $options);
         $builder
+            ->add("category")
             ->add("plant")
             ->add("type")
             ->add("format")

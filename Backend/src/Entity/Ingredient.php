@@ -69,12 +69,13 @@ abstract class Ingredient
         ['value' => 'volume', 'viewValue' => 'Volume'],
         ['value' => 'color', 'viewValue' => 'Couleur'],
         ['value' => 'capacity', 'viewValue' => 'Capacité'],
-        ['value' => 'acidAlpha', 'viewValue' => 'Acid-Alpha'],
+        ['value' => 'acidAlpha', 'viewValue' => 'Acid Alpha'],
         ['value' => 'harvestYear', 'viewValue' => 'Année de la récolte'],
-        ['value' => 'childName', 'viewValue' => 'Catégory'],
+        ['value' => 'childName', 'viewValue' => 'Classe'],
         ['value' => 'size', 'viewValue' => 'Taille'],
         ['value' => 'productionYear', 'viewValue' => 'Année de production'],
         ['value' => 'head', 'viewValue' => 'Tête'],
+        ['value' => 'category', 'viewValue' => 'Catégorie'],
         ['value' => 'bottle', 'viewValue' => 'Bouteille']
     ];
     /**
