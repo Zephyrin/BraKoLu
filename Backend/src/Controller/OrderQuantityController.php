@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Helpers\HelperController;
 use App\Entity\OrderQuantity;
 use App\Repository\OrderQuantityRepository;
+use App\Repository\CustomerRepository;
 use App\Form\OrderQuantityType;
 use App\Controller\Helpers\HelperForwardController;
 use App\Serializer\FormErrorSerializer;
@@ -28,7 +29,7 @@ use DateTime;
  * Class OrderQuantityController
  * @package App\Controller
  *
- * @Route("api")
+ * @Route("api/client/{clientId}")
  * @SWG\Tag(name="OrderQuantity")
  * 
  */
@@ -49,6 +50,10 @@ class OrderQuantityController extends AbstractFOSRestController
     private $repository;
 
     /**
+     * @var CustomerRepository
+     */
+    private $clientRepository;
+    /**
      * @var FormErrorSerializer
      */
     private $formErrorSerializer;
@@ -56,18 +61,22 @@ class OrderQuantityController extends AbstractFOSRestController
     public function __construct(
         EntityManagerInterface $entityManager,
         OrderQuantityRepository $repository,
+        CustomerRepository $clientRepository,
         FormErrorSerializer $formErrorSerializer
     ) {
         $this->entityManager = $entityManager;
         $this->repository = $repository;
+        $this->clientRepository = $clientRepository;
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
     /**
-     * @Route("/orderQuantity",
+     * @Route("/ordered",
      *  name="api_orderQuantity_post",
-     *  methods={"POST"}
-     * )
+     *  methods={"POST"},
+     *  requirements={
+     *      "clientId": "\d+"
+     * })
      * 
      * @SWG\Post(
      *  consumes={"application/json"},
@@ -90,13 +99,14 @@ class OrderQuantityController extends AbstractFOSRestController
      *  )
      * )
      * @param Request $request
+     * @param int $clientId
      * @return View|JsonResponse
      * @throws ExceptionInterface
      */
-    public function postAction(Request $request)
+    public function postAction(Request $request, int $clientId)
     {
         $data = $this->getDataFromJson($request, true);
-
+        $client = $this->getClientById($clientId);
         $newEntity = new OrderQuantity();
         $form = $this->createForm(OrderQuantityType::class, $newEntity);
         $form->submit($data, false);
@@ -105,6 +115,7 @@ class OrderQuantityController extends AbstractFOSRestController
             $this
         );
         $insertData = $form->getData();
+        $insertData->setCustomer($client);
         $this->entityManager->persist($insertData);
 
         $this->entityManager->flush();
@@ -116,7 +127,8 @@ class OrderQuantityController extends AbstractFOSRestController
      *  name="api_orderQuantity_get",
      *  methods={"GET"},
      *  requirements={
-     *      "id": "\d+"
+     *      "id": "\d+",
+     *      "clientId": "\d+"
      * })
      * 
      * @SWG\Get(
@@ -144,7 +156,10 @@ class OrderQuantityController extends AbstractFOSRestController
     /**
      * @Route("/orderQuantitys",
      *  name="api_orderQuantity_gets",
-     *  methods={"GET"})
+     *  methods={"GET"},
+     *   requirements={
+     *      "clientId": "\d+"
+     * })
      * 
      * @SWG\Get(
      *     summary="Retourne la liste de tout les ordres d'achats en fonction des paramètres de recherche et de pagination. ",
@@ -191,7 +206,8 @@ class OrderQuantityController extends AbstractFOSRestController
      *  name="api_orderQuantity_patch",
      *  methods={"PATCH"},
      *  requirements={
-     *      "id": "\d+"
+     *      "id": "\d+",
+     *      "clientId": "\d+"
      * })
      * 
      * @SWG\Patch(
@@ -260,7 +276,8 @@ class OrderQuantityController extends AbstractFOSRestController
      *  name="api_orderQuantity_delete",
      *  methods={"DELETE"},
      *  requirements={
-     *      "id": "\d+"
+     *      "id": "\d+",
+     *      "clientId": "\d+"
      * })
      * 
      * @SWG\Delete(
@@ -308,5 +325,20 @@ class OrderQuantityController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $orderQuantity;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Client
+     * @throws NotFoundHttpException
+     */
+    private function getClientById(string $id)
+    {
+        $client = $this->clientRepository->find($id);
+        if (null === $client) {
+            throw new NotFoundHttpException();
+        }
+        return $client;
     }
 }

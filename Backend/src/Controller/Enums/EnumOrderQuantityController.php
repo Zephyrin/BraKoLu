@@ -19,20 +19,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\PreconditionFailedHttpException;
 
 /**
- * Class EnumStockController
+ * Class EnumOrderQuantityController
  * @package App\Controller\Enums
  * 
- * @Route("api/ingredient/stock")
+ * @Route("api/client/quantity/ordered")
  * @SWG\Tag(name="Ingredients' enums")
  */
-class EnumStockController extends AbstractFOSRestController
+class EnumOrderQuantityController extends AbstractFOSRestController
 {
     /**
      * @Route("/enum/{name}",
-     *  name="api_enum_ingredient_stock_get",
+     *  name="api_enum_order_quantity_get",
      *  methods={"GET"},
      *  requirements={
-     *      "name": "(states|headers)"
+     *      "name": "(headers)"
      * })
      * 
      * @SWG\Get(
@@ -42,7 +42,7 @@ class EnumStockController extends AbstractFOSRestController
      *          name="name",
      *          type="string",
      *          required=true,
-     *          description="On cherche soit la liste des états du stock soit la liste de tout les entêtes possible.",
+     *          description="On cherche les entêtes possible pour les ordres d'achats.",
      *          in="path")
      * )
      * @SWG\Response(

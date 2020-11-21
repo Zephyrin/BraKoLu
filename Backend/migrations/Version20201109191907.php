@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201108202511 extends AbstractMigration
+final class Version20201109191907 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -45,7 +45,7 @@ final class Version20201108202511 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_6BAF7870DCF9352B');
         $this->addSql('CREATE TEMPORARY TABLE __temp__ingredient AS SELECT id, bottle_id, name, comment, unit, unit_factor, plant, format, ebc, childName, acid_alpha, harvest_year, type, volume, color, capacity, size, head, production_year FROM ingredient');
         $this->addSql('DROP TABLE ingredient');
-        $this->addSql('CREATE TABLE ingredient (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bottle_id INTEGER DEFAULT NULL, name VARCHAR(1024) NOT NULL COLLATE BINARY, comment VARCHAR(255) DEFAULT NULL COLLATE BINARY, unit VARCHAR(25) DEFAULT NULL COLLATE BINARY, unit_factor INTEGER NOT NULL, plant VARCHAR(255) DEFAULT NULL COLLATE BINARY, format VARCHAR(255) DEFAULT NULL COLLATE BINARY, ebc INTEGER DEFAULT NULL, childName VARCHAR(255) NOT NULL COLLATE BINARY, acid_alpha INTEGER DEFAULT NULL, harvest_year DATE DEFAULT NULL, type VARCHAR(30) DEFAULT NULL COLLATE BINARY, volume INTEGER DEFAULT NULL, color VARCHAR(30) DEFAULT NULL COLLATE BINARY, capacity INTEGER DEFAULT NULL, size INTEGER DEFAULT NULL, head VARCHAR(30) DEFAULT NULL COLLATE BINARY, production_year DATE DEFAULT NULL, CONSTRAINT FK_6BAF7870DCF9352B FOREIGN KEY (bottle_id) REFERENCES ingredient (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE ingredient (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bottle_id INTEGER DEFAULT NULL, name VARCHAR(1024) NOT NULL COLLATE BINARY, comment VARCHAR(255) DEFAULT NULL COLLATE BINARY, unit VARCHAR(25) DEFAULT NULL COLLATE BINARY, unit_factor INTEGER NOT NULL, plant VARCHAR(255) DEFAULT NULL COLLATE BINARY, format VARCHAR(255) DEFAULT NULL COLLATE BINARY, ebc INTEGER DEFAULT NULL, childName VARCHAR(255) NOT NULL COLLATE BINARY, acid_alpha INTEGER DEFAULT NULL, harvest_year DATE DEFAULT NULL, type VARCHAR(30) DEFAULT NULL COLLATE BINARY, volume INTEGER DEFAULT NULL, color VARCHAR(30) DEFAULT NULL COLLATE BINARY, capacity INTEGER DEFAULT NULL, size INTEGER DEFAULT NULL, head VARCHAR(30) DEFAULT NULL COLLATE BINARY, production_year DATE DEFAULT NULL, category VARCHAR(255) DEFAULT NULL, CONSTRAINT FK_6BAF7870DCF9352B FOREIGN KEY (bottle_id) REFERENCES ingredient (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('INSERT INTO ingredient (id, bottle_id, name, comment, unit, unit_factor, plant, format, ebc, childName, acid_alpha, harvest_year, type, volume, color, capacity, size, head, production_year) SELECT id, bottle_id, name, comment, unit, unit_factor, plant, format, ebc, childName, acid_alpha, harvest_year, type, volume, color, capacity, size, head, production_year FROM __temp__ingredient');
         $this->addSql('DROP TABLE __temp__ingredient');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6BAF78705E237E06 ON ingredient (name)');
