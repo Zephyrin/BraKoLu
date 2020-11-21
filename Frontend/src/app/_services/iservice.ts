@@ -16,6 +16,11 @@ export interface IService {
    * Lors de l'initialisation, d'une création, d'une mise à jour ou d'une suppression.
    */
   loading: Subject<boolean>;
+
+  /**
+   * La valeur direct de loading sans avoir à l'observer.
+   */
+  loadingSource: boolean;
   /**
    * Les données sous forme de tableau.
    */
@@ -54,6 +59,11 @@ export interface IService {
    * La liste des entêtes à afficher pour les tableaux.
    */
   displayedColumns: string[];
+
+  /**
+   * Permet de sélectionner un élément du model.
+   */
+  selected: any;
 
   /**
    * Charge l'intégralité des données, utilisé par défaut.
@@ -141,6 +151,11 @@ export interface IService {
    * Recherche dans un tableau de ValueViewChild la valeur et retourne la valeur de la vue.
    */
   findInValueViewChild(valueViewChild: ValueViewChild[], value: string): string;
+
+  /**
+   * Change l'élément sélectionné.
+   */
+  setSelected(value: any): void;
 }
 
 export interface ValueViewChild {
@@ -151,6 +166,7 @@ export interface ValueViewChild {
 export abstract class CService<T> implements IService {
   //#region Attributes IService
   public model: T[];
+  public selected: T;
   public loading = new Subject<boolean>();
   public loadingSource = false;
   public errors = new FormErrors();
@@ -266,12 +282,12 @@ export abstract class CService<T> implements IService {
   public update(name: string, value: T, newValue: any): void {
     if (this.start() === true) {
       this.workingOn = value;
-      if (newValue === undefined || newValue === null) {
+      if ((newValue === undefined || newValue === null) && (name === undefined || name === null)) {
         this.delete(value);
       } else {
         if (this.workingOn) {
           const id = 'id';
-          if (newValue[id]) {
+          if (newValue && newValue[id]) {
             // On utilise le mode avec l'objet entier.
             this.updateOrCreate(newValue);
           } else {
@@ -386,5 +402,9 @@ export abstract class CService<T> implements IService {
       return find.viewValue;
     }
     return undefined;
+  }
+
+  public setSelected(value: T): void {
+    this.selected = value;
   }
 }

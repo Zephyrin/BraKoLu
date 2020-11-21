@@ -9,7 +9,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class IngredientStockType extends AbstractType
 {
@@ -29,9 +28,9 @@ class IngredientStockType extends AbstractType
                 ['class' => Ingredient::class, 'required' => true]
             )
             ->add(
-                'suppliers',
-                CollectionType::class,
-                ['entry_type' => Supplier::class]
+                'supplier',
+                EntityType::class,
+                ['class' => Supplier::class, 'required' => false]
             );
     }
 

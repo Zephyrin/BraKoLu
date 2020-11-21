@@ -1,0 +1,14 @@
+<app-ingredients-desktop [service]="ingredientService"
+                         [allowSelection]="true">
+</app-ingredients-desktop>
+<div mat-dialog-actions
+     class="flex-reverse">
+  <button mat-button
+          [disabled]="!ingredientService.selected"
+          (click)="onSubmitClick()">
+    <ng-container>Ajouter</ng-container>
+  </button>
+  <button mat-button
+          type="button"
+          (click)="onCancelClick()">Annuler</button>
+</div>

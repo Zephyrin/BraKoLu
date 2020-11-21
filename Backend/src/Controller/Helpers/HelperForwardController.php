@@ -46,4 +46,36 @@ trait HelperForwardController
         }
         return $response;
     }
+
+    public function createOrUpdate(?array &$data, string $name, string $controller, bool $clearData = false, bool $request = true)
+    {
+        $response_json = null;
+        $response = null;
+        if ($data == null)
+            return $response;
+        $patch = "App\\Controller\\" . $controller . "::putOrPatch";
+        $post = "App\\Controller\\" . $controller . "::post";
+        if (isset($data[$name]) && isset($data[$name][$this->id])) {
+            $id = $data[$name][$this->id];
+            unset($data[$name][$this->id]);
+            if ($request)
+                $response = $this->forward(
+                    $patch,
+                    ["data" => $data[$name], "id" => $id, "clearMissing" => $clearData]
+                );
+            $data[$name] = $id;
+        } else if (isset($data[$name]) && $data[$name] != null && !is_int($data[$name])) {
+            $response = $this->forward(
+                $post,
+                ['data' => $data[$name]]
+            );
+            if ($response->getStatusCode() == 201) {
+                $response_json = json_decode($response->getContent(), true);
+                if (isset($response_json[$this->id])) {
+                    $data[$name] = $response_json[$this->id];
+                }
+            }
+        }
+        return [$response, $name];
+    }
 }

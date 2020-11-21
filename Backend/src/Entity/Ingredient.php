@@ -117,12 +117,20 @@ abstract class Ingredient
     /**
      * @SerializedName("ingredientStocks")
      * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="ingredient", orphanRemoval=true)
+     * @Exclude()
      */
     private $ingredientStocks;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BrewIngredient::class, mappedBy="ingredient", orphanRemoval=true)
+     * @Exclude()
+     */
+    private $brewIngredients;
 
     public function __construct()
     {
         $this->ingredientStocks = new ArrayCollection();
+        $this->brewIngredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -201,6 +209,37 @@ abstract class Ingredient
             // set the owning side to null (unless already changed)
             if ($ingredientStock->getIngredient() === $this) {
                 $ingredientStock->setIngredient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewIngredient[]
+     */
+    public function getbrewIngredients(): Collection
+    {
+        return $this->brewIngredients;
+    }
+
+    public function addBrewIngredient(BrewIngredient $BrewIngredient): self
+    {
+        if (!$this->brewIngredients->contains($BrewIngredient)) {
+            $this->brewIngredients[] = $BrewIngredient;
+            $BrewIngredient->setIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrewIngredient(BrewIngredient $BrewIngredient): self
+    {
+        if ($this->brewIngredients->contains($BrewIngredient)) {
+            $this->brewIngredients->removeElement($BrewIngredient);
+            // set the owning side to null (unless already changed)
+            if ($BrewIngredient->getIngredient() === $this) {
+                $BrewIngredient->setIngredient(null);
             }
         }
 

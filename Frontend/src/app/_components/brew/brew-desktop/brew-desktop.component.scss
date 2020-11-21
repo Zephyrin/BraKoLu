@@ -1,0 +1,68 @@
+
+.action-container {
+  display: flex;
+  justify-content: right;
+}
+
+.action-container {
+  button {
+  opacity: 0.5;
+  }
+  button:hover {
+    opacity: 1;
+  }
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+.flex {
+  display: flex;
+}
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-row {
+  cursor: pointer;
+}
+
+.element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+  margin-left: 5px;
+}
+
+.element-save {
+  display: flex;
+  flex-flow: row-reverse;
+}
+
+.element-diagram:first {
+  margin-left: 0;
+}
+
+.element-name {
+  font-weight: bold;
+  font-size: x-large;
+  line-height: normal;
+}
+
+.element-specification {
+  font-style: italic;
+}
+
+.element-description {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.mat-expansion-panel-header-description {
+  justify-content: right;
+  align-items: center;
+}

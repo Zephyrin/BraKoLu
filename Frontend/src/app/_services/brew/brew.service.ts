@@ -3,7 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { BrewHttpService } from './brew-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 import { Injectable } from '@angular/core';
-import { Brew } from '@app/_models/brew';
+import { Brew, BrewIngredient as BrewIngredient } from '@app/_models/brew';
+import { Ingredient, IngredientStock } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +84,46 @@ export class BrewService extends CService<Brew> {
         break;
     }
     return value[name];
+  }
+
+  public addIngredientToBrew(brew: Brew, ingredient: Ingredient) {
+    const ingredientToBrew = new BrewIngredient(undefined);
+    ingredientToBrew.brew = brew;
+    ingredientToBrew.ingredient = ingredient;
+    ingredientToBrew.quantity = ingredientToBrew.quantity;
+    (this.http as BrewHttpService).addIngredientToBrew(brew.id, ingredientToBrew).subscribe(response => {
+      ingredientToBrew.id = response.id;
+      brew.brewIngredients.push(ingredientToBrew);
+      this.end(true);
+    }, err => {
+      this.end(true, err);
+    });
+  }
+
+  public updateIngredientToBrew(brew: Brew, ingredient: BrewIngredient, newValue: number) {
+    const newIngredient = new BrewIngredient(undefined);
+    newIngredient.quantity = newValue;
+    (this.http as BrewHttpService).updateIngredientToBrew(brew.id, ingredient.id, newIngredient).subscribe(response => {
+      ingredient.quantity = newValue;
+      this.end(true);
+    }, err => {
+      this.end(true, err);
+    });
+  }
+
+  public deleteIngredientToBrew(brew: Brew, ingredient: BrewIngredient) {
+    (this.http as BrewHttpService).deleteIngredientToBrew(brew.id, ingredient.id).subscribe(response => {
+      const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
+      if (index >= 0) { brew.brewIngredients.splice(index, 1); }
+      this.end(true);
+    }, err => {
+      if (err.code === 404) {
+        const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
+        if (index >= 0) { brew.brewIngredients.splice(index, 1); }
+        this.end(true);
+      } else {
+        this.end(true, err);
+      }
+    });
   }
 }

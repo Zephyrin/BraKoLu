@@ -11,7 +11,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./brew-create.component.scss']
 })
 export class BrewCreateComponent extends ChildCreateFormBaseComponent {
-
   constructor(
     public dialogRef: MatDialogRef<BrewCreateComponent>,
     public service: BrewService,

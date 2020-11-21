@@ -52,20 +52,6 @@
         {{service.form.get('ebc').errors?.serverError}}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>État</mat-label>
-      <mat-select required
-                  formControlName="state"
-                  placeholder="Ex: Création">
-        <mat-option *ngFor="let state of service.states"
-                    [value]="state.value">
-          {{state.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-error>
-        {{service.form.get('state').errors?.serverError}}
-      </mat-error>
-    </mat-form-field>
   </mat-dialog-content>
   <div mat-dialog-actions
        class="flex-reverse">

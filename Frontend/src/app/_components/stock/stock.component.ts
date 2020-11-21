@@ -1,7 +1,7 @@
 import { StockService } from '@app/_services/stock/stock.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BaseComponent } from '@app/_components/base-component';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-stock',

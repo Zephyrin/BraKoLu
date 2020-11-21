@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Brew;
+use App\Entity\BrewIngredient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +25,12 @@ class BrewType extends AbstractType
             ->add("state")
             ->add("producedQuantity")
             ->add("started")
-            ->add("ended");
+            ->add("ended")
+            ->add(
+                'brewIngredients',
+                CollectionType::class,
+                ['entry_type' => BrewIngredient::class]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

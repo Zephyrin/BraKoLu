@@ -8,7 +8,9 @@ import { ComponentType } from '@angular/cdk/portal';
 
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   private serviceEndUpdateSubscription: Subscription;
+  private afterClosedSubscription: Subscription;
   @Input() service: IService;
+  @Input() allowSelection = false;
   constructor(
     public dialog: MatDialog,
     protected componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
@@ -21,7 +23,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
       if (data === true) {
         this.endUpdate();
-        this.dialog.closeAll();
+        //this.dialog.closeAll();
       }
     });
     this.init();
@@ -29,36 +31,45 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   public init(): void { }
   public endUpdate() { }
+  public onDestroy() { }
 
   ngOnDestroy(): void {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
+    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+    this.onDestroy();
   }
 
-  openCreateDialog(): void {
+  openCreateDialog(event: MouseEvent): void {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).create();
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
   }
 
-  openUpdateDialog(element: any): void {
+  openUpdateDialog(event: MouseEvent, element: any): void {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
   }
 
-  openDeleteDialog(element: any, title: string): void {
+  openDeleteDialog(evt: MouseEvent, element: any, title: string): void {
+    evt.stopPropagation();
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
     (dialogRef.componentInstance as RemoveDialogComponent).title = title;
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result && result.data === true) {
         this.service.update(undefined, element, null);
       }
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     });
   }
 }

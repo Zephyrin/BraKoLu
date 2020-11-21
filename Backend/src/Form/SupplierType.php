@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Supplier;
-use App\Entity\IngredientStock;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,12 +17,7 @@ class SupplierType extends AbstractType
     ) {
         $builder
             ->add("id")
-            ->add("name")
-            ->add(
-                'ingredientStocks',
-                CollectionType::class,
-                ['entry_type' => IngredientStock::class]
-            );
+            ->add("name");
     }
 
     public function configureOptions(OptionsResolver $resolver)

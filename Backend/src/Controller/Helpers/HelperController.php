@@ -47,17 +47,35 @@ trait HelperController
      */
     public function validationError(
         FormInterface $form,
-        AbstractFOSRestController $controller
+        AbstractFOSRestController $controller,
+        $responses = null
     ) {
-        if (false === $form->isValid()) {
-            throw new JsonException(new JsonResponse(
-                [
-                    'status' => 'Erreur',
-                    'message' => 'Erreur de validation',
-                    'errors' => $controller->formErrorSerializer->normalize($form)
-                ],
-                JsonResponse::HTTP_UNPROCESSABLE_ENTITY
-            ));
+        $data = [
+            'status' => 'Erreur',
+            'message' => 'Erreur de validation',
+            'errors' => $controller->formErrorSerializer->normalize($form),
+        ];
+        $inError = !$form->isValid();
+        if ($responses != null) {
+            foreach ($responses as $index => $field) {
+                $code = 200;
+                if ($field[0] != null)
+                    $code = $field[0]->getStatusCode();
+                if ($code != 201 && $code != 200 && $code != 204) {
+                    $inError = true;
+                    if ($field[0] != null) {
+                        $errors = json_decode($field[0]->getContent(), true);
+                        if (isset($errors["errors"][0])) {
+                            if (isset($data["errors"][0]["children"])) {
+                                $data["errors"][0]["children"][$field[1]] = $errors["errors"][0];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($inError) {
+            throw new JsonException(new JsonResponse($data, JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
         }
         return true;
     }

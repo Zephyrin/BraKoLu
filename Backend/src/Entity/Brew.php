@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BrewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\EnumHelper;
 use JMS\Serializer\Annotation\SerializedName;
@@ -16,20 +18,19 @@ class Brew
 {
     const HEADERS = [
         ['value' => 'name', 'viewValue' => 'Nom'],
-        ['value' => 'abv', 'viewValue' => 'ABV'],
+        /* ['value' => 'abv', 'viewValue' => 'ABV'],
         ['value' => 'ibu', 'viewValue' => 'IBU'],
-        ['value' => 'ebc', 'viewValue' => 'EBC'],
+        ['value' => 'ebc', 'viewValue' => 'EBC'], */
         ['value' => 'state', 'viewValue' => 'État'],
-        ['value' => 'producedQuantity', 'viewValue' => 'Quantité réalisée'],
+        /* ['value' => 'producedQuantity', 'viewValue' => 'Quantité réalisée'], */
         ['value' => 'start', 'viewValue' => 'Début'],
-        ['value' => 'ended', 'viewValue' => 'Fin'],
-        ['value' => 'created', 'viewValue' => 'Créé']
+        /* ['value' => 'ended', 'viewValue' => 'Fin'], */
+        /* ['value' => 'created', 'viewValue' => 'Créé'] */
     ];
 
     const STATES = [
         ['value' => 'created', 'viewValue' => 'Créé'],
-        ['value' => 'validate', 'viewValue' => 'Validé'],
-        ['value' => 'ordered', 'viewValue' => 'Commandé'],
+        ['value' => 'planed', 'viewValue' => 'Planifié'],
         ['value' => 'brewing', 'viewValue' => 'Brassage'],
         ['value' => 'packaging', 'viewValue' => 'Conditionnement'],
         ['value' => 'complete', 'viewValue' => 'Complété'],
@@ -97,9 +98,23 @@ class Brew
      */
     private $created;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BrewIngredient::class, mappedBy="brew", orphanRemoval=true)
+     * @SerializedName("brewIngredients")
+     */
+    private $brewIngredients;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="brew", orphanRemoval=true)
+     * @SerializedName("brewStocks")
+     */
+    private $brewStocks;
+
     public function __construct()
     {
         $this->created = new \DateTime();
+        $this->brewIngredients = new ArrayCollection();
+        $this->brewStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +226,68 @@ class Brew
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewIngredient[]
+     */
+    public function getbrewIngredients(): Collection
+    {
+        return $this->brewIngredients;
+    }
+
+    public function addBrewIngredient(BrewIngredient $BrewIngredient): self
+    {
+        if (!$this->brewIngredients->contains($BrewIngredient)) {
+            $this->brewIngredients[] = $BrewIngredient;
+            $BrewIngredient->setBrew($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrewIngredient(BrewIngredient $BrewIngredient): self
+    {
+        if ($this->brewIngredients->contains($BrewIngredient)) {
+            $this->brewIngredients->removeElement($BrewIngredient);
+            // set the owning side to null (unless already changed)
+            if ($BrewIngredient->getBrew() === $this) {
+                $BrewIngredient->setBrew(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewStock[]
+     */
+    public function getBrewStocks(): Collection
+    {
+        return $this->brewStocks;
+    }
+
+    public function addBrewStock(BrewStock $brewStock): self
+    {
+        if (!$this->brewStocks->contains($brewStock)) {
+            $this->brewStocks[] = $brewStock;
+            $brewStock->setBrew($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrewStock(BrewStock $brewStock): self
+    {
+        if ($this->brewStocks->contains($brewStock)) {
+            $this->brewStocks->removeElement($brewStock);
+            // set the owning side to null (unless already changed)
+            if ($brewStock->getBrew() === $this) {
+                $brewStock->setBrew(null);
+            }
+        }
 
         return $this;
     }

@@ -36,6 +36,19 @@ class IngredientStockRepository extends ServiceEntityRepository
         return $this->resultCount($query, $paramFetcher);
     }
 
+    public function findAvalaibleStock(int $ingredientId)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.state != :state')
+            ->andWhere('e.quantity > 0')
+            ->andWhere('e.ingredient = :ingredientId')
+            ->setParameter('state', 'sold_out')
+            ->setParameter('ingredientId', $ingredientId)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return IngredientStock[] Returns an array of IngredientStock objects
     //  */

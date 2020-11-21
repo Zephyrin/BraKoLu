@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @ORM\Entity(repositoryClass=IngredientStockRepository::class)
@@ -51,14 +52,12 @@ class IngredientStock
     private $creationDate;
 
     /**
-     * @Assert\NotBlank(message="The quantity should not be null")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $quantity;
 
     /**
-     * @Assert\NotBlank(message="The price should not be null")
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $price;
 
@@ -97,15 +96,53 @@ class IngredientStock
     private $ingredient;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Supplier::class, inversedBy="ingredientStocks")
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="stocks")
      */
-    private $Suppliers;
+    private $ordered;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="stock", orphanRemoval=true)
+     * @SerializedName("brewStocks")
+     */
+    private $brewStocks;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Supplier::class, inversedBy="ingredientStocks")
+     */
+    private $supplier;
 
     public function __construct()
     {
-        $this->Suppliers = new ArrayCollection();
+        $this->brewStocks = new ArrayCollection();
     }
 
+    public function calcFreeQuantity(): int
+    {
+        $quantity = $this->quantity;
+        if ($quantity == null)
+            $quantity = 0;
+        foreach ($this->brewStocks as $brew) {
+            if (!$brew->getApply())
+                $quantity = $quantity - $brew->getQuantity();
+        }
+        return $quantity;
+    }
+
+    public function calcFreeQuantityWithoutCreatedBrew()
+    {
+        $quantity = $this->quantity;
+        if ($quantity == null)
+            $quantity = 0;
+        foreach ($this->brewStocks as $brew) {
+            if (
+                !$brew->getApply()
+                && $brew->getBrew()->getState() != 'created'
+                && $brew->getBrew()->getState() != 'validate'
+            )
+                $quantity = $quantity - $brew->getQuantity();
+        }
+        return $quantity;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -128,7 +165,7 @@ class IngredientStock
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(?int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -140,7 +177,7 @@ class IngredientStock
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 
@@ -207,28 +244,57 @@ class IngredientStock
         return $this;
     }
 
-    /**
-     * @return Collection|Supplier[]
-     */
-    public function getSuppliers(): Collection
+    public function getOrdered(): ?Order
     {
-        return $this->Suppliers;
+        return $this->ordered;
     }
 
-    public function addSupplier(Supplier $supplier): self
+    public function setOrdered(?Order $ordered): self
     {
-        if (!$this->Suppliers->contains($supplier)) {
-            $this->Suppliers[] = $supplier;
+        $this->ordered = $ordered;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BrewStock[]
+     */
+    public function getBrewStocks(): Collection
+    {
+        return $this->brewStocks;
+    }
+
+    public function addBrewStock(BrewStock $brewStock): self
+    {
+        if (!$this->brewStocks->contains($brewStock)) {
+            $this->brewStocks[] = $brewStock;
+            $brewStock->setStock($this);
         }
 
         return $this;
     }
 
-    public function removeSupplier(Supplier $supplier): self
+    public function removeBrewStock(BrewStock $brewStock): self
     {
-        if ($this->Suppliers->contains($supplier)) {
-            $this->Suppliers->removeElement($supplier);
+        if ($this->brewStocks->contains($brewStock)) {
+            $this->brewStocks->removeElement($brewStock);
+            // set the owning side to null (unless already changed)
+            if ($brewStock->getStock() === $this) {
+                $brewStock->setStock(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

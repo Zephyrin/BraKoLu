@@ -1,3 +1,6 @@
+import { IngredientFactory } from './ingredientFactory';
+import { Ingredient } from '@app/_models';
+import { IngredientStock } from './ingredientStock';
 export class Brew {
   id: number;
   name: string;
@@ -9,8 +12,10 @@ export class Brew {
   started: Date;
   ended: Date;
   created: Date;
-
+  brewIngredients: BrewIngredient[];
   public constructor(value: Brew | undefined) {
+    this.brewIngredients = new Array();
+    this.state = 'created';
     if (value && value !== null) {
       this.id = value.id;
       this.name = value.name;
@@ -27,6 +32,13 @@ export class Brew {
       }
       if (value.created) {
         this.created = new Date(value.created);
+      }
+      if (value.brewIngredients?.length > 0) {
+        value.brewIngredients.forEach(e => {
+          const child = new BrewIngredient(e);
+          child.brew = this;
+          this.brewIngredients.push(child);
+        });
       }
     }
   }
@@ -75,3 +87,61 @@ export class Brew {
     return data;
   }
 }
+
+export class BrewIngredient {
+  id: number;
+  brew: Brew;
+  ingredient: Ingredient;
+  quantity: number;
+
+  public constructor(value: BrewIngredient | undefined) {
+    this.quantity = 0;
+    if (value && value !== null) {
+      this.id = value.id;
+      this.brew = value.brew;
+      if (value.ingredient) {
+        this.ingredient = IngredientFactory.createCpy(value.ingredient);
+      }
+      this.quantity = value.quantity;
+    }
+  }
+
+  toJSON() {
+    const data = {};
+    if (this.id) { data[`id`] = this.id; }
+    if (this.ingredient) { data[`ingredient`] = this.ingredient.toJSON(); }
+    if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
+    return data;
+  }
+}
+
+export class BrewStock {
+  id: number;
+  brew: Brew;
+  stock: IngredientStock;
+  quantity: number;
+  apply: boolean;
+
+  public constructor(value: BrewStock | undefined) {
+    this.quantity = 0;
+    this.apply = false;
+    if (value && value !== null) {
+      this.id = value.id;
+      this.brew = value.brew;
+      if (value.stock) {
+        this.stock = new IngredientStock(value.stock);
+      }
+      this.quantity = value.quantity;
+    }
+  }
+
+  toJSON(includeStock = true) {
+    const data = {};
+    if (this.id) { data[`id`] = this.id; }
+    if (includeStock && this.stock) { data[`stock`] = this.stock.toJSON(true, false); }
+    if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
+    if (this.apply !== undefined) { data[`apply`] = this.apply; }
+    return data;
+  }
+}
+

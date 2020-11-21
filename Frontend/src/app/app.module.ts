@@ -29,6 +29,10 @@ import { IngredientsComponent } from './_components/ingredients/ingredients.comp
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
 import { ToolsEditComponent } from './_components/tools/tools-edit/tools-edit.component';
 import { MatTableModule } from '@angular/material/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatStepperModule } from '@angular/material/stepper';
+
 import { IngredientsDesktopComponent } from './_components/ingredients/ingredients-desktop/ingredients-desktop.component';
 import { IngredientsMobileComponent } from './_components/ingredients/ingredients-mobile/ingredients-mobile.component';
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
@@ -47,6 +51,15 @@ import { BrewComponent } from './_components/brew/brew.component';
 import { BrewMobileComponent } from './_components/brew/brew-mobile/brew-mobile.component';
 import { BrewDesktopComponent } from './_components/brew/brew-desktop/brew-desktop.component';
 import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.component';
+import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredient-create/brew-ingredient-create.component';
+import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-desktop.component';
+import { OrderComponent } from './_components/order/order.component';
+import { OrderDesktopComponent } from './_components/order/order-desktop/order-desktop.component';
+import { OrderMobileComponent } from './_components/order/order-mobile/order-mobile.component';
+import { OrderCreateComponent } from './_components/order/order-create/order-create.component';
+import { OrderPronosticComponent } from './_components/order/order-pronostic/order-pronostic.component';
+import { BrewsTableComponent } from './_components/brew/brew-desktop/brews-table/brews-table.component';
+import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/brew-details-desktop/brew-details-desktop.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +84,16 @@ import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.
     BrewMobileComponent,
     BrewDesktopComponent,
     BrewCreateComponent,
+    BrewIngredientCreateComponent,
+    BrewIngredientDesktopComponent,
+    OrderComponent,
+    OrderDesktopComponent,
+    OrderMobileComponent,
+    OrderCreateComponent,
+    OrderPronosticComponent,
+    BrewsTableComponent,
+    BrewDetailsDesktopComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -98,7 +121,10 @@ import { BrewCreateComponent } from './_components/brew/brew-create/brew-create.
     MatExpansionModule,
     MatChipsModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CdkTreeModule,
+    MatBadgeModule,
+    MatStepperModule
   ],
   providers: [
     DatePipe

@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { ValueViewChild } from '@app/_services/iservice';
@@ -19,6 +18,7 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
   @Input() service: IService;
   dataSource: any = [];
   @ViewChild(MatSort) sort: MatSort;
+  @Input() allowSelection = false;
 
   constructor(
     public dialog: MatDialog) {

@@ -28,4 +28,8 @@ export abstract class Ingredient {
     if (this.childName) { data[`childName`] = this.childName; }
     return data;
   }
+
+  brewView(): string {
+    return this.name;
+  }
 }

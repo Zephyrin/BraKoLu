@@ -30,12 +30,12 @@
         *matCellDef="let row">
       <div class="action-container">
         <button mat-icon-button
-                (click)="openUpdateDialog(row)"
+                (click)="openUpdateDialog($event, row)"
                 [attr.aria-label]="'Met à jour ' + service.getDisplay('name',row)">
           <mat-icon>update</mat-icon>
         </button>
         <button mat-icon-button
-                (click)="openDeleteDialog(row, service.getDisplay('name', row))"
+                (click)="openDeleteDialog($event, row, service.getDisplay('name', row))"
                 [attr.aria-label]="'Supprime ' + service.getDisplay('name',row)">
           <mat-icon>delete</mat-icon>
         </button>
@@ -46,5 +46,8 @@
       class="tr-box"
       *matHeaderRowDef="service.displayedColumns"></tr>
   <tr mat-row
+      (click)="allowSelection ? service.setSelected(row) : undefined"
+      [class.selected-row]="service.selected === row"
+      [class.allow-select]="allowSelection"
       *matRowDef="let row; columns: service.displayedColumns;"></tr>
 </table>

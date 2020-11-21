@@ -1,3 +1,4 @@
+import { BrewStock } from './brew';
 import { IngredientFactory } from './ingredientFactory';
 import { Supplier } from './supplier';
 import { Ingredient } from './ingredient';
@@ -11,10 +12,11 @@ export class IngredientStock {
   orderedDate: Date;
   endedDate: Date;
   ingredient: Ingredient;
-  suppliers: Supplier[];
+  brewStocks: BrewStock[];
+  supplier: Supplier;
 
-  public constructor(stock: IngredientStock | undefined, createSupplier = false) {
-    this.suppliers = new Array();
+  public constructor(stock: IngredientStock | undefined) {
+    this.brewStocks = new Array();
     if (stock && stock !== null) {
       this.id = stock.id;
       if (stock.creationDate) {
@@ -30,12 +32,17 @@ export class IngredientStock {
         this.endedDate = new Date(stock.endedDate);
       }
       this.ingredient = IngredientFactory.createCpy(stock.ingredient);
-      if (stock.suppliers) {
-        if (createSupplier === true) {
-          stock.suppliers.forEach(supplier => this.suppliers.push(new Supplier(supplier, false)));
-        } else {
-          stock.suppliers.forEach(supplier => this.suppliers.push(supplier));
-        }
+      if (stock.supplier) {
+        this.supplier = new Supplier(stock.supplier);
+      }
+      if (stock.brewStocks) {
+        stock.brewStocks.forEach(brewStock => {
+          const newBrewStock = new BrewStock(brewStock);
+          this.brewStocks.push(newBrewStock);
+          if (!brewStock.stock) {
+            newBrewStock.stock = this;
+          }
+        });
       }
     }
   }
@@ -44,17 +51,22 @@ export class IngredientStock {
     return this.quantity / this.ingredient.unitFactor;
   }
 
-  toJSON(includeSupplier = true) {
+  toJSON(includeSupplier = true, includeBrewStock = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
-    if (this.quantity) { data[`quantity`] = this.quantity; }
+    if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
     if (this.price) { data[`price`] = this.price; }
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
     if (includeSupplier === true) {
-      const suppliers = new Array();
-      this.suppliers.forEach(supplier => suppliers.push(supplier.toJSON(false)));
-      data[`suppliers`] = suppliers;
+      if (this.supplier) {
+        data[`supplier`] = this.supplier.toJSON(true);
+      }
+    }
+    if (includeBrewStock) {
+      const brewStocks = new Array();
+      this.brewStocks.forEach(brewStock => brewStocks.push(brewStock.toJSON(false)));
+      data[`brewStocks`] = brewStocks;
     }
     return data;
   }
