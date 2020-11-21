@@ -1,0 +1,8 @@
+<mat-horizontal-stepper [linear]="true"
+                        #stepper
+                        labelPosition="bottom">
+  <mat-step *ngFor="let state of service.states"
+            [label]="state.viewValue"
+            [editable]="false">
+  </mat-step>
+</mat-horizontal-stepper>

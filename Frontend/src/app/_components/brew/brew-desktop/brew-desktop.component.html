@@ -1,5 +1,7 @@
-<div class="tab">
-  <div class="auto">
+<mat-tab-group [selectedIndex]="formSelectedBrew.value"
+               mat-align-tabs="center"
+               (selectedIndexChange)="formSelectedBrew.setValue($event)">
+  <mat-tab label="Brassins">
     <div class="inline-header">
       <button mat-button
               (click)="openCreateDialog($event)"
@@ -8,96 +10,32 @@
         <mat-label> Ajouter un brassin</mat-label>
       </button>
     </div>
-    <table mat-table
-           class="full-width"
-           #matTable
-           matSort
-           cdkDropList
-           multiTemplateDataRows
-           (cdkDropListDropped)="dropListDropped($event)"
-           cdkDropListOrientation="horizontal"
-           [dataSource]="dataSource">
-      <ng-container [matColumnDef]="header.value"
-                    *ngFor="let header of service.headers">
-        <th mat-header-cell
-            class="header-box"
-            cdkDrag
-            cdkDragLockAxis="x"
-            [cdkDragData]="header"
-            cdkDragBoundary=".tr-box"
-            [mat-sort-header]="header.value"
-            *matHeaderCellDef>{{header.viewValue}}
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <span> {{ service.getDisplay(header.value, element) }} </span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="expandedDetail">
-        <td mat-cell
-            *matCellDef="let element"
-            [attr.colspan]="service.displayedColumns.length">
-          <div class="element-detail"
-               [@detailExpand]="element === selected ? 'expanded' : 'collapsed'">
-            <div class="flex">
-              <div>
-                <div class="element-diagram">
-                  <div class="element-name"> {{element.name}} <span class="element-description">
-                      {{element.state}} </span></div>
-                  <div class="element-specification"> {{element.abv}} {{element.ibu}} {{element.ebc}} </div>
-                </div>
-                <div class="element-diagram">
-                  <div class="element-date">Créé le : {{element.created | date: 'y-MM-dd HH:mm'}} </div>
-                  <div class="element-date"
-                       *ngIf="element.started">Commence le : {{element.started | date: 'y-MM-dd HH:mm'}} </div>
-                  <div class="element-date"
-                       *ngIf="element.ended">Termine le : {{element.ended | date: 'y-MM-dd HH:mm'}} </div>
-                </div>
-              </div>
-              <!-- On part sur de l'auto-save, plus ergonomic.
-              À chaque ajout, on ajoute directement la ligne dans le brassin en utilisant le post sur l'ingredient du brassin.
-              De la même manière lorsque l'on met à jour la quantité met en utilisant le patch.
-              -->
-              <!-- Ajoute un nouvel ingrédient au brassin. -->
-              <app-brew-ingredient-desktop [brew]="element"
-                                           [ingredientService]="serviceIngredient"
-                                           [brewService]="service"></app-brew-ingredient-desktop>
-            </div>
-          </div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="action">
-        <th mat-header-cell
-            *matHeaderCellDef>
-        </th>
-        <td mat-cell
-            *matCellDef="let row">
-          <div class="action-container">
-            <button mat-icon-button
-                    (click)="openUpdateDialog($event, row)"
-                    [attr.aria-label]="'Met à jour ' + service.getDisplay('name',row)">
-              <mat-icon>update</mat-icon>
-            </button>
-            <button mat-icon-button
-                    (click)="openDeleteDialog($event, row, service.getDisplay('name', row))"
-                    [attr.aria-label]="'Supprime ' + service.getDisplay('name',row)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-      <tr mat-header-row
-          class="tr-box"
-          *matHeaderRowDef="service.displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: service.displayedColumns;"
-          class="element-row"
-          [class.expanded-row]="selected === row"
-          (click)="expandRow($event, row)"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: ['expandedDetail']"
-          class="detail-row"></tr>
-    </table>
-    <app-pagination [paginate]="service.paginate"></app-pagination>
-  </div>
-</div>
+    <mat-accordion class="example-headers-align"
+                   multi>
+      <mat-expansion-panel *ngFor="let brewView of brewsViewList">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{brewView.title}}
+          </mat-panel-title>
+          <mat-panel-description>
+            <span [matBadge]="brewView.dataSource.length"
+                  matBadgeSize="small"></span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-brews-table [dataSource]="brewView.dataSource"
+                         [lastColumn]="brewView.lastColumn"
+                         (selected)="openTab($event)"></app-brews-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-tab>
+  <mat-tab *ngFor="let brew of selectedBrews; let index = index">
+    <ng-template mat-tab-label>
+      {{service.getDisplay('name', brew)}}
+      <button mat-icon-button
+              (click)="closeTab($event, brew, index)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+    <app-brew-details-desktop [brew]="brew"></app-brew-details-desktop>
+  </mat-tab>
+</mat-tab-group>

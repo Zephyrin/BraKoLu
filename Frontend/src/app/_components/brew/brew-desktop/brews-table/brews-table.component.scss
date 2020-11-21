@@ -1,0 +1,13 @@
+.action-container {
+  display: flex;
+  justify-content: right;
+}
+
+.action-container {
+  button {
+  opacity: 0.5;
+  }
+  button:hover {
+    opacity: 1;
+  }
+}

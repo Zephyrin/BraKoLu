@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { tap } from 'rxjs/operators';
 import { merge } from 'rxjs';
@@ -26,11 +27,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ]
 })
 export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent> implements AfterViewInit {
-  @ViewChild('Table') tableComponent: TableComponent;
-  dataSource: any = [];
-  @ViewChild(MatSort) sort: MatSort;
-  public selected: Brew | null;
+  public formSelectedBrew = new FormControl(0);
+  public selectedBrews = new Array<Brew>();
 
+  public createdBrews: Brew[];
+  public brewsViewList = new Array<AccordionExtension>();
   constructor(
     public dialog: MatDialog,
     public serviceIngredient: IngredientService) {
@@ -39,38 +40,55 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    merge(this.sort.sortChange)
-      .pipe(tap(() => {
-        this.service.sort.change(this.sort.active, this.sort.direction);
-      })).subscribe();
   }
 
   public endUpdate() {
-    this.dataSource = new MatTableDataSource(this.service.model);
-    const index = this.service.displayedColumns.findIndex(x => x === 'action');
-    if (index < 0) {
-      this.service.displayedColumns.push('action');
-    }
-    else if (index < this.service.displayedColumns.length - 1) {
-      moveItemInArray(this.service.displayedColumns, index, this.service.displayedColumns.length - 1);
-    }
-    this.dataSource.sort = this.sort;
+    this.brewsViewList.push({
+      title: 'À planifier',
+      dataSource: this.service.model.filter(x => x.state === 'created'),
+      lastColumn: { value: 'created', viewValue: 'Créé le' }
+    });
+    this.brewsViewList.push({
+      title: 'Planifier',
+      dataSource: this.service.model.filter(x => x.state === 'planed'),
+      lastColumn: { value: 'planed', viewValue: 'Planifier le' }
+    });
+    this.brewsViewList.push({
+      title: 'En Fermentation',
+      dataSource: this.service.model.filter(x => x.state === 'brewing'),
+      lastColumn: { value: 'packaging', viewValue: 'Conditionnement le' }
+    });
+    this.brewsViewList.push({
+      title: 'En conditionnement',
+      dataSource: this.service.model.filter(x => x.state === 'packaging'),
+      lastColumn: { value: 'availableAt', viewValue: 'Disponible le' }
+    });
+    this.brewsViewList.push({
+      title: 'Disponible & archivé',
+      dataSource: this.service.model.filter(x => x.state === 'complete' || x.state === 'archived'),
+      lastColumn: undefined
+    });
   }
 
-  dropListDropped(event: CdkDragDrop<ValueViewChild>) {
-    if (event) {
-      moveItemInArray(this.service.displayedColumns, event.previousIndex, event.currentIndex);
-      const elt = this.service.displayedColumns[event.currentIndex];
-      const index = this.service.headers.findIndex(x => x.value === elt);
-      moveItemInArray(this.service.headers, index, event.currentIndex);
-      localStorage.setItem(this.service.constructor.name + '_headers', JSON.stringify(this.service.headers));
-      this.endUpdate();
+  public openTab(brew: Brew) {
+    const index = this.selectedBrews.findIndex(x => x.id === brew.id);
+    if (index >= 0) {
+      this.formSelectedBrew.setValue(index + 1);
+    } else {
+      this.selectedBrews.push(brew);
+      this.formSelectedBrew.setValue(this.selectedBrews.length);
     }
   }
 
-  expandRow(event: MouseEvent, row: Brew) {
+  public closeTab(event: MouseEvent, brew: Brew, index: number) {
     event.stopPropagation();
-    this.selected = this.selected === row ? null : row;
+    this.formSelectedBrew.setValue(0);
+    this.selectedBrews.splice(index, 1);
   }
+}
+
+class AccordionExtension {
+  title: string;
+  dataSource: any[];
+  lastColumn: ValueViewChild;
 }
