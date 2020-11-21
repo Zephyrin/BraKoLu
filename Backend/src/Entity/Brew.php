@@ -30,8 +30,7 @@ class Brew
 
     const STATES = [
         ['value' => 'created', 'viewValue' => 'Créé'],
-        ['value' => 'validate', 'viewValue' => 'Validé'],
-        ['value' => 'ordered', 'viewValue' => 'Commandé'],
+        ['value' => 'planed', 'viewValue' => 'Planifié'],
         ['value' => 'brewing', 'viewValue' => 'Brassage'],
         ['value' => 'packaging', 'viewValue' => 'Conditionnement'],
         ['value' => 'complete', 'viewValue' => 'Complété'],
