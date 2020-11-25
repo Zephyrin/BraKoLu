@@ -1,7 +1,7 @@
 <button mat-button
         (click)="addIngredient()">
   <mat-icon>add_circle_outline</mat-icon>
-  <mat-label>Ajouter un ingrédient à {{brew.name}}</mat-label>
+  <mat-label>Ajouter un ingrédient</mat-label>
 </button>
 <div class="element-listing"
      *ngIf="!ingredientService.loadingSource">

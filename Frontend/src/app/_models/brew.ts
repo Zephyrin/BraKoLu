@@ -3,6 +3,7 @@ import { Ingredient } from '@app/_models';
 import { IngredientStock } from './ingredientStock';
 export class Brew {
   id: number;
+  number: number;
   name: string;
   abv: number;
   ibu: number;
@@ -13,11 +14,12 @@ export class Brew {
   ended: Date;
   created: Date;
   brewIngredients: BrewIngredient[];
+
   public constructor(value: Brew | undefined) {
     this.brewIngredients = new Array();
-    this.state = 'created';
     if (value && value !== null) {
       this.id = value.id;
+      this.number = value.number;
       this.name = value.name;
       this.abv = value.abv;
       this.ibu = value.ibu;
@@ -43,45 +45,75 @@ export class Brew {
     }
   }
 
+  update(value: Brew | undefined) {
+    // Pour le moment seulement les types simples sont mise à jour. À voir
+    // si il faut aussi mettre à jour le reste.
+    if (value && value !== null) {
+      if (this.number !== value.number) { this.number = value.number; }
+      if (this.name !== value.name) { this.name = value.name; }
+      if (this.abv !== value.abv) { this.abv = value.abv; }
+      if (this.ibu !== value.ibu) { this.ibu = value.ibu; }
+      if (this.ebc !== value.ebc) { this.ebc = value.ebc; }
+      if (this.state !== value.state) { this.state = value.state; }
+      if (this.producedQuantity !== value.producedQuantity) { this.producedQuantity = value.producedQuantity; }
+      if (this.started !== value.started) {
+        if (value.started) { this.started = new Date(value.started); }
+        else { this.started = undefined; }
+      }
+      if (this.ended !== value.ended) {
+        if (value.ended) { this.ended = new Date(value.ended); }
+        else { this.ended = undefined; }
+      }
+      if (this.created !== value.created) {
+        if (value.created) { this.created = new Date(value.created); }
+        else { this.created = undefined; }
+      }
+    }
+  }
   toJSON(includeSupplier = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
+    if (this.number) { data[`number`] = this.number; }
     if (this.name) { data[`name`] = this.name; }
     if (this.abv) { data[`abv`] = this.abv; }
     if (this.ibu) { data[`ibu`] = this.ibu; }
     if (this.ebc) { data[`ebc`] = this.ebc; }
     if (this.state) { data[`state`] = this.state; }
     if (this.producedQuantity) { data[`producedQuantity`] = this.producedQuantity; }
-    if (this.started) {
-      if (typeof this.started === 'string') {
+    if (this.started !== undefined) {
+      if (this.started === null || isNaN(this.started.getTime())) {
+        data[`started`] = null;
+      } else if (typeof this.started === 'string') {
         data[`started`] = this.started;
       } else {
         data[`started`] =
           this.started.getFullYear()
           + '-'
-          + this.started.getMonth()
+          + (this.started.getMonth() + 1).toString().padStart(2, '0')
           + '-'
-          + this.started.getDay()
+          + this.started.getDate().toString().padStart(2, '0')
           + ' '
-          + this.started.getHours()
+          + this.started.getHours().toString().padStart(2, '0')
           + ':'
-          + this.started.getMinutes();
+          + this.started.getMinutes().toString().padStart(2, '0');
       }
     }
-    if (this.ended) {
-      if (typeof this.ended === 'string') {
+    if (this.ended !== undefined) {
+      if (this.ended === null || isNaN(this.ended.getTime())) {
+        data[`ended`] = null;
+      } else if (typeof this.ended === 'string') {
         data[`ended`] = this.ended;
       } else {
         data[`ended`] =
           this.ended.getFullYear()
           + '-'
-          + this.ended.getMonth()
+          + (this.ended.getMonth() + 1).toString().padStart(2, '0')
           + '-'
-          + this.ended.getDay()
+          + this.ended.getDate().toString().padStart(2, '0')
           + ' '
-          + this.ended.getHours()
+          + this.ended.getHours().toString().padStart(2, '0')
           + ':'
-          + this.ended.getMinutes();
+          + this.ended.getMinutes().toString().padStart(2, '0');
       }
     }
     return data;

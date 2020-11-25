@@ -24,10 +24,7 @@
         *matCellDef="let row">
       <div class="action-container">
         <button mat-icon-button
-                [attr.aria-label]="'Met à jour ' + service.getDisplay('name', row)">
-          <mat-icon>update</mat-icon>
-        </button>
-        <button mat-icon-button
+                (click)="deleteBrewClick($event, row)"
                 [attr.aria-label]="'Supprime ' + service.getDisplay('name', row)">
           <mat-icon>delete</mat-icon>
         </button>

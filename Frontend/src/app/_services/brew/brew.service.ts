@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BrewHttpService } from './brew-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
-import { Injectable } from '@angular/core';
+import { Injectable, SimpleChange } from '@angular/core';
 import { Brew, BrewIngredient as BrewIngredient } from '@app/_models/brew';
 import { Ingredient, IngredientStock } from '@app/_models';
 
@@ -61,10 +61,11 @@ export class BrewService extends CService<Brew> {
   public createFormBasedOn(formBuilder: FormBuilder, value: Brew): void {
     this.form = formBuilder.group({
       id: [''],
+      number: ['', Validators.required],
       name: ['', Validators.required],
-      abv: ['', Validators.required],
-      ibu: ['', Validators.required],
-      ebc: ['', Validators.required],
+      abv: ['125', Validators.required],
+      ibu: ['0', Validators.required],
+      ebc: ['11', Validators.required],
       state: ['', Validators.required],
       producedQuantity: [''],
       started: [''],
@@ -94,9 +95,10 @@ export class BrewService extends CService<Brew> {
     (this.http as BrewHttpService).addIngredientToBrew(brew.id, ingredientToBrew).subscribe(response => {
       ingredientToBrew.id = response.id;
       brew.brewIngredients.push(ingredientToBrew);
-      this.end(true);
+      const simpleChange = new SimpleChange(null, ingredientToBrew, true);
+      this.end(true, simpleChange);
     }, err => {
-      this.end(true, err);
+      this.end(true, undefined, err);
     });
   }
 
@@ -105,25 +107,39 @@ export class BrewService extends CService<Brew> {
     newIngredient.quantity = newValue;
     (this.http as BrewHttpService).updateIngredientToBrew(brew.id, ingredient.id, newIngredient).subscribe(response => {
       ingredient.quantity = newValue;
-      this.end(true);
+      const simpleChange = new SimpleChange(ingredient, ingredient, true);
+      this.end(true, simpleChange);
     }, err => {
-      this.end(true, err);
+      this.end(true, undefined, err);
     });
   }
 
   public deleteIngredientToBrew(brew: Brew, ingredient: BrewIngredient) {
     (this.http as BrewHttpService).deleteIngredientToBrew(brew.id, ingredient.id).subscribe(response => {
       const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
-      if (index >= 0) { brew.brewIngredients.splice(index, 1); }
-      this.end(true);
+      const simpleChange = new SimpleChange(null, null, true);
+      if (index >= 0) {
+        const removed = brew.brewIngredients.splice(index, 1);
+        simpleChange.previousValue = removed[0];
+      }
+      this.end(true, simpleChange);
     }, err => {
       if (err.code === 404) {
         const index = brew.brewIngredients.findIndex(x => x.id === ingredient.id);
-        if (index >= 0) { brew.brewIngredients.splice(index, 1); }
-        this.end(true);
+        const simpleChange = new SimpleChange(null, null, true);
+        if (index >= 0) {
+          const removed = brew.brewIngredients.splice(index, 1);
+          simpleChange.previousValue = removed[0];
+
+        }
+        this.end(true, simpleChange);
       } else {
-        this.end(true, err);
+        this.end(true, undefined, err);
       }
     });
+  }
+
+  protected updateData(newData: Brew, oldData: Brew) {
+    oldData.update(newData);
   }
 }

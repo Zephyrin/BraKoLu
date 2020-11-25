@@ -3,7 +3,7 @@ import { ChildCreateFormBaseComponent } from '@app/_components/child-create-form
 import { MatDialog } from '@angular/material/dialog';
 import { IService } from '@app/_services/iservice';
 import { Subscription } from 'rxjs';
-import { OnInit, OnDestroy, Input, TemplateRef, Component } from '@angular/core';
+import { OnInit, OnDestroy, Input, TemplateRef, Component, SimpleChange } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
@@ -21,16 +21,13 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
-      if (data === true) {
-        this.endUpdate();
-        //this.dialog.closeAll();
-      }
+      this.endUpdate(data);
     });
     this.init();
   }
 
   public init(): void { }
-  public endUpdate() { }
+  public endUpdate(change: SimpleChange) { }
   public onDestroy() { }
 
   ngOnDestroy(): void {

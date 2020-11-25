@@ -3,7 +3,7 @@ import { TableComponent } from '@app/_components/helpers/table/table.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core';
 import { StockCreateComponent } from '@app/_components/stock/stock-create/stock-create.component';
 
 @Component({
@@ -21,8 +21,8 @@ export class StockDesktopComponent extends ChildBaseComponent<StockCreateCompone
     this.tableComponent.UpdateComponentOrTemplateRef(StockCreateComponent);
   }
 
-  public endUpdate() {
-    this.tableComponent.endUpdate();
+  public endUpdate(change: SimpleChange) {
+    this.tableComponent.endUpdate(change);
   }
 
   public init() {

@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormErrors } from '@app/_helpers/form-error';
 import { HttpService } from '@app/_services/http.service';
 import { Subject } from 'rxjs';
+import { SimpleChange } from '@angular/core';
 
 export interface IService {
   /**
@@ -32,8 +33,10 @@ export interface IService {
   /**
    * Permet de dire à l'interface que la création, mise à jour ou la suppression est terminée
    * et qu'il peut mettre à jour la vue.
+   * Si SimpleChange est null, cela signifie que c'est le chargement qui a terminé.
+   * Sinon on a les informations qui sont remontées au travers de cette classe.
    */
-  endUpdate: Subject<boolean>;
+  endUpdate: Subject<SimpleChange>;
 
   /**
    * Permet de gérer la pagination de la liste de données.
@@ -171,7 +174,7 @@ export abstract class CService<T> implements IService {
   public loadingSource = false;
   public errors = new FormErrors();
   public form: FormGroup;
-  public endUpdate = new Subject<boolean>();
+  public endUpdate = new Subject<SimpleChange>();
   public headers: ValueViewChild[] = [];
   public displayedColumns: string[] = [];
 
@@ -251,10 +254,10 @@ export abstract class CService<T> implements IService {
     this.http.getAll(httpParams).subscribe(response => {
       this.paginate.setParametersFromResponse(response.headers);
       this.model = response.body.map((x) => this.createCpy(x));
-      this.end(true);
+      this.end(true, undefined);
     }, err => {
       this.model = [];
-      this.end(true, err);
+      this.end(true, undefined, err);
     });
   }
   //#region IService
@@ -282,23 +285,26 @@ export abstract class CService<T> implements IService {
   public update(name: string, value: T, newValue: any): void {
     if (this.start() === true) {
       this.workingOn = value;
+      const simpleChange = new SimpleChange(value, newValue, true);
       if ((newValue === undefined || newValue === null) && (name === undefined || name === null)) {
-        this.delete(value);
+        this.delete(simpleChange);
       } else {
         if (this.workingOn) {
           const id = 'id';
           if (newValue && newValue[id]) {
             // On utilise le mode avec l'objet entier.
-            this.updateOrCreate(newValue);
+            simpleChange.currentValue = newValue;
+            this.updateOrCreate(simpleChange);
           } else {
             // On utilise qu'une partie de l'objet.
-            const model: any = {};
+            const model = this.create();
             model[id] = this.workingOn[id];
             model[name] = newValue;
-            this.updateOrCreate(model);
+            simpleChange.currentValue = model;
+            this.updateOrCreate(simpleChange);
           }
         } else {
-          this.updateOrCreate(newValue);
+          this.updateOrCreate(simpleChange);
         }
 
       }
@@ -313,7 +319,7 @@ export abstract class CService<T> implements IService {
     return true;
   }
 
-  protected end(wasUpdate: boolean, serverError?: any | undefined) {
+  protected end(wasUpdate: boolean, change: SimpleChange | undefined, serverError?: any | undefined) {
     if (serverError) {
       this.errors.formatError(serverError);
       if (this.form && serverError.error?.errors) {
@@ -334,57 +340,67 @@ export abstract class CService<T> implements IService {
     } else if (wasUpdate) {
       this.errors = new FormErrors();
       this.workingOn = undefined;
-      this.endUpdate.next(true);
+      this.endUpdate.next(change);
     }
     this.loadingSource = false;
     this.loading.next(this.loadingSource);
   }
 
-  protected updateOrCreate(model: T) {
+  protected updateOrCreate(simpleChange: SimpleChange) {
     const name = 'id';
+    const model = simpleChange.currentValue;
     if (model[name] === undefined || model[name] === '') {
       const dataToSent = this.createCpy(model);
       this.http.create(dataToSent).subscribe(data => {
-        this.model.push(this.createCpy(data));
-        this.end(true);
+        simpleChange.currentValue = this.createCpy(data);
+        this.model.push(simpleChange.currentValue);
+        this.end(true, simpleChange);
       }, error => {
-        this.end(true, error);
+        this.end(true, simpleChange, error);
       });
     } else {
       this.http.update(model[name].toString(), model).subscribe(data => {
-        Object.keys(model).forEach(key => {
-          this.workingOn[key] = model[key];
-        });
-        this.end(true);
+        simpleChange.previousValue = this.createCpy(this.workingOn);
+        this.updateData(data, this.workingOn);
+
+        simpleChange.currentValue = this.workingOn;
+        this.end(true, simpleChange);
       }, error => {
-        this.end(true, error);
+        this.end(true, simpleChange, error);
       });
     }
   }
 
-  protected delete(model: T) {
+  protected updateData(newData: T, oldData: T) {
+    Object.keys(newData).forEach(key => {
+      oldData[key] = newData[key];
+    });
+  }
+
+  protected delete(simpleChange: SimpleChange) {
     const name = 'id';
+    const model = simpleChange.previousValue;
     if (model[name] !== undefined) {
       this.http.delete(model[name]).subscribe(() => {
-        this.sliceWorkingOn();
+        this.sliceWorkingOn(simpleChange);
       }, (error) => {
         if (error.status === 404) {
-          this.sliceWorkingOn();
+          this.sliceWorkingOn(simpleChange);
         } else {
-          this.end(true, error);
+          this.end(true, simpleChange, error);
         }
       });
     } else {
-      this.end(true, undefined);
+      this.end(true, simpleChange, undefined);
     }
   }
 
-  protected sliceWorkingOn() {
+  protected sliceWorkingOn(simpleChange: SimpleChange) {
     const index = this.model.indexOf(this.workingOn);
     if (index >= 0) {
       this.model.splice(index, 1);
     }
-    this.end(true);
+    this.end(true, simpleChange);
   }
 
   public createForm(formBuilder: FormBuilder, value: T): void {

@@ -5,7 +5,7 @@ import { BrewService } from '@app/_services/brew/brew.service';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderCreateComponent } from '@app/_components/order/order-create/order-create.component';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, SimpleChange } from '@angular/core';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
 
 @Component({
@@ -34,8 +34,8 @@ export class OrderDesktopComponent extends ChildBaseComponent<OrderCreateCompone
     this.orderService.selectedOrders.splice(0, this.orderService.selectedOrders.length);
   }
 
-  public endUpdate() {
-    this.tableComponent.endUpdate();
+  public endUpdate(change: SimpleChange) {
+    this.tableComponent.endUpdate(change);
   }
 
   public addNewOrder(): void {

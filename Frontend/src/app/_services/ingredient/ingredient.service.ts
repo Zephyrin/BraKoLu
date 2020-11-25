@@ -268,8 +268,8 @@ export class IngredientService extends CService<Ingredient>{
         httpParams = httpParams.append('selectChildren', 'bottle');
         this.h.getAll(httpParams).subscribe(response => {
           this.allBottles = response.body.map((x) => new Bottle(x as Bottle));
-          this.end(false);
-        }, err => { this.end(err); });
+          this.end(false, undefined);
+        }, err => { this.end(err, undefined); });
       }
     }
     switch (value.childName) {

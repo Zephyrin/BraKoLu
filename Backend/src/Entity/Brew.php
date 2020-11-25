@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Brew
 {
     const HEADERS = [
+        ['value' => 'number', 'viewValue' => 'N°'],
         ['value' => 'name', 'viewValue' => 'Nom'],
         /* ['value' => 'abv', 'viewValue' => 'ABV'],
         ['value' => 'ibu', 'viewValue' => 'IBU'],
@@ -32,6 +33,7 @@ class Brew
         ['value' => 'created', 'viewValue' => 'Créé'],
         ['value' => 'planed', 'viewValue' => 'Planifié'],
         ['value' => 'brewing', 'viewValue' => 'Brassage'],
+        ['value' => 'fermentation', 'viewValue' => 'Fermentation'],
         ['value' => 'packaging', 'viewValue' => 'Conditionnement'],
         ['value' => 'complete', 'viewValue' => 'Complété'],
         ['value' => 'archived', 'viewValue' => 'Archivé']
@@ -109,6 +111,11 @@ class Brew
      * @SerializedName("brewStocks")
      */
     private $brewStocks;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $number;
 
     public function __construct()
     {
@@ -288,6 +295,18 @@ class Brew
                 $brewStock->setBrew(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNumber(): ?string
+    {
+        return $this->number;
+    }
+
+    public function setNumber(string $number): self
+    {
+        $this->number = $number;
 
         return $this;
     }

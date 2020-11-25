@@ -12,19 +12,21 @@
     </div>
     <mat-accordion class="example-headers-align"
                    multi>
-      <mat-expansion-panel *ngFor="let brewView of brewsViewList">
+      <mat-expansion-panel *ngFor="let brewView of brewsViewList"
+                           [disabled]="brewView.dataSource.data.length === 0">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{brewView.title}}
           </mat-panel-title>
           <mat-panel-description>
-            <span [matBadge]="brewView.dataSource.length"
+            <span [matBadge]="brewView.dataSource.data.length"
                   matBadgeSize="small"></span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <app-brews-table [dataSource]="brewView.dataSource"
                          [lastColumn]="brewView.lastColumn"
-                         (selected)="openTab($event)"></app-brews-table>
+                         (selected)="openTab($event)"
+                         (deleteBrew)="deleteBrew($event)"></app-brews-table>
       </mat-expansion-panel>
     </mat-accordion>
   </mat-tab>

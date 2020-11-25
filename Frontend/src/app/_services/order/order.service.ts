@@ -5,7 +5,7 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { OrderHttpService } from './order-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
-import { Injectable } from '@angular/core';
+import { Injectable, SimpleChange } from '@angular/core';
 import { Order } from '@app/_models/order';
 import { Ingredient, IngredientStock } from '@app/_models';
 
@@ -92,7 +92,7 @@ export class OrderService extends CService<Order> {
       order.update(response);
       dataSource.updateSource(order);
     }, err => {
-      this.end(true, err);
+      this.end(true, undefined, err);
     });
   }
 
@@ -102,10 +102,11 @@ export class OrderService extends CService<Order> {
         const newOrder = new Order(response);
         this.model.push(newOrder);
         this.selectedOrders.push(newOrder);
-        this.end(true);
+        const simpleChange = new SimpleChange(null, newOrder, true);
+        this.end(true, simpleChange);
         this.formSelectedOrder.setValue(this.selectedOrders.length);
       }, error => {
-        this.end(true, error);
+        this.end(true, undefined, error);
       });
     }
   }
@@ -114,9 +115,9 @@ export class OrderService extends CService<Order> {
     if (this.start() === true) {
       const obs = (this.http as OrderHttpService).brewStockToOrder(brewStock, brewOrder, order);
       obs.subscribe(repsonse => {
-        this.end(true);
+        this.end(true, undefined);
       }, error => {
-        this.end(true, error);
+        this.end(true, undefined, error);
       });
       return obs;
     }
@@ -126,9 +127,9 @@ export class OrderService extends CService<Order> {
     if (this.start() === true) {
       const obs = (this.http as OrderHttpService).brewOrderToStock(brewOrder, brewStock, order);
       obs.subscribe(repsonse => {
-        this.end(true);
+        this.end(true, undefined);
       }, error => {
-        this.end(true, error);
+        this.end(true, undefined, error);
       });
       return obs;
     }
@@ -139,12 +140,13 @@ export class OrderService extends CService<Order> {
       (this.http as OrderHttpService).addIngredientToOrder(order, ingredient).subscribe(response => {
         const nIngredient = new IngredientStock(response);
         order.stocks.push(nIngredient);
-        this.end(true);
+        const simpleChange = new SimpleChange(null, nIngredient, true);
+        this.end(true, simpleChange);
         if (callback) {
           callback(sender, nIngredient);
         }
       }, error => {
-        this.end(true, error);
+        this.end(true, undefined, error);
       });
     }
   }
@@ -152,12 +154,17 @@ export class OrderService extends CService<Order> {
   public deleteIngredientToOrder(order: Order, ingredient: IngredientStock, callback, sender: any): void {
     if (this.start() === true) {
       (this.http as OrderHttpService).deleteIngredientToOrder(order, ingredient).subscribe(response => {
-        this.end(true);
+        const simpleChange = new SimpleChange(null, null, true);
         const index = order.stocks.findIndex(x => x.id === ingredient.id);
-        if (index >= 0) { order.stocks.splice(index, 1); }
+        if (index >= 0) {
+          const removed = order.stocks.splice(index, 1);
+          simpleChange.previousValue = removed[0];
+
+        }
+        this.end(true, simpleChange);
         if (callback) { callback(sender, ingredient.id); }
       }, error => {
-        this.end(true, error);
+        this.end(true, undefined, error);
       });
     }
   }

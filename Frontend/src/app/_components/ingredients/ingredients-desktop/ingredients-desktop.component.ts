@@ -6,7 +6,7 @@ import { IngredientService } from '@app/_services/ingredient/ingredient.service'
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit, SimpleChange } from '@angular/core';
 import { MatChipSelectionChange } from '@angular/material/chips';
 
 @Component({
@@ -54,10 +54,10 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
   }
 
 
-  public endUpdate() {
+  public endUpdate(change: SimpleChange) {
     this.selectColumnToDisplay();
 
-    this.tableComponent.endUpdate();
+    this.tableComponent.endUpdate(change);
   }
 
   protected selectColumnToDisplay(): void {

@@ -245,14 +245,35 @@ class BrewController extends AbstractFOSRestController
      */
     public function putOrPatch(array $data, bool $clearMissing, string $id)
     {
+        $started = false;
+        $ended = false;
+        $this->manageDates($data);
+        if (array_key_exists("started", $data)) {
+            $started = $data["started"];
+            unset($data["started"]);
+        }
+        if (array_key_exists("ended", $data)) {
+            $ended = $data["ended"];
+            unset($data["ended"]);
+        }
         $existing = $this->getById($id);
         $form = $this->createForm(BrewType::class, $existing);
 
         $form->submit($data, $clearMissing);
+        if ($existing->getState() == "created") {
+            if ($started != false && $started != null) $existing->setState("planed");
+        }
+        if ($existing->getState() == "planed") {
+            if ($started == null) $existing->setState("created");
+        }
         $this->validationError($form, $this);
+        if ($started != false || is_null($started))
+            $existing->setStarted($started);
+        if ($ended != false || is_null($ended))
+            $existing->setEnded($ended);
         $this->entityManager->flush();
 
-        return $this->view(null, Response::HTTP_NO_CONTENT);
+        return $this->view($existing, Response::HTTP_OK);
     }
 
     /**
@@ -308,5 +329,15 @@ class BrewController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $brew;
+    }
+
+    private function manageDates(array &$brew)
+    {
+        if (isset($brew['started'])) {
+            $brew['started'] = DateTime::createFromFormat('Y-m-d H:i', $brew['started']);
+        }
+        if (isset($brew['ended'])) {
+            $brew['ended'] = DateTime::createFromFormat('Y-m-d H:i', $brew['started']);
+        }
     }
 }

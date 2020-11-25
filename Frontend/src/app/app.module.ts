@@ -32,7 +32,8 @@ import { MatTableModule } from '@angular/material/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { IngredientsDesktopComponent } from './_components/ingredients/ingredients-desktop/ingredients-desktop.component';
 import { IngredientsMobileComponent } from './_components/ingredients/ingredients-mobile/ingredients-mobile.component';
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
@@ -124,7 +125,9 @@ import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/bre
     MatCheckboxModule,
     CdkTreeModule,
     MatBadgeModule,
-    MatStepperModule
+    MatStepperModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   providers: [
     DatePipe

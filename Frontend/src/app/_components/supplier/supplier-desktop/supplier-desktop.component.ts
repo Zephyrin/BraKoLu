@@ -2,7 +2,7 @@ import { TableComponent } from '@app/_components/helpers/table/table.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core';
 import { SupplierCreateComponent } from '@app/_components/supplier/supplier-create/supplier-create.component';
 
 @Component({
@@ -21,7 +21,7 @@ export class SupplierDesktopComponent extends ChildBaseComponent<SupplierCreateC
     this.tableComponent.UpdateComponentOrTemplateRef(SupplierCreateComponent);
   }
 
-  public endUpdate() {
-    this.tableComponent.endUpdate();
+  public endUpdate(change: SimpleChange) {
+    this.tableComponent.endUpdate(change);
   }
 }

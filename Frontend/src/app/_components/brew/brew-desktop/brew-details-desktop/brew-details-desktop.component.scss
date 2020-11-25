@@ -1,0 +1,22 @@
+.horizontal-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+}
+
+.brew-basic {
+  flex: initial;
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid;
+  padding: 1em;
+  margin: 1em;
+}
+
+.stepper {
+  flex: auto;
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}

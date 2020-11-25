@@ -6,6 +6,17 @@
               [ngStyle]="{'pointer-events':service.loadingSource ? 'none' : 'auto' }">
     </fieldset>
     <mat-form-field class="full-width">
+      <mat-label>N°</mat-label>
+      <input matInput
+             required
+             formControlName="number"
+             placeholder="Ex: 02.03"
+             value="">
+      <mat-error>
+        {{service.form.get('number').errors?.serverError}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
       <mat-label>Nom</mat-label>
       <input matInput
              required

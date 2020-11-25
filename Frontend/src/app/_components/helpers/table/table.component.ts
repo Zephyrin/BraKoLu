@@ -3,7 +3,7 @@ import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { ValueViewChild } from '@app/_services/iservice';
 import { MatSort } from '@angular/material/sort';
 import { IService } from '@app/_services/iservice';
-import { Component, OnInit, Input, ViewChild, AfterViewInit, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, TemplateRef, Inject, SimpleChange } from '@angular/core';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
@@ -36,7 +36,7 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
       })).subscribe();
   }
 
-  public endUpdate() {
+  public endUpdate(change: SimpleChange) {
     this.dataSource = new MatTableDataSource(this.service.model);
     const index = this.service.displayedColumns.findIndex(x => x === 'action');
     if (index < 0) {
@@ -55,7 +55,7 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
       const index = this.service.headers.findIndex(x => x.value === elt);
       moveItemInArray(this.service.headers, index, event.currentIndex);
       localStorage.setItem(this.service.constructor.name + '_headers', JSON.stringify(this.service.headers));
-      this.endUpdate();
+      this.endUpdate(undefined);
     }
   }
 

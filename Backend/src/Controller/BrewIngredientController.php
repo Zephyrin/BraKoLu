@@ -226,7 +226,7 @@ class BrewIngredientController extends AbstractFOSRestController
 
     /**
      * @Route("/brew/{brewId}/ingredient/{id}",
-     *  name="api_brew_delete",
+     *  name="api_brew_ingredient_delete",
      *  methods={"DELETE"},
      *  requirements={
      *      "id": "\d+",

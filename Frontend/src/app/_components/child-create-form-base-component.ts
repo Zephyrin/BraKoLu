@@ -17,7 +17,7 @@ export class ChildCreateFormBaseComponent implements OnInit, OnDestroy {
     protected formBuilder: FormBuilder,
   ) {
     this.endUpdateSubscription = service.endUpdate.subscribe(status => {
-      if (status === true) {
+      if (status?.currentValue) {
         this.dialogRef.close();
       }
     });

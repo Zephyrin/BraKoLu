@@ -24,7 +24,7 @@ export class Yeast extends Ingredient {
         data[`productionYear`] =
           this.productionYear.getFullYear()
           + '-'
-          + this.productionYear.getMonth();
+          + (this.productionYear.getMonth() + 1).toString().padStart(2, '0');
       }
     }
     return data;

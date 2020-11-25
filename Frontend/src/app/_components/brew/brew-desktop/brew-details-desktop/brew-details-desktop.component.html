@@ -1,8 +1,66 @@
-<mat-horizontal-stepper [linear]="true"
-                        #stepper
-                        labelPosition="bottom">
-  <mat-step *ngFor="let state of service.states"
-            [label]="state.viewValue"
-            [editable]="false">
-  </mat-step>
-</mat-horizontal-stepper>
+<div class="horizontal-flex">
+  <div>
+    <div class="brew-basic">
+      <span>Nom du brassin : {{brew.name}}</span>
+      <span>Numéro du brassin : {{brew.number}}</span>
+    </div>
+    <div class="brew-basic"
+         *ngIf="brew.state !== 'created' && brew.state !== 'planed'">
+      <span>{{brew.started | date:'dd-M-yyyy'}}</span>
+      <span>{{brew.ended | date:'dd-M-yyyy'}}</span>
+    </div>
+    <div class="brew-basic"
+         *ngIf="brew.state === 'created' || brew.state === 'planed'">
+      <div class="date-inline">
+        <mat-form-field>
+          <mat-label>Date de brassage</mat-label>
+          <input matInput
+                 [matDatepicker]="startedDate"
+                 (dateInput)="updateDate($event, 'started')"
+                 (dateChange)="updateDate($event, 'started')"
+                 [value]="brew.started">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="startedDate"></mat-datepicker-toggle>
+          <mat-datepicker #startedDate></mat-datepicker>
+        </mat-form-field>
+        <button mat-icon-button
+                *ngIf="brew.started"
+                (click)="deleteDate($event, 'started')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div class="date-inline">
+        <mat-form-field>
+          <mat-label>Date de fin de brassage</mat-label>
+          <input matInput
+                 [matDatepicker]="endedDate"
+                 (dateInput)="updateDate($event, 'ended')"
+                 (dateChange)="updateDate($event, 'ended')"
+                 [value]="brew.ended">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="endedDate"></mat-datepicker-toggle>
+          <mat-datepicker #endedDate></mat-datepicker>
+        </mat-form-field>
+        <button mat-icon-button
+                *ngIf="brew.ended"
+                (click)="deleteDate($event, 'ended')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-horizontal-stepper [linear]="true"
+                          #stepper
+                          labelPosition="bottom"
+                          class="stepper">
+    <mat-step *ngFor="let state of service.states"
+              [label]="state.viewValue"
+              [completed]="brew.state === state.value"
+              [editable]="false">
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
+
+<app-brew-ingredient-desktop [brew]="brew"
+                             [ingredientService]="ingredientService"
+                             [brewService]="service"></app-brew-ingredient-desktop>
