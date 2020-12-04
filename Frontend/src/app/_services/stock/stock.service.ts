@@ -1,3 +1,4 @@
+import { StockSearchService } from './stock-search.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StockHttpService } from './stock-http.service';
@@ -16,7 +17,7 @@ export class StockService extends CService<IngredientStock>{
   constructor(
     private h: StockHttpService,
     public datepipe: DatePipe) {
-    super(h, undefined);
+    super(h, new StockSearchService());
   }
 
   public initEnums(): void {

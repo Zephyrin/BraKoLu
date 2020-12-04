@@ -1,18 +1,13 @@
 import { DeleteBrewEvent } from './brews-table/brews-table.component';
 import { FormControl } from '@angular/forms';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { tap } from 'rxjs/operators';
-import { merge } from 'rxjs';
 import { Brew } from '@app/_models/brew';
 import { MatTableDataSource } from '@angular/material/table';
-import { TableComponent } from '@app/_components/helpers/table/table.component';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { BrewCreateComponent } from './../brew-create/brew-create.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ValueViewChild } from '@app/_services/iservice';
-import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -53,7 +48,7 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
       this.brewsViewList.push({
         title: 'Planifier',
         dataSource: new MatTableDataSource<Brew>(this.service.model.filter(x => x.state === 'planed')),
-        lastColumn: { value: 'planed', viewValue: 'Planifier le' }
+        lastColumn: { value: 'started', viewValue: 'Planifier le' }
       });
       this.brewsViewList.push({
         title: 'En Fermentation',
@@ -70,20 +65,26 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
         dataSource: new MatTableDataSource<Brew>(this.service.model.filter(x => x.state === 'complete' || x.state === 'archived')),
         lastColumn: undefined
       });
-      this.openTab(this.service.model[0]);
-    } else if (change.previousValue === undefined || change.previousValue === null) {
-      // C'est un ajout.
-      this.pushToCorrectList(change.currentValue);
-      this.openTab(change.currentValue);
-    } else if (change.currentValue === undefined || change.currentValue === null) {
-      // C'est une suppression...
-      this.deleteFromList(this.selectedBrews, change.previousValue);
-      this.deleteFormCorrectList(change.previousValue);
+      if (this.service.model.length > 0) {
+        this.openTab(this.service.model[0]);
+      }
     } else {
-      // On regarde si il y a eu un changement de status
-      if (change.previousValue.state !== change.currentValue.state) {
-        this.deleteFormCorrectList(change.previousValue);
-        this.pushToCorrectList(change.currentValue);
+      if (change.previousValue instanceof Brew || change.currentValue instanceof Brew) {
+        if (change.previousValue === undefined || change.previousValue === null) {
+          // C'est un ajout.
+          this.pushToCorrectList(change.currentValue);
+          this.openTab(change.currentValue);
+        } else if (change.currentValue === undefined || change.currentValue === null) {
+          // C'est une suppression...
+          this.deleteFromList(this.selectedBrews, change.previousValue);
+          this.deleteFormCorrectList(change.previousValue);
+        } else {
+          // On regarde si il y a eu un changement de status
+          if (change.previousValue.state !== change.currentValue.state) {
+            this.deleteFormCorrectList(change.previousValue);
+            this.pushToCorrectList(change.currentValue);
+          }
+        }
       }
     }
   }

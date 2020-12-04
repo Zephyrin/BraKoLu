@@ -10,8 +10,7 @@
         <mat-label> Ajouter un brassin</mat-label>
       </button>
     </div>
-    <mat-accordion class="example-headers-align"
-                   multi>
+    <mat-accordion multi>
       <mat-expansion-panel *ngFor="let brewView of brewsViewList"
                            [disabled]="brewView.dataSource.data.length === 0">
         <mat-expansion-panel-header>
@@ -32,7 +31,7 @@
   </mat-tab>
   <mat-tab *ngFor="let brew of selectedBrews; let index = index">
     <ng-template mat-tab-label>
-      {{service.getDisplay('name', brew)}}
+      {{service.getDisplay('number', brew)}} - {{service.getDisplay('name', brew)}}
       <button mat-icon-button
               (click)="closeTab($event, brew, index)">
         <mat-icon>close</mat-icon>

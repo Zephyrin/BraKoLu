@@ -1,6 +1,6 @@
-<mat-tab-group [selectedIndex]="orderService.formSelectedOrder.value"
+<mat-tab-group [selectedIndex]="formSelectedOrder.value"
                mat-align-tabs="center"
-               (selectedIndexChange)="orderService.formSelectedOrder.setValue($event)">
+               (selectedIndexChange)="formSelectedOrder.setValue($event)">
   <mat-tab label="Commandes">
     <button mat-button
             (click)="addNewOrder()">
@@ -13,12 +13,18 @@
                #tableComponent></app-table>
     <app-pagination [paginate]="service.paginate"></app-pagination>
   </mat-tab>
-  <mat-tab *ngFor="let order of orderService.selectedOrders; let index = index"
-           [label]="service.getDisplay('tabOrder', order)">
-    <app-order-pronostic [order]="order"
-                         [brewService]="brewService"
-                         [supplierService]="supplierService"
-                         [ingredientService]="ingredientService"
-                         [service]="service"></app-order-pronostic>
+  <mat-tab *ngFor="let order of selectedOrders; let index = index"
+           [ngSwitch]="order.state">
+    <ng-template mat-tab-label>
+      {{service.getDisplay('tabOrder', order)}}
+      <button mat-icon-button
+              (click)="closeTab($event, order, index)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-template>
+    <app-order-detail-creation *ngSwitchCase="'created'"
+                               [order]="order"></app-order-detail-creation>
+    <app-order-detail *ngSwitchDefault></app-order-detail>
+
   </mat-tab>
 </mat-tab-group>

@@ -10,7 +10,6 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Console } from 'console';
 
 @Component({
   selector: 'app-brew-details-desktop',
@@ -56,7 +55,7 @@ export class BrewDetailsDesktopComponent implements OnInit, AfterViewInit, OnDes
 
   ngAfterViewInit(): void {
     // On passe par la vue en bindant le status completed du step si c'est celui du brassin.
-    // this.stepperComponent.selectedIndex = this.service.states.findIndex(x => x.value === this.brew.state);
+    this.stepperComponent.selectedIndex = this.service.states.findIndex(x => x.value === this.brew.state);
   }
 
   ngOnDestroy(): void {
@@ -64,8 +63,10 @@ export class BrewDetailsDesktopComponent implements OnInit, AfterViewInit, OnDes
   }
 
   endUpdate(data: SimpleChange) {
-    if (data.previousValue.id === this.brew.id && data.currentValue) {
-      if (this.brew.state !== data.previousValue.state) {
+    if (data.previousValue !== null && data.previousValue !== undefined) {
+      if (data.previousValue.id === this.brew.id && data.currentValue) {
+        if (this.brew.state !== data.previousValue.state) {
+        }
       }
     }
   }
@@ -87,5 +88,11 @@ export class BrewDetailsDesktopComponent implements OnInit, AfterViewInit, OnDes
 
   deleteDate(event: MouseEvent, date: string) {
     this.service.update(date, this.$brew, null);
+  }
+
+  isCompleteState(state: string) {
+    const indexState = this.service.states.findIndex(x => x.value === state);
+    const indexBrew = this.service.states.findIndex(x => x.value === this.brew.state);
+    return indexState <= indexBrew;
   }
 }

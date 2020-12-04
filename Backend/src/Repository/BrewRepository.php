@@ -33,6 +33,7 @@ class BrewRepository extends ServiceEntityRepository
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         }
+        $query = $this->orList($query, $paramFetcher->get('states'), 'e.state = ');
         return $this->resultCount($query, $paramFetcher);
     }
     // /**

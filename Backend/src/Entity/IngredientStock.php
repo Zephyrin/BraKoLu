@@ -98,7 +98,7 @@ class IngredientStock
     /**
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="stocks")
      */
-    private $ordered;
+    private $order;
 
     /**
      * @ORM\OneToMany(targetEntity=BrewStock::class, mappedBy="stock", orphanRemoval=true)
@@ -110,6 +110,12 @@ class IngredientStock
      * @ORM\ManyToOne(targetEntity=Supplier::class, inversedBy="ingredientStocks")
      */
     private $supplier;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @SerializedName("deliveryScheduledFor")
+     */
+    private $deliveryScheduledFor;
 
     public function __construct()
     {
@@ -244,14 +250,14 @@ class IngredientStock
         return $this;
     }
 
-    public function getOrdered(): ?Order
+    public function getOrder(): ?Order
     {
-        return $this->ordered;
+        return $this->order;
     }
 
-    public function setOrdered(?Order $ordered): self
+    public function setOrder(?Order $order): self
     {
-        $this->ordered = $ordered;
+        $this->order = $order;
 
         return $this;
     }
@@ -295,6 +301,18 @@ class IngredientStock
     public function setSupplier(?Supplier $supplier): self
     {
         $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getDeliveryScheduledFor(): ?\DateTimeInterface
+    {
+        return $this->deliveryScheduledFor;
+    }
+
+    public function setDeliveryScheduledFor(?\DateTimeInterface $deliveryScheduledFor): self
+    {
+        $this->deliveryScheduledFor = $deliveryScheduledFor;
 
         return $this;
     }

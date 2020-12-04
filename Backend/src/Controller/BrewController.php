@@ -176,6 +176,9 @@ class BrewController extends AbstractFOSRestController
      * @QueryParam(name="search"
      *      , nullable=true
      *      , description="Recherche dans la base sur les attributs de la classe brew.")
+     * @QueryParam(name="states"
+     *      , nullable=true
+     *      , description="Selectionne uniquement ceux dont l'état est dans la liste.")
      *
      * @param ParamFetcher $paramFetcher
      * @return View

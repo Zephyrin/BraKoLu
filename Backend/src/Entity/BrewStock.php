@@ -40,11 +40,6 @@ class BrewStock
      */
     private $apply;
 
-    /**
-     * @ORM\OneToOne(targetEntity=StockNotOrder::class, mappedBy="brewStock", cascade={"persist", "remove"})
-     * @SerializedName("stockNotOrder")
-     */
-    private $stockNotOrder;
 
     public function getId(): ?int
     {
@@ -95,23 +90,6 @@ class BrewStock
     public function setApply(bool $apply): self
     {
         $this->apply = $apply;
-
-        return $this;
-    }
-
-    public function getStockNotOrder(): ?StockNotOrder
-    {
-        return $this->stockNotOrder;
-    }
-
-    public function setStockNotOrder(StockNotOrder $stockNotOrder): self
-    {
-        $this->stockNotOrder = $stockNotOrder;
-
-        // set the owning side of the relation if necessary
-        if ($stockNotOrder->getBrewStock() !== $this) {
-            $stockNotOrder->setBrewStock($this);
-        }
 
         return $this;
     }

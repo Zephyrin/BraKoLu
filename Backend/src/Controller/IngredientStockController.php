@@ -60,6 +60,12 @@ class IngredientStockController extends AbstractFOSRestController
 
     private $ingredient = "ingredient";
 
+    private $order = "order";
+
+    private $supplier = "supplier";
+
+    private $deliveryDate = "deliveryScheduledFor";
+
     public function __construct(
         EntityManagerInterface $entityManager,
         IngredientStockRepository $repository,
@@ -111,18 +117,26 @@ class IngredientStockController extends AbstractFOSRestController
 
     public function post(array $data)
     {
-        $responseIngredient = $this->createOrUpdateIngredient($data, $this->ingredient);
+        $delivery = false;
+        $response[] = $this->createOrUpdate($data, $this->ingredient, "IngredientController", false, true);
+        $response[] = $this->createOrUpdate($data, $this->order, "OrderController", false, false);
+        $this->manageDataDates($data);
+        if (array_key_exists($this->deliveryDate, $data)) {
+            $delivery = $data[$this->deliveryDate];
+            unset($data[$this->deliveryDate]);
+        }
         $newEntity = new IngredientStock();
         // La date de création doit-être mise avant la validation. Car c'est un attribut
         // obligatoire, mais qui n'est pas accessible par le client.
         $newEntity->setCreationDate(new DateTime());
+        if ($delivery != false || is_null($delivery))
+            $newEntity->setDeliveryScheduledFor($delivery);
         $form = $this->createForm(IngredientStockType::class, $newEntity);
         $form->submit($data, false);
-        $this->validationErrorWithChild(
+        $this->validationError(
             $form,
             $this,
-            $responseIngredient,
-            $this->ingredient
+            $response
         );
         $insertData = $form->getData();
         $this->manageDates($insertData);
@@ -197,6 +211,9 @@ class IngredientStockController extends AbstractFOSRestController
      * @QueryParam(name="search"
      *      , nullable=true
      *      , description="Recherche dans la base sur les attributs de la classe et de la classe liée ingrédient.")
+     * @QueryParam(name="states"
+     *      , nullable=true
+     *      , description="Selectionne uniquement ceux dont l'état est dans la liste.")
      *
      * @param ParamFetcher $paramFetcher
      * @return View
@@ -256,6 +273,7 @@ class IngredientStockController extends AbstractFOSRestController
         return $this->putOrPatch($this->getDataFromJson($request, true), false, $id);
     }
 
+
     /**
      * @param array $data
      * @param string $id
@@ -266,13 +284,22 @@ class IngredientStockController extends AbstractFOSRestController
      */
     public function putOrPatch(array $data, bool $clearMissing, string $id)
     {
+        $delivery = false;
         $existing = $this->getById($id);
+        $response[] = $this->createOrUpdate($data, $this->supplier, "SupplierController", false, false);
+        $this->manageDataDates($data);
+        if (array_key_exists($this->deliveryDate, $data)) {
+            $delivery = $data[$this->deliveryDate];
+            unset($data[$this->deliveryDate]);
+        }
         $form = $this->createForm(IngredientStockType::class, $existing);
 
         $form->submit($data, $clearMissing);
-        $this->validationError($form, $this);
+        $this->validationError($form, $this, $response);
         $updateData = $form->getData();
         $this->manageDates($updateData);
+        if ($delivery != false || is_null($delivery))
+            $updateData->setDeliveryScheduledFor($delivery);
         $this->entityManager->flush();
 
         return $this->view(null, Response::HTTP_NO_CONTENT);
@@ -332,6 +359,13 @@ class IngredientStockController extends AbstractFOSRestController
             throw new NotFoundHttpException();
         }
         return $ingredient;
+    }
+
+    private function manageDataDates(array &$stock)
+    {
+        if (isset($stock[$this->deliveryDate])) {
+            $stock[$this->deliveryDate] = DateTime::createFromFormat('Y-m-d', $stock[$this->deliveryDate]);
+        }
     }
 
     private function manageDates(IngredientStock $stock)

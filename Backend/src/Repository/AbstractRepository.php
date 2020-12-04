@@ -33,6 +33,24 @@ trait AbstractRepository
     return $offset;
   }
 
+  public function orList(QueryBuilder $query, string $list, string $condition)
+  {
+    if ($list != null) {
+      $split = explode(',', $list);
+      $sql = '(';
+      $or = '';
+      foreach ($split as $child) {
+        $sql = $sql . $or . $condition . ':' . $child;
+        $or = ' OR ';
+      }
+      $sql = $sql . ')';
+      $query = $query->andWhere($sql);
+      foreach ($split as $child) {
+        $query = $query->setParameter($child, $child);
+      }
+    }
+    return $query;
+  }
   /**
    * $query The query builder
    * $entityName the name of the entity to count in. Like App\Entity\SubCategory

@@ -55,12 +55,23 @@
                           class="stepper">
     <mat-step *ngFor="let state of service.states"
               [label]="state.viewValue"
-              [completed]="brew.state === state.value"
-              [editable]="false">
+              [completed]="isCompleteState(state.value)"
+              [editable]="isCompleteState(state.value)">
+      <span>{{state.value}} - {{brew.state}}</span>
     </mat-step>
   </mat-horizontal-stepper>
 </div>
-
-<app-brew-ingredient-desktop [brew]="brew"
-                             [ingredientService]="ingredientService"
-                             [brewService]="service"></app-brew-ingredient-desktop>
+<ng-container [ngSwitch]="service.states[stepper.selectedIndex].value">
+  <app-brew-ingredient-desktop [brew]="brew"
+                               [ingredientService]="ingredientService"
+                               [brewService]="service"
+                               *ngSwitchCase="'created'"></app-brew-ingredient-desktop>
+  <app-brew-ingredient-desktop [brew]="brew"
+                               [ingredientService]="ingredientService"
+                               [brewService]="service"
+                               [isPlanedView]="true"
+                               *ngSwitchCase="'planed'"></app-brew-ingredient-desktop>
+  <div *ngSwitchDefault>
+    La vue de {{service.states[stepper.selectedIndex].value}} non présent pour le moment.
+  </div>
+</ng-container>

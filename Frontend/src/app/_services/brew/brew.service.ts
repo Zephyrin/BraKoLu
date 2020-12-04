@@ -1,10 +1,11 @@
+import { BrewSearchService } from './brew-search.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BrewHttpService } from './brew-http.service';
 import { CService, ValueViewChild } from '@app/_services/iservice';
 import { Injectable, SimpleChange } from '@angular/core';
 import { Brew, BrewIngredient as BrewIngredient } from '@app/_models/brew';
-import { Ingredient, IngredientStock } from '@app/_models';
+import { Ingredient } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class BrewService extends CService<Brew> {
   constructor(
     private h: BrewHttpService,
     public datepipe: DatePipe) {
-    super(h, undefined);
+    super(h, new BrewSearchService());
   }
 
   public initEnums(): void {
@@ -66,7 +67,7 @@ export class BrewService extends CService<Brew> {
       abv: ['125', Validators.required],
       ibu: ['0', Validators.required],
       ebc: ['11', Validators.required],
-      state: ['', Validators.required],
+      state: ['created', Validators.required],
       producedQuantity: [''],
       started: [''],
       ended: [''],

@@ -170,7 +170,7 @@ export class BrewStock {
   toJSON(includeStock = true) {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
-    if (includeStock && this.stock) { data[`stock`] = this.stock.toJSON(true, false); }
+    if (includeStock && this.stock) { data[`stock`] = this.stock.toJSON(true); }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
     if (this.apply !== undefined) { data[`apply`] = this.apply; }
     return data;

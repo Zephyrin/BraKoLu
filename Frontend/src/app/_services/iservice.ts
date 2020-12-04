@@ -244,12 +244,12 @@ export abstract class CService<T> implements IService {
 
   private load$(): void {
     let httpParams = null;
+    if (this.search) {
+      httpParams = this.search.initSearchParams(httpParams);
+    }
     if (!this.loadAll) {
-      httpParams = this.paginate.initPaginationParams(null);
+      httpParams = this.paginate.initPaginationParams(httpParams);
       httpParams = this.sort.initSortParams(httpParams);
-      if (this.search) {
-        httpParams = this.search.initSearchParams(httpParams);
-      }
     }
     this.http.getAll(httpParams).subscribe(response => {
       this.paginate.setParametersFromResponse(response.headers);
@@ -282,7 +282,7 @@ export abstract class CService<T> implements IService {
     return undefined;
   }
 
-  public update(name: string, value: T, newValue: any): void {
+  public update(name: string, value: T, newValue: any, update = false): void {
     if (this.start() === true) {
       this.workingOn = value;
       const simpleChange = new SimpleChange(value, newValue, true);
@@ -291,7 +291,7 @@ export abstract class CService<T> implements IService {
       } else {
         if (this.workingOn) {
           const id = 'id';
-          if (newValue && newValue[id]) {
+          if ((newValue && newValue[id] || !name) && !update) {
             // On utilise le mode avec l'objet entier.
             simpleChange.currentValue = newValue;
             this.updateOrCreate(simpleChange);
@@ -352,6 +352,9 @@ export abstract class CService<T> implements IService {
     if (model[name] === undefined || model[name] === '') {
       const dataToSent = this.createCpy(model);
       this.http.create(dataToSent).subscribe(data => {
+        // On met à jour sur l'ancienne valeur l'id pour le retrouver plus facilement
+        // lors des recherches. Pas sûr d'en avoir besoin.
+        // simpleChange.previousValue[name] = data[name];
         simpleChange.currentValue = this.createCpy(data);
         this.model.push(simpleChange.currentValue);
         this.end(true, simpleChange);
@@ -372,9 +375,11 @@ export abstract class CService<T> implements IService {
   }
 
   protected updateData(newData: T, oldData: T) {
-    Object.keys(newData).forEach(key => {
-      oldData[key] = newData[key];
-    });
+    if (newData) {
+      Object.keys(newData).forEach(key => {
+        oldData[key] = newData[key];
+      });
+    }
   }
 
   protected delete(simpleChange: SimpleChange) {

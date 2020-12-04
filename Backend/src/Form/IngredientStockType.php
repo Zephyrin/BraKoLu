@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\IngredientStock;
 use App\Entity\Ingredient;
 use App\Entity\Supplier;
+use App\Entity\Order;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,6 +23,7 @@ class IngredientStockType extends AbstractType
             ->add("quantity")
             ->add("price")
             ->add("state")
+            ->add("deliveryScheduledFor")
             ->add(
                 'ingredient',
                 EntityType::class,
@@ -31,6 +33,11 @@ class IngredientStockType extends AbstractType
                 'supplier',
                 EntityType::class,
                 ['class' => Supplier::class, 'required' => false]
+            )
+            ->add(
+                'order',
+                EntityType::class,
+                ['class' => Order::class]
             );
     }
 

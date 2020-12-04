@@ -57,10 +57,11 @@ import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredie
 import { OrderComponent } from './_components/order/order.component';
 import { OrderDesktopComponent } from './_components/order/order-desktop/order-desktop.component';
 import { OrderMobileComponent } from './_components/order/order-mobile/order-mobile.component';
-import { OrderCreateComponent } from './_components/order/order-create/order-create.component';
-import { OrderPronosticComponent } from './_components/order/order-pronostic/order-pronostic.component';
 import { BrewsTableComponent } from './_components/brew/brew-desktop/brews-table/brews-table.component';
 import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/brew-details-desktop/brew-details-desktop.component';
+import { BrewIngredientTableComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-table/brew-ingredient-table.component';
+import { OrderDetailComponent } from './_components/order/order-desktop/order-detail/order-detail.component';
+import { OrderDetailCreationComponent } from './_components/order/order-desktop/order-detail-creation/order-detail-creation.component';
 
 @NgModule({
   declarations: [
@@ -90,10 +91,11 @@ import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/bre
     OrderComponent,
     OrderDesktopComponent,
     OrderMobileComponent,
-    OrderCreateComponent,
-    OrderPronosticComponent,
     BrewsTableComponent,
     BrewDetailsDesktopComponent,
+    BrewIngredientTableComponent,
+    OrderDetailComponent,
+    OrderDetailCreationComponent,
 
   ],
   imports: [

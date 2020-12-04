@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BrewStock } from './../../_models/brew';
 import { Brew } from '@app/_models/brew';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -13,11 +13,12 @@ import { Ingredient, IngredientStock } from '@app/_models';
   providedIn: 'root'
 })
 export class OrderService extends CService<Order> {
-  public selectedOrders = new Array<Order>();
-  public formSelectedOrder = new FormControl(0);
+
 
   public states: ValueViewChild[] = [];
   private nbEnumLeft = 0;
+
+  public selectedChange = new Subject<Order>();
 
   constructor(
     private h: OrderHttpService,
@@ -87,51 +88,16 @@ export class OrderService extends CService<Order> {
     return value[name];
   }
 
-  public getPronostic(brews: Brew[], order: Order, dataSource: any) {
-    (this.http as OrderHttpService).getPronostic(brews, order).subscribe(response => {
-      order.update(response);
-      dataSource.updateSource(order);
-    }, err => {
-      this.end(true, undefined, err);
-    });
-  }
-
   public createOrder(): void {
     if (this.start() === true) {
       this.http.create(new Order(undefined)).subscribe(response => {
         const newOrder = new Order(response);
         this.model.push(newOrder);
-        this.selectedOrders.push(newOrder);
         const simpleChange = new SimpleChange(null, newOrder, true);
         this.end(true, simpleChange);
-        this.formSelectedOrder.setValue(this.selectedOrders.length);
       }, error => {
         this.end(true, undefined, error);
       });
-    }
-  }
-
-  public brewStockToOrder(brewStock: BrewStock, brewOrder: BrewStock, order: Order): Observable<Order> {
-    if (this.start() === true) {
-      const obs = (this.http as OrderHttpService).brewStockToOrder(brewStock, brewOrder, order);
-      obs.subscribe(repsonse => {
-        this.end(true, undefined);
-      }, error => {
-        this.end(true, undefined, error);
-      });
-      return obs;
-    }
-  }
-
-  public brewOrderToStock(brewOrder: BrewStock, brewStock: BrewStock, order: Order): Observable<Order> {
-    if (this.start() === true) {
-      const obs = (this.http as OrderHttpService).brewOrderToStock(brewOrder, brewStock, order);
-      obs.subscribe(repsonse => {
-        this.end(true, undefined);
-      }, error => {
-        this.end(true, undefined, error);
-      });
-      return obs;
     }
   }
 
@@ -170,32 +136,6 @@ export class OrderService extends CService<Order> {
   }
 
   public setSelected(value: Order): void {
-    const index = this.selectedOrders.findIndex(x => x.id === value?.id);
-    if (index >= 0) {
-      this.formSelectedOrder.setValue(index + 1);
-    } else {
-      this.selectedOrders.push(value);
-      this.formSelectedOrder.setValue(this.selectedOrders.length);
-    }
-  }
-
-  public setBrewList(brewList: Array<Brew>, allBrews: Array<Brew>, value: Order): void {
-    // On ajoute à la liste d'affichage les brassins déjà contenu dans la commande
-    brewList.splice(0, brewList.length - 1);
-    value.stocks.forEach(stock => {
-      stock.brewStocks.forEach(brewStock => {
-        const index = brewList.findIndex(x => x.id === brewStock.brew.id);
-        if (index < 0) {
-          brewList.push(brewStock.brew);
-        }
-      });
-    });
-    // Si la commande est au status de créé, on ajoute aussi les brassins au status crée ou planning
-    allBrews.filter(x => x.state === 'created' || x.state === 'planning').forEach(brew => {
-      const index = brewList.findIndex(x => x.id === brew.id);
-      if (index < 0) {
-        brewList.push(brew);
-      }
-    });
+    this.selectedChange.next(value);
   }
 }

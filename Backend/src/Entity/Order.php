@@ -44,7 +44,7 @@ class Order
     private $created;
 
     /**
-     * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="ordered")
+     * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="order")
      */
     private $stocks;
 
@@ -55,16 +55,9 @@ class Order
      */
     private $state;
 
-    /**
-     * @ORM\OneToMany(targetEntity=StockNotOrder::class, mappedBy="ordered", orphanRemoval=true)
-     * @SerializedName("stockNotOrders")
-     */
-    private $stockNotOrders;
-
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
-        $this->stockNotOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,7 +89,7 @@ class Order
     {
         if (!$this->stocks->contains($stock)) {
             $this->stocks[] = $stock;
-            $stock->setOrdered($this);
+            $stock->setOrder($this);
         }
 
         return $this;
@@ -107,8 +100,8 @@ class Order
         if ($this->stocks->contains($stock)) {
             $this->stocks->removeElement($stock);
             // set the owning side to null (unless already changed)
-            if ($stock->getOrdered() === $this) {
-                $stock->setOrdered(null);
+            if ($stock->getOrder() === $this) {
+                $stock->setOrder(null);
             }
         }
 
@@ -123,37 +116,6 @@ class Order
     public function setState(string $state): self
     {
         $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|StockNotOrder[]
-     */
-    public function getStockNotOrders(): Collection
-    {
-        return $this->stockNotOrders;
-    }
-
-    public function addStockNotOrder(StockNotOrder $stockNotOrder): self
-    {
-        if (!$this->stockNotOrders->contains($stockNotOrder)) {
-            $this->stockNotOrders[] = $stockNotOrder;
-            $stockNotOrder->setOrdered($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStockNotOrder(StockNotOrder $stockNotOrder): self
-    {
-        if ($this->stockNotOrders->contains($stockNotOrder)) {
-            $this->stockNotOrders->removeElement($stockNotOrder);
-            // set the owning side to null (unless already changed)
-            if ($stockNotOrder->getOrdered() === $this) {
-                $stockNotOrder->setOrdered(null);
-            }
-        }
 
         return $this;
     }

@@ -3,35 +3,14 @@
   <mat-icon>add_circle_outline</mat-icon>
   <mat-label>Ajouter un ingrédient</mat-label>
 </button>
+<button mat-button
+        *ngIf="isPlanedView"
+        (click)="letsGoBrew()">
+  <mat-icon>receipt</mat-icon>
+  <mat-label>Bra...Brassage !</mat-label>
+</button>
 <div class="element-listing"
      *ngIf="!ingredientService.loadingSource">
-  <mat-list>
-    <ng-container *ngFor="let children of ingredientService.ingredientChildrenNames">
-      <ng-container *ngIf="hasChildren(children.value)">
-        <div mat-subheader>
-          {{children.viewValue}}
-        </div>
-        <mat-list-item *ngFor="let brewIngredient of getChildren(children.value)">
-          <div mat-line>
-            <!-- use a disabled button to provide padding for tree leaf -->
-            <button mat-icon-button
-                    disabled></button>
-            {{brewIngredient.ingredient.brewView()}}
-            <mat-form-field>
-              <mat-label>Quantité ({{brewIngredient.ingredient.unit}})</mat-label>
-              <input matInput
-                     [placeholder]="'Ex: 23 ' + brewIngredient.ingredient.unit"
-                     type="number"
-                     (change)="updateIngredient($event, brewIngredient)"
-                     [value]="brewIngredient.quantity">
-            </mat-form-field>
-            <button mat-icon-button
-                    (click)="deleteIngredient($event, brewIngredient)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </mat-list-item>
-      </ng-container>
-    </ng-container>
-  </mat-list>
+  <app-brew-ingredient-table *ngFor="let children of brewIngredientByType"
+                             [brewIngredientByType]="children"></app-brew-ingredient-table>
 </div>
