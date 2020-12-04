@@ -2,7 +2,7 @@ import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Order } from '@app/_models/order';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { BrewIngredient } from '@app/_models/brew';
+import { BrewIngredient, Brew } from '@app/_models/brew';
 import { ValueViewChild } from '@app/_services/iservice';
 import { OrderService } from '@app/_services/order/order.service';
 import { StockService } from '@app/_services/stock/stock.service';
@@ -49,6 +49,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 })
 export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   accordionOrder = new Array<AccordionOrder>();
+  brewsDetail = new Array<BrewDetail>();
   brewSubscription: Subscription;
   stockSubscription: Subscription;
   @Input() order: Order;
@@ -121,6 +122,8 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
         }
       });
       this.brewService.model.forEach(brew => {
+        const brewDetail = new BrewDetail(brew);
+        this.brewsDetail.push(brewDetail);
         brew.brewIngredients.forEach(brewIngredient => {
           if (brewIngredient.brew.state === 'planed') {
             let indexAccordion = this.accordionOrder.findIndex(x => x.childName.value === brewIngredient.ingredient.childName);
@@ -133,7 +136,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
               this.accordionOrder.push(accordion);
               indexAccordion = this.accordionOrder.length - 1;
             }
-            this.accordionOrder[indexAccordion].addBrewIngredient(brewIngredient);
+            this.accordionOrder[indexAccordion].addBrewIngredient(brewIngredient, brewDetail);
           }
         });
       });
@@ -237,7 +240,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
-  public updateStockSupplier(evt: MatSelectChange, orderStock: OrderStock, stock: IngredientStock, name: string): void {
+  public updateStockSupplier(evt: MatSelectChange, orderStock: OrderStock, stock: IngredientStock): void {
     this.stockService.update('supplier', stock, evt.value, true);
   }
 
@@ -253,6 +256,36 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   }
 }
 
+class BrewDetail {
+  brew: Brew;
+  isApply: boolean;
+  canBeBrew: boolean;
+  ingredients = new Array<BrewIngredientOrder>();
+  constructor(brew: Brew) {
+    this.brew = brew;
+    this.isApply = true;
+    this.canBeBrew = true;
+  }
+
+  addIngredient(ingredient: BrewIngredientOrder) {
+    this.ingredients.push(ingredient);
+  }
+
+  ingredientBecomeOk() {
+    let canBrew = true;
+    this.ingredients.forEach(ing => {
+      if (ing.quantityLeft > 0) {
+        this.canBeBrew = false;
+        canBrew = false;
+      }
+    });
+    if (canBrew) { this.canBeBrew = true; }
+  }
+
+  ingredientWillMiss() {
+    this.canBeBrew = false;
+  }
+}
 class AccordionOrder {
   childName: ValueViewChild;
   orderStocks = new Array<OrderStock>();
@@ -279,28 +312,17 @@ class AccordionOrder {
     }
   }
 
-  public addBrewIngredient(brewIngredient: BrewIngredient) {
+  public addBrewIngredient(brewIngredient: BrewIngredient, brewDetail: BrewDetail) {
     let index = this.orderStocks.findIndex(x => x.ingredient.id === brewIngredient.ingredient.id);
     if (index < 0) {
       const orderStock = new OrderStock(brewIngredient.ingredient, this.order, undefined, this.stockService);
       this.orderStocks.push(orderStock);
       index = this.orderStocks.length - 1;
     }
-    this.orderStocks[index].addBrewIngredient(brewIngredient);
+    this.orderStocks[index].addBrewIngredient(brewIngredient, brewDetail);
     if (this.orderStocks[index].expanded) {
       this.expanded = true;
     }
-  }
-}
-
-class DataSourceStock extends DataSource<OrderStock> {
-  source = new BehaviorSubject<OrderStock[]>([]);
-  connect(collectionViewer: CollectionViewer): Observable<OrderStock[] | readonly OrderStock[]> {
-    return this.source.asObservable();
-  }
-  disconnect(collectionViewer: CollectionViewer): void {
-    this.source.value.splice(0, this.source.value.length);
-    this.source.complete();
   }
 }
 
@@ -342,7 +364,7 @@ class OrderStock {
     this.orderStocks.push(stock);
   }
 
-  public addBrewIngredient(brewIngredient: BrewIngredient) {
+  public addBrewIngredient(brewIngredient: BrewIngredient, brewDetail: BrewDetail) {
     let quantityOrder = 0;
     let quantityInOrder = 0;
     this.orderStocks.forEach(stock => {
@@ -360,9 +382,12 @@ class OrderStock {
       }
     });
 
-    this.brewIngredients.push(new BrewIngredientOrder(brewIngredient,
-      (this.quantityInStock + quantityOrder + quantityInOrder) - this.quantityNeeded)
-    );
+    this.brewIngredients.push(
+      new BrewIngredientOrder(
+        brewIngredient,
+        (this.quantityInStock + quantityOrder + quantityInOrder) - this.quantityNeeded,
+        brewDetail
+      ));
     this.quantityNeeded += brewIngredient.quantity;
     if (this.quantityInStock + quantityInOrder > this.quantityNeeded) { this.quantityRecommanded = 0; }
     else if (this.quantityInStock + quantityInOrder > 0 && this.quantityNeeded > this.quantityInStock + quantityInOrder) {
@@ -372,6 +397,7 @@ class OrderStock {
     }
     if (this.brewIngredients[this.brewIngredients.length - 1].quantityLeft > 0) {
       this.expanded = true;
+      this.brewIngredients[this.brewIngredients.length - 1].brewDetail.ingredientWillMiss();
     }
   }
 
@@ -394,13 +420,28 @@ class OrderStock {
           quantityOrder += stock.quantity;
         }
       });
-      brewIngredient.quantityLeft = brewIngredient.brewIngredient.quantity;
-      if (quantityOrder + this.quantityInStock - quantityUsed >= brewIngredient.quantityLeft) {
-        quantityUsed += brewIngredient.quantityLeft;
-        brewIngredient.quantityLeft = 0;
+      let quantityLeft = brewIngredient.brewIngredient.quantity;
+      if (quantityOrder + this.quantityInStock - quantityUsed >= quantityLeft) {
+        quantityUsed += quantityLeft;
+        quantityLeft = 0;
       } else {
-        brewIngredient.quantityLeft -= (quantityOrder + this.quantityInStock - quantityUsed);
-        quantityUsed += brewIngredient.brewIngredient.quantity - brewIngredient.quantityLeft;
+        quantityLeft -= (quantityOrder + this.quantityInStock - quantityUsed);
+        quantityUsed += brewIngredient.brewIngredient.quantity - quantityLeft;
+      }
+      if (quantityLeft !== brewIngredient.quantityLeft) {
+        let notifyBrewMissing = false;
+        let notifyBrewIngOk = false;
+        if (quantityLeft > 0 && brewIngredient.quantityLeft === 0) {
+          notifyBrewMissing = true;
+        } else if (quantityLeft === 0 && brewIngredient.quantityLeft > 0) {
+          notifyBrewIngOk = true;
+        }
+        brewIngredient.quantityLeft = quantityLeft;
+        if (notifyBrewIngOk) {
+          brewIngredient.brewDetail.ingredientBecomeOk();
+        } else if (notifyBrewMissing) {
+          brewIngredient.brewDetail.ingredientWillMiss();
+        }
       }
     });
   }
@@ -409,8 +450,9 @@ class OrderStock {
 class BrewIngredientOrder {
   brewIngredient: BrewIngredient;
   quantityLeft: number;
+  brewDetail: BrewDetail;
 
-  public constructor(brewIngredient: BrewIngredient, quantityLeft: number) {
+  public constructor(brewIngredient: BrewIngredient, quantityLeft: number, brewDetail: BrewDetail) {
     this.brewIngredient = brewIngredient;
     if (quantityLeft >= brewIngredient.quantity) {
       this.quantityLeft = 0;
@@ -419,5 +461,7 @@ class BrewIngredientOrder {
     } else {
       this.quantityLeft = brewIngredient.quantity;
     }
+    this.brewDetail = brewDetail;
+    brewDetail.addIngredient(this);
   }
 }

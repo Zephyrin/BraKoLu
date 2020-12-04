@@ -2,10 +2,15 @@
   <div class="brew-container">
     <mat-selection-list class="brew-list"
                         #brews>
-      <mat-list-option *ngFor="let brew of brewService.model"
-                       [value]="brew">
+      <mat-list-option *ngFor="let brew of brewsDetail"
+                       [value]="brew"
+                       [selected]="brew.isApply">
+        <mat-icon matListIcon
+                  *ngIf="brew.canBeBrew">thumb_up</mat-icon>
+        <mat-icon matListIcon
+                  *ngIf="!brew.canBeBrew">warning</mat-icon>
         <div class="brew-custom-placeholder"></div>
-        {{brew.number}} - {{brew.name}} : {{brew.started | date: 'dd-M-yyyy' }} - {{brew.state}}
+        {{brew.brew.number}} - {{brew.brew.name}} : {{brew.brew.started | date: 'dd-M-yyyy' }} - {{brew.brew.state}}
       </mat-list-option>
     </mat-selection-list>
   </div>
