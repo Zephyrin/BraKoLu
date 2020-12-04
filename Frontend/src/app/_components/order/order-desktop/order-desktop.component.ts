@@ -68,8 +68,11 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
     }
   }
 
-  public closeTab(event: MouseEvent, brew: Order, index: number) {
+  public closeTab(event: MouseEvent, order: Order, index: number) {
     event.stopPropagation();
+    if (order.state === 'created') {
+      this.loadStockAndBrewFormOrder = false;
+    }
     this.formSelectedOrder.setValue(0);
     this.selectedOrders.splice(index, 1);
   }
@@ -93,6 +96,8 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
   private initServices() {
     if (this.loadStockAndBrewFormOrder === false) {
       this.ingredientService.initEnums();
+      this.brewService.model = undefined;
+      this.stockService.model = undefined;
       this.supplierService.load(true);
       (this.stockService.search as StockSearchService).stockSearch.addState('ordered');
       (this.stockService.search as StockSearchService).stockSearch.addState('stocked');

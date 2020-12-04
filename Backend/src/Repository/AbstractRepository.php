@@ -33,7 +33,7 @@ trait AbstractRepository
     return $offset;
   }
 
-  public function orList(QueryBuilder $query, string $list, string $condition)
+  public function orList(QueryBuilder $query, ?string $list, string $condition)
   {
     if ($list != null) {
       $split = explode(',', $list);
