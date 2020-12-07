@@ -137,6 +137,11 @@ export interface IService {
   create(): any;
 
   /**
+   * Crée une instance pour réaliser un udpate partiel de l'objet.
+   */
+  createPart(): any;
+
+  /**
    * Créer le formulaire de création ou de mise à jour.
    *
    * @param formBuilder Le créateur de formulaire donné par la vue. Permet de définir les champs qui seront suivis
@@ -230,6 +235,7 @@ export abstract class CService<T> implements IService {
   //#region Abstract IService
   abstract createCpy(value: T): T;
   abstract create(): T;
+  abstract createPart(): T;
   public abstract createFormBasedOn(formBuilder: FormBuilder, value: T);
 
   public abstract initEnums();
@@ -282,8 +288,8 @@ export abstract class CService<T> implements IService {
     return undefined;
   }
 
-  public update(name: string, value: T, newValue: any, update = false): void {
-    if (this.start() === true) {
+  public update(name: string, value: T, newValue: any, update = false, forceCall = false): void {
+    if (this.start() === true || forceCall) {
       this.workingOn = value;
       const simpleChange = new SimpleChange(value, newValue, true);
       if ((newValue === undefined || newValue === null) && (name === undefined || name === null)) {
@@ -297,7 +303,7 @@ export abstract class CService<T> implements IService {
             this.updateOrCreate(simpleChange);
           } else {
             // On utilise qu'une partie de l'objet.
-            const model = this.create();
+            const model = this.createPart();
             model[id] = this.workingOn[id];
             model[name] = newValue;
             simpleChange.currentValue = model;
@@ -363,10 +369,11 @@ export abstract class CService<T> implements IService {
       });
     } else {
       this.http.update(model[name].toString(), model).subscribe(data => {
-        simpleChange.previousValue = this.createCpy(this.workingOn);
-        this.updateData(data, this.workingOn);
+        const newValue = simpleChange.previousValue;
+        simpleChange.previousValue = this.createCpy(simpleChange.previousValue);
+        this.updateData(data, newValue, model);
 
-        simpleChange.currentValue = this.workingOn;
+        simpleChange.currentValue = newValue;
         this.end(true, simpleChange);
       }, error => {
         this.end(true, simpleChange, error);
@@ -374,10 +381,16 @@ export abstract class CService<T> implements IService {
     }
   }
 
-  protected updateData(newData: T, oldData: T) {
+  protected updateData(newData: T, oldData: T, modelUsedForUpdate: T) {
     if (newData) {
       Object.keys(newData).forEach(key => {
         oldData[key] = newData[key];
+      });
+    } else {
+      Object.keys(modelUsedForUpdate).forEach(key => {
+        if (key !== 'id') {
+          oldData[key] = modelUsedForUpdate[key];
+        }
       });
     }
   }

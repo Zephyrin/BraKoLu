@@ -5,7 +5,7 @@
 
 
 // Define color from palette (with parameters default, lighter, darker)
-$light-primary: mat-palette($md-light-primary, 500, 400, 100); 
+$light-primary: mat-palette($md-light-primary, 500, 400, 100);
 $light-accent: mat-palette($md-light-accent, 500, A100, A400);
 $light-warn: mat-palette($md-light-warn);
 
@@ -16,9 +16,9 @@ $light-background: (background_color : #ffeadb);
 // Creating theme
 $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
-$custom-background-color: #ffeadb;
+/* $custom-background-color: #ffeadb;
 $background: map-get($light-theme, background);
 $background: map_merge($background, (background: $custom-background-color));
-$light-theme: map_merge($light-theme, (background: $background));
+$light-theme: map_merge($light-theme, (background: $background)); */
 
 @include angular-material-theme($light-theme);

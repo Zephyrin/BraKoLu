@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Order;
-use App\Entity\IngredientStock;
+use App\Form\IngredientStockType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,7 +23,7 @@ class OrderType extends AbstractType
             ->add(
                 'stocks',
                 CollectionType::class,
-                ['class' => IngredientStock::class]
+                ['entry_type' => IngredientStockType::class]
             );
     }
 

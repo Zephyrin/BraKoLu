@@ -29,9 +29,9 @@ export class OrderHttpService extends HttpService<Order>{
 
   deletePath() { return this.path; }
 
-  public addIngredientToOrder(order: Order, ingredient: Ingredient): Observable<IngredientStock> {
-    return this.http.patch<IngredientStock>(
-      `${environment.apiUrl}/${this.updatePath()}/${order.id}/addIngredient/${ingredient.id}`, {}
+  public changeState(order: Order): Observable<Order> {
+    return this.http.patch<Order>(
+      `${environment.apiUrl}/${this.updatePath()}/${order.id}/changeState`, {}
     );
   }
 

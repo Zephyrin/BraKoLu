@@ -65,6 +65,9 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
     if (change && change.previousValue === null) {
       this.selectedOrders.push(change.currentValue as Order);
       this.formSelectedOrder.setValue(this.selectedOrders.length);
+    } else if (change && (change.currentValue === null || change.currentValue === undefined)) {
+      const index = this.selectedOrders.findIndex(x => x.id === change.previousValue.id);
+      if (index >= 0) { this.selectedOrders.splice(index, 1); }
     }
   }
 
@@ -78,7 +81,6 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
   }
 
   public addNewOrder(): void {
-    this.initServices();
     let index = this.service.model.findIndex(x => x.state === 'created');
     if (index >= 0) {
       index = this.selectedOrders.findIndex(x => x.state === 'created');
@@ -89,8 +91,10 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
         this.formSelectedOrder.setValue(this.selectedOrders.length);
       }
     } else {
+      this.loadStockAndBrewFormOrder = false;
       this.orderService.createOrder();
     }
+    this.initServices();
   }
 
   private initServices() {

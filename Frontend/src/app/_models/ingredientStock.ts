@@ -18,8 +18,8 @@ export class IngredientStock {
   supplier: Supplier;
   order: Order;
 
-  public constructor(stock: IngredientStock | undefined, includeOrder: boolean = true) {
-    this.brewStocks = new Array();
+  public constructor(stock: IngredientStock | undefined, includeOrder: boolean = true, initLists: boolean = true) {
+    if (initLists) { this.brewStocks = new Array(); }
     if (stock && stock !== null) {
       this.id = stock.id;
       if (stock.creationDate) {
@@ -56,10 +56,27 @@ export class IngredientStock {
     }
   }
 
+  public update(value: IngredientStock) {
+    if (value.creationDate) {
+      this.creationDate = new Date(value.creationDate);
+    }
+    if (value.quantity) { this.quantity = value.quantity; }
+    if (value.price) { this.price = value.price; }
+    if (value.state) { this.state = value.state; }
+    if (value.orderedDate) { this.orderedDate = new Date(value.orderedDate); }
+    if (value.endedDate) { this.endedDate = new Date(value.endedDate); }
+    if (value.deliveryScheduledFor) { this.deliveryScheduledFor = new Date(value.deliveryScheduledFor); }
+    if (value.supplier && value.supplier.id !== this.supplier?.id) {
+      this.supplier = new Supplier(value.supplier);
+    }
+    if (value.order && value.order?.id !== this.order?.id) {
+      this.order = new Order(value.order);
+    }
+  }
+
   public init(ingredient: Ingredient, order: Order) {
     this.state = 'created';
     this.quantity = 0;
-    this.creationDate = new Date('now');
     this.order = order;
     order.stocks.push(this);
     this.ingredient = ingredient;
@@ -73,7 +90,7 @@ export class IngredientStock {
     const data = {};
     if (this.id) { data[`id`] = this.id; }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
-    if (this.price) { data[`price`] = this.price; }
+    if (this.price !== undefined) { data[`price`] = this.price; }
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
     if (includeSupplier === true || includeSupplier === '') {

@@ -56,6 +56,12 @@ export class StockService extends CService<IngredientStock>{
     return new IngredientStock(undefined);
   }
 
+  public createPart(): IngredientStock {
+    const ing = new IngredientStock(undefined, false, false);
+
+    return ing;
+  }
+
   public createCpy(stock: IngredientStock): IngredientStock {
     return new IngredientStock(stock);
   }

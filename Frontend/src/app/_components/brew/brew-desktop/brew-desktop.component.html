@@ -15,11 +15,11 @@
                            [disabled]="brewView.dataSource.data.length === 0">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{brewView.title}}
+            <span [matBadge]="brewView.dataSource.data.length"
+                  matBadgeSize="small">{{brewView.title}}</span>
           </mat-panel-title>
           <mat-panel-description>
-            <span [matBadge]="brewView.dataSource.data.length"
-                  matBadgeSize="small"></span>
+            <span></span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <app-brews-table [dataSource]="brewView.dataSource"

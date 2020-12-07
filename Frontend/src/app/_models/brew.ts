@@ -15,8 +15,8 @@ export class Brew {
   created: Date;
   brewIngredients: BrewIngredient[];
 
-  public constructor(value: Brew | undefined) {
-    this.brewIngredients = new Array();
+  public constructor(value: Brew | undefined, initLists: boolean = true) {
+    if (initLists) { this.brewIngredients = new Array(); }
     if (value && value !== null) {
       this.id = value.id;
       this.number = value.number;

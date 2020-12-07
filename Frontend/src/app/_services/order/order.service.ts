@@ -59,11 +59,17 @@ export class OrderService extends CService<Order> {
   }
 
   public create(): Order {
-    return new Order(undefined);
+    const order = new Order(undefined);
+    return order;
   }
 
-  public createCpy(brew: Order): Order {
-    return new Order(brew);
+  public createPart(): Order {
+    const order = new Order(undefined, false, false);
+    return order;
+  }
+
+  public createCpy(order: Order): Order {
+    return new Order(order);
   }
 
   public createFormBasedOn(formBuilder: FormBuilder, value: Order): void {
@@ -76,10 +82,10 @@ export class OrderService extends CService<Order> {
   public getDisplay(name: string, value: Order): any {
     switch (name) {
       case 'created':
-        return this.datepipe.transform(value[name], 'y-MM-dd');
+        return this.datepipe.transform(value[name], 'dd-MM-y');
       case 'tabOrder':
         if (value.id) {
-          return 'Commande ' + value.id;
+          return value.id + ' - ' + this.datepipe.transform(value[`created`], 'dd-MM-y');
         }
         return 'Nouvelle commande';
       default:
@@ -101,34 +107,12 @@ export class OrderService extends CService<Order> {
     }
   }
 
-  public addIngredientToOrder(order: Order, ingredient: Ingredient, callback, sender: any): void {
+  public changeState(order: Order): void {
     if (this.start() === true) {
-      (this.http as OrderHttpService).addIngredientToOrder(order, ingredient).subscribe(response => {
-        const nIngredient = new IngredientStock(response);
-        order.stocks.push(nIngredient);
-        const simpleChange = new SimpleChange(null, nIngredient, true);
+      (this.http as OrderHttpService).changeState(order).subscribe(response => {
+        const simpleChange = new SimpleChange(this.createCpy(order), order, true);
+        order.update(response);
         this.end(true, simpleChange);
-        if (callback) {
-          callback(sender, nIngredient);
-        }
-      }, error => {
-        this.end(true, undefined, error);
-      });
-    }
-  }
-
-  public deleteIngredientToOrder(order: Order, ingredient: IngredientStock, callback, sender: any): void {
-    if (this.start() === true) {
-      (this.http as OrderHttpService).deleteIngredientToOrder(order, ingredient).subscribe(response => {
-        const simpleChange = new SimpleChange(null, null, true);
-        const index = order.stocks.findIndex(x => x.id === ingredient.id);
-        if (index >= 0) {
-          const removed = order.stocks.splice(index, 1);
-          simpleChange.previousValue = removed[0];
-
-        }
-        this.end(true, simpleChange);
-        if (callback) { callback(sender, ingredient.id); }
       }, error => {
         this.end(true, undefined, error);
       });

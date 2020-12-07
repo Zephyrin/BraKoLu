@@ -39,8 +39,8 @@
               *matCellDef="let row"
               class="cursor">
             <div class="expanded">
-              <mat-icon *ngIf="!row.expanded">expand_less</mat-icon>
-              <mat-icon *ngIf="row.expanded">expand_more</mat-icon>
+              <mat-icon *ngIf="row.expanded">expand_less</mat-icon>
+              <mat-icon *ngIf="!row.expanded">expand_more</mat-icon>
             </div>
           </td>
         </ng-container>
@@ -115,8 +115,7 @@
                   <mat-datepicker #deliveryScheduledFor></mat-datepicker>
                 </mat-form-field>
                 <button mat-icon-button
-                        (click)="removeStockOrder($event, element, index)"
-                        *ngIf="index > 0">
+                        (click)="removeStockOrder($event, element, index)">
                   <mat-icon>remove_circle_outline</mat-icon>
                 </button>
               </div>
@@ -185,4 +184,11 @@
       </table>
     </mat-expansion-panel>
   </mat-accordion>
+  <div class="inline-flex-invert">
+    <button mat-button
+            [disabled]="orderService.loadingSource || stockService.loadingSource || brewService.loadingSource"
+            (click)="launchOrder($event)">
+      <mat-icon>local_shipping</mat-icon>Passer la commande
+    </button>
+  </div>
 </fieldset>

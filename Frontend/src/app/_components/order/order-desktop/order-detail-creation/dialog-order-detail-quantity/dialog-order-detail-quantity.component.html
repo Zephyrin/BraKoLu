@@ -1,0 +1,13 @@
+<p mat-dialog-title>Problème sur les quantités</p>
+<div mat-dialog-content>
+  Certain ingrédients de la commande ont une quantité à 0.<br /><br />
+  Est-ce que je les <b>supprime</b> puis je passe la commande ?<br />
+</div>
+<div mat-dialog-actions
+     class="d-flex flex-row-reverse">
+  <button mat-button
+          type="submit"
+          (click)="onSubmit()">Supprime et continue !</button>
+  <button mat-button
+          (click)="onNoClick()">Non !! Arrête la commande</button>
+</div>

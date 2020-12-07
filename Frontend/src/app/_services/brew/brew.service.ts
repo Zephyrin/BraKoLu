@@ -55,6 +55,12 @@ export class BrewService extends CService<Brew> {
     return new Brew(undefined);
   }
 
+  public createPart(): Brew {
+    const brew = new Brew(undefined, false);
+
+    return brew;
+  }
+
   public createCpy(brew: Brew): Brew {
     return new Brew(brew);
   }
@@ -140,7 +146,7 @@ export class BrewService extends CService<Brew> {
     });
   }
 
-  protected updateData(newData: Brew, oldData: Brew) {
+  protected updateData(newData: Brew, oldData: Brew, modelUsedForUpdate: Brew) {
     oldData.update(newData);
   }
 }

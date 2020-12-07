@@ -28,7 +28,7 @@ class Order
 
     public static function getStates()
     {
-        return EnumHelper::getEnum(IngredientStock::STATES);
+        return EnumHelper::getEnum(Order::STATES);
     }
 
     /**
@@ -50,7 +50,7 @@ class Order
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Assert\Choice(callback="getStates", message="Sélectionne un status correct.")
+     * @Assert\Choice(callback="getStates", message="Sélectionne un statut correct.")
      * @Assert\NotBlank(message="The state should not be null")
      */
     private $state;

@@ -209,16 +209,15 @@ class OrderController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/order/{id}/addIngredient/{idIngredient}",
-     *  name="api_order_add_ingredient_patch",
+     * @Route("/order/{id}/changeState",
+     *  name="api_order_change_state_patch",
      *  methods={"PATCH"},
      *  requirements={
-     *      "id": "\d+",
-     *      "idIngredient": "\d+"
+     *      "id": "\d+"
      * })
      * 
      * @SWG\Patch(
-     *     summary="Ajoute un ingrédient à la liste de la commande.",
+     *     summary="Change l'état de la commande et du stock dans la foulée.",
      *     consumes={"application/json"},
      *     produces={"application/json"},
      *     @SWG\Response(
@@ -239,53 +238,34 @@ class OrderController extends AbstractFOSRestController
      *          in="path",
      *          type="string",
      *          description="L'ID utilisé pour retrouver la ligne de la commande."
-     *     ),
-     *     @SWG\Parameter(
-     *          name="idIngredient",
-     *          in="path",
-     *          type="string",
-     *          description="L'ID utilisé pour retrouver l'ingrédient."
      *     )
      * )
      * @param string $id
-     * @param string $idIngredient
      * @param Request $request
      * @return View|JsonResponse
      * @throws ExceptionInterface
      */
-    public function patchOrderAddIngredient(Request $request, string $id, string $idIngredient)
+    public function patchOrderChangeState(Request $request, string $id)
     {
         $order = $this->getById($id);
         if ($order->getState() == 'received') {
             $this->createConflictError("La commande ne peut-être modifiée car elle est déjà reçue.");
         }
-        $ingredient = $this->getIngredientById($idIngredient);
-        // Si l'ingrédient est lié à un brassin, on ajoute les lignes BrewStock avec des quantités à 0.
-        $stock = new IngredientStock();
-        $stock->setIngredient($ingredient);
-        $stock->setCreationDate(new DateTime());
-        $stock->setQuantity(0);
-        $stock->setState($order->getState());
-        foreach ($order->getStocks() as $dbStock) {
-            if ($dbStock->getIngredient()->getId() == $idIngredient && $dbStock->getState() == $order->getState()) {
-                // On copie les BrewStocks au nouvelle ingrédient.
-                foreach ($dbStock->getBrewStock() as $brewStock) {
-                    $newBrewStock = new BrewStock();
-                    $brewStock->getBrew()->addBrewStock($brewStock);
-                    $newBrewStock->setApply(false);
-
-                    $newBrewStock->setQuantity(0);
-                    $stock->addBrewStock($brewStock);
-                    $this->entityManager->persist($brewStock);
-                }
-                break;
-            }
+        $state = $order->getState();
+        if ($state == 'created') {
+            $order->setState('ordered');
+            $state = 'ordered';
+        } else if ($state === 'ordered') {
+            $order->setState('received');
+            $state = 'stocked';
         }
-        $order->addStock($stock);
-
-        $this->entityManager->persist($stock);
+        foreach ($order->getStocks() as $stock) {
+            $stock->setState($state);
+            $stock->setOrderedDate(new DateTime('now'));
+        }
+        $this->entityManager->persist($order);
         $this->entityManager->flush();
-        return $this->view($stock, Response::HTTP_CREATED);
+        return $this->view($order, Response::HTTP_OK);
     }
 
     /**
@@ -391,7 +371,9 @@ class OrderController extends AbstractFOSRestController
     public function deleteAction(string $id)
     {
         $existing = $this->getById($id);
-
+        foreach ($existing->getStocks() as $stock) {
+            $this->entityManager->remove($stock);
+        }
         $this->entityManager->remove($existing);
         $this->entityManager->flush();
         return $this->view(null, Response::HTTP_NO_CONTENT);

@@ -42,6 +42,10 @@ export class SupplierService extends CService<Supplier>{
   public create(): Supplier {
     return new Supplier(undefined);
   }
+  public createPart(): Supplier {
+    const supplier = new Supplier(undefined);
+    return supplier;
+  }
 
   public createCpy(stock: Supplier): Supplier {
     return new Supplier(stock);

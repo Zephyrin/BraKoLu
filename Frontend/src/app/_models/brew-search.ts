@@ -7,7 +7,9 @@ export class BrewSearch {
   }
   public addState(value: string) {
     if (!this.states) { this.states = new Array<string>(); }
-    this.states.push(value);
+    if (this.states.findIndex(x => x === value) < 0) {
+      this.states.push(value);
+    }
   }
 
   public order(orderBy: string, direction: string) {

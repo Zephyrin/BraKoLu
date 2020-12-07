@@ -1,0 +1,26 @@
+<p mat-dialog-title>Problème sur les dates de livraison</p>
+<div mat-dialog-content>
+  Certain ingrédient de la commande n'ont pas de date de livraison.<br /><br />
+  Est-ce que je les enregistre sans date de livraison prévisionnelle puis je passe la commande ?<br /><br />
+  Ou je les renseignes avec cette date :
+  <mat-form-field appearance="legacy">
+    <mat-label></mat-label>
+    <input matInput
+           [(value)]="newDate"
+           [matDatepicker]="deliveryScheduledFor">
+    <mat-datepicker-toggle matSuffix
+                           [for]="deliveryScheduledFor"></mat-datepicker-toggle>
+    <mat-datepicker #deliveryScheduledFor></mat-datepicker>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions
+     class="d-flex flex-row-reverse">
+  <button mat-button
+          type="submit"
+          (click)="onSubmitWithDate()">Mets à jour les dates et continue</button>
+  <button mat-button
+          type="submit"
+          (click)="onSubmit()">Continue avec des dates indéfinies</button>
+  <button mat-button
+          (click)="onNoClick()">Arrête tout !</button>
+</div>

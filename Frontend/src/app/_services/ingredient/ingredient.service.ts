@@ -137,6 +137,10 @@ export class IngredientService extends CService<Ingredient>{
     throw new Error('Tu ne peux pas créer d\'ingrédient générique comme ça.');
   }
 
+  public createPart(): Ingredient {
+    throw new Error('Arf, je ne sais pas quoi te dire. Essaie autre chose, ou appel moi !');
+  }
+
   public createWithChildName(childName: string): Ingredient {
     return IngredientFactory.createNew(childName);
   }

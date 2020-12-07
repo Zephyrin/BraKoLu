@@ -2,6 +2,7 @@ import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -62,6 +63,10 @@ import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/bre
 import { BrewIngredientTableComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-table/brew-ingredient-table.component';
 import { OrderDetailComponent } from './_components/order/order-desktop/order-detail/order-detail.component';
 import { OrderDetailCreationComponent } from './_components/order/order-desktop/order-detail-creation/order-detail-creation.component';
+import { DialogOrderDetailDateComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-date/dialog-order-detail-date.component';
+import { DialogOrderDetailSupplierComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-supplier/dialog-order-detail-supplier.component';
+import { DialogOrderDetailPriceComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-price/dialog-order-detail-price.component';
+import { DialogOrderDetailQuantityComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-quantity/dialog-order-detail-quantity.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +101,10 @@ import { OrderDetailCreationComponent } from './_components/order/order-desktop/
     BrewIngredientTableComponent,
     OrderDetailComponent,
     OrderDetailCreationComponent,
+    DialogOrderDetailDateComponent,
+    DialogOrderDetailSupplierComponent,
+    DialogOrderDetailPriceComponent,
+    DialogOrderDetailQuantityComponent,
 
   ],
   imports: [
@@ -129,7 +138,8 @@ import { OrderDetailCreationComponent } from './_components/order/order-desktop/
     MatBadgeModule,
     MatStepperModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatSlideToggleModule
   ],
   providers: [
     DatePipe

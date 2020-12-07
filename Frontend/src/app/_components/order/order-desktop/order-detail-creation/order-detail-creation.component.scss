@@ -14,3 +14,8 @@ tr.detail-row {
 .cursor {
   cursor: pointer;
 }
+
+.inline-flex-invert {
+  display: flex;
+  flex-direction: row-reverse;
+}

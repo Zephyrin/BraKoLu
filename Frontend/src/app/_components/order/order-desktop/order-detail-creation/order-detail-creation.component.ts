@@ -1,3 +1,8 @@
+import { DialogOrderDetailPriceComponent } from './dialog-order-detail-price/dialog-order-detail-price.component';
+import { DialogOrderDetailSupplierComponent } from './dialog-order-detail-supplier/dialog-order-detail-supplier.component';
+import { DialogOrderDetailDateComponent } from './dialog-order-detail-date/dialog-order-detail-date.component';
+import { DialogOrderDetailQuantityComponent } from './dialog-order-detail-quantity/dialog-order-detail-quantity.component';
+import { MatDialog } from '@angular/material/dialog';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Order } from '@app/_models/order';
@@ -7,7 +12,7 @@ import { ValueViewChild } from '@app/_services/iservice';
 import { OrderService } from '@app/_services/order/order.service';
 import { StockService } from '@app/_services/stock/stock.service';
 import { BrewService } from '@app/_services/brew/brew.service';
-import { Component, OnInit, OnDestroy, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, SimpleChange, TemplateRef } from '@angular/core';
 import { Ingredient, IngredientStock, Supplier } from '@app/_models';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
@@ -19,6 +24,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DialogOrderDetailResult } from './dialog-order-detail-base';
 
 @Component({
   selector: 'app-order-detail-creation',
@@ -60,13 +66,15 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   public displayedColumnsBrewIngredient = new Array<string>();
   public undefValue = undefined;
   private inputIntervalBeforeSave: any;
+  private afterClosedSubscription: Subscription;
 
   constructor(
     public brewService: BrewService,
     public stockService: StockService,
     public orderService: OrderService,
     public ingredientService: IngredientService,
-    public supplierService: SupplierService
+    public supplierService: SupplierService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -105,6 +113,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.brewSubscription) { this.brewSubscription.unsubscribe(); }
     if (this.stockSubscription) { this.stockSubscription.unsubscribe(); }
+    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
   }
 
   createPartIngredientType() {
@@ -191,12 +200,15 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
 
   public removeStockOrder(event: MouseEvent, row: OrderStock, index: number): void {
     event.stopPropagation();
-    if (index >= 0 && index <= row.orderStocks.length) {
+    if (index >= 0 && index < row.orderStocks.length) {
       row.updateQuantity(row.orderStocks[index], 0);
       if (row.orderStocks[index].id > 0) {
         this.stockService.update(undefined, row.orderStocks[index], undefined);
       }
       row.orderStocks.splice(index, 1);
+    }
+    if (row.orderStocks.length === 0) {
+      row.addOrderStock(undefined);
     }
   }
 
@@ -214,6 +226,18 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
             orderStock.orderStocks[index] = change.currentValue;
           }
         }
+      }
+      const orderIndex = this.order.stocks.findIndex(x => x === change.previousValue);
+      if (orderIndex >= 0) {
+        this.order.stocks[orderIndex] = change.currentValue;
+      } else {
+        this.order.stocks.push(change.currentValue);
+      }
+    } else if (change.previousValue && change.previousValue[`id`]
+      && (change.currentValue === null || change.currentValue === undefined)) {
+      const orderIndex = this.order.stocks.findIndex(x => x === change.previousValue);
+      if (orderIndex >= 0) {
+        this.order.stocks.splice(orderIndex, 1);
       }
     }
   }
@@ -253,6 +277,74 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
       stock[date] = null;
     }
     orderStock.updateQuantity(undefined, undefined);
+  }
+
+  launchOrder(event: any) {
+    let popupDate = false;
+    let popupSupplier = false;
+    let popupPrice = false;
+    let popupQuantity = false;
+    this.order.stocks.forEach(stock => {
+      if (stock.id > 0) {
+        if (stock.deliveryScheduledFor === null || stock.deliveryScheduledFor === undefined) {
+          popupDate = true;
+        }
+        if (stock.supplier === null || stock.supplier === undefined) {
+          popupSupplier = true;
+        }
+        if (stock.price === undefined || stock.price === 0) {
+          popupPrice = true;
+        }
+        if (stock.quantity === undefined || stock.quantity === 0) {
+          popupQuantity = true;
+        }
+      }
+    });
+    this.order.stocks = this.order.stocks.filter(x => x.id > 0);
+    this.tryLaunchOrder(popupQuantity, popupDate, popupSupplier, popupPrice);
+  }
+
+  private tryLaunchOrder(popupQuantity: boolean, popupDate: boolean, popupSupplier: boolean, popupPrice: boolean) {
+    const showPopup = popupQuantity || popupDate || popupSupplier || popupPrice;
+    let template: any;
+    if (popupQuantity) {
+      template = DialogOrderDetailQuantityComponent;
+      popupQuantity = false;
+    } else if (popupDate) {
+      template = DialogOrderDetailDateComponent;
+      popupDate = false;
+    } else if (popupSupplier) {
+      template = DialogOrderDetailSupplierComponent;
+      popupSupplier = false;
+    } else if (popupPrice) {
+      template = DialogOrderDetailPriceComponent;
+      popupPrice = false;
+    }
+
+    if (showPopup) {
+      const dialogRef = this.dialog.open(template, { minWidth: '30em' });
+      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+      this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
+        if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+        if (result.data === DialogOrderDetailResult.removeEmptyQuantity) {
+          this.order.stocks.forEach(stock => {
+            if (!stock.quantity) { this.stockService.update(undefined, stock, undefined); }
+          });
+        }
+        else if (result.data === DialogOrderDetailResult.updateMissingDate) {
+          this.order.stocks.forEach(stock => {
+            if (!stock.deliveryScheduledFor) {
+              this.stockService.update('deliveryScheduledFor', stock, result.newDate, true, true);
+            }
+          });
+        }
+        if (result.data !== DialogOrderDetailResult.cancel) {
+          this.tryLaunchOrder(popupQuantity, popupDate, popupSupplier, popupPrice);
+        }
+      });
+    } else {
+      this.orderService.changeState(this.order);
+    }
   }
 }
 
@@ -402,7 +494,7 @@ class OrderStock {
   }
 
   public updateQuantity(iStock: IngredientStock, quantity: number) {
-    if (iStock && quantity) { iStock.quantity = quantity; }
+    if (iStock && quantity >= 0) { iStock.quantity = quantity; }
     let quantityUsed = 0;
     this.brewIngredients.forEach(brewIngredient => {
       let quantityOrder = 0;

@@ -6,8 +6,8 @@ export class Order {
   state: string;
   created: Date;
 
-  constructor(value: Order | undefined, includeStocks: boolean = true) {
-    this.stocks = new Array();
+  constructor(value: Order | undefined, includeStocks: boolean = true, initLists: boolean = true) {
+    if (initLists) { this.stocks = new Array(); }
     if (value) {
       this.id = value.id;
       if (value.stocks && includeStocks) {
@@ -23,22 +23,31 @@ export class Order {
   }
 
   update(value: Order) {
-    this.stocks = new Array();
+    if (value.state) { this.state = value.state; }
     if (value.stocks) {
-      value.stocks.forEach(x => this.stocks.push(new IngredientStock(x)));
+      value.stocks.forEach(x => {
+        const index = this.stocks.findIndex(y => y.id === x.id);
+        if (index < 0) { this.stocks.push(new IngredientStock(x)); }
+        else { this.stocks[index].update(x); }
+      });
     }
     this.state = value.state;
   }
 
   toJSON() {
-    const data = [];
+    const data = {};
     if (this.id) { data[`id`] = this.id; }
     if (this.state) { data[`state`] = this.state; }
-    if (this.stocks) {
-      const stocks = new Array();
-      this.stocks.forEach(x => stocks.push(x.toJSON(true)));
-      data[`stocks`] = stocks;
-    }
+    /* On inclut pas les stocks car ils sont créés à la volé.
+    Attention, lors du passage de la commande de créé à en commande,
+    on fait une mise à jour partielle, du coup on ne doit pas mettre
+    une liste de stocks vide...
+    */
+    /*  if (this.stocks) {
+       const stocks = new Array();
+       this.stocks.forEach(x => stocks.push(x.toJSON(true)));
+       data[`stocks`] = stocks;
+     } */
     return data;
   }
 }
