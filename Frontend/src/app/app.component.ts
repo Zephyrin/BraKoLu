@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
       map(result => result.matches),
       shareReplay()
     );
+  isSmallScreen$ = this.breakpointObserver.observe('(max-width: 1280px)').pipe(
+    map(result => result.matches),
+    shareReplay()
+  );
 
   constructor(
     private breakpointObserver: BreakpointObserver,

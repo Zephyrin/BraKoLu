@@ -1,24 +1,29 @@
-<mat-tab-group [selectedIndex]="formSelectedOrder.value"
+<mat-tab-group [selectedIndex]="orderDisplayService.formSelectedOrder.value"
                mat-align-tabs="center"
-               (selectedIndexChange)="formSelectedOrder.setValue($event)">
-  <mat-tab label="Commandes">
-    <button mat-button
-            (click)="addNewOrder()">
-      <mat-icon>add_circle_outline</mat-icon>
-      <mat-label>Créer une commande</mat-label>
-    </button>
+               (selectedIndexChange)="orderDisplayService.formSelectedOrder.setValue($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon svgIcon="truck-check"></mat-icon>
+      Commandes
+      <mat-icon svgIcon="arrow-expand-down"
+                *ngIf="orderDisplayService.formSelectedOrder.value === 0"></mat-icon>
+      <mat-icon svgIcon="arrow-expand-right"
+                *ngIf="orderDisplayService.formSelectedOrder.value > 0"></mat-icon>
+    </ng-template>
     <app-table [service]="service"
                class="full-width"
-               [allowSelection]="!service.loadingSource && !brewService.loadingSource && !supplierService.loadingSource"
+               [allowSelection]="!service.loadingSource
+                  && !orderDisplayService.brewService.loadingSource
+                  && !orderDisplayService.supplierService.loadingSource"
                #tableComponent></app-table>
     <app-pagination [paginate]="service.paginate"></app-pagination>
   </mat-tab>
-  <mat-tab *ngFor="let order of selectedOrders; let index = index"
+  <mat-tab *ngFor="let order of orderDisplayService.selectedOrders; let index = index"
            [ngSwitch]="order.state">
     <ng-template mat-tab-label>
       {{service.getDisplay('tabOrder', order)}}
       <button mat-icon-button
-              (click)="closeTab($event, order, index)">
+              (click)="orderDisplayService.closeTab($event, order, index)">
         <mat-icon>close</mat-icon>
       </button>
     </ng-template>

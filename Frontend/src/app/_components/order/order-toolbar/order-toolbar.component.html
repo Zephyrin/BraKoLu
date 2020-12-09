@@ -1,2 +1,37 @@
-<p>order-toolbar works! Boecaiasnetc raueci sruaecisrtuaec aecarueci</p>
-<span> Blabla !</span>
+<button mat-button
+        (click)="orderDisplayService.addNewOrder()"
+        *ngIf="!orderDisplayService.hasNewOrder"
+        [class.spinner]="orderService.loadingSource"
+        [disabled]="orderService.loadingSource">
+
+
+  <mat-icon svgIcon="truck-fast"></mat-icon>
+  <mat-label>Créer une commande</mat-label>
+</button>
+
+<button mat-button
+        (click)="orderDisplayService.addNewOrder()"
+        [class.spinner]="orderService.loadingSource"
+        [disabled]="orderService.loadingSource"
+        *ngIf="orderDisplayService.hasNewOrder && !orderDisplayService.newOrderOpen">
+  <mat-icon svgIcon="truck-delivery"></mat-icon>
+  <mat-label>Ouvrir la commande</mat-label>
+</button>
+
+
+<button mat-button
+        (click)="orderDisplayService.launchOrderClick($event)"
+        [class.spinner]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
+        [disabled]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
+        *ngIf="orderDisplayService.newOrderOpen">
+  <mat-icon svgIcon="truck-check"></mat-icon>
+  <mat-label>Passer la commande</mat-label>
+</button>
+
+
+<button mat-icon-button
+        [disabled]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
+        *ngIf="orderDisplayService.newOrderOpen"
+        (click)="orderDisplayService.brewExpanded = !orderDisplayService.brewExpanded">
+  <mat-icon svgIcon="barley"></mat-icon>
+</button>

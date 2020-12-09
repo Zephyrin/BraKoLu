@@ -1,3 +1,4 @@
+import { OrderDisplayService } from '@app/_services/order/order-display.service';
 import { DialogOrderDetailPriceComponent } from './dialog-order-detail-price/dialog-order-detail-price.component';
 import { DialogOrderDetailSupplierComponent } from './dialog-order-detail-supplier/dialog-order-detail-supplier.component';
 import { DialogOrderDetailDateComponent } from './dialog-order-detail-date/dialog-order-detail-date.component';
@@ -12,11 +13,9 @@ import { ValueViewChild } from '@app/_services/iservice';
 import { OrderService } from '@app/_services/order/order.service';
 import { StockService } from '@app/_services/stock/stock.service';
 import { BrewService } from '@app/_services/brew/brew.service';
-import { Component, OnInit, OnDestroy, Input, SimpleChange, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, SimpleChange } from '@angular/core';
 import { Ingredient, IngredientStock, Supplier } from '@app/_models';
-import { DataSource } from '@angular/cdk/table';
-import { CollectionViewer } from '@angular/cdk/collections';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
 import {
   MAT_MOMENT_DATE_FORMATS,
@@ -51,6 +50,11 @@ import { DialogOrderDetailResult } from './dialog-order-detail-base';
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
+    trigger('brewExpand', [
+      state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden' })),
+      state('expanded', style({ width: '*', visibility: 'visible' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+    ]),
   ]
 })
 export class OrderDetailCreationComponent implements OnInit, OnDestroy {
@@ -67,6 +71,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   public undefValue = undefined;
   private inputIntervalBeforeSave: any;
   private afterClosedSubscription: Subscription;
+  private orderDisplaySubscription: Subscription;
 
   constructor(
     public brewService: BrewService,
@@ -74,8 +79,13 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     public orderService: OrderService,
     public ingredientService: IngredientService,
     public supplierService: SupplierService,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    public orderDisplayService: OrderDisplayService
+  ) {
+    this.orderDisplaySubscription = this.orderDisplayService.launchOrder.subscribe(x => {
+      this.launchOrder(x);
+    });
+  }
 
   ngOnInit(): void {
     this.accordionOrder.splice(0, this.accordionOrder.length);
@@ -114,6 +124,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     if (this.brewSubscription) { this.brewSubscription.unsubscribe(); }
     if (this.stockSubscription) { this.stockSubscription.unsubscribe(); }
     if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+    if (this.orderDisplaySubscription) { this.orderDisplaySubscription.unsubscribe(); }
   }
 
   createPartIngredientType() {

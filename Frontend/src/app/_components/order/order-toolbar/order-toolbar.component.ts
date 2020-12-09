@@ -1,3 +1,5 @@
+import { OrderService } from '@app/_services/order/order.service';
+import { OrderDisplayService } from '@app/_services/order/order-display.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderToolbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public orderDisplayService: OrderDisplayService,
+    public orderService: OrderService
+  ) { }
 
   ngOnInit(): void {
   }
-
 }
