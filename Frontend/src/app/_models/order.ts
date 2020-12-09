@@ -1,4 +1,4 @@
-import { IngredientStock } from './ingredientStock';
+import { IngredientStock } from './internal';
 
 export class Order {
   id: number;

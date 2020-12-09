@@ -1,6 +1,7 @@
 <!-- FOND DE PAGE APPLICATION -->
 
 <mat-sidenav-container class="sidenav-container"
+                       autosize
                        fullscreen>
 
   <!-- MENU DE GAUCHE -->
@@ -15,7 +16,8 @@
       <img matListIcon
            alt="Bra.Tool Menu"
            src="assets/bra.tool.ico"
-           style="height: 1em" /> Menu
+           style="height: 1em" /><img class="title"
+           src="./assets/dark/banner_BRATOOL.svg" />
     </mat-toolbar>
 
     <mat-nav-list>
@@ -85,16 +87,10 @@
              src="assets/bra.tool.ico"
              style="height: 1em" />
       </button>
-
-      <img class="title"
-           src="./assets/dark/banner_BRATOOL.svg" />
+      <app-header></app-header>
     </mat-toolbar>
     <!-- Add Content Here -->
     <main class="mt-md-2 ml-md-2 mr-md-2 mb-md-2">
-
-
-
-
       <router-outlet></router-outlet>
     </main>
 

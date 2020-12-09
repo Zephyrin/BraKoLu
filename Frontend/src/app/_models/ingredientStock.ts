@@ -1,8 +1,8 @@
-import { BrewStock } from './brew';
-import { IngredientFactory } from './ingredientFactory';
-import { Supplier } from './supplier';
-import { Ingredient } from './ingredient';
-import { Order } from './order';
+import { BrewStock } from './internal';
+import { Ingredient } from './internal';
+import { Order } from './internal';
+import { Supplier } from './internal';
+import { IngredientFactory } from './internal';
 
 export class IngredientStock {
   id: number;

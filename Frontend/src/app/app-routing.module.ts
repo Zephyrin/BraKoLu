@@ -1,3 +1,4 @@
+import { OrderToolbarComponent } from './_components/order/order-toolbar/order-toolbar.component';
 import { OrderComponent } from './_components/order/order.component';
 import { BrewComponent } from './_components/brew/brew.component';
 import { VenteComponent } from './_components/vente/vente.component';
@@ -24,7 +25,7 @@ const routes: Routes = [
   { path: 'stock', component: StockComponent },
   { path: 'option', component: OptionComponent },
   { path: 'brew', component: BrewComponent },
-  { path: 'command', component: OrderComponent }
+  { path: 'command', component: OrderComponent },
 ];
 
 @NgModule({

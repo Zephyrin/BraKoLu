@@ -6,7 +6,7 @@ import { Other } from './other';
 import { Hop } from './hop';
 import { Bottle } from './bottle';
 import { Box } from './box';
-import { Ingredient } from '@app/_models';
+import { Ingredient } from './ingredient';
 
 export class IngredientFactory {
   public static createCpy(ingredient: Ingredient): Ingredient {

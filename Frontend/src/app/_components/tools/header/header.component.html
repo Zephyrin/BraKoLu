@@ -1,0 +1,4 @@
+<ng-container [ngSwitch]="route.url">
+  <div *ngSwitchDefault>{{route.url}}</div>
+  <app-order-toolbar *ngSwitchCase="'/command'"></app-order-toolbar>
+</ng-container>

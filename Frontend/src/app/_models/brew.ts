@@ -1,6 +1,5 @@
-import { IngredientFactory } from './ingredientFactory';
-import { Ingredient } from '@app/_models';
-import { IngredientStock } from './ingredientStock';
+import { IngredientStock, IngredientFactory, Ingredient } from './internal';
+
 export class Brew {
   id: number;
   number: number;

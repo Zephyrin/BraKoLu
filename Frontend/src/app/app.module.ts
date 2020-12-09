@@ -67,6 +67,8 @@ import { DialogOrderDetailDateComponent } from './_components/order/order-deskto
 import { DialogOrderDetailSupplierComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-supplier/dialog-order-detail-supplier.component';
 import { DialogOrderDetailPriceComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-price/dialog-order-detail-price.component';
 import { DialogOrderDetailQuantityComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-quantity/dialog-order-detail-quantity.component';
+import { OrderToolbarComponent } from './_components/order/order-toolbar/order-toolbar.component';
+import { HeaderComponent } from './_components/tools/header/header.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +107,8 @@ import { DialogOrderDetailQuantityComponent } from './_components/order/order-de
     DialogOrderDetailSupplierComponent,
     DialogOrderDetailPriceComponent,
     DialogOrderDetailQuantityComponent,
+    OrderToolbarComponent,
+    HeaderComponent,
 
   ],
   imports: [
