@@ -13,9 +13,13 @@ export class Brew {
   ended: Date;
   created: Date;
   brewIngredients: BrewIngredient[];
+  brewStocks: BrewStock[];
 
   public constructor(value: Brew | undefined, initLists: boolean = true) {
-    if (initLists) { this.brewIngredients = new Array(); }
+    if (initLists) {
+      this.brewIngredients = new Array<BrewIngredient>();
+      this.brewStocks = new Array<BrewStock>();
+    }
     if (value && value !== null) {
       this.id = value.id;
       this.number = value.number;
@@ -124,6 +128,7 @@ export class BrewIngredient {
   brew: Brew;
   ingredient: Ingredient;
   quantity: number;
+  brewStocks: BrewStock[];
 
   public constructor(value: BrewIngredient | undefined) {
     this.quantity = 0;
@@ -152,6 +157,7 @@ export class BrewStock {
   stock: IngredientStock;
   quantity: number;
   apply: boolean;
+  brewIngredient: BrewIngredient;
 
   public constructor(value: BrewStock | undefined) {
     this.quantity = 0;
@@ -172,6 +178,7 @@ export class BrewStock {
     if (includeStock && this.stock) { data[`stock`] = this.stock.toJSON(true); }
     if (this.quantity !== undefined) { data[`quantity`] = this.quantity; }
     if (this.apply !== undefined) { data[`apply`] = this.apply; }
+    if (this.brewIngredient !== undefined) { data[`brewIngredient`] = this.brewIngredient.id; }
     return data;
   }
 }

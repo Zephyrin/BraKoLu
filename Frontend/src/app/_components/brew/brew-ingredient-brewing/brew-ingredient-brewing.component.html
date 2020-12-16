@@ -1,0 +1,93 @@
+<fieldset class="element-listing">
+
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let stepperReceipt of container.ingredientsByType">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{stepperReceipt.childName}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let ingredients of stepperReceipt.ingAndStocks">
+          <button mat-icon-button
+                  [disabled]="ingredients.onlyOne">
+            <mat-icon *ngIf="ingredients.expanded">expand_less</mat-icon>
+            <mat-icon *ngIf="ingredients.collapsed">expand_more</mat-icon>
+          </button>
+          <span>{{ingredients.ingredient.name}}</span>
+          <mat-list class="full-width">
+            <ng-container *ngFor="let receiptIng of ingredients.brewIngredients; let index = index;">
+              <mat-list-item *ngIf="ingredients.shouldBeDisplay(index)"
+                             class="flex-end">
+                <span>{{receiptIng.brewIngredient.quantity / ingredients.ingredient.unitFactor}} {{ingredients.ingredient.unit}}</span>
+                <mat-list class="full-width">
+                  <ng-container *ngFor="let brewStock of receiptIng.brewStocks; let indexBrewStock = index;">
+                    <mat-list-item>
+                      <mat-form-field appearance="legacy"
+                                      class="supplierForm">
+                        <mat-label>Stock</mat-label>
+                        <mat-select [compareWith]="compareId"
+                                    placeholder="Stock">
+                          <mat-option [value]="undefined"></mat-option>
+                          <!-- <mat-option *ngFor="let supplier of stockService.model"
+                                                        [value]="supplier">
+                                              {{supplier.name}}
+                                            </mat-option> -->
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="legacy"
+                                      class="quantityForm">
+                        <mat-label>Quantité</mat-label>
+                        <input matInput
+                               [placeholder]="'Ex: 23 ' + ingredients.ingredient.unit"
+                               type="number"
+                               step="any"
+                               min="0"
+                               [value]="0 / ingredients.ingredient.unitFactor">
+                      </mat-form-field>
+                      <button mat-icon-button
+                              *ngIf="indexBrewStock === receiptIng.brewStocks.length - 1"
+                              (click)="ingredients.created = true">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </mat-list-item>
+                  </ng-container>
+                  <mat-list-item *ngIf="ingredients.created">
+                    <mat-form-field appearance="legacy"
+                                    class="stockForm">
+                      <mat-label>Stock</mat-label>
+                      <mat-select [compareWith]="compareId"
+                                  placeholder="Stock">
+                        <mat-option [value]="undefined"></mat-option>
+                        <mat-option *ngFor="let stock of stockService.model"
+                                    [value]="stock">
+                          {{stock.ingredient.name}} - {{stock.quantity / stock.ingredient.unitFactor}}
+                          {{stock.ingredient.unit}} - {{ stock.orderedDate | date: 'dd-MM-yyyy'}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="legacy"
+                                    class="quantityForm">
+                      <mat-label>Quantité</mat-label>
+                      <input matInput
+                             [placeholder]="'Ex: 23 ' + ingredients.ingredient.unit"
+                             type="number"
+                             step="any"
+                             min="0"
+                             (change)="ingredients.createBrewStockFromQuantity($event, receiptIng)"
+                             [value]="0 / ingredients.ingredient.unitFactor">
+                    </mat-form-field>
+                    <button mat-icon-button
+                            disabled>
+                    </button>
+                  </mat-list-item>
+                </mat-list>
+              </mat-list-item>
+            </ng-container>
+          </mat-list>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</fieldset>

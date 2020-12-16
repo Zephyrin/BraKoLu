@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { OrderDisplayService } from '@app/_services/order/order-display.service';
 import { DialogOrderDetailPriceComponent } from './dialog-order-detail-price/dialog-order-detail-price.component';
 import { DialogOrderDetailSupplierComponent } from './dialog-order-detail-supplier/dialog-order-detail-supplier.component';
@@ -80,7 +81,8 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     public ingredientService: IngredientService,
     public supplierService: SupplierService,
     public dialog: MatDialog,
-    public orderDisplayService: OrderDisplayService
+    public orderDisplayService: OrderDisplayService,
+    public datepipe: DatePipe
   ) {
     this.orderDisplaySubscription = this.orderDisplayService.launchOrder.subscribe(x => {
       this.launchOrder(x);
@@ -92,10 +94,10 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     this.headersStock = new Array<ValueViewChild>();
     this.headersStock.push({ value: 'ingredient', viewValue: 'Ingrédient' });
     this.headersStock.push({ value: 'quantityRecommanded', viewValue: 'Qt. Préconisée' });
-    this.headersStock.push({ value: 'quantityOrder', viewValue: 'Qt. commandée' });
+    /* this.headersStock.push({ value: 'quantityOrder', viewValue: 'Qt. commandée' });
     this.headersStock.push({ value: 'price', viewValue: 'Prix' });
     this.headersStock.push({ value: 'supplier', viewValue: 'Fournisseur' });
-    this.headersStock.push({ value: 'deliveryPlanned', viewValue: 'Livraison prévue le' });
+    this.headersStock.push({ value: 'deliveryPlanned', viewValue: 'Livraison prévue le' }); */
     this.displayedColumnsStock.push('expanded');
     this.headersStock.forEach(val => { this.displayedColumnsStock.push(val.value); });
     this.displayedColumnsStock.push('action');
@@ -168,20 +170,35 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     orderStock.expanded = !orderStock.expanded;
   }
 
-  getDisplay(name: string, orderStock: OrderStock): string | number {
+  getDisplay(name: string, orderStock: OrderStock): string | number | boolean {
     switch (name) {
       case 'ingredient':
         return orderStock.ingredient.name;
       case 'quantityRecommanded':
         return (orderStock.quantityRecommanded / orderStock.ingredient.unitFactor) + ' ' + orderStock.ingredient.unit;
       case 'quantityOrder':
-        return 'tmp';
-      case 'price':
-        return 'tmp';
-      case 'supplier':
-        return 'tmp';
-      case 'deliveryPlanned':
-        return 'tmp';
+        {
+          let ret = '';
+          if (orderStock.quantityOrder > 0) {
+            ret += (orderStock.quantityOrder / orderStock.ingredient.unitFactor) + ' ' + orderStock.ingredient.unit;
+          }
+          return ret;
+        }
+      case 'displayTruck':
+        if (orderStock.lastDeliverySchedule > new Date(1, 1, 1)) {
+          return true;
+        }
+        return false;
+      case 'lastDeliverySchedule':
+        {
+          let ret = '';
+          if (orderStock.lastDeliverySchedule > new Date(1, 1, 1)) {
+            ret += this.datepipe.transform(orderStock.lastDeliverySchedule, 'dd-MM-yyyy');
+          }
+          return ret;
+        }
+      default:
+        break;
     }
     return 'non trouvé';
   }
@@ -189,11 +206,15 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   getDisplayBrewIngredient(name: string, brewIng: BrewIngredientOrder) {
     switch (name) {
       case 'brewName':
-        return brewIng.brewIngredient.brew.number + ' - ' + brewIng.brewIngredient.brew.name;
+        return brewIng.brewIngredient.brew.number + ' - '
+          + brewIng.brewIngredient.brew.name + ' '
+          + this.datepipe.transform(brewIng.brewIngredient.brew.started, 'dd-MM-y');
       case 'quantity':
-        return brewIng.brewIngredient.quantity;
+        return brewIng.brewIngredient.quantity / brewIng.brewIngredient.ingredient.unitFactor;
       case 'quantityMissing':
-        return brewIng.quantityLeft;
+        return brewIng.quantityLeft / brewIng.brewIngredient.ingredient.unitFactor;
+      case 'unit':
+        return brewIng.brewIngredient.ingredient.unit;
       default:
         break;
     }
@@ -438,6 +459,14 @@ class OrderStock {
   quantityInStock = 0;
   quantityNeeded = 0;
   quantityRecommanded = 0;
+  /**
+   * La quantité totale commandée.
+   */
+  quantityOrder = 0;
+  /**
+   * La date de livraison la plus lointaine.
+   */
+  lastDeliverySchedule = new Date(1, 1, 1);
   brewIngredients = new Array<BrewIngredientOrder>();
   stockService: StockService;
   expanded = false;
@@ -464,12 +493,17 @@ class OrderStock {
       stock.init(this.ingredient, this.order);
     }
     if (!stock.quantity) { stock.quantity = 0; }
+    this.quantityOrder += stock.quantity;
+    if (stock.deliveryScheduledFor > this.lastDeliverySchedule) {
+      this.lastDeliverySchedule = stock.deliveryScheduledFor;
+    }
     this.orderStocks.push(stock);
   }
 
   public addBrewIngredient(brewIngredient: BrewIngredient, brewDetail: BrewDetail) {
     let quantityOrder = 0;
     let quantityInOrder = 0;
+
     this.orderStocks.forEach(stock => {
       if (stock.deliveryScheduledFor === undefined || stock.deliveryScheduledFor === null) {
         quantityOrder += stock.quantity;
@@ -480,7 +514,7 @@ class OrderStock {
     this.inOrders.forEach(stock => {
       if (stock.deliveryScheduledFor === undefined || stock.deliveryScheduledFor === null) {
         quantityInOrder += stock.quantity;
-      } else if (stock.deliveryScheduledFor > brewIngredient.brew.started) {
+      } else if (stock.deliveryScheduledFor < brewIngredient.brew.started) {
         quantityInOrder += stock.quantity;
       }
     });
@@ -505,8 +539,12 @@ class OrderStock {
   }
 
   public updateQuantity(iStock: IngredientStock, quantity: number) {
-    if (iStock && quantity >= 0) { iStock.quantity = quantity; }
+    if (iStock && quantity >= 0) {
+      this.quantityOrder += quantity - iStock.quantity;
+      iStock.quantity = quantity;
+    }
     let quantityUsed = 0;
+    let scheduleFor = new Date(1, 1, 1);
     this.brewIngredients.forEach(brewIngredient => {
       let quantityOrder = 0;
       this.orderStocks.forEach(stock => {
@@ -515,11 +553,16 @@ class OrderStock {
         } else if (stock.deliveryScheduledFor < brewIngredient.brewIngredient.brew.started) {
           quantityOrder += stock.quantity;
         }
+        if (scheduleFor < stock.deliveryScheduledFor) {
+          scheduleFor = stock.deliveryScheduledFor;
+        }
       });
+      if (this.lastDeliverySchedule !== scheduleFor && scheduleFor !== new Date()) { this.lastDeliverySchedule = scheduleFor; }
       this.inOrders.forEach(stock => {
         if (stock.deliveryScheduledFor === undefined || stock.deliveryScheduledFor === null) {
-          quantityOrder += stock.quantity;
-        } else if (stock.deliveryScheduledFor > brewIngredient.brewIngredient.brew.started) {
+          // On ne fait rien lorsque la date de livraison est indéfinie.
+          // quantityOrder += stock.quantity;
+        } else if (stock.deliveryScheduledFor < brewIngredient.brewIngredient.brew.started) {
           quantityOrder += stock.quantity;
         }
       });

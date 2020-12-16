@@ -69,6 +69,7 @@ import { DialogOrderDetailPriceComponent } from './_components/order/order-deskt
 import { DialogOrderDetailQuantityComponent } from './_components/order/order-desktop/order-detail-creation/dialog-order-detail-quantity/dialog-order-detail-quantity.component';
 import { OrderToolbarComponent } from './_components/order/order-toolbar/order-toolbar.component';
 import { HeaderComponent } from './_components/tools/header/header.component';
+import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredient-brewing/brew-ingredient-brewing.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { HeaderComponent } from './_components/tools/header/header.component';
     DialogOrderDetailQuantityComponent,
     OrderToolbarComponent,
     HeaderComponent,
+    BrewIngredientBrewingComponent,
   ],
   imports: [
     BrowserModule,

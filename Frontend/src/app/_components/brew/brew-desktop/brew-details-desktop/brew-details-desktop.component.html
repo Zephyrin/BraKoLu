@@ -71,6 +71,8 @@
                                [brewService]="service"
                                [isPlanedView]="true"
                                *ngSwitchCase="'planed'"></app-brew-ingredient-desktop>
+  <app-brew-ingredient-brewing [brew]="brew"
+                               *ngSwitchCase="'brewing'"></app-brew-ingredient-brewing>
   <div *ngSwitchDefault>
     La vue de {{service.states[stepper.selectedIndex].value}} non présent pour le moment.
   </div>

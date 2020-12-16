@@ -69,7 +69,10 @@ export class BrewIngredientTableComponent implements OnInit, AfterViewInit {
     }
     this.inputIntervalBeforeSave = setInterval(() => {
       clearInterval(this.inputIntervalBeforeSave);
-      (this.brewService as BrewService).updateIngredientToBrew(this.brewIngredientByType.brew, ingredient, +evt.srcElement.value);
+      (this.brewService as BrewService).updateIngredientToBrew(
+        this.brewIngredientByType.brew,
+        ingredient,
+        +evt.srcElement.value);
       this.inputIntervalBeforeSave = undefined;
     }, 300);
   }

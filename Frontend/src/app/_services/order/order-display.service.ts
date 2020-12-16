@@ -35,6 +35,8 @@ export class OrderDisplayService {
   private orderSelectedChange(order: Order) {
     if (order.state === 'created') {
       this.initServices();
+    } else {
+      this.newOrderOpen = false;
     }
     const index = this.selectedOrders.findIndex(x => x.id === order?.id);
     if (index >= 0) {
@@ -43,6 +45,18 @@ export class OrderDisplayService {
       this.selectedOrders.push(order);
       this.formSelectedOrder.setValue(this.selectedOrders.length);
     }
+  }
+  public changeSelectedIndex(index: number) {
+    this.formSelectedOrder.setValue(index);
+    // Le 0 est pour l'onglets des commandes. Donc décalage de 1...
+    if (index > 0 && index <= this.selectedOrders.length) {
+      const order = this.selectedOrders[index - 1];
+      if (order.state === 'created') {
+        this.initServices();
+      } else {
+        this.newOrderOpen = false;
+      }
+    } else { this.newOrderOpen = false; }
   }
 
   public init() {
@@ -100,7 +114,6 @@ export class OrderDisplayService {
       this.loadStockAndBrewFormOrder = false;
       this.orderService.createOrder();
     }
-    this.newOrderOpen = true;
     this.initServices();
   }
 
@@ -109,6 +122,7 @@ export class OrderDisplayService {
   }
 
   private initServices() {
+    this.newOrderOpen = true;
     if (this.loadStockAndBrewFormOrder === false) {
       this.ingredientService.initEnums();
       this.brewService.model = undefined;

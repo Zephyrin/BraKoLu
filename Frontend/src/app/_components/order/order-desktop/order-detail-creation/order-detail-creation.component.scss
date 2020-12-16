@@ -51,3 +51,39 @@ tr.detail-row {
       vertical-align: middle;
   }
 }
+
+
+.quantityForm {
+  min-width: 60px;
+  margin-right: 0.5em;
+}
+.priceForm {
+  min-width: 60px;
+}
+.supplierForm {
+  min-width: 90px;
+  margin-right: 0.5em;
+}
+.deliveryScheduledForm {
+  min-width: 120px;
+  margin-right: 0.5em;
+}
+
+
+.action-container {
+  display: flex;
+  justify-content: right;
+}
+
+.action-container {
+  button {
+  opacity: 0.5;
+  }
+  button:hover {
+    opacity: 1;
+  }
+}
+
+.grow-twice {
+  flex-grow: 2;
+}

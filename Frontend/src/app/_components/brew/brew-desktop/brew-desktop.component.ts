@@ -65,9 +65,6 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
         dataSource: new MatTableDataSource<Brew>(this.service.model.filter(x => x.state === 'complete' || x.state === 'archived')),
         lastColumn: undefined
       });
-      if (this.service.model.length > 0) {
-        this.openTab(this.service.model[0]);
-      }
     } else {
       if (change.previousValue instanceof Brew || change.currentValue instanceof Brew) {
         if (change.previousValue === undefined || change.previousValue === null) {

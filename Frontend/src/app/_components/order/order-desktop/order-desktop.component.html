@@ -1,6 +1,6 @@
 <mat-tab-group [selectedIndex]="orderDisplayService.formSelectedOrder.value"
                mat-align-tabs="center"
-               (selectedIndexChange)="orderDisplayService.formSelectedOrder.setValue($event)">
+               (selectedIndexChange)="orderDisplayService.changeSelectedIndex($event)">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon svgIcon="truck-check"></mat-icon>

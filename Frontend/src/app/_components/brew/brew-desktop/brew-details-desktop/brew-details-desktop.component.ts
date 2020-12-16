@@ -55,7 +55,7 @@ export class BrewDetailsDesktopComponent implements OnInit, AfterViewInit, OnDes
 
   ngAfterViewInit(): void {
     // On passe par la vue en bindant le status completed du step si c'est celui du brassin.
-    this.stepperComponent.selectedIndex = this.service.states.findIndex(x => x.value === this.brew.state);
+    //this.stepperComponent.selectedIndex = this.service.states.findIndex(x => x.value === this.brew.state);
   }
 
   ngOnDestroy(): void {
