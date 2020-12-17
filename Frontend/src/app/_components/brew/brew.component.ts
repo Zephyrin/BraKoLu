@@ -1,4 +1,5 @@
-import { BrewSearchService } from './../../_services/brew/brew-search.service';
+import { StockService } from '@app/_services/stock/stock.service';
+import { BrewSearchService } from '@app/_services/brew/brew-search.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BaseComponent } from '@app/_components/base-component';
 import { Component } from '@angular/core';
@@ -13,10 +14,12 @@ export class BrewComponent extends BaseComponent {
 
   constructor(
     protected breakpointObserver: BreakpointObserver,
-    public service: BrewService
+    public service: BrewService,
+    public stockService: StockService
   ) {
     super(breakpointObserver, service);
     (service.search as BrewSearchService).brewSearch.clearStates();
+    this.stockService.load(true);
   }
 
 }

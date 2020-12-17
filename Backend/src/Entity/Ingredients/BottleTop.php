@@ -24,7 +24,7 @@ class BottleTop extends Ingredient
     }
     /**
      * @ORM\Column(type="integer")
-     * @Assert\Choice(callback="getTypes", message="Sélectionne une taille correct.")
+     * @Assert\Choice(callback="getSizes", message="Sélectionne une taille correct.")
      */
     private $size;
 

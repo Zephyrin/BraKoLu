@@ -25,7 +25,7 @@ class Cereal extends Ingredient
         ['value' => 'extract', 'viewValue' => 'Extrait']
     ];
 
-    const CATEGORY = [
+    const CATEGORIES = [
         ['value' => 'base', 'viewValue' => 'Base'],
         ['value' => 'base (6-rows)', 'viewValue' => 'Base 6 Rangées'],
         ['value' => 'base (maris otter)', 'viewValue' => 'Base Maris Otter'],
@@ -48,9 +48,9 @@ class Cereal extends Ingredient
         return EnumHelper::getEnum(Cereal::FORMATS);
     }
 
-    public static function getCategorys()
+    public static function getCategories()
     {
-        return EnumHelper::getEnum(Cereal::FORMATS);
+        return EnumHelper::getEnum(Cereal::CATEGORIES);
     }
 
     /**
@@ -66,13 +66,13 @@ class Cereal extends Ingredient
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(callback="getFormats", message="Sélectionne une catégorie correcte.")
+     * @Assert\Choice(callback="getCategories", message="Sélectionne une catégorie correcte.")
      */
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(callback="getCategorys", message="Sélectionne un format correct.")
+     * @Assert\Choice(callback="getFormats", message="Sélectionne un format correct.")
      */
     private $format;
 

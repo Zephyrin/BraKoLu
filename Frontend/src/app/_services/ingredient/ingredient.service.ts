@@ -32,6 +32,8 @@ export class IngredientService extends CService<Ingredient>{
 
   public cerealTypes: ValueViewChild[] = [];
 
+  public cerealCategories: ValueViewChild[] = [];
+
   public hopTypes: ValueViewChild[] = [];
 
   public kegHead: ValueViewChild[] = [];
@@ -56,6 +58,7 @@ export class IngredientService extends CService<Ingredient>{
     this.nbEnumLeft = 0;
     this.initEnum(this.cerealTypes, 'cereal', 'types');
     this.initEnum(this.cerealFormats, 'cereal', 'formats');
+    this.initEnum(this.cerealCategories, 'cereal', 'categories');
     this.initEnum(this.bottleType, 'bottle', 'types');
     this.initEnum(this.bottleVolume, 'bottle', 'volume');
     this.initEnum(this.bottleTopSize, 'bottleTop', 'sizes');
@@ -282,6 +285,7 @@ export class IngredientService extends CService<Ingredient>{
         this.form.addControl('plant', new FormControl('', Validators.required));
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('ebc', new FormControl('', Validators.required));
+        this.form.addControl('category', new FormControl('', Validators.required));
         break;
       case 'hop':
         this.form.addControl('type', new FormControl('', Validators.required));

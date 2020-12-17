@@ -5,6 +5,7 @@ export class Cereal extends Ingredient {
   type: string;
   format: string;
   ebc: number;
+  category: string;
 
   public constructor(cereal: Cereal | undefined) {
     super(cereal);
@@ -13,6 +14,7 @@ export class Cereal extends Ingredient {
       this.type = cereal.type;
       this.format = cereal.format;
       this.ebc = cereal.ebc;
+      this.category = cereal.category;
     } else {
       this.childName = 'cereal';
     }
@@ -24,6 +26,7 @@ export class Cereal extends Ingredient {
     if (this.type) { data[`type`] = this.type; }
     if (this.format) { data[`format`] = this.format; }
     if (this.ebc) { data[`ebc`] = this.ebc; }
+    if (this.category) { data[`category`] = this.category; }
     return data;
   }
 }

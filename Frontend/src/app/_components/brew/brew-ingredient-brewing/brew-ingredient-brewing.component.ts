@@ -19,17 +19,18 @@ export class BrewIngredientBrewingComponent implements OnInit {
   }
   get brew(): Brew { return this.brew$; }
   private brew$: Brew;
-  container = new ContainerIngredientByType();
+  container: ContainerIngredientByType;
 
   public headersIngByBrew: ValueViewChild[];
   public displayedColumnsIngByBrew = new Array<string>();
   constructor(
     public ingredientService: IngredientService,
     public stockService: StockService
-  ) { }
+  ) {
+    this.container = new ContainerIngredientByType(this.stockService);
+  }
 
   ngOnInit(): void {
-    this.stockService.load(true);
     this.headersIngByBrew = new Array<ValueViewChild>();
     this.headersIngByBrew.push({ value: 'ingredient', viewValue: 'Ingrédient' });
     this.headersIngByBrew.push({ value: 'quantityReceipt', viewValue: 'Quantité' });
@@ -64,6 +65,10 @@ export class ContainerIngredientByType {
   ingredientsByType = new Array<IngredientsByType>();
 
   /**
+   * Le service qui gère le stock.
+   */
+  private stockService: StockService;
+  /**
    * Initialisation du container principal avec un brassin.
    * Il remplit la liste ingredientsByType avec les brewIngredients et les
    * brewStock, respectivement les ingrédients de la recette et les ingrédient
@@ -75,11 +80,11 @@ export class ContainerIngredientByType {
     this.ingredientsByType.splice(0, this.ingredientsByType.length - 1);
     this.brew$.brewIngredients.forEach(ing => {
       const ingByType = this.getIngByType(ing.ingredient.childName);
-      ingByType.addBrewIngredient(ing);
+      ingByType.addBrewIngredient(ing, this.stockService);
     });
     this.brew$.brewStocks.forEach(ing => {
       const ingByType = this.getIngByType(ing.stock.ingredient.childName);
-      ingByType.addBrewStock(ing);
+      ingByType.addBrewStock(ing, this.stockService);
     });
   }
 
@@ -100,6 +105,10 @@ export class ContainerIngredientByType {
       index = this.ingredientsByType.length - 1;
     }
     return this.ingredientsByType[index];
+  }
+
+  constructor(stockService: StockService) {
+    this.stockService = stockService;
   }
 }
 
@@ -127,8 +136,8 @@ export class IngredientsByType {
   /**
    * Ajoute un ingrédient de la recette au container.
    */
-  public addBrewIngredient(bIng: BrewIngredient): void {
-    const ing = this.getIngAndStocks(bIng.ingredient);
+  public addBrewIngredient(bIng: BrewIngredient, stockService: StockService): void {
+    const ing = this.getIngAndStocks(bIng.ingredient, stockService);
     ing.addBrewIngredient(bIng);
   }
 
@@ -136,8 +145,8 @@ export class IngredientsByType {
    * Ajoute un ingrédient lié au stock au container.
    * Cet ingrédient peut-être lié à un ingrédient de la recette ou pas.
    */
-  public addBrewStock(bStock: BrewStock): void {
-    const ing = this.getIngAndStocks(bStock.stock.ingredient);
+  public addBrewStock(bStock: BrewStock, stockService: StockService): void {
+    const ing = this.getIngAndStocks(bStock.stock.ingredient, stockService);
     ing.addBrewStock(bStock);
   }
 
@@ -145,10 +154,10 @@ export class IngredientsByType {
    * Récupère un ReceiptAndStock en fonction d'un ingredient. Le crée si il n'existe
    * pas.
    */
-  private getIngAndStocks(ingredient: Ingredient): ReceiptAndStock {
+  private getIngAndStocks(ingredient: Ingredient, stockService: StockService): ReceiptAndStock {
     let index = this.ingAndStocks.findIndex(x => x.ingredient.id === ingredient.id);
     if (index < 0) {
-      this.ingAndStocks.push(new ReceiptAndStock(ingredient, this.brew));
+      this.ingAndStocks.push(new ReceiptAndStock(ingredient, this.brew, stockService));
       index = this.ingAndStocks.length - 1;
     }
     return this.ingAndStocks[index];
@@ -160,6 +169,16 @@ export class ReceiptAndStock {
    * L'ingrédient de base.
    */
   ingredient: Ingredient;
+
+  /**
+   * Le service du stock.
+   */
+  stockService: StockService;
+
+  /**
+   * La liste des ingrédients du stocks
+   */
+  stocks: Array<IngredientStock>;
   /**
    * La liste des ingrédients de la recette lié aux ingrédients du stock.
    * Permet de lier les ingrédients qui vont être pris au stock par rapport à la recette.
@@ -199,9 +218,11 @@ export class ReceiptAndStock {
    */
   created = true;
 
-  constructor(ingredient: Ingredient, brew: Brew) {
+  constructor(ingredient: Ingredient, brew: Brew, stockService: StockService) {
     this.ingredient = ingredient;
     this.brew = brew;
+    this.stockService = stockService;
+    this.stocks = this.stockService.model.filter(x => x.ingredient.id === ingredient.id && x.state === 'stocked');
   }
 
   public addBrewIngredient(bIng: BrewIngredient): void {
@@ -230,7 +251,7 @@ export class ReceiptAndStock {
 
   }
 
-  public createBrewStockFromQuantity(evt: any, ing: BrewIngredient): void {
+  public createBrewStockFromQuantity(evt: any, ing: ReceiptLinkToStock): void {
     const value = +evt.srcElement.value;
     const brewStock = new BrewStock(undefined);
 
@@ -238,9 +259,10 @@ export class ReceiptAndStock {
     brewStock.quantity = value;
     brewStock.apply = false;
     if (ing !== undefined) {
-      brewStock.brewIngredient = ing;
-      const receipt = this.getReceiptLinkToStock(ing);
-      receipt.addBrewStock(brewStock);
+      brewStock.brewIngredient = ing.brewIngredient;
+      ing.addBrewStock(brewStock);
+    } else {
+      this.brewStocksWithoutReceipt.push(brewStock);
     }
     this.manageDisplay();
   }

@@ -27,12 +27,14 @@
                                       class="supplierForm">
                         <mat-label>Stock</mat-label>
                         <mat-select [compareWith]="compareId"
+                                    [disabled]="ingredients.stocks.length === 0"
                                     placeholder="Stock">
                           <mat-option [value]="undefined"></mat-option>
-                          <!-- <mat-option *ngFor="let supplier of stockService.model"
-                                                        [value]="supplier">
-                                              {{supplier.name}}
-                                            </mat-option> -->
+                          <mat-option *ngFor="let stock of ingredients.stocks"
+                                      [value]="stock">
+                            {{stock.ingredient.name}} - {{stock.quantity / stock.ingredient.unitFactor}}
+                            {{stock.ingredient.unit}} - {{ stock.orderedDate | date: 'dd-MM-yyyy'}}
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                       <mat-form-field appearance="legacy"
@@ -57,9 +59,10 @@
                                     class="stockForm">
                       <mat-label>Stock</mat-label>
                       <mat-select [compareWith]="compareId"
+                                  [disabled]="ingredients.stocks.length === 0"
                                   placeholder="Stock">
                         <mat-option [value]="undefined"></mat-option>
-                        <mat-option *ngFor="let stock of stockService.model"
+                        <mat-option *ngFor="let stock of ingredients.stocks"
                                     [value]="stock">
                           {{stock.ingredient.name}} - {{stock.quantity / stock.ingredient.unitFactor}}
                           {{stock.ingredient.unit}} - {{ stock.orderedDate | date: 'dd-MM-yyyy'}}

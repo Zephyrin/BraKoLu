@@ -83,7 +83,7 @@ class EnumIngredientController extends AbstractFOSRestController
      *  methods={"GET"},
      *  requirements={
      *      "childName": "(bottle|bottleTop|box|cereal|hop|keg|other|yeast)",
-     *      "name": "(volume|sizes|formats|types|head)"
+     *      "name": "(volume|sizes|formats|types|head|categories)"
      *  }
      * )
      * 
@@ -148,6 +148,8 @@ class EnumIngredientController extends AbstractFOSRestController
                         return $this->view(Cereal::FORMATS);
                     case 'types':
                         return $this->view(Cereal::TYPES);
+                    case 'categories':
+                        return $this->view(Cereal::CATEGORIES);
                     default:
                         break;
                 }

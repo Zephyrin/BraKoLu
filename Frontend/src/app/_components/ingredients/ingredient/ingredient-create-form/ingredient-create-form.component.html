@@ -109,6 +109,19 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width">
+            <mat-label>Catégorie</mat-label>
+            <mat-select required
+                        formControlName="category">
+              <mat-option *ngFor="let childName of service.cerealCategories"
+                          [value]="childName.value">
+                {{childName.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ service.form.get('category').errors?.serverError }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
             <mat-label>EBC</mat-label>
             <input matInput
                    required
