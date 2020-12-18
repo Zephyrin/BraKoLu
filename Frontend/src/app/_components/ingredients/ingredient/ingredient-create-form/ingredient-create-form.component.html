@@ -128,7 +128,7 @@
                    formControlName="ebc"
                    type="number"
                    min=1
-                   placeholder="saisir ici la valeur"
+                   placeholder="Ex. 4"
                    value="">
             <mat-error>
               {{ service.form.get('ebc').errors?.serverError }}
@@ -168,12 +168,13 @@
           </mat-form-field>
           <mat-form-field class="full-width">
             <mat-label>Année de récolte</mat-label>
-            <input matInput
-                   required
-                   formControlName="harvestYear"
-                   placeholder="Saisir ici l'année de récolte: 2020"
-                   type="month"
-                   pattern="[0-9]{4}">
+            <mat-select required
+                        formControlName="harvestYear">
+              <mat-option *ngFor="let year of years"
+                          [value]="year">
+                {{year}}
+              </mat-option>
+            </mat-select>
             <mat-error>
               {{ service.form.get('harvestYear').errors?.serverError }}
             </mat-error>
@@ -206,14 +207,19 @@
             <input matInput
                    required
                    formControlName="productionYear"
-                   placeholder="Saisir ici l'année de production: 2020-10"
+                   placeholder="Saisir ici l'année de production: 10-2020"
                    type="month"
-                   pattern="[0-9]{4}-(0[1-9])|(1[0-2])">
+                   [matDatepicker]="dp">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp
+                            startView="multi-year"
+                            (yearSelected)="chosenYearHandler($event)"
+                            (monthSelected)="chosenMonthHandler($event, dp)"
+                            panelClass="example-month-picker">
+            </mat-datepicker>
             <mat-error>
               {{ service.form.get('productionYear').errors?.serverError }}
-            </mat-error>
-            <mat-error *ngIf="service.form.get('productionYear').errors?.pattern">
-              Le format de la date n'est pas valide. J'attends l'année-mois.
             </mat-error>
           </mat-form-field>
         </div>

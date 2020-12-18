@@ -314,10 +314,7 @@ export class IngredientService extends CService<Ingredient>{
       case 'yeast':
         this.form.addControl('type', new FormControl('', Validators.required));
         this.form.addControl('productionYear',
-          new FormControl('',
-            [Validators.required,
-            Validators.pattern('^[0-9]{4}-(0[1-9])|(1[0-2])$')
-            ]));
+          new FormControl(null, [Validators.required]));
         break;
       case 'bottleTop':
         this.form.addControl('size', new FormControl('', Validators.required));

@@ -3,7 +3,7 @@ import { Ingredient } from './ingredient';
 export class Hop extends Ingredient {
   type: string;
   acidAlpha: string;
-  harvestYear: Date;
+  harvestYear: number;
 
   public constructor(hop: Hop | undefined) {
     super(hop);
@@ -21,12 +21,7 @@ export class Hop extends Ingredient {
     if (this.type) { data[`type`] = this.type; }
     if (this.acidAlpha) { data[`acidAlpha`] = this.acidAlpha; }
     if (this.harvestYear) {
-      if (typeof this.harvestYear === 'string') {
-        data[`harvestYear`] = this.harvestYear;
-      } else {
-        data[`harvestYear`] =
-          this.harvestYear.getFullYear();
-      }
+      data[`harvestYear`] = this.harvestYear;
     }
     return data;
   }
