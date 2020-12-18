@@ -2,7 +2,7 @@ import { Ingredient } from './ingredient';
 
 export class Yeast extends Ingredient {
   type: number;
-  productionYear: Date;
+  productionYear: Date | string;
 
   public constructor(yeast: Yeast | undefined) {
     super(yeast);
