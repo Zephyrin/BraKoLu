@@ -13,10 +13,9 @@
                [opened]="(isHandset$ | async) === false || (isSmallScreen$ | async) === false">
 
     <mat-toolbar>
-      <img matListIcon
-           alt="Bra.Tool Menu"
+      <img alt="Bra.Tool Menu"
            src="assets/bra.tool.ico"
-           style="height: 1em" /><img class="title"
+           style="height: 2em" /><img class="title"
            src="./assets/dark/banner_BRATOOL.svg" />
     </mat-toolbar>
 
@@ -82,12 +81,19 @@
               (click)="drawer.toggle()"
               *ngIf="(isHandset$ | async) || (isSmallScreen$ | async)"
               matTooltip="Affiche le menu Bra">
-        <img matListIcon
-             alt="Bra.Tool Menu"
-             src="assets/bra.tool.ico"
-             style="height: 1em" />
-        <img class="title"
-             src="./assets/dark/banner_BRATOOL.svg" />
+        <div>
+          <img alt="Bra.Tool Menu"
+               src="assets/bra.tool.ico"
+               style="height: 2em" />
+          <img class="title"
+               alt="Bra.Tool Menu"
+               src="./assets/dark/banner_BRATOOL.svg" />
+        </div>
+      </button>
+      <button mat-button
+              *ngIf="(isHandset$ | async) || (isSmallScreen$ | async)"
+              disabled>
+        <mat-icon></mat-icon>
       </button>
       <app-header></app-header>
     </mat-toolbar>

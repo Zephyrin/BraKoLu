@@ -8,22 +8,14 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Component } from '@angular/core';
 import {
-  MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
-// Depending on whether rollup is used, moment needs to be imported differently.
-// Since Moment.js doesn't have a default export, we normally need to import using the `* as`
-// syntax. However, rollup creates a synthetic default module and we thus need to import it using
-// the `default as` syntax.
-import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
-import { default as _rollupMoment, Moment } from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 
-const moment = _rollupMoment || _moment;
+// const moment = _rollupMoment || _moment;
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
@@ -88,13 +80,13 @@ export class IngredientCreateFormComponent extends ChildCreateFormBaseComponent 
     this.createFormBasedOn(newIngredient);
   }
 
-  chosenYearHandler(normalizedYear: Moment) {
+  chosenYearHandler(normalizedYear: any) {
     const ctrlValue = this.manageProductionYear();
     ctrlValue.setFullYear(normalizedYear.year());
     this.service.form.patchValue({ productionYear: ctrlValue });
   }
 
-  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+  chosenMonthHandler(normalizedMonth: any, datepicker: MatDatepicker<any>) {
     const ctrlValue = this.manageProductionYear();
     ctrlValue.setMonth(normalizedMonth.month());
     this.service.form.patchValue({ productionYear: ctrlValue });

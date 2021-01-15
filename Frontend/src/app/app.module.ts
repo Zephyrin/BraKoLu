@@ -36,7 +36,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { IngredientsDesktopComponent } from './_components/ingredients/ingredients-desktop/ingredients-desktop.component';
-import { IngredientsMobileComponent } from './_components/ingredients/ingredients-mobile/ingredients-mobile.component';
 import { IngredientCreateFormComponent } from './_components/ingredients/ingredient/ingredient-create-form/ingredient-create-form.component';
 import { StockComponent } from './_components/stock/stock.component';
 import { StockCreateComponent } from './_components/stock/stock-create/stock-create.component';
@@ -70,6 +69,7 @@ import { DialogOrderDetailQuantityComponent } from './_components/order/order-de
 import { OrderToolbarComponent } from './_components/order/order-toolbar/order-toolbar.component';
 import { HeaderComponent } from './_components/tools/header/header.component';
 import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredient-brewing/brew-ingredient-brewing.component';
+import { IngredientToolbarComponent } from './_components/ingredients/ingredient-toolbar/ingredient-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +78,6 @@ import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredie
     RemoveDialogComponent,
     ToolsEditComponent,
     IngredientsDesktopComponent,
-    IngredientsMobileComponent,
     IngredientCreateFormComponent,
     StockComponent,
     StockCreateComponent,
@@ -111,6 +110,7 @@ import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredie
     OrderToolbarComponent,
     HeaderComponent,
     BrewIngredientBrewingComponent,
+    IngredientToolbarComponent,
   ],
   imports: [
     BrowserModule,

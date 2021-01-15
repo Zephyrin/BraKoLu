@@ -27,7 +27,8 @@
   </form>
 </div>
 
-<div class="inline-center">
+<div class="inline-center"
+     [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
   <!-- FILTRES TYPES INGREDIENTS -->
   <mat-chip-list aria-label="Sélection des types d'ingrédients"
                  [multiple]="true"

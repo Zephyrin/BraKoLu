@@ -1,0 +1,36 @@
+<div class="inline-header">
+  <div class="inline">
+    <button mat-button
+            (click)="openCreateDialog($event)"
+            [matTooltip]="'Ajouter un ingrédient type à la base de données'">
+      <mat-icon>add_circle_outline</mat-icon>
+      <mat-label> Ajouter ingrédient</mat-label>
+    </button>
+    <button mat-icon-button
+            [matTooltip]="'Afficher les filtres'"
+            (click)="ingredientDisplay.filterExpanded = !ingredientDisplay.filterExpanded">
+      <mat-icon svgIcon="filter"
+                *ngIf="!ingredientDisplay.filterExpanded"></mat-icon>
+      <mat-icon svgIcon="filter-off"
+                *ngIf="ingredientDisplay.filterExpanded"></mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="searchForm">
+    <mat-form-field>
+      <mat-label>Recherche</mat-label>
+      <input matInput
+             id="searchText"
+             formControlName="search"
+             type="search"
+             aria-label="Recherche">
+      <button for="searchText"
+              mat-icon-button
+              matSuffix
+              type="submit"
+              (click)="search()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>

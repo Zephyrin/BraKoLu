@@ -1,4 +1,5 @@
-<ng-container [ngSwitch]="route.url">
+<div [ngSwitch]="route.url">
   <div *ngSwitchDefault></div>
   <app-order-toolbar *ngSwitchCase="'/command'"></app-order-toolbar>
-</ng-container>
+  <app-ingredient-toolbar *ngSwitchCase="'/ingredients'"></app-ingredient-toolbar>
+</div>
