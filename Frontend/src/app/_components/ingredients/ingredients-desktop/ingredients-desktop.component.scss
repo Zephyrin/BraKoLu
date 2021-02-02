@@ -3,3 +3,16 @@
   flex-direction: row;
   justify-content: center;
 }
+
+mat-chip {
+  max-width: 200px;
+}
+
+.inline {
+  display: flex;
+  justify-content: space-between;
+}
+
+.padding {
+  padding: 1em;
+}

@@ -1,49 +1,24 @@
-<div class="inline-header">
-  <!-- BOUTON AJOUTER INGREDIENT -->
-  <button mat-icon-button
-          (click)="openCreateDialog($event)"
-          [matTooltip]="'Ajouter un ingrédient type à la base de données'">
-    <mat-icon>add_circle_outline</mat-icon>
-    <mat-label> Ajouter ingrédient</mat-label>
-  </button>
-
-  <!-- BOITE RECHERCHE -->
-  <form [formGroup]="searchForm">
-    <mat-form-field>
-      <mat-label>Recherche</mat-label>
-      <input matInput
-             id="searchText"
-             formControlName="search"
-             type="search"
-             aria-label="Recherche">
-      <button for="searchText"
-              mat-icon-button
-              matSuffix
-              type="submit"
-              (click)="search()">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-  </form>
-</div>
-
-<div class="inline-center"
-     [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
+<div class="inline">
   <!-- FILTRES TYPES INGREDIENTS -->
-  <mat-chip-list aria-label="Sélection des types d'ingrédients"
-                 [multiple]="true"
-                 (change)="selectionChange($event)"
-                 [selectable]="true">
-    <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
-              [selected]="childName.selected"
-              (selectionChange)="selectionChange($event)"
-              (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
-  </mat-chip-list>
+  <div class="filter-container"
+       [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
+    <mat-chip-list aria-label="Sélection des types d'ingrédients"
+                   class="mat-chip-list-stacked"
+                   [multiple]="true"
+                   (change)="selectionChange($event)"
+                   [selectable]="true">
+      <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
+                [selected]="childName.selected"
+                (selectionChange)="selectionChange($event)"
+                (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
+    </mat-chip-list>
+  </div>
+  <div class="full-width padding">
+    <!-- TABLEAU DES INGREDIENTS -->
+    <app-table [service]="service"
+               [allowSelection]="allowSelection"
+               #tableComponent></app-table>
+
+    <app-pagination [paginate]="service.paginate"></app-pagination>
+  </div>
 </div>
-
-<!-- TABLEAU DES INGREDIENTS -->
-<app-table [service]="service"
-           [allowSelection]="allowSelection"
-           #tableComponent></app-table>
-
-<app-pagination [paginate]="service.paginate"></app-pagination>
