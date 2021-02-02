@@ -8,9 +8,12 @@
                    (change)="selectionChange($event)"
                    [selectable]="true">
       <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
+                class="overflow"
                 [selected]="childName.selected"
                 (selectionChange)="selectionChange($event)"
-                (click)="selectIngredientChange(childName)">{{childName.viewValue}}</mat-chip>
+                (click)="selectIngredientChange(childName)">
+        {{childName.viewValue}}
+      </mat-chip>
     </mat-chip-list>
   </div>
   <div class="full-width padding">
