@@ -1,3 +1,4 @@
+import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { Ingredient } from '@app/_models';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { FormBuilder } from '@angular/forms';
@@ -16,6 +17,7 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent {
   constructor(
     public dialogRef: MatDialogRef<StockCreateComponent>,
     public service: StockService,
+    public supplierService: SupplierService,
     protected formBuilder: FormBuilder,
     public ingredientService: IngredientService
   ) {
@@ -24,9 +26,19 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent {
 
   init() {
     this.ingredientService.load(true);
+    this.supplierService.load(true);
   }
 
-  compareIngredient(c1: Ingredient, c2: Ingredient): boolean {
+  onSubmitClick(): void {
+    if (this.service.form.invalid) {
+      return;
+    }
+    const val = Object.assign({}, this.service.form.value);
+    val.quantity = val.quantity * val.ingredient.unitFactor;
+    this.service.update(undefined, this.value, val);
+  }
+
+  compareId(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }

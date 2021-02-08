@@ -22,10 +22,27 @@ export class StockSearchService implements ISearch {
         this.stockSearch.states.toString()
       );
     }
+    if (this.stockSearch.searchValue.length > 0) {
+      httpParams = httpParams.append(
+        'search',
+        this.stockSearch.searchValue
+      );
+    }
     return httpParams;
   }
 
   setParametersFromUrl(params: Params): void {
+    if (params && params.hasOwnProperty('search')) {
+      this.stockSearch.searchValue = params.search;
+    } else {
+      this.stockSearch.searchValue = '';
+    }
+  }
 
+  public updateSearch(search: string) {
+    if (this.stockSearch.searchValue !== search) {
+      this.stockSearch.searchValue = search;
+      this.changePageSubject.next(true);
+    }
   }
 }

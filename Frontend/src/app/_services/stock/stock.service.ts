@@ -72,8 +72,14 @@ export class StockService extends CService<IngredientStock>{
       quantity: ['', Validators.required],
       price: ['', Validators.required],
       state: ['', Validators.required],
-      ingredient: ['', Validators.required]
+      ingredient: ['', Validators.required],
+      supplier: ['']
     });
+  }
+
+  public patchValue(value: IngredientStock): void {
+    this.form.patchValue(value);
+    this.form.patchValue({ quantity: value.quantityCalc() });
   }
 
   public getDisplay(name: string, value: IngredientStock): any {
@@ -88,6 +94,8 @@ export class StockService extends CService<IngredientStock>{
       case 'orderedDate':
       case 'endedDate':
         return this.datepipe.transform(value[name], 'y-MM-dd');
+      case 'supplier':
+        return value.supplier?.name;
       default:
         break;
     }

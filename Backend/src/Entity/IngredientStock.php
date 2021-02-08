@@ -29,7 +29,8 @@ class IngredientStock
         ['value' => 'state', 'viewValue' => 'État'],
         ['value' => 'creationDate', 'viewValue' => 'Crée le'],
         ['value' => 'orderedDate', 'viewValue' => 'Commandé le'],
-        ['value' => 'endedDate', 'viewValue' => 'Terminé le']
+        ['value' => 'endedDate', 'viewValue' => 'Terminé le'],
+        ['value' => 'supplier', 'viewValue' => 'Fournisseur']
     ];
 
     public static function getStates()

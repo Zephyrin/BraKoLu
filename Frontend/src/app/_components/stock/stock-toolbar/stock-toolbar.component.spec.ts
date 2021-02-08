@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StockMobileComponent } from './stock-mobile.component';
+import { StockToolbarComponent } from './stock-toolbar.component';
 
-describe('StockMobileComponent', () => {
-  let component: StockMobileComponent;
-  let fixture: ComponentFixture<StockMobileComponent>;
+describe('StockToolbarComponent', () => {
+  let component: StockToolbarComponent;
+  let fixture: ComponentFixture<StockToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StockMobileComponent ]
+      declarations: [ StockToolbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StockMobileComponent);
+    fixture = TestBed.createComponent(StockToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

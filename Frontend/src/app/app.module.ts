@@ -40,7 +40,6 @@ import { IngredientCreateFormComponent } from './_components/ingredients/ingredi
 import { StockComponent } from './_components/stock/stock.component';
 import { StockCreateComponent } from './_components/stock/stock-create/stock-create.component';
 import { StockDesktopComponent } from './_components/stock/stock-desktop/stock-desktop/stock-desktop.component';
-import { StockMobileComponent } from './_components/stock/stock-mobile/stock-mobile/stock-mobile.component';
 import { PaginationComponent } from './_components/helpers/pagination/pagination.component';
 import { OptionComponent } from './_components/option/option.component';
 import { VenteComponent } from './_components/vente/vente.component';
@@ -70,6 +69,7 @@ import { OrderToolbarComponent } from './_components/order/order-toolbar/order-t
 import { HeaderComponent } from './_components/tools/header/header.component';
 import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredient-brewing/brew-ingredient-brewing.component';
 import { IngredientToolbarComponent } from './_components/ingredients/ingredient-toolbar/ingredient-toolbar.component';
+import { StockToolbarComponent } from './_components/stock/stock-toolbar/stock-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +82,6 @@ import { IngredientToolbarComponent } from './_components/ingredients/ingredient
     StockComponent,
     StockCreateComponent,
     StockDesktopComponent,
-    StockMobileComponent,
     PaginationComponent,
     OptionComponent,
     VenteComponent,
@@ -111,6 +110,7 @@ import { IngredientToolbarComponent } from './_components/ingredients/ingredient
     HeaderComponent,
     BrewIngredientBrewingComponent,
     IngredientToolbarComponent,
+    StockToolbarComponent,
   ],
   imports: [
     BrowserModule,

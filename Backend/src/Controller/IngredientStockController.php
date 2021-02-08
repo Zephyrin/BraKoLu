@@ -120,6 +120,7 @@ class IngredientStockController extends AbstractFOSRestController
         $delivery = false;
         $response[] = $this->createOrUpdate($data, $this->ingredient, "IngredientController", false, true);
         $response[] = $this->createOrUpdate($data, $this->order, "OrderController", false, false);
+        $response[] = $this->createOrUpdate($data, $this->supplier, "SupplierController", false, true);
         $this->manageDataDates($data);
         if (array_key_exists($this->deliveryDate, $data)) {
             $delivery = $data[$this->deliveryDate];
@@ -286,6 +287,8 @@ class IngredientStockController extends AbstractFOSRestController
     {
         $delivery = false;
         $existing = $this->getById($id);
+        $response[] = $this->createOrUpdate($data, $this->ingredient, "IngredientController", false, false);
+        $response[] = $this->createOrUpdate($data, $this->order, "OrderController", false, false);
         $response[] = $this->createOrUpdate($data, $this->supplier, "SupplierController", false, false);
         $this->manageDataDates($data);
         if (array_key_exists($this->deliveryDate, $data)) {
@@ -297,7 +300,7 @@ class IngredientStockController extends AbstractFOSRestController
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this, $response);
         $updateData = $form->getData();
-        $this->manageDates($updateData);
+        //$this->manageDates($updateData);
         if ($delivery != false || is_null($delivery))
             $updateData->setDeliveryScheduledFor($delivery);
         $this->entityManager->flush();

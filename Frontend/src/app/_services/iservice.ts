@@ -299,7 +299,7 @@ export abstract class CService<T> implements IService {
           const id = 'id';
           if ((newValue && newValue[id] || !name) && !update) {
             // On utilise le mode avec l'objet entier.
-            simpleChange.currentValue = newValue;
+            simpleChange.currentValue = this.createCpy(newValue);
             this.updateOrCreate(simpleChange);
           } else {
             // On utilise qu'une partie de l'objet.
@@ -423,6 +423,10 @@ export abstract class CService<T> implements IService {
 
   public createForm(formBuilder: FormBuilder, value: T): void {
     this.createFormBasedOn(formBuilder, value);
+    this.patchValue(value);
+  }
+
+  protected patchValue(value: T): void {
     this.form.patchValue(value);
   }
 
