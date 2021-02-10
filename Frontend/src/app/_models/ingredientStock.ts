@@ -83,6 +83,9 @@ export class IngredientStock {
   }
 
   quantityCalc() {
+    if (!this.ingredient) {
+      return undefined;
+    }
     return this.quantity / this.ingredient.unitFactor;
   }
 

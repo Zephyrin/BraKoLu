@@ -62,6 +62,7 @@
         <mat-select formControlName="supplier"
                     placeholder="Ex: ???"
                     [compareWith]="compareId">
+          <mat-option (click)="addSupplier($event)">Ajouter un fournisseur</mat-option>
           <mat-option *ngFor="let supplier of supplierService.model"
                       [value]="supplier">
             {{supplier.name}}
