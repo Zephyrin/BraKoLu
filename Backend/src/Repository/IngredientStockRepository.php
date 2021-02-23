@@ -28,10 +28,10 @@ class IngredientStockRepository extends ServiceEntityRepository
         $selectStates = $paramFetcher->get('states');
         $query = $this->createQueryBuilder('e');
         if ($search != null) {
-            // TODO: Mettre à jour la recherche des ingrédients. 
-            $query = $query->andWhere(
-                '(LOWER(e.comment) LIKE :search OR LOWER(e.name) LIKE :search)'
-            )
+            $query = $query->innerJoin('e.ingredient', 'i')
+                ->andWhere(
+                    '(LOWER(i.name) LIKE :search)'
+                )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         }
         $query = $this->orList($query, $selectStates, 'e.state = ');

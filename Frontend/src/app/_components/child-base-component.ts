@@ -5,6 +5,7 @@ import { IService } from '@app/_services/iservice';
 import { Subscription } from 'rxjs';
 import { OnInit, OnDestroy, Input, TemplateRef, Component, SimpleChange } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
+import { timeoutWith } from 'rxjs/operators';
 
 export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   private serviceEndUpdateSubscription: Subscription;
@@ -60,13 +61,10 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   openDeleteDialog(evt: MouseEvent, element: any, title: string): void {
     evt.stopPropagation();
+    this.service.clearErrors();
     const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
     (dialogRef.componentInstance as RemoveDialogComponent).title = title;
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result && result.data === true) {
-        this.service.update(undefined, element, null);
-      }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-    });
+    (dialogRef.componentInstance as RemoveDialogComponent).element = element;
+    (dialogRef.componentInstance as RemoveDialogComponent).service = this.service;
   }
 }

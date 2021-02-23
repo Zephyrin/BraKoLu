@@ -2,9 +2,13 @@
 <div mat-dialog-content>
   Es-tu sûre de vouloir supprimer {{title}} ?
 </div>
+<mat-error>
+  {{service.getError(undefined)}}
+</mat-error>
 <div mat-dialog-actions
      class="d-flex flex-row-reverse">
   <button mat-button
+          [disabled]="service.loadingSource"
           (click)="onSubmit()">Oui</button>
   <button mat-button
           (click)="onNoClick()">Non</button>

@@ -1,10 +1,13 @@
-<div class="tab">
-  <div class="auto">
+<div class="inline">
+  <div class="filter-container"
+       [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
+    <app-supplier-desktop [service]="serviceSupplier"
+                          class="initial"></app-supplier-desktop>
+  </div>
+  <div class="full-width padding">
     <!-- TABLEAU DU STOCK -->
     <app-table [service]="service"
                #Table></app-table>
     <app-pagination [paginate]="service.paginate"></app-pagination>
   </div>
-  <app-supplier-desktop [service]="serviceSupplier"
-                        class="initial"></app-supplier-desktop>
 </div>

@@ -70,6 +70,8 @@ import { HeaderComponent } from './_components/tools/header/header.component';
 import { BrewIngredientBrewingComponent } from './_components/brew/brew-ingredient-brewing/brew-ingredient-brewing.component';
 import { IngredientToolbarComponent } from './_components/ingredients/ingredient-toolbar/ingredient-toolbar.component';
 import { StockToolbarComponent } from './_components/stock/stock-toolbar/stock-toolbar.component';
+import { SupplierSelectInputComponent } from './_components/supplier/supplier-select-input/supplier-select-input.component';
+import { SupplierSelectDialogComponent } from './_components/supplier/supplier-select-dialog/supplier-select-dialog.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +113,8 @@ import { StockToolbarComponent } from './_components/stock/stock-toolbar/stock-t
     BrewIngredientBrewingComponent,
     IngredientToolbarComponent,
     StockToolbarComponent,
+    SupplierSelectInputComponent,
+    SupplierSelectDialogComponent,
   ],
   imports: [
     BrowserModule,

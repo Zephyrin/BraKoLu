@@ -60,6 +60,11 @@ form {
   width: 100%;
 }
 
+.padding {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .flex-reverse {
   display: flex;
   flex-flow: row-reverse;
@@ -73,5 +78,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+}
+
+
+.filter-container {
+  overflow: hidden;
+}
+
+.inline {
+  display: flex;
   justify-content: space-between;
 }

@@ -31,6 +31,7 @@ class Supplier
 
     /**
      * @ORM\OneToMany(targetEntity=IngredientStock::class, mappedBy="supplier")
+     * @Exclude()
      */
     private $ingredientStocks;
 

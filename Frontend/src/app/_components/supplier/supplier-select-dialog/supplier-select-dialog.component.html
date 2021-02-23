@@ -1,0 +1,14 @@
+<app-supplier-desktop [service]="supplierService"
+                      [allowSelection]="true">
+</app-supplier-desktop>
+<div mat-dialog-actions
+     class="flex-reverse">
+  <button mat-button
+          [disabled]="!supplierService.selected"
+          (click)="onSubmitClick()">
+    <ng-container>Ajouter</ng-container>
+  </button>
+  <button mat-button
+          type="button"
+          (click)="onCancelClick()">Annuler</button>
+</div>

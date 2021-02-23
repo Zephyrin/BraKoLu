@@ -66,3 +66,7 @@ tr.detail-row {
   justify-content: right;
   align-items: center;
 }
+
+::ng-deep .mat-content {
+  overflow: initial!important;
+}

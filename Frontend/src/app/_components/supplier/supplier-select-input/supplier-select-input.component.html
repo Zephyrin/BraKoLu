@@ -1,0 +1,13 @@
+<!-- <input matInput
+       [value]="value?.name" /> -->
+<button *ngIf="value === undefined || value === null"
+        disabled
+        mat-button></button>
+{{value?.name}}
+<!-- <button mat-icon-button
+        matSuffix
+        [matTooltip]="'Supprime le fournisseur'"
+        *ngIf="value !== undefined && value !== null"
+        (click)="deleteSupplier($event)">
+  <mat-icon svgIcon="close"></mat-icon>
+</button> -->

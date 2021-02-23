@@ -289,7 +289,20 @@ class SupplierController extends AbstractFOSRestController
     public function deleteAction(string $id)
     {
         $existing = $this->getById($id);
-
+        if (
+            $existing
+            && $existing->getIngredientStocks()
+            && $existing->getIngredientStocks()->count() > 0
+        ) {
+            $this->createConflictError(
+                '',
+                'Il y a '
+                    . $existing->getIngredientStocks()->count()
+                    . ' stocks lié à '
+                    . $existing->getName()
+                    . '.'
+            );
+        }
         $this->entityManager->remove($existing);
         $this->entityManager->flush();
         return $this->view(null, Response::HTTP_NO_CONTENT);

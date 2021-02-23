@@ -1,6 +1,7 @@
-import { FormErrors } from '@app/_helpers/form-error';
+import { Subscription } from 'rxjs';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IService } from '@app/_services';
 
 @Component({
   selector: 'app-remove-dialog',
@@ -8,10 +9,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./remove-dialog.component.scss']
 })
 export class RemoveDialogComponent implements OnInit {
-  loading = false;
-  submitted = false;
-  errors = new FormErrors();
   title: string;
+  service: IService;
+  element: any;
+
+  afterUpdateSubscription: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<RemoveDialogComponent>,
@@ -25,6 +27,17 @@ export class RemoveDialogComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.dialogRef.close({ data: true });
+    if (this.element && this.service) {
+      this.afterUpdateSubscription = this.service.endUpdate.subscribe(result => {
+        if (this.afterUpdateSubscription) { this.afterUpdateSubscription.unsubscribe(); }
+        if (!this.service.hasErrors()) {
+          this.dialogRef.close({ data: true });
+        }
+      });
+      this.service.update(undefined, this.element, null);
+    }
+    else {
+      this.dialogRef.close({ data: true });
+    }
   }
 }

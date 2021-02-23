@@ -9,5 +9,6 @@
 </div>
 <!-- TABLEAU des fournisseurs -->
 <app-table [service]="service"
+           [allowSelection]="allowSelection"
            #Table></app-table>
 <app-pagination [paginate]="service.paginate"></app-pagination>

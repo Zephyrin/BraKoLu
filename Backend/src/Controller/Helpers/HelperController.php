@@ -122,13 +122,14 @@ trait HelperController
     }
 
     public function createConflictError(
-        string $message
+        string $errors,
+        string $message = 'Erreur de conflit'
     ) {
         throw new JsonException(new JsonResponse(
             [
                 'status' => 'Erreur',
-                'message' => 'Erreur de conflict',
-                'errors' => $message
+                'message' => $message,
+                'errors' => $errors
             ],
             JsonResponse::HTTP_CONFLICT
         ));

@@ -88,6 +88,10 @@ export interface IService {
   has(name: string, value: any | undefined): boolean;
 
   /**
+   * Supprime les erreurs du service afin de réouvrir une dialog sans avoir les erreurs précédentes.
+   */
+  clearErrors(): void;
+  /**
    * Détermine si un attribut est en erreur ou non dans le formulaire form.
    *
    * @param name Le nom de l'attribut potentielement en erreur.
@@ -250,10 +254,10 @@ export abstract class CService<T> implements IService {
 
   private load$(): void {
     let httpParams = null;
-    if (this.search) {
-      httpParams = this.search.initSearchParams(httpParams);
-    }
     if (!this.loadAll) {
+      if (this.search) {
+        httpParams = this.search.initSearchParams(httpParams);
+      }
       httpParams = this.paginate.initPaginationParams(httpParams);
       httpParams = this.sort.initSortParams(httpParams);
     }
@@ -271,12 +275,19 @@ export abstract class CService<T> implements IService {
     return value && value[name];
   }
 
+  public clearErrors(): void {
+    this.errors = new FormErrors();
+  }
+
   public hasError(name: string): boolean {
     return this.errors.hasErrors[name];
   }
 
   public getError(name: string): string {
-    return this.errors.get(name);
+    if (name) {
+      return this.errors.get(name);
+    }
+    return this.errors.message;
   }
   public hasErrors(): boolean {
     return this.errors.hasAtLeastOne;

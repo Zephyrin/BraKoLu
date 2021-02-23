@@ -99,6 +99,8 @@ export class IngredientStock {
     if (includeSupplier === true || includeSupplier === '') {
       if (this.supplier) {
         data[`supplier`] = this.supplier.toJSON(true);
+      } else {
+        data[`supplier`] = null;
       }
     }
     if (this.order) {
