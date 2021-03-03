@@ -37,8 +37,8 @@ class IngredientStockRepository extends ServiceEntityRepository
         }
         if ($suppliers != null) {
             $split = explode(',', $suppliers);
-            $query = $query->innerJoin('e.supplier', 'i');
             if (str_contains($suppliers, '-1')) {
+                $query = $query->leftJoin('e.supplier', 'i');
                 if (count($split) > 1) {
                     $query = $query->andWhere(
                         $query->expr()->orX(
@@ -48,7 +48,7 @@ class IngredientStockRepository extends ServiceEntityRepository
                     );
                 } else {
                     $query = $query->andWhere(
-                        $query->expr()->isNull('i')
+                        $query->expr()->isNull('e.supplier')
                     );
                 }
             } else {
