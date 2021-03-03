@@ -1,12 +1,10 @@
-<button mat-button
+<button mat-icon-button
         (click)="orderDisplayService.addNewOrder()"
         *ngIf="!orderDisplayService.hasNewOrder"
         [class.spinner]="orderService.loadingSource"
         [disabled]="orderService.loadingSource">
-
-
   <mat-icon svgIcon="truck-fast"></mat-icon>
-  <mat-label>Créer une commande</mat-label>
+  <mat-label> Créer une commande</mat-label>
 </button>
 
 <button mat-button

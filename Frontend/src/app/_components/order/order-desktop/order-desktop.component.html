@@ -1,5 +1,6 @@
 <mat-tab-group [selectedIndex]="orderDisplayService.formSelectedOrder.value"
                mat-align-tabs="center"
+               class="full-width padding"
                (selectedIndexChange)="orderDisplayService.changeSelectedIndex($event)">
   <mat-tab>
     <ng-template mat-tab-label>
