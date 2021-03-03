@@ -72,6 +72,8 @@ import { IngredientToolbarComponent } from './_components/ingredients/ingredient
 import { StockToolbarComponent } from './_components/stock/stock-toolbar/stock-toolbar.component';
 import { SupplierSelectInputComponent } from './_components/supplier/supplier-select-input/supplier-select-input.component';
 import { SupplierSelectDialogComponent } from './_components/supplier/supplier-select-dialog/supplier-select-dialog.component';
+import { SupplierSelectorFilterComponent } from './_components/supplier/supplier-selector-filter/supplier-selector-filter.component';
+import { StockStateFilterComponent } from './_components/stock/stock-state-filter/stock-state-filter.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +117,8 @@ import { SupplierSelectDialogComponent } from './_components/supplier/supplier-s
     StockToolbarComponent,
     SupplierSelectInputComponent,
     SupplierSelectDialogComponent,
+    SupplierSelectorFilterComponent,
+    StockStateFilterComponent,
   ],
   imports: [
     BrowserModule,

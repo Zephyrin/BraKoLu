@@ -215,6 +215,9 @@ class IngredientStockController extends AbstractFOSRestController
      * @QueryParam(name="states"
      *      , nullable=true
      *      , description="Selectionne uniquement ceux dont l'état est dans la liste.")
+     * @QueryParam(name="suppliers"
+     *      , nullable=true
+     *      , description="Selectionne uniquement ceux dont le fournisseur est dans la liste des ids.")
      *
      * @param ParamFetcher $paramFetcher
      * @return View

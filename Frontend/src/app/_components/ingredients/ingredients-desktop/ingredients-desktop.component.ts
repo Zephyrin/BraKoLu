@@ -2,7 +2,7 @@ import { IngredientDisplayService } from '@app/_services/ingredient/ingredient-d
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { IngredientChildrenSelected } from '@app/_models/ingredient-search';
+import { ValueViewChildSelected } from '@app/_models/ValueViewChildSelected';
 import { IngredientSearchService } from '@app/_services/ingredient/ingredient-search.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
@@ -38,7 +38,7 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
   get getService() { return this.service as IngredientService; }
   get getSearch() { return this.service.search as IngredientSearchService; }
 
-  public selectIngredientChange(child: IngredientChildrenSelected) {
+  public selectIngredientChange(child: ValueViewChildSelected) {
     this.getSearch.updateSelected(child);
   }
 

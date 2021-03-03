@@ -8,7 +8,6 @@ import { MatFormField, MatFormFieldControl } from '@angular/material/form-field'
 import { Supplier } from '@app/_models';
 import { Subject } from 'rxjs';
 import { SupplierSelectDialogComponent } from '../supplier-select-dialog/supplier-select-dialog.component';
-import { TryCatchStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-supplier-select-input',
@@ -39,13 +38,13 @@ export class SupplierSelectInputComponent implements
 
   @Input()
   get placeholder() {
-    return this._placeholder;
+    return this.$placeholder;
   }
   set placeholder(plh) {
-    this._placeholder = plh;
+    this.$placeholder = plh;
     this.stateChanges.next();
   }
-  private _placeholder: string;
+  private $placeholder: string;
 
   focused = false;
   get empty(): boolean {
@@ -58,25 +57,25 @@ export class SupplierSelectInputComponent implements
 
   @Input()
   get required(): boolean {
-    return this._required;
+    return this.$required;
   }
   set required(req) {
-    this._required = coerceBooleanProperty(req);
+    this.$required = coerceBooleanProperty(req);
     this.stateChanges.next();
   }
-  private _required = false;
+  private $required = false;
 
   @Input()
-  get disabled(): boolean { return this._disabled; }
+  get disabled(): boolean { return this.$disabled; }
   set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
+    this.$disabled = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
-  private _disabled = false;
+  private $disabled = false;
 
   errorState = false;
   controlType = 'supplier-select-input';
-  @Input('aria-describedby') describedBy = '';
+  @Input('aria-describedby') ariaDescribedby = '';
   autofilled?: boolean;
 
   onChange: any = () => { };
@@ -120,7 +119,7 @@ export class SupplierSelectInputComponent implements
   }
 
   setDescribedByIds(ids: string[]): void {
-    this.describedBy = ids.join(' ');
+    this.ariaDescribedby = ids.join(' ');
   }
 
   onContainerClick(event: MouseEvent): void {

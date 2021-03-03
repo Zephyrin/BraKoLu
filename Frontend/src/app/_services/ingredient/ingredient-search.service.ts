@@ -3,7 +3,8 @@ import { ISearch } from './../isearch';
 import { Subject } from 'rxjs';
 import { HttpParams, HttpHeaders } from '@angular/common/http';
 import { Params } from '@angular/router';
-import { IngredientSearch, IngredientChildrenSelected } from '@app/_models/ingredient-search';
+import { IngredientSearch } from '@app/_models/ingredient-search';
+import { ValueViewChildSelected } from '@app/_models/ValueViewChildSelected';
 
 export class IngredientSearchService implements ISearch {
   ingredientSearch = new IngredientSearch();
@@ -15,11 +16,11 @@ export class IngredientSearchService implements ISearch {
     ingredientChildrenNames.forEach(x => {
       const saveStatusStr = localStorage.getItem('ingredientSearch_' + x.value);
       const saveStatus = saveStatusStr === undefined || saveStatusStr === null ? false : JSON.parse(saveStatusStr);
-      this.ingredientSearch.selectChildren.push(new IngredientChildrenSelected(x, saveStatus));
+      this.ingredientSearch.selectChildren.push(new ValueViewChildSelected(x, saveStatus));
     });
   }
 
-  public updateSelected(child: IngredientChildrenSelected) {
+  public updateSelected(child: ValueViewChildSelected) {
     child.selected = !child.selected;
     localStorage.setItem('ingredientSearch_' + child.value, JSON.stringify(child.selected));
     this.changePageSubject.next(true);

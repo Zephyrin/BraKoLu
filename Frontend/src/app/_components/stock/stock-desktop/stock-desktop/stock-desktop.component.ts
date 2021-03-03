@@ -7,6 +7,9 @@ import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core
 import { StockCreateComponent } from '@app/_components/stock/stock-create/stock-create.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { StockDisplayService } from '@app/_services/stock/stock-display.service';
+import { Supplier } from '@app/_models';
+import { StockService } from '@app/_services/stock/stock.service';
+import { StockSearchService } from '@app/_services/stock/stock-search.service';
 
 @Component({
   selector: 'app-stock-desktop',
@@ -38,6 +41,14 @@ export class StockDesktopComponent extends ChildBaseComponent<StockCreateCompone
   }
 
   public init() {
-    this.serviceSupplier.load(false);
+    this.serviceSupplier.load(true);
+  }
+
+  public selectedSuppliersChange(suppliers: Supplier[]) {
+    ((this.service as StockService).search as StockSearchService).updateSuppliers(suppliers);
+  }
+
+  public selectedStatesChange(states: string[]) {
+    ((this.service as StockService).search as StockSearchService).updateStates(states);
   }
 }

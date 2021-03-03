@@ -26,6 +26,7 @@ class IngredientStockRepository extends ServiceEntityRepository
     {
         $search = $paramFetcher->get('search');
         $selectStates = $paramFetcher->get('states');
+        $suppliers = $paramFetcher->get('suppliers');
         $query = $this->createQueryBuilder('e');
         if ($search != null) {
             $query = $query->innerJoin('e.ingredient', 'i')
@@ -33,6 +34,28 @@ class IngredientStockRepository extends ServiceEntityRepository
                     '(LOWER(i.name) LIKE :search)'
                 )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
+        }
+        if ($suppliers != null) {
+            $split = explode(',', $suppliers);
+            $query = $query->innerJoin('e.supplier', 'i');
+            if (str_contains($suppliers, '-1')) {
+                if (count($split) > 1) {
+                    $query = $query->andWhere(
+                        $query->expr()->orX(
+                            $query->expr()->isNull('i'),
+                            $query->expr()->in('i.id', $split)
+                        )
+                    );
+                } else {
+                    $query = $query->andWhere(
+                        $query->expr()->isNull('i')
+                    );
+                }
+            } else {
+                $query = $query->andWhere(
+                    $query->expr()->in('i.id', $split)
+                );
+            }
         }
         $query = $this->orList($query, $selectStates, 'e.state = ');
         return $this->resultCount($query, $paramFetcher);

@@ -27,7 +27,7 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
-    if (this.service.model.length > 0) {
+    if (this.service.model?.length > 0) {
       this.endUpdate(undefined);
     }
   }

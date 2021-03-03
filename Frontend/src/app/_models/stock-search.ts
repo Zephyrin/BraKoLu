@@ -1,5 +1,8 @@
+import { Supplier } from '.';
+
 export class StockSearch {
   states: string[];
+  suppliers: Supplier[];
   searchValue = '';
 
   public addState(value: string) {
