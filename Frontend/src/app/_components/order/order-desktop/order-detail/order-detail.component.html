@@ -74,6 +74,8 @@
           <td mat-cell
               *matCellDef="let element">
             <mat-slide-toggle [checked]="element.state === 'stocked' || element.state === 'sold_out'"
+                              [matTooltip]="element.ingredient.name
+                              + (element.state === 'stocked' ? ' est en stock' : ' n\'est pas en stock')"
                               (change)="updateStockState($event, element, supplier)"></mat-slide-toggle>
           </td>
         </ng-container>

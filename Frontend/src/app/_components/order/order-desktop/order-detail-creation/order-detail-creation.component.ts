@@ -296,8 +296,8 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
-  public updateStockSupplier(evt: MatSelectChange, orderStock: OrderStock, stock: IngredientStock): void {
-    this.stockService.update('supplier', stock, evt.value, true);
+  public updateStockSupplier(supplier: Supplier, orderStock: OrderStock, stock: IngredientStock): void {
+    this.stockService.update('supplier', stock, supplier, true);
   }
 
   updateDate(event: any, orderStock: OrderStock, stock: IngredientStock, date: string) {

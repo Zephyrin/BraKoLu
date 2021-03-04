@@ -146,17 +146,11 @@
   <mat-form-field appearance="legacy"
                   class="supplierForm">
     <mat-label>Fournisseur</mat-label>
-    <mat-select [value]="stock.supplier"
-                [compareWith]="compareId"
-                [disabled]="!stock.id || stockService.loadingSource"
-                (selectionChange)="updateStockSupplier($event, element, stock)"
-                placeholder="Fournisseur">
-      <mat-option [value]="undefined">Sans fournisseur</mat-option>
-      <mat-option *ngFor="let supplier of supplierService.model"
-                  [value]="supplier">
-        {{supplier.name}}
-      </mat-option>
-    </mat-select>
+    <app-supplier-select-input #supplier
+                               [value]="stock.supplier"
+                               [disabled]="!stock.id"
+                               (newSupplier)="updateStockSupplier($event, element, stock)"
+                               placeholder="Fournisseur"></app-supplier-select-input>
   </mat-form-field>
   <mat-form-field appearance="legacy"
                   class="deliveryScheduledForm">
