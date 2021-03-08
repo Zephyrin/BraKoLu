@@ -188,21 +188,29 @@
 
 <ng-template #listBrewElement
              let-element="element">
-  <mat-list>
-    <mat-list-item *ngFor="let brewElement of element.brewIngredients">
-      <b>{{getDisplayBrewIngredient('brewName', brewElement)}}</b>&nbsp;brassage le&nbsp;
-      <b>{{getDisplayBrewIngredient('startDate',
-        brewElement)}}</b>
-      <mat-icon svgIcon="arrow-right"></mat-icon>
-      {{getDisplayBrewIngredient('quantity', brewElement)}} {{getDisplayBrewIngredient('unit', brewElement)}} - 
-      <mat-chip-list>
-        <mat-chip [color]="brewElement.quantityLeft > 0 ? 'accent' : 'primary'"
-                  [selected]="brewElement.quantityLeft > 0">
-          {{getDisplayBrewIngredient('quantityMissing', brewElement)}} {{getDisplayBrewIngredient('unit', brewElement)}}
-        </mat-chip>
-      </mat-chip-list>
-    </mat-list-item>
-  </mat-list>
+  <mat-table class="full-width"
+             #matTable
+             matSort
+             [dataSource]="element.brewIngredients">
+    <ng-container [matColumnDef]="header.value"
+                  *ngFor="let header of headersDetailStock">
+      <th mat-header-cell
+          class="header-box"
+          [mat-sort-header]="header.value"
+          *matHeaderCellDef>{{header.viewValue}}
+      </th>
+      <td mat-cell
+          *matCellDef="let element">
+        {{ getDisplayBrewIngredient(header.value, element) }}
+      </td>
+    </ng-container>
+    <tr mat-header-row
+        class="tr-box"
+        *matHeaderRowDef="displayedColumnsDetailStock"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumnsDetailStock;"
+        class="element-row"></tr>
+  </mat-table>
 </ng-template>
 <ng-template #tableBrewElement
              let-element="element">

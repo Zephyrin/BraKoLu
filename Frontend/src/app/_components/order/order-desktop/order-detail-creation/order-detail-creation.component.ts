@@ -66,7 +66,9 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   @Input() order: Order;
 
   public headersStock: ValueViewChild[];
+  public headersDetailStock: ValueViewChild[];
   public displayedColumnsStock = new Array<string>();
+  public displayedColumnsDetailStock = new Array<string>();
   public headersBrewIngredient = new Array<ValueViewChild>();
   public displayedColumnsBrewIngredient = new Array<string>();
   public undefValue = undefined;
@@ -105,6 +107,13 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     this.headersBrewIngredient.push({ value: 'quantity', viewValue: 'Quantité' });
     this.headersBrewIngredient.push({ value: 'quantityMissing', viewValue: 'Quantité manquante' });
     this.headersBrewIngredient.forEach(val => this.displayedColumnsBrewIngredient.push(val.value));
+    this.headersDetailStock = new Array<ValueViewChild>();
+    this.headersDetailStock.push({ value: 'brewName', viewValue: 'Brassin' });
+    this.headersDetailStock.push({ value: 'startDate', viewValue: 'À brasser le' });
+    this.headersDetailStock.push({ value: 'quantity', viewValue: 'Quantité' });
+    this.headersDetailStock.push({ value: 'quantityMissing', viewValue: 'Quantité manquante' });
+    this.headersDetailStock.forEach(val => { this.displayedColumnsDetailStock.push(val.value); });
+
     this.brewSubscription = this.brewService.endUpdate.subscribe(change => {
       if (!change) { this.createPartIngredientType(); }
     });
@@ -211,9 +220,10 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
       case 'startDate':
         return this.datepipe.transform(brewIng.brewIngredient.brew.started, 'dd-MM-y');
       case 'quantity':
-        return brewIng.brewIngredient.quantity / brewIng.brewIngredient.ingredient.unitFactor;
+        return brewIng.brewIngredient.quantity / brewIng.brewIngredient.ingredient.unitFactor + ' '
+          + brewIng.brewIngredient.ingredient.unit;
       case 'quantityMissing':
-        return brewIng.quantityLeft / brewIng.brewIngredient.ingredient.unitFactor;
+        return brewIng.quantityLeft / brewIng.brewIngredient.ingredient.unitFactor + ' ' + brewIng.brewIngredient.ingredient.unit;
       case 'unit':
         return brewIng.brewIngredient.ingredient.unit;
       default:

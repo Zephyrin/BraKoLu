@@ -30,6 +30,7 @@
         *matCellDef="let row">
       <div class="action-container">
         <button mat-icon-button
+                *ngIf="componentOrTemplateRef"
                 (click)="openUpdateDialog($event, row)"
                 [attr.aria-label]="'Met à jour ' + service.getDisplay('name',row)">
           <mat-icon>update</mat-icon>
