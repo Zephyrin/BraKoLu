@@ -190,7 +190,10 @@
              let-element="element">
   <mat-list>
     <mat-list-item *ngFor="let brewElement of element.brewIngredients">
-      {{getDisplayBrewIngredient('brewName', brewElement)}} <mat-icon svgIcon="arrow-right"></mat-icon>
+      <b>{{getDisplayBrewIngredient('brewName', brewElement)}}</b>&nbsp;brassage le&nbsp;
+      <b>{{getDisplayBrewIngredient('startDate',
+        brewElement)}}</b>
+      <mat-icon svgIcon="arrow-right"></mat-icon>
       {{getDisplayBrewIngredient('quantity', brewElement)}} {{getDisplayBrewIngredient('unit', brewElement)}} - 
       <mat-chip-list>
         <mat-chip [color]="brewElement.quantityLeft > 0 ? 'accent' : 'primary'"

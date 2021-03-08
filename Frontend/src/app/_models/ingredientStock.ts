@@ -17,8 +17,9 @@ export class IngredientStock {
   brewStocks: BrewStock[];
   supplier: Supplier;
   order: Order;
-
+  isPart = false;
   public constructor(stock: IngredientStock | undefined, includeOrder: boolean = true, initLists: boolean = true) {
+    if (!initLists && !includeOrder) { this.isPart = true; }
     if (initLists) { this.brewStocks = new Array(); }
     if (stock && stock !== null) {
       this.id = stock.id;
@@ -96,7 +97,7 @@ export class IngredientStock {
     if (this.price !== undefined) { data[`price`] = this.price; }
     if (this.state) { data[`state`] = this.state; }
     if (this.ingredient) { data[`ingredient`] = this.ingredient.id; }
-    if (includeSupplier === true || includeSupplier === '') {
+    if (!this.isPart && (includeSupplier === true || includeSupplier === '')) {
       if (this.supplier) {
         data[`supplier`] = this.supplier.toJSON(true);
       } else {

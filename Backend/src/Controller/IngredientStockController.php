@@ -303,7 +303,7 @@ class IngredientStockController extends AbstractFOSRestController
         $form->submit($data, $clearMissing);
         $this->validationError($form, $this, $response);
         $updateData = $form->getData();
-        if (!isset($data['supplier']) && $data['supplier'] == null)
+        if (isset($data['supplier']) && $data['supplier'] == null)
             $updateData->setSupplier(null);
         if ($delivery != false || is_null($delivery))
             $updateData->setDeliveryScheduledFor($delivery);

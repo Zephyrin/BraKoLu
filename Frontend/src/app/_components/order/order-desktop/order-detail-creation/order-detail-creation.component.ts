@@ -207,8 +207,9 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     switch (name) {
       case 'brewName':
         return brewIng.brewIngredient.brew.number + ' - '
-          + brewIng.brewIngredient.brew.name + ' '
-          + this.datepipe.transform(brewIng.brewIngredient.brew.started, 'dd-MM-y');
+          + brewIng.brewIngredient.brew.name + ' ';
+      case 'startDate':
+        return this.datepipe.transform(brewIng.brewIngredient.brew.started, 'dd-MM-y');
       case 'quantity':
         return brewIng.brewIngredient.quantity / brewIng.brewIngredient.ingredient.unitFactor;
       case 'quantityMissing':
