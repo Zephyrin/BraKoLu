@@ -11,6 +11,10 @@ tr.detail-row {
   display: flex;
   justify-content: space-between;
 }
+.column {
+  display: flex;
+  flex-direction: column;
+}
 .padding {
   padding: 1em;
 }

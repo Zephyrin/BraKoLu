@@ -14,7 +14,7 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   @Input() allowSelection = false;
   constructor(
     public dialog: MatDialog,
-    protected componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
+    public componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) { }
 
   public UpdateComponentOrTemplateRef(componentOrTemplateRef: ComponentType<T> | TemplateRef<T>) {
     this.componentOrTemplateRef = componentOrTemplateRef;

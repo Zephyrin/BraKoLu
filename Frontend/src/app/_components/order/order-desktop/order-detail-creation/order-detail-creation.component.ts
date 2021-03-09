@@ -17,7 +17,6 @@ import { BrewService } from '@app/_services/brew/brew.service';
 import { Component, OnInit, OnDestroy, Input, SimpleChange } from '@angular/core';
 import { Ingredient, IngredientStock, Supplier } from '@app/_models';
 import { Subscription } from 'rxjs';
-import { MatSelectChange } from '@angular/material/select';
 import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
@@ -25,6 +24,7 @@ import {
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DialogOrderDetailResult } from './dialog-order-detail-base';
+import { MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-order-detail-creation',
@@ -67,15 +67,17 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
 
   public headersStock: ValueViewChild[];
   public headersDetailStock: ValueViewChild[];
+  public headersCreationStock: ValueViewChild[];
   public displayedColumnsStock = new Array<string>();
   public displayedColumnsDetailStock = new Array<string>();
+  public displayedColumnsCreationStock = new Array<string>();
   public headersBrewIngredient = new Array<ValueViewChild>();
   public displayedColumnsBrewIngredient = new Array<string>();
   public undefValue = undefined;
   private inputIntervalBeforeSave: any;
   private afterClosedSubscription: Subscription;
   private orderDisplaySubscription: Subscription;
-
+  private $updateTable: MatTable<any>;
   constructor(
     public brewService: BrewService,
     public stockService: StockService,
@@ -84,7 +86,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     public supplierService: SupplierService,
     public dialog: MatDialog,
     public orderDisplayService: OrderDisplayService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
   ) {
     this.orderDisplaySubscription = this.orderDisplayService.launchOrder.subscribe(x => {
       this.launchOrder(x);
@@ -113,6 +115,14 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     this.headersDetailStock.push({ value: 'quantity', viewValue: 'Quantité' });
     this.headersDetailStock.push({ value: 'quantityMissing', viewValue: 'Quantité manquante' });
     this.headersDetailStock.forEach(val => { this.displayedColumnsDetailStock.push(val.value); });
+
+    this.headersCreationStock = new Array<ValueViewChild>();
+    this.headersCreationStock.push({ value: 'quantity', viewValue: 'Quantité' });
+    this.headersCreationStock.push({ value: 'supplier', viewValue: 'Fournisseur' });
+    this.headersCreationStock.push({ value: 'deliveryAt', viewValue: 'Livraison prévu' });
+    this.headersCreationStock.push({ value: 'price', viewValue: 'Prix' });
+    this.headersCreationStock.push({ value: 'action', viewValue: '' });
+    this.headersCreationStock.forEach(val => { this.displayedColumnsCreationStock.push(val.value); });
 
     this.brewSubscription = this.brewService.endUpdate.subscribe(change => {
       if (!change) { this.createPartIngredientType(); }
@@ -236,12 +246,13 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
-  public addNewStockOrder(event: MouseEvent, row: OrderStock): void {
+  public addNewStockOrder(event: MouseEvent, row: OrderStock, table: MatTable<any>): void {
     event.stopPropagation();
     row.addOrderStock(undefined);
+    if (table) { table.renderRows(); }
   }
 
-  public removeStockOrder(event: MouseEvent, row: OrderStock, index: number): void {
+  public removeStockOrder(event: MouseEvent, row: OrderStock, index: number, table: MatTable<any>): void {
     event.stopPropagation();
     if (index >= 0 && index < row.orderStocks.length) {
       row.updateQuantity(row.orderStocks[index], 0);
@@ -253,6 +264,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     if (row.orderStocks.length === 0) {
       row.addOrderStock(undefined);
     }
+    if (table) { table.renderRows(); }
   }
 
   private updateIngredientStock(change: SimpleChange) {
@@ -264,7 +276,8 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
         const indexRow = row.orderStocks.findIndex(x => x.ingredient.id === change.previousValue.ingredient.id);
         if (indexRow >= 0) {
           const orderStock = row.orderStocks[indexRow];
-          const index = orderStock.orderStocks.findIndex(x => x === change.previousValue);
+          let index = orderStock.orderStocks.findIndex(x => x === change.previousValue);
+          if (index < 0) { index = orderStock.orderStocks.findIndex(x => !x.id); }
           if (index >= 0) {
             orderStock.orderStocks[index] = change.currentValue;
           }
@@ -283,13 +296,15 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
         this.order.stocks.splice(orderIndex, 1);
       }
     }
+    if (this.$updateTable) { this.$updateTable.renderRows(); }
   }
 
-  public updateStock(evt: any, orderStock: OrderStock, stock: IngredientStock, name: string): void {
+  public updateStock(evt: any, orderStock: OrderStock, stock: IngredientStock, name: string, table: MatTable<any>): void {
     if (this.inputIntervalBeforeSave) {
       clearInterval(this.inputIntervalBeforeSave);
     }
     this.inputIntervalBeforeSave = setInterval(() => {
+      this.$updateTable = table;
       clearInterval(this.inputIntervalBeforeSave);
       let val = +evt.srcElement.value;
       if (name === 'quantity') { val = val * stock.ingredient.unitFactor; }
@@ -307,11 +322,13 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
-  public updateStockSupplier(supplier: Supplier, orderStock: OrderStock, stock: IngredientStock): void {
+  public updateStockSupplier(supplier: Supplier, orderStock: OrderStock, stock: IngredientStock, table: MatTable<any>): void {
+    this.$updateTable = table;
     this.stockService.update('supplier', stock, supplier, true);
   }
 
-  updateDate(event: any, orderStock: OrderStock, stock: IngredientStock, date: string) {
+  updateDate(event: any, orderStock: OrderStock, stock: IngredientStock, date: string, table: MatTable<any>) {
+    this.$updateTable = table;
     if (event.target.value) {
       this.stockService.update(date, stock, new Date(event.target.value));
       stock[date] = new Date(event.target.value);
