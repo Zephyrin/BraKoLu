@@ -277,7 +277,7 @@ class OrderController extends AbstractFOSRestController
      * })
      * 
      * @SWG\Patch(
-     *     summary="Mise à jour d'une partie du brassin. Les champs manquants ne sont pas modifiés.",
+     *     summary="Mise à jour d'une partie d'une commande. Les champs manquants ne sont pas modifiés.",
      *     consumes={"application/json"},
      *     produces={"application/json"},
      *     @SWG\Response(
@@ -294,17 +294,17 @@ class OrderController extends AbstractFOSRestController
      *          in="body",
      *          required=true,
      *          @SWG\Schema(ref=@Model(type=Order::class)),
-     *          description="Une partie d'une ligne du brassin."
+     *          description="Une partie d'une ligne d'une commande."
      *     ),
      *     @SWG\Response(
      *          response=404,
-     *          description="Le brassin n'a pas été trouvée."
+     *          description="La commande n'a pas été trouvée."
      *     ),
      *     @SWG\Parameter(
      *          name="id",
      *          in="path",
      *          type="string",
-     *          description="L'ID utilisé pour retrouver la ligne du brassin."
+     *          description="L'ID utilisé pour retrouver la ligne de la commande."
      *     )
      * )
      * @param string $id
@@ -346,22 +346,22 @@ class OrderController extends AbstractFOSRestController
      * })
      * 
      * @SWG\Delete(
-     *     summary="Supprime la ligne du brassin de la base de données. Ne peut pas être annulé.",
+     *     summary="Supprime la ligne de la commande de la base de données. Ne peut pas être annulé.",
      *     @SWG\Parameter(
      *          name="id",
      *          in="path",
      *          type="string",
-     *          description="L'ID utilisé pour retrouver la ligne du brassin."
+     *          description="L'ID utilisé pour retrouver la ligne de la commande."
      *     )
      * )
      * @SWG\Response(
      *     response=204,
-     *     description="La ligne du brassin a bien été supprimée."
+     *     description="La ligne de la commande a bien été supprimée."
      * )
      *
      * @SWG\Response(
      *     response=404,
-     *     description="La ligne du brassin n'existe pas."
+     *     description="La ligne de la commande n'existe pas."
      * )
      *
      * @param string $id

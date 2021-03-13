@@ -1,0 +1,85 @@
+<div class="table-responsive">
+  <mat-table class="full-width"
+             #matTable
+             matSort
+             multiTemplateDataRows
+             [dataSource]="ingredientsByType.orderStocks">
+    <ng-container matColumnDef="expanded">
+      <th mat-header-cell
+          *matHeaderCellDef>
+      </th>
+      <td mat-cell
+          (click)="selectedRow($event, row)"
+          *matCellDef="let row"
+          class="cursor">
+        <div class="expanded">
+          <mat-icon *ngIf="row.expanded">expand_less</mat-icon>
+          <mat-icon *ngIf="!row.expanded">expand_more</mat-icon>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="header.value"
+                  *ngFor="let header of headersStock">
+      <th mat-header-cell
+          class="header-box"
+          [mat-sort-header]="header.value"
+          *matHeaderCellDef>{{header.viewValue}}
+      </th>
+      <td mat-cell
+          *matCellDef="let element">
+        {{ getDisplay(header.value, element) }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell
+          *matHeaderCellDef>
+      </th>
+      <td mat-cell
+          *matCellDef="let element">
+        <div class="action-container">
+          <ng-container *ngIf="element.orderStocks.length === 1">
+            <app-stock-in-order-inline [element]="element"
+                                       [stock]="element.orderStocks[0]"></app-stock-in-order-inline>
+            <button mat-icon-button
+                    (click)="addNewStockOrder($event, element, undefined)"
+                    [attr.aria-label]="'Ajouter un nouvel ingrédient'">
+              <mat-icon>add_task</mat-icon>
+            </button>
+          </ng-container>
+          <div *ngIf="element.orderStocks.length > 1">
+            Commande de
+            {{getDisplay('quantityOrder', element)}}
+            <mat-icon svgIcon="truck-delivery"
+                      *ngIf="getDisplay('displayTruck', element)"></mat-icon>
+            {{getDisplay('lastDeliverySchedule', element)}}
+          </div>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell
+          *matCellDef="let element"
+          [attr.colspan]="displayedColumnsStock.length">
+        <div class="element-detail column"
+             [@detailExpand]="element.expanded ? 'expanded' : 'collapsed'">
+          <app-stock-in-order-table *ngIf="element.orderStocks.length > 1"
+                                    [element]="element"
+                                    [stocks]="element.orderStocks"></app-stock-in-order-table>
+
+          <app-brews-for-ingredient [element]="element"></app-brews-for-ingredient>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row
+        class="tr-box"
+        *matHeaderRowDef="displayedColumnsStock"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumnsStock;"
+        class="element-row"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: ['expandedDetail']"
+        class="detail-row"></tr>
+
+  </mat-table>
+</div>

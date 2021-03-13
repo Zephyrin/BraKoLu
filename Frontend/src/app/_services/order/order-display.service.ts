@@ -67,6 +67,8 @@ export class OrderDisplayService {
   public destroy() {
     this.formSelectedOrder.setValue(0);
     this.selectedOrders.splice(0, this.selectedOrders.length);
+    this.changeSelectedIndex(0);
+    this.loadStockAndBrewFormOrder = false;
     if (this.selectedChangeSubscription) { this.selectedChangeSubscription.unsubscribe(); }
   }
 

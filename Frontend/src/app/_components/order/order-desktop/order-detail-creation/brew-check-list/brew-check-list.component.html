@@ -1,0 +1,18 @@
+<mat-chip-list aria-label="Sélection des types d'ingrédients"
+               class="mat-chip-list-stacked"
+               [multiple]="true"
+               (change)="selectionChange($event)"
+               [selectable]="true">
+  <mat-chip *ngFor="let brew of orderDetailCreation?.brewsDetail"
+            class="overflow"
+            [selected]="brew.isApply"
+            (selectionChange)="selectionChange($event)"
+            (click)="selectedBrewChange(brew)">
+    <mat-icon matListIcon
+              *ngIf="brew.canBeBrew">thumb_up</mat-icon>
+    <mat-icon matListIcon
+              *ngIf="!brew.canBeBrew">warning</mat-icon>
+    <div class="brew-custom-placeholder"></div>
+    {{brew.brew.number}} - {{brew.brew.name}}<br />{{brew.brew.started | date: 'dd-M-yyyy' }}
+  </mat-chip>
+</mat-chip-list>

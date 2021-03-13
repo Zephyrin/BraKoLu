@@ -75,6 +75,11 @@ import { SupplierSelectDialogComponent } from './_components/supplier/supplier-s
 import { SupplierSelectorFilterComponent } from './_components/supplier/supplier-selector-filter/supplier-selector-filter.component';
 import { StockStateFilterComponent } from './_components/stock/stock-state-filter/stock-state-filter.component';
 import { BrewToolbarComponent } from './_components/brew/brew-toolbar/brew-toolbar.component';
+import { BrewCheckListComponent } from './_components/order/order-desktop/order-detail-creation/brew-check-list/brew-check-list.component';
+import { IngredientTypeComponent } from './_components/order/order-desktop/order-detail-creation/ingredient-type/ingredient-type.component';
+import { StockInOrderInlineComponent } from './_components/order/order-desktop/order-detail-creation/stock-in-order-inline/stock-in-order-inline.component';
+import { StockInOrderTableComponent } from './_components/order/order-desktop/order-detail-creation/stock-in-order-table/stock-in-order-table.component';
+import { BrewsForIngredientComponent } from './_components/order/order-desktop/order-detail-creation/brews-for-ingredient/brews-for-ingredient.component';
 
 @NgModule({
   declarations: [
@@ -121,6 +126,11 @@ import { BrewToolbarComponent } from './_components/brew/brew-toolbar/brew-toolb
     SupplierSelectorFilterComponent,
     StockStateFilterComponent,
     BrewToolbarComponent,
+    BrewCheckListComponent,
+    IngredientTypeComponent,
+    StockInOrderInlineComponent,
+    StockInOrderTableComponent,
+    BrewsForIngredientComponent,
   ],
   imports: [
     BrowserModule,

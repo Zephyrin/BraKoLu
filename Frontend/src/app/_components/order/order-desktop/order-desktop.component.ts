@@ -20,6 +20,7 @@ export class OrderDesktopComponent extends ChildBaseComponent<undefined>{
     public orderDisplayService: OrderDisplayService
   ) {
     super(dialog, undefined);
+    orderDisplayService.destroy();
   }
 
   public init() {

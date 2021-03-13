@@ -1,0 +1,52 @@
+<mat-form-field appearance="legacy"
+                class="quantityForm">
+  <mat-label>Quantité</mat-label>
+  <input matInput
+         [placeholder]="'Ex: 23 ' + element.ingredient.unit"
+         type="number"
+         step="any"
+         min="0"
+         (change)="updateStock($event, element, stock, 'quantity')"
+         [value]="stock.quantity / element.ingredient.unitFactor">
+</mat-form-field>
+<mat-form-field appearance="legacy"
+                class="supplierForm">
+  <mat-label>Fournisseur</mat-label>
+  <app-supplier-select-input #supplier
+                             [value]="stock.supplier"
+                             [disabled]="!stock.id"
+                             (newSupplier)="updateStockSupplier($event, element, stock)"
+                             placeholder="Fournisseur"></app-supplier-select-input>
+</mat-form-field>
+<mat-form-field appearance="legacy"
+                class="deliveryScheduledForm">
+  <mat-label>Livraison prévue</mat-label>
+  <input matInput
+         [disabled]="!stock.id || stockService.loadingSource"
+         [matDatepicker]="deliveryScheduledFor"
+         (dateInput)="updateDate($event, element, stock, 'deliveryScheduledFor')"
+         (dateChange)="updateDate($event, element, stock, 'deliveryScheduledFor')"
+         [value]="stock.deliveryScheduledFor">
+  <mat-datepicker-toggle matSuffix
+                         [for]="deliveryScheduledFor"></mat-datepicker-toggle>
+  <mat-datepicker #deliveryScheduledFor></mat-datepicker>
+</mat-form-field>
+<mat-form-field appearance="legacy"
+                class="priceForm">
+  <mat-label>Prix</mat-label>
+  <input matInput
+         [placeholder]="'Ex: 23 €'"
+         type="number"
+         step="any"
+         min="0"
+         (change)="updateStock($event, element, stock, 'price')"
+         [value]="stock.price">
+</mat-form-field>
+<button mat-icon-button
+        *ngIf="stock.id > 0"
+        (click)="removeStockOrder($event, element)">
+  <mat-icon>remove_circle_outline</mat-icon>
+</button>
+<button mat-icon-button
+        *ngIf="!stock.id"
+        disabled></button>
