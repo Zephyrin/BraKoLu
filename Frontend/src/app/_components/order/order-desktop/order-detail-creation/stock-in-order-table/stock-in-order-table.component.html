@@ -22,7 +22,7 @@
                  type="number"
                  step="any"
                  min="0"
-                 (change)="updateStock($event, element, stock, 'quantity', table)"
+                 (change)="updateStock($event, element, stock, 'quantity')"
                  [value]="stock.quantity / element.ingredient.unitFactor">
         </mat-form-field>
         <mat-form-field appearance="legacy"
@@ -32,7 +32,7 @@
           <app-supplier-select-input #supplier
                                      [value]="stock.supplier"
                                      [disabled]="!stock.id"
-                                     (newSupplier)="updateStockSupplier($event, element, stock, table)"
+                                     (newSupplier)="updateStockSupplier($event, element, stock)"
                                      placeholder="Fournisseur"></app-supplier-select-input>
         </mat-form-field>
         <mat-form-field appearance="legacy"
@@ -42,8 +42,8 @@
           <input matInput
                  [disabled]="!stock.id || stockService.loadingSource"
                  [matDatepicker]="deliveryScheduledFor"
-                 (dateInput)="updateDate($event, element, stock, 'deliveryScheduledFor', table)"
-                 (dateChange)="updateDate($event, element, stock, 'deliveryScheduledFor', table)"
+                 (dateInput)="updateDate($event, element, stock, 'deliveryScheduledFor')"
+                 (dateChange)="updateDate($event, element, stock, 'deliveryScheduledFor')"
                  [value]="stock.deliveryScheduledFor">
           <mat-datepicker-toggle matSuffix
                                  [for]="deliveryScheduledFor"></mat-datepicker-toggle>
@@ -58,18 +58,18 @@
                  type="number"
                  step="any"
                  min="0"
-                 (change)="updateStock($event, element, stock, 'price', table)"
+                 (change)="updateStock($event, element, stock, 'price')"
                  [value]="stock.price">
         </mat-form-field>
         <ng-container *ngSwitchCase="'action'">
           <button mat-icon-button
                   *ngIf="stock.id > 0 || i > 0"
-                  (click)="removeStockOrder($event, element, i, table)">
+                  (click)="removeStockOrder($event, element, i)">
             <mat-icon>remove_circle_outline</mat-icon>
           </button>
           <button mat-icon-button
                   *ngIf="i == stocks.length - 1"
-                  (click)="addNewStockOrder($event, element, table)"
+                  (click)="addNewStockOrder($event, element)"
                   [attr.aria-label]="'Ajouter un nouvel ingrédient'">
             <mat-icon>add_task</mat-icon>
           </button>

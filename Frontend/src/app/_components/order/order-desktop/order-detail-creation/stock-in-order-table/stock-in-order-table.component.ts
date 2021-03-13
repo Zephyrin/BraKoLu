@@ -85,7 +85,7 @@ export class StockInOrderTableComponent implements OnInit, OnDestroy {
     orderStock.updateQuantity(undefined, undefined);
   }
 
-  public removeStockOrder(event: MouseEvent, row: OrderStock, index: number, table: MatTable<any>): void {
+  public removeStockOrder(event: MouseEvent, row: OrderStock, index: number): void {
     event.stopPropagation();
     if (index >= 0 && index < row.orderStocks.length) {
       row.updateQuantity(row.orderStocks[index], 0);
@@ -97,6 +97,12 @@ export class StockInOrderTableComponent implements OnInit, OnDestroy {
     if (row.orderStocks.length === 0) {
       row.addOrderStock(undefined);
     }
+    if (this.table) { this.table.renderRows(); }
+  }
+
+  public addNewStockOrder(event: MouseEvent, row: OrderStock): void {
+    event.stopPropagation();
+    row.addOrderStock(undefined);
     if (this.table) { this.table.renderRows(); }
   }
 }
