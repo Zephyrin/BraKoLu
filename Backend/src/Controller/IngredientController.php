@@ -675,11 +675,6 @@ class IngredientController extends AbstractFOSRestController
     private function manageDate(array &$data)
     {
         switch ($data[$this->childName]) {
-            case 'hop':
-                if (isset($data['harvestYear'])) {
-                    $data['harvestYear'] = \DateTime::createFromFormat('Y', $data['harvestYear']);
-                }
-                break;
             case 'yeast':
                 if (isset($data['productionYear'])) {
                     $data['productionYear'] = \DateTime::createFromFormat('Y-m', $data['productionYear']);

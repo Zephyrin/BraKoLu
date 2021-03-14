@@ -17,7 +17,8 @@ class Order
 {
     const HEADERS = [
         ['value' => 'id', 'viewValue' => 'ID'],
-        ['value' => 'created', 'viewValue' => 'Créé']
+        ['value' => 'created', 'viewValue' => 'Créé'],
+        ['value' => 'state', 'viewValue' => 'État']
     ];
 
     const STATES = [

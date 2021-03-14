@@ -37,7 +37,7 @@ class Hop extends Ingredient
     private $acid_alpha;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="integer")
      * @SerializedName("harvestYear")
      */
     private $harvest_year;
@@ -71,12 +71,12 @@ class Hop extends Ingredient
         return $this;
     }
 
-    public function getHarvestYear(): ?\DateTimeInterface
+    public function getHarvestYear(): ?int
     {
         return $this->harvest_year;
     }
 
-    public function setHarvestYear(\DateTimeInterface $harvest_year): self
+    public function setHarvestYear(int $harvest_year): self
     {
         $this->harvest_year = $harvest_year;
 

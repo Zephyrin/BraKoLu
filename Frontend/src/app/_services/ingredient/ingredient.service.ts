@@ -224,8 +224,6 @@ export class IngredientService extends CService<Ingredient>{
   }
   private getDisplayHop(name: string, value: Hop): any {
     switch (name) {
-      case 'harvestYear':
-        return this.datepipe.transform(value[name], 'y');
       case 'type':
         return this.findInValueViewChild(this.hopTypes, value[name]);
       default:
