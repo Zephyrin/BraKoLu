@@ -1,37 +1,47 @@
-<mat-tab-group [selectedIndex]="orderDisplayService.formSelectedOrder.value"
-               mat-align-tabs="center"
-               class="full-width padding"
-               (selectedIndexChange)="orderDisplayService.changeSelectedIndex($event)">
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon svgIcon="truck-check"></mat-icon>
-      Commandes
-      <mat-icon svgIcon="arrow-expand-down"
-                *ngIf="orderDisplayService.formSelectedOrder.value === 0"></mat-icon>
-      <mat-icon svgIcon="arrow-expand-right"
-                *ngIf="orderDisplayService.formSelectedOrder.value > 0"></mat-icon>
-    </ng-template>
-    <app-table [service]="service"
-               class="full-width"
-               [allowSelection]="!service.loadingSource
-                  && !orderDisplayService.brewService.loadingSource
-                  && !orderDisplayService.supplierService.loadingSource"
-               #tableComponent></app-table>
-    <app-pagination [paginate]="service.paginate"></app-pagination>
-  </mat-tab>
-  <mat-tab *ngFor="let order of orderDisplayService.selectedOrders; let index = index"
-           [ngSwitch]="order.state">
-    <ng-template mat-tab-label>
-      {{service.getDisplay('tabOrder', order)}}
-      <button mat-icon-button
-              (click)="orderDisplayService.closeTab($event, order, index)">
-        <mat-icon>close</mat-icon>
-      </button>
-    </ng-template>
-    <app-order-detail-creation *ngSwitchCase="'created'"
-                               [order]="order"></app-order-detail-creation>
-    <app-order-detail *ngSwitchDefault
-                      [order]="order"></app-order-detail>
+<div class="inline">
+  <div class="filter-container"
+       [@filterExpand]="displayService.filterOrder ? 'expanded' : 'collapsed'">
+    <h1>État</h1>
+    <app-order-filter class="initial"
+                      (selectedStates)="selectedStatesChange($event)"></app-order-filter>
+  </div>
+  <div class="full-width padding">
+    <mat-tab-group [selectedIndex]="displayService.formSelectedOrder.value"
+                   mat-align-tabs="center"
+                   class="full-width padding"
+                   (selectedIndexChange)="displayService.changeSelectedIndex($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="truck-check"></mat-icon>
+          Commandes
+          <mat-icon svgIcon="arrow-expand-down"
+                    *ngIf="displayService.formSelectedOrder.value === 0"></mat-icon>
+          <mat-icon svgIcon="arrow-expand-right"
+                    *ngIf="displayService.formSelectedOrder.value > 0"></mat-icon>
+        </ng-template>
+        <app-table [service]="service"
+                   class="full-width"
+                   [allowSelection]="!service.loadingSource
+                  && !displayService.brewService.loadingSource
+                  && !displayService.supplierService.loadingSource"
+                   #tableComponent></app-table>
+        <app-pagination [paginate]="service.paginate"></app-pagination>
+      </mat-tab>
+      <mat-tab *ngFor="let order of displayService.selectedOrders; let index = index"
+               [ngSwitch]="order.state">
+        <ng-template mat-tab-label>
+          {{service.getDisplay('tabOrder', order)}}
+          <button mat-icon-button
+                  (click)="displayService.closeTab($event, order, index)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-template>
+        <app-order-detail-creation *ngSwitchCase="'created'"
+                                   [order]="order"></app-order-detail-creation>
+        <app-order-detail *ngSwitchDefault
+                          [order]="order"></app-order-detail>
 
-  </mat-tab>
-</mat-tab-group>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

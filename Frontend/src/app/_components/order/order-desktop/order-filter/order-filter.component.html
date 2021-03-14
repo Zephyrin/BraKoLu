@@ -1,0 +1,13 @@
+<mat-chip-list aria-label="État des commandes à afficher"
+               class="mat-chip-list-stacked"
+               [multiple]="true"
+               (change)="selectionChange($event)"
+               [selectable]="true">
+  <mat-chip *ngFor="let childName of model"
+            class="overflow"
+            [selected]="childName.selected"
+            (selectionChange)="selectionChange($event)"
+            (click)="selectChange(childName)">
+    {{childName.viewValue}}
+  </mat-chip>
+</mat-chip-list>

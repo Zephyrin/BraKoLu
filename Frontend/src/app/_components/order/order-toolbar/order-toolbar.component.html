@@ -37,3 +37,14 @@
   <mat-icon svgIcon="barley-off"
             *ngIf="!orderDisplayService.brewExpanded"></mat-icon>
 </button>
+
+<button mat-icon-button
+        [disabled]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
+        *ngIf="orderDisplayService.formSelectedOrder.value === 0"
+        (click)="orderDisplayService.filterOrder = !orderDisplayService.filterOrder"
+        [matTooltip]="orderDisplayService.filterOrder ? 'Cacher les filtres' : 'Afficher les filtres'">
+  <mat-icon svgIcon="barley"
+            *ngIf="orderDisplayService.filterOrder"></mat-icon>
+  <mat-icon svgIcon="barley-off"
+            *ngIf="!orderDisplayService.filterOrder"></mat-icon>
+</button>

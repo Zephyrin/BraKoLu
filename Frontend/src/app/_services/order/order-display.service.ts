@@ -20,6 +20,7 @@ export class OrderDisplayService {
   public hasNewOrder = false;
   public newOrderOpen = false;
   public brewExpanded = true;
+  public filterOrder = true;
   public launchOrder = new EventEmitter<any>();
   private selectedChangeSubscription: Subscription;
   loadStockAndBrewFormOrder = false;

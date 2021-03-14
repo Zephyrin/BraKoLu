@@ -25,6 +25,7 @@ class OrderRepository extends ServiceEntityRepository
     public function findAllPagination(ParamFetcher $paramFetcher)
     {
         $search = $paramFetcher->get('search');
+        $selectStates = $paramFetcher->get('states');
         $query = $this->createQueryBuilder('e');
         if ($search != null) {
             // TODO: Mettre à jour la recherche des commandes. À voir selon le besoin.
@@ -33,6 +34,7 @@ class OrderRepository extends ServiceEntityRepository
             )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         }
+        $query = $this->orList($query, $selectStates, 'e.state = ');
         return $this->resultCount($query, $paramFetcher);
     }
 }

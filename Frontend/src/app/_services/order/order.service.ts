@@ -8,6 +8,7 @@ import { CService, ValueViewChild } from '@app/_services/iservice';
 import { Injectable, SimpleChange } from '@angular/core';
 import { Order } from '@app/_models/order';
 import { Ingredient, IngredientStock } from '@app/_models';
+import { OrderSearchService } from './order-search.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class OrderService extends CService<Order> {
   constructor(
     private h: OrderHttpService,
     public datepipe: DatePipe) {
-    super(h, undefined);
+    super(h, new OrderSearchService());
   }
 
   public initEnums(): void {

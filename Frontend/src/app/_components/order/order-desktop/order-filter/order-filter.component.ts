@@ -1,25 +1,26 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { MatChipSelectionChange } from '@angular/material/chips';
 import { ValueViewChildSelected } from '@app/_models/ValueViewChildSelected';
-import { StockSearchService } from '@app/_services/stock/stock-search.service';
-import { StockService } from '@app/_services/stock/stock.service';
+import { OrderSearchService } from '@app/_services/order/order-search.service';
+import { OrderService } from '@app/_services/order/order.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-stock-state-filter',
-  templateUrl: './stock-state-filter.component.html',
-  styleUrls: ['./stock-state-filter.component.scss']
+  selector: 'app-order-filter',
+  templateUrl: './order-filter.component.html',
+  styleUrls: ['./order-filter.component.scss']
 })
-export class StockStateFilterComponent implements OnInit, OnDestroy {
+export class OrderFilterComponent implements OnInit, OnDestroy {
+
   @Output() selectedStates = new EventEmitter<string[]>();
 
   private endUpdateSubscription: Subscription;
 
   public model: ValueViewChildSelected[] = [];
-  constructor(private service: StockService) { }
+  constructor(private service: OrderService) { }
 
   ngOnInit(): void {
-    (this.service.search as StockSearchService).stockSearch?.states?.forEach(value => {
+    (this.service.search as OrderSearchService).orderSearch?.states?.forEach(value => {
       this.model.push(new ValueViewChildSelected({ value, viewValue: undefined }, true));
     });
     this.endUpdateSubscription = this.service.endUpdate.subscribe(data => {
@@ -62,5 +63,4 @@ export class StockStateFilterComponent implements OnInit, OnDestroy {
     child.selected = !child.selected;
     this.selectedStates.emit(this.model.filter(e => e.selected).map(e => e.value));
   }
-
 }

@@ -198,6 +198,9 @@ class OrderController extends AbstractFOSRestController
      * @QueryParam(name="search"
      *      , nullable=true
      *      , description="Recherche dans la base sur les attributs de la classe order.")
+     * @QueryParam(name="states"
+     *      , nullable=true
+     *      , description="Selectionne uniquement ceux dont l'état est dans la liste.")
      *
      * @param ParamFetcher $paramFetcher
      * @return View

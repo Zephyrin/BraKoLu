@@ -80,6 +80,7 @@ import { IngredientTypeComponent } from './_components/order/order-desktop/order
 import { StockInOrderInlineComponent } from './_components/order/order-desktop/order-detail-creation/stock-in-order-inline/stock-in-order-inline.component';
 import { StockInOrderTableComponent } from './_components/order/order-desktop/order-detail-creation/stock-in-order-table/stock-in-order-table.component';
 import { BrewsForIngredientComponent } from './_components/order/order-desktop/order-detail-creation/brews-for-ingredient/brews-for-ingredient.component';
+import { OrderFilterComponent } from './_components/order/order-desktop/order-filter/order-filter.component';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { BrewsForIngredientComponent } from './_components/order/order-desktop/o
     StockInOrderInlineComponent,
     StockInOrderTableComponent,
     BrewsForIngredientComponent,
+    OrderFilterComponent,
   ],
   imports: [
     BrowserModule,
