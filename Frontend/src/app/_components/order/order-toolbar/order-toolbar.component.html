@@ -1,10 +1,10 @@
-<button mat-icon-button
+<button mat-button
         (click)="orderDisplayService.addNewOrder()"
         *ngIf="!orderDisplayService.hasNewOrder"
         [class.spinner]="orderService.loadingSource"
         [disabled]="orderService.loadingSource">
   <mat-icon svgIcon="truck-fast"></mat-icon>
-  <mat-label> Créer une commande</mat-label>
+  <mat-label>Créer une commande</mat-label>
 </button>
 
 <button mat-button
@@ -30,9 +30,10 @@
 <button mat-icon-button
         [disabled]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
         *ngIf="orderDisplayService.newOrderOpen"
-        (click)="orderDisplayService.brewExpanded = !orderDisplayService.brewExpanded">
+        (click)="orderDisplayService.brewExpanded = !orderDisplayService.brewExpanded"
+        [matTooltip]="orderDisplayService.brewExpanded ? 'Cacher les filtres' : 'Afficher les filtres'">
   <mat-icon svgIcon="barley"
-            *ngIf="!orderDisplayService.brewExpanded"></mat-icon>
-  <mat-icon svgIcon="barley-off"
             *ngIf="orderDisplayService.brewExpanded"></mat-icon>
+  <mat-icon svgIcon="barley-off"
+            *ngIf="!orderDisplayService.brewExpanded"></mat-icon>
 </button>

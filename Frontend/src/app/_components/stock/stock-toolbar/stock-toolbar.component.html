@@ -7,12 +7,12 @@
       <mat-label> Ajouter un ingrédient au stock</mat-label>
     </button>
     <button mat-icon-button
-            [matTooltip]="'Afficher les filtres'"
+            [matTooltip]="stockDisplay.filterExpanded ? 'Cacher les filtres' : 'Afficher les filtres'"
             (click)="stockDisplay.filterExpanded = !stockDisplay.filterExpanded">
       <mat-icon svgIcon="filter"
-                *ngIf="!stockDisplay.filterExpanded"></mat-icon>
-      <mat-icon svgIcon="filter-off"
                 *ngIf="stockDisplay.filterExpanded"></mat-icon>
+      <mat-icon svgIcon="filter-off"
+                *ngIf="!stockDisplay.filterExpanded"></mat-icon>
     </button>
   </div>
 
