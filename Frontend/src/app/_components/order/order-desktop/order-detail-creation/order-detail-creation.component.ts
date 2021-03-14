@@ -49,8 +49,8 @@ import { OrderDetailCreation } from '@app/_mapper/order/order-detail-creation';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('brewExpand', [
-      state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden' })),
-      state('expanded', style({ width: '*', visibility: 'visible' })),
+      state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden', padding: '0px' })),
+      state('expanded', style({ width: '*', visibility: 'visible', padding: '10px' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
     ]),
   ]
