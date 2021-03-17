@@ -83,34 +83,28 @@ export class BrewDetailsDesktopComponent implements OnInit, OnDestroy {
             index++;
           });
           this.indexCurrentBrew = indexCurrentBrew;
-          //      this.udpateCurrentStep(indexCurrentBrew);
         }
       }
     } else if (data.previousValue !== null && data.previousValue !== undefined) {
       if (data.previousValue.id === this.brew.id && data.currentValue) {
         if (this.brew.state !== data.previousValue.state) {
+          const indexCurrentBrew = this.service.states.findIndex(
+            x => x.value === this.brew.state);
+
+          for (let index = 0; index < this.states.length; index++) {
+            this.states[index].isCurrent = indexCurrentBrew === index;
+            this.states[index].isDone = index < indexCurrentBrew;
+            this.states[index].isDoneForm.patchValue({ isDone: index < indexCurrentBrew });
+          }
+          this.indexCurrentBrew = indexCurrentBrew;
         }
       }
     }
-  }
-
-  udpateCurrentStep(indexBrew: number) {
-    const interval = setInterval(() => {
-      if (this.indexCurrentBrew < indexBrew) {
-        this.indexCurrentBrew++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
   }
 
   isCompleteState(state: string) {
     const indexState = this.service.states.findIndex(x => x.value === state);
     const indexBrew = this.service.states.findIndex(x => x.value === this.brew.state);
     return indexState <= indexBrew;
-  }
-
-  test(brewState: BrewState) {
-    return brewState.isDone;
   }
 }
