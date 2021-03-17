@@ -6,6 +6,7 @@
                           class="stepper">
     <mat-step *ngFor="let brewState of states"
               [state]="brewState.isDone ? 'done': brewState.isCurrent ? 'edit' : 'number'"
+              [completed]="brewState.isDone"
               [stepControl]="brewState.isDoneForm">
       <ng-template matStepperIcon="done">
         <mat-icon>done_all</mat-icon>
