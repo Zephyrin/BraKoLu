@@ -1,3 +1,48 @@
+<div>
+  <!-- <div class="brew-basic"
+       *ngIf="brew.state !== 'created' && brew.state !== 'planed'">
+    <span>{{brew.started | date:'dd-M-yyyy'}}</span>
+    <span>{{brew.ended | date:'dd-M-yyyy'}}</span>
+  </div> -->
+  <div class="brew-basic">
+    <div class="date-inline">
+      <mat-form-field>
+        <mat-label>Date de brassage</mat-label>
+        <input matInput
+               [matDatepicker]="startedDate"
+               (dateInput)="updateDate($event, 'started')"
+               (dateChange)="updateDate($event, 'started')"
+               [value]="brew.started">
+        <mat-datepicker-toggle matSuffix
+                               [for]="startedDate"></mat-datepicker-toggle>
+        <mat-datepicker #startedDate></mat-datepicker>
+      </mat-form-field>
+      <button mat-icon-button
+              *ngIf="brew.started"
+              (click)="deleteDate($event, 'started')">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="date-inline">
+      <mat-form-field>
+        <mat-label>Date de fin de brassage</mat-label>
+        <input matInput
+               [matDatepicker]="endedDate"
+               (dateInput)="updateDate($event, 'ended')"
+               (dateChange)="updateDate($event, 'ended')"
+               [value]="brew.ended">
+        <mat-datepicker-toggle matSuffix
+                               [for]="endedDate"></mat-datepicker-toggle>
+        <mat-datepicker #endedDate></mat-datepicker>
+      </mat-form-field>
+      <button mat-icon-button
+              *ngIf="brew.ended"
+              (click)="deleteDate($event, 'ended')">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
 <button mat-button
         (click)="addIngredient()">
   <mat-icon>add_circle_outline</mat-icon>
@@ -11,6 +56,15 @@
 </button>
 <div class="element-listing"
      *ngIf="!ingredientService.loadingSource">
-  <app-brew-ingredient-table *ngFor="let children of brewIngredientByType"
-                             [brewIngredientByType]="children"></app-brew-ingredient-table>
+  <mat-accordion multi>
+    <mat-expansion-panel [hideToggle]="false"
+                         [expanded]="true"
+                         *ngFor="let children of brewIngredientByType">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{children.type.viewValue}}</mat-panel-title>
+        <mat-panel-description></mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-brew-ingredient-table [brewIngredientByType]="children"></app-brew-ingredient-table>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>

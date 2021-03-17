@@ -1,79 +1,39 @@
 <div class="horizontal-flex">
-  <div>
-    <div class="brew-basic">
-      <span>Nom du brassin : {{brew.name}}</span>
-      <span>Numéro du brassin : {{brew.number}}</span>
-    </div>
-    <div class="brew-basic"
-         *ngIf="brew.state !== 'created' && brew.state !== 'planed'">
-      <span>{{brew.started | date:'dd-M-yyyy'}}</span>
-      <span>{{brew.ended | date:'dd-M-yyyy'}}</span>
-    </div>
-    <div class="brew-basic"
-         *ngIf="brew.state === 'created' || brew.state === 'planed'">
-      <div class="date-inline">
-        <mat-form-field>
-          <mat-label>Date de brassage</mat-label>
-          <input matInput
-                 [matDatepicker]="startedDate"
-                 (dateInput)="updateDate($event, 'started')"
-                 (dateChange)="updateDate($event, 'started')"
-                 [value]="brew.started">
-          <mat-datepicker-toggle matSuffix
-                                 [for]="startedDate"></mat-datepicker-toggle>
-          <mat-datepicker #startedDate></mat-datepicker>
-        </mat-form-field>
-        <button mat-icon-button
-                *ngIf="brew.started"
-                (click)="deleteDate($event, 'started')">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <div class="date-inline">
-        <mat-form-field>
-          <mat-label>Date de fin de brassage</mat-label>
-          <input matInput
-                 [matDatepicker]="endedDate"
-                 (dateInput)="updateDate($event, 'ended')"
-                 (dateChange)="updateDate($event, 'ended')"
-                 [value]="brew.ended">
-          <mat-datepicker-toggle matSuffix
-                                 [for]="endedDate"></mat-datepicker-toggle>
-          <mat-datepicker #endedDate></mat-datepicker>
-        </mat-form-field>
-        <button mat-icon-button
-                *ngIf="brew.ended"
-                (click)="deleteDate($event, 'ended')">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
   <mat-horizontal-stepper [linear]="true"
                           #stepper
                           labelPosition="bottom"
+                          [selectedIndex]="indexCurrentBrew"
                           class="stepper">
-    <mat-step *ngFor="let state of service.states"
-              [label]="state.viewValue"
-              [completed]="isCompleteState(state.value)"
-              [editable]="isCompleteState(state.value)">
-      <span>{{state.value}} - {{brew.state}}</span>
+    <mat-step *ngFor="let brewState of states"
+              [state]="brewState.isDone ? 'done': brewState.isCurrent ? 'edit' : 'number'"
+              [stepControl]="brewState.isDoneForm">
+      <ng-template matStepperIcon="done">
+        <mat-icon>done_all</mat-icon>
+      </ng-template>
+      <ng-template matStepLabel>{{brewState.state.viewValue}}
+        <ng-container *ngIf="brewState.state.value === 'brewing' && brew.started"><br />{{brew.started | date:
+          'dd-M-yyyy'}}
+        </ng-container>
+        <ng-container *ngIf="brewState.state.value === 'packaging' && brew.ended"><br />{{brew.ended | date:
+          'dd-M-yyyy'}}
+        </ng-container>
+      </ng-template>
+      <ng-container [ngSwitch]="service.states[stepper.selectedIndex].value">
+        <app-brew-ingredient-desktop [brew]="brew"
+                                     [ingredientService]="ingredientService"
+                                     [brewService]="service"
+                                     *ngSwitchCase="'created'"></app-brew-ingredient-desktop>
+        <app-brew-ingredient-desktop [brew]="brew"
+                                     [ingredientService]="ingredientService"
+                                     [brewService]="service"
+                                     [isPlanedView]="true"
+                                     *ngSwitchCase="'planed'"></app-brew-ingredient-desktop>
+        <app-brew-ingredient-brewing [brew]="brew"
+                                     *ngSwitchCase="'brewing'"></app-brew-ingredient-brewing>
+        <div *ngSwitchDefault>
+          La vue de {{service.states[stepper.selectedIndex].value}} non présent pour le moment.
+        </div>
+      </ng-container>
     </mat-step>
   </mat-horizontal-stepper>
 </div>
-<ng-container [ngSwitch]="service.states[stepper.selectedIndex].value">
-  <app-brew-ingredient-desktop [brew]="brew"
-                               [ingredientService]="ingredientService"
-                               [brewService]="service"
-                               *ngSwitchCase="'created'"></app-brew-ingredient-desktop>
-  <app-brew-ingredient-desktop [brew]="brew"
-                               [ingredientService]="ingredientService"
-                               [brewService]="service"
-                               [isPlanedView]="true"
-                               *ngSwitchCase="'planed'"></app-brew-ingredient-desktop>
-  <app-brew-ingredient-brewing [brew]="brew"
-                               *ngSwitchCase="'brewing'"></app-brew-ingredient-brewing>
-  <div *ngSwitchDefault>
-    La vue de {{service.states[stepper.selectedIndex].value}} non présent pour le moment.
-  </div>
-</ng-container>

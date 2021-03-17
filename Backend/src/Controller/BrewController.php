@@ -340,7 +340,7 @@ class BrewController extends AbstractFOSRestController
             $brew['started'] = DateTime::createFromFormat('Y-m-d H:i', $brew['started']);
         }
         if (isset($brew['ended'])) {
-            $brew['ended'] = DateTime::createFromFormat('Y-m-d H:i', $brew['started']);
+            $brew['ended'] = DateTime::createFromFormat('Y-m-d H:i', $brew['ended']);
         }
     }
 }

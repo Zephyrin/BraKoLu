@@ -40,6 +40,25 @@ export class BrewIngredientDesktopComponent implements OnInit, OnDestroy {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
   }
 
+  updateStartedDate(event: any) {
+    this.updateDate(event, 'started');
+  }
+  updateEndedDate(event: any) {
+    this.updateDate(event, 'ended');
+  }
+  updateDate(event: any, date: string) {
+    if (event.target.value) {
+      this.brewService.update(date, this.brew, new Date(event.target.value));
+    } else {
+      this.brewService.update(date, this.brew, null);
+    }
+
+  }
+
+  deleteDate(event: MouseEvent, date: string) {
+    this.brewService.update(date, this.brew, null);
+  }
+
   private updateBrewIngredientList(simpleChange: SimpleChange) {
     // Ici on ne gère que la vue des brewIngredients et plus tard des brewStock
     if (simpleChange.currentValue instanceof BrewIngredient
