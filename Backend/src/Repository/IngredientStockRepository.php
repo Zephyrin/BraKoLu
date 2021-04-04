@@ -31,19 +31,19 @@ class IngredientStockRepository extends ServiceEntityRepository
         if ($search != null) {
             $query = $query->innerJoin('e.ingredient', 'i')
                 ->andWhere(
-                    '(LOWER(i.name) LIKE :search)'
+                    'LOWER(e.name) LIKE :search) OR (LOWER(i.name) LIKE :search)'
                 )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         }
         if ($suppliers != null) {
             $split = explode(',', $suppliers);
             if (str_contains($suppliers, '-1')) {
-                $query = $query->leftJoin('e.supplier', 'i');
+                $query = $query->leftJoin('e.supplier', 's');
                 if (count($split) > 1) {
                     $query = $query->andWhere(
                         $query->expr()->orX(
-                            $query->expr()->isNull('i'),
-                            $query->expr()->in('i.id', $split)
+                            $query->expr()->isNull('s'),
+                            $query->expr()->in('s.id', $split)
                         )
                     );
                 } else {
@@ -52,8 +52,9 @@ class IngredientStockRepository extends ServiceEntityRepository
                     );
                 }
             } else {
+                $query = $query->leftJoin('e.supplier', 's');
                 $query = $query->andWhere(
-                    $query->expr()->in('i.id', $split)
+                    $query->expr()->in('s.id', $split)
                 );
             }
         }
