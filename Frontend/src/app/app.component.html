@@ -10,7 +10,7 @@
                [fixedInViewport]="(isHandset$ | async) === false || (isSmallScreen$ | async) === false"
                [attr.role]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'over' : 'side'"
-               [opened]="(isHandset$ | async) === false || (isSmallScreen$ | async) === false">
+               [opened]="!((isHandset$ | async) || (isSmallScreen$ | async))">
 
     <mat-toolbar>
       <img alt="Bra.Tool Menu"
