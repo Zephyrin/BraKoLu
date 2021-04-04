@@ -83,14 +83,14 @@ export class OrderService extends CService<Order> {
   public getDisplay(name: string, value: Order): any {
     switch (name) {
       case 'created':
-        return this.datepipe.transform(value[name], 'dd-MM-y');
+        return this.datepipe.transform(value[name], 'dd/MM/y');
       case 'state':
         const index = this.states.findIndex(s => s.value === value[name]);
         if (index >= 0) { return this.states[index].viewValue; }
         break;
       case 'tabOrder':
         if (value.id) {
-          return value.id + ' - ' + this.datepipe.transform(value[`created`], 'dd-MM-y');
+          return value.id + ' - ' + this.datepipe.transform(value[`created`], 'dd/MM/y');
         }
         return 'Nouvelle commande';
       default:
