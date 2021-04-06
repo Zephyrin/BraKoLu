@@ -49,7 +49,7 @@ export class StockBySupplier {
   stockArrived(stock: IngredientStock) {
     let exp = false;
     this.stocks.forEach(x => {
-      if (x.id !== stock.id && stock.state === 'ordered') {
+      if (x.id !== stock.id && x.state === 'ordered') {
         exp = true;
       }
     });
