@@ -31,7 +31,7 @@ class IngredientStockRepository extends ServiceEntityRepository
         if ($search != null) {
             $query = $query->innerJoin('e.ingredient', 'i')
                 ->andWhere(
-                    'LOWER(e.name) LIKE :search) OR (LOWER(i.name) LIKE :search)'
+                    '(LOWER(e.name) LIKE :search OR LOWER(i.name) LIKE :search)'
                 )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
         }
