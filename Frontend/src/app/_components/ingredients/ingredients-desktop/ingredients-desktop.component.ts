@@ -1,5 +1,4 @@
 import { IngredientDisplayService } from '@app/_services/ingredient/ingredient-display.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ValueViewChildSelected } from '@app/_models/ValueViewChildSelected';
@@ -10,17 +9,14 @@ import { IngredientCreateFormComponent } from './../ingredient/ingredient-create
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, OnInit, SimpleChange } from '@angular/core';
 import { MatChipSelectionChange } from '@angular/material/chips';
+import { filterExpand } from '@app/_components/animations/filter-animation';
 
 @Component({
   selector: 'app-ingredients-desktop',
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss'],
   animations: [
-    trigger('filterExpand', [
-      state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden', padding: '0px' })),
-      state('expanded', style({ width: '*', visibility: 'visible', padding: '10px' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ])
+    filterExpand
   ]
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {

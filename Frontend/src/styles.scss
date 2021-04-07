@@ -1,15 +1,14 @@
-
 // import material icon from local directory
 // install via npm install material-design-icons J'ai l'impression que c'est le
 // même que celui en dessous. Pour le moment inutile. À voir si on le supprime
 // Ajout de nouveaux icones
 //@import '~material-design-icons/iconfont/material-icons.css';
 // install via npm install material-icons
-@import '~material-icons/iconfont/material-icons.css';
+@import "~material-icons/iconfont/material-icons.css";
 
 // Roboto fontface intsall via npm install roboto-fontface
 @import "~roboto-fontface/css/roboto/roboto-fontface.css";
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 /* @import '~@angular/material/theming';
@@ -46,10 +45,12 @@ $brakolu-theme: map_merge($brakolu-theme, (background: $background));
  */
 /* You can add global styles to this file, and also import other style files */
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
 form {
   display: flex;
@@ -70,8 +71,14 @@ form {
   flex-flow: row-reverse;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 // Todo à mettre dans des fichiers que l'on comprendra par la suite...
 .inline-header {
@@ -81,9 +88,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   justify-content: space-between;
 }
 
-
 .filter-container {
   overflow: hidden;
+  border-right: solid 1px rgba(0, 0, 0, 0.12);
+}
+
+.filter-container:expanded {
+  padding-right: 20px !important;
 }
 
 .inline {
