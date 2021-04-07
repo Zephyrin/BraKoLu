@@ -28,17 +28,21 @@ class IngredientStockRepository extends ServiceEntityRepository
         $selectStates = $paramFetcher->get('states');
         $suppliers = $paramFetcher->get('suppliers');
         $query = $this->createQueryBuilder('e');
+        $hasJoinSupplier = false;
         if ($search != null) {
             $query = $query->innerJoin('e.ingredient', 'i')
+                ->innerJoin('e.supplier', 's')
                 ->andWhere(
-                    '(LOWER(e.name) LIKE :search OR LOWER(i.name) LIKE :search)'
+                    '(LOWER(s.name) LIKE :search OR LOWER(i.name) LIKE :search)'
                 )
                 ->setParameter('search', "%" . addcslashes(strtolower($search), '%_') . '%');
+            $hasJoinSupplier = true;
         }
         if ($suppliers != null) {
             $split = explode(',', $suppliers);
             if (str_contains($suppliers, '-1')) {
-                $query = $query->leftJoin('e.supplier', 's');
+                if($hasJoinSupplier == false)
+                    $query = $query->leftJoin('e.supplier', 's');
                 if (count($split) > 1) {
                     $query = $query->andWhere(
                         $query->expr()->orX(
@@ -52,9 +56,9 @@ class IngredientStockRepository extends ServiceEntityRepository
                     );
                 }
             } else {
-                $query = $query->leftJoin('e.supplier', 's');
+                $query = $query->leftJoin('e.supplier', 'z');
                 $query = $query->andWhere(
-                    $query->expr()->in('s.id', $split)
+                    $query->expr()->in('z.id', $split)
                 );
             }
         }
