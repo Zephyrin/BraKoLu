@@ -24,7 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { IngredientsComponent } from './_components/ingredients/ingredients.component';
 import { RemoveDialogComponent } from './_components/helpers/remove-dialog/remove-dialog.component';
@@ -81,6 +81,7 @@ import { StockInOrderInlineComponent } from './_components/order/order-desktop/o
 import { StockInOrderTableComponent } from './_components/order/order-desktop/order-detail-creation/stock-in-order-table/stock-in-order-table.component';
 import { BrewsForIngredientComponent } from './_components/order/order-desktop/order-detail-creation/brews-for-ingredient/brews-for-ingredient.component';
 import { OrderFilterComponent } from './_components/order/order-desktop/order-filter/order-filter.component';
+import { TwoDigitDecimalNumberDirective } from './_directives/two-digit-decimal-number.directive';
 
 @NgModule({
   declarations: [
@@ -133,6 +134,7 @@ import { OrderFilterComponent } from './_components/order/order-desktop/order-fi
     StockInOrderTableComponent,
     BrewsForIngredientComponent,
     OrderFilterComponent,
+    TwoDigitDecimalNumberDirective,
   ],
   imports: [
     BrowserModule,
@@ -169,7 +171,8 @@ import { OrderFilterComponent } from './_components/order/order-desktop/order-fi
     MatSlideToggleModule
   ],
   providers: [
-    DatePipe
+    DatePipe,
+    DecimalPipe
   ],
   bootstrap: [AppComponent]
 })

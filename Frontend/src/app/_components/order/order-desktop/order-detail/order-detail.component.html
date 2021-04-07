@@ -44,7 +44,8 @@
                        step="any"
                        min="0"
                        (change)="updateStock($event, element, 'price')"
-                       [value]="element.price">
+                       [value]="element.price / 100 | number: '1.2-2'"
+                       appTwoDigitDecimalNumber>
               </mat-form-field>
             </div>
             <div *ngSwitchCase="'deliveryPlanned'">

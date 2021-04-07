@@ -38,7 +38,9 @@
                formControlName="price"
                placeholder="Ex: 23"
                type="number"
-               value="">
+               step="any"
+               min="0"
+               appTwoDigitDecimalNumber>
         <mat-error>
           {{service.form.get('price').errors?.serverError}}
         </mat-error>

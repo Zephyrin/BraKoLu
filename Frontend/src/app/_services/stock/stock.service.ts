@@ -1,5 +1,5 @@
 import { StockSearchService } from './stock-search.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StockHttpService } from './stock-http.service';
 
@@ -16,7 +16,8 @@ export class StockService extends CService<IngredientStock>{
   private nbEnumLeft = 0;
   constructor(
     private h: StockHttpService,
-    public datepipe: DatePipe) {
+    public datepipe: DatePipe,
+    public decimalpipe: DecimalPipe) {
     super(h, new StockSearchService());
   }
 
@@ -80,6 +81,7 @@ export class StockService extends CService<IngredientStock>{
   public patchValue(value: IngredientStock): void {
     this.form.patchValue(value);
     this.form.patchValue({ quantity: value.quantityCalc() });
+    this.form.patchValue({ price: this.decimalpipe.transform(value.price / 100, '1.2-2') });
   }
 
   public getDisplay(name: string, value: IngredientStock): any {

@@ -42,6 +42,7 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent implement
     }
     const val = Object.assign({}, this.service.form.value);
     val.quantity = val.quantity * val.ingredient.unitFactor;
+    val.price = val.price * 100;
     this.service.update(undefined, this.value, val);
   }
 
