@@ -80,7 +80,6 @@ export class StockService extends CService<IngredientStock>{
 
   public patchValue(value: IngredientStock): void {
     this.form.patchValue(value);
-    this.form.patchValue({ quantity: value.quantityCalc() });
   }
 
   public getDisplay(name: string, value: IngredientStock): any {

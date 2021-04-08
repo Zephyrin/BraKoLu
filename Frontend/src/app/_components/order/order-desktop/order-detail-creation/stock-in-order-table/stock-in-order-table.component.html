@@ -17,13 +17,9 @@
                         floatLabel="never"
                         *ngSwitchCase="'quantity'"
                         class="quantityForm">
-          <input matInput
-                 [placeholder]="'Ex: 23 ' + element.ingredient.unit"
-                 type="number"
-                 step="any"
-                 min="0"
-                 (change)="updateStock($event, element, stock, 'quantity')"
-                 [value]="stock.quantity / element.ingredient.unitFactor">
+          <app-quantity-input (change)="updateStock($event, element, stock, 'quantity')"
+                              [value]="stock.quantity"
+                              [ingredient]="element.ingredient"></app-quantity-input>
         </mat-form-field>
         <mat-form-field appearance="legacy"
                         *ngSwitchCase="'supplier'"

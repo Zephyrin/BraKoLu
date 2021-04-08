@@ -25,8 +25,7 @@ export class StockInOrderInlineComponent implements OnInit {
     }
     this.inputIntervalBeforeSave = setInterval(() => {
       clearInterval(this.inputIntervalBeforeSave);
-      let val = +evt.srcElement.value;
-      if (name === 'quantity') { val = val * stock.ingredient.unitFactor; }
+      const val = +evt.srcElement.value;
       if (stock.id) { this.stockService.update(name, stock, val); }
       else {
         const old = stock[name];

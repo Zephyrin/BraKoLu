@@ -1,0 +1,9 @@
+<input matInput
+       [placeholder]="'Ex: 23 ' + unit"
+       type="number"
+       step="any"
+       min="0"
+       [step]="step"
+       [value]="quantity"
+       (change)="onChangeEvent($event)">
+&nbsp;{{unit}}

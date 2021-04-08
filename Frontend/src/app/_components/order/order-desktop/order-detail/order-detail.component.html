@@ -24,15 +24,11 @@
               [ngSwitch]="header.value">
             <span *ngSwitchDefault> {{ getDisplay(header.value, element) }} </span>
             <div *ngSwitchCase="'quantityOrder'">
-              <mat-form-field appearance="legacy">
-                <mat-label></mat-label>
-                <input matInput
-                       [placeholder]="'Ex: 23 ' + element.ingredient.unit"
-                       type="number"
-                       step="any"
-                       min="0"
-                       (change)="updateStock($event, element, 'quantity')"
-                       [value]="element.quantity / element.ingredient.unitFactor">
+              <mat-form-field appearance="legacy"
+                              floatLabel="never">
+                <app-quantity-input [value]="element.quantity"
+                                    [ingredient]="element.ingredient"
+                                    (change)="updateStock($event, element, 'quantity')"></app-quantity-input>
               </mat-form-field>
             </div>
             <div *ngSwitchCase="'price'">

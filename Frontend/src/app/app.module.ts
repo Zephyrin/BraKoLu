@@ -83,6 +83,7 @@ import { BrewsForIngredientComponent } from './_components/order/order-desktop/o
 import { OrderFilterComponent } from './_components/order/order-desktop/order-filter/order-filter.component';
 import { TwoDigitDecimalNumberDirective } from './_directives/two-digit-decimal-number.directive';
 import { PriceInputComponent } from './_components/helpers/price-input/price-input.component';
+import { QuantityInputComponent } from './_components/helpers/quantity-input/quantity-input.component';
 
 @NgModule({
   declarations: [
@@ -137,6 +138,7 @@ import { PriceInputComponent } from './_components/helpers/price-input/price-inp
     OrderFilterComponent,
     TwoDigitDecimalNumberDirective,
     PriceInputComponent,
+    QuantityInputComponent,
   ],
   imports: [
     BrowserModule,

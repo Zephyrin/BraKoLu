@@ -55,9 +55,7 @@ export class OrderDetailComponent implements OnInit {
     }
     this.inputIntervalBeforeSave = setInterval(() => {
       clearInterval(this.inputIntervalBeforeSave);
-      let val = +evt.srcElement.value;
-      if (name === 'quantity') { val = val * stock.ingredient.unitFactor; }
-      if (name === 'price') { val = val * 100; }
+      const val = +evt.srcElement.value;
       this.stockService.update(name, stock, val);
       this.inputIntervalBeforeSave = undefined;
     }, 300);

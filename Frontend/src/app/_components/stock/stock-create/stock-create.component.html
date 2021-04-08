@@ -21,12 +21,10 @@
       <mat-form-field class="full-width">
         <mat-label>Quantité {{service.form.value.ingredient ? '(' + service.form.value.ingredient.unit + ')' : ''}}
         </mat-label>
-        <input matInput
-               required
-               formControlName="quantity"
-               placeholder="Ex: 10"
-               type="number"
-               value="">
+        <app-quantity-input formControlName="quantity"
+                            [unit]="service.form.value.ingredient.unit"
+                            [unitFactor]="service.form.value.ingredient.unitFactor"
+                            required></app-quantity-input>
         <mat-error>
           {{service.form.get('quantity').errors?.serverError}}
         </mat-error>

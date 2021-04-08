@@ -1,6 +1,9 @@
 <mat-form-field appearance="legacy"
                 class="quantityForm">
   <mat-label>Quantité</mat-label>
+  <app-quantity-input [value]="stock.quantity"
+                      [ingredient]="element.ingredient"
+                      (change)="updateStock($event, element, stock, 'quantity')"></app-quantity-input>
   <input matInput
          [placeholder]="'Ex: 23 ' + element.ingredient.unit"
          type="number"
