@@ -4,7 +4,7 @@
                          [expanded]="supplier.expanded">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{supplier?.supplier?.name}}
+          {{supplier?.supplier?.name ? supplier.supplier.name : 'Sans fournisseur' }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <table mat-table

@@ -38,11 +38,13 @@
           <mat-icon>close</mat-icon>
         </button>
       </ng-template>
-      <app-order-detail-creation *ngSwitchCase="'created'"
-                                 [order]="order"></app-order-detail-creation>
-      <app-order-detail *ngSwitchDefault
-                        class="padding"
-                        [order]="order"></app-order-detail>
+      <div class="full-width padding">
+        <app-order-detail-creation *ngSwitchCase="'created'"
+                                   [order]="order"></app-order-detail-creation>
+        <app-order-detail *ngSwitchDefault
+                          class="padding"
+                          [order]="order"></app-order-detail>
+      </div>
 
     </mat-tab>
   </mat-tab-group>
