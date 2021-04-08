@@ -1,5 +1,5 @@
 import { StockSearchService } from './stock-search.service';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StockHttpService } from './stock-http.service';
 
@@ -16,8 +16,7 @@ export class StockService extends CService<IngredientStock>{
   private nbEnumLeft = 0;
   constructor(
     private h: StockHttpService,
-    public datepipe: DatePipe,
-    public decimalpipe: DecimalPipe) {
+    public datepipe: DatePipe) {
     super(h, new StockSearchService());
   }
 
