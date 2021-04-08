@@ -1,0 +1,10 @@
+<input matInput
+       [placeholder]="'Ex: 23 €'"
+       type="number"
+       step="any"
+       min="0"
+       TwoDigitDecimalNumberDirective
+       [value]="price | number : '1.2-2'"
+       (change)="onChangeEvent($event)">
+<mat-icon matSuffix
+          svgIcon="currency-eur"></mat-icon>

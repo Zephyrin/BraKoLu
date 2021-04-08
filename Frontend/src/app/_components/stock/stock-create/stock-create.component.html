@@ -33,14 +33,8 @@
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Prix</mat-label>
-        <input matInput
-               required
-               formControlName="price"
-               placeholder="Ex: 23"
-               type="number"
-               step="any"
-               min="0"
-               appTwoDigitDecimalNumber>
+        <app-price-input formControlName="price"
+                         required></app-price-input>
         <mat-error>
           {{service.form.get('price').errors?.serverError}}
         </mat-error>

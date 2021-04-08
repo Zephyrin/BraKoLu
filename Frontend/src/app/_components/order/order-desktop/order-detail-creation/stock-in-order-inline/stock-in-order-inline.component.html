@@ -34,14 +34,8 @@
 <mat-form-field appearance="legacy"
                 class="priceForm">
   <mat-label>Prix</mat-label>
-  <input matInput
-         [placeholder]="'Ex: 23 €'"
-         type="number"
-         step="any"
-         min="0"
-         (change)="updateStock($event, element, stock, 'price')"
-         [value]="stock.price / 100 | number: '1.2-2'"
-         TwoDigitDecimalNumberDirective>
+  <app-price-input [value]="stock.price"
+                   (change)="updateStock($event, element, stock, 'price')"></app-price-input>
 </mat-form-field>
 <button mat-icon-button
         *ngIf="stock.id > 0"

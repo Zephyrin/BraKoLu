@@ -36,16 +36,10 @@
               </mat-form-field>
             </div>
             <div *ngSwitchCase="'price'">
-              <mat-form-field appearance="legacy">
-                <mat-label></mat-label>
-                <input matInput
-                       [placeholder]="'Ex: 23 €'"
-                       type="number"
-                       step="any"
-                       min="0"
-                       (change)="updateStock($event, element, 'price')"
-                       [value]="element.price / 100 | number: '1.2-2'"
-                       appTwoDigitDecimalNumber>
+              <mat-form-field appearance="legacy"
+                              floatLabel="never">
+                <app-price-input [value]="element.price"
+                                 (change)="updateStock($event, element, 'price')"></app-price-input>
               </mat-form-field>
             </div>
             <div *ngSwitchCase="'deliveryPlanned'">

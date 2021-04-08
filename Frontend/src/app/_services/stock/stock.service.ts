@@ -81,7 +81,6 @@ export class StockService extends CService<IngredientStock>{
   public patchValue(value: IngredientStock): void {
     this.form.patchValue(value);
     this.form.patchValue({ quantity: value.quantityCalc() });
-    this.form.patchValue({ price: this.decimalpipe.transform(value.price / 100, '1.2-2') });
   }
 
   public getDisplay(name: string, value: IngredientStock): any {

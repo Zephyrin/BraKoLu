@@ -56,7 +56,6 @@ export class StockInOrderTableComponent implements OnInit, OnDestroy {
       clearInterval(this.inputIntervalBeforeSave);
       let val = +evt.srcElement.value;
       if (name === 'quantity') { val = val * stock.ingredient.unitFactor; }
-      if (name === 'price') { val = val * 100; }
       if (stock.id) { this.stockService.update(name, stock, val); }
       else {
         const old = stock[name];

@@ -53,14 +53,8 @@
                         *ngSwitchCase="'price'"
                         floatLabel="never"
                         class="priceForm">
-          <input matInput
-                 [placeholder]="'Ex: 23 €'"
-                 type="number"
-                 step="any"
-                 min="0"
-                 (change)="updateStock($event, element, stock, 'price')"
-                 [value]="stock.price / 100 | number: '1.2-2'"
-                 TwoDigitDecimalNumberDirective>
+          <app-price-input [value]="stock.price"
+                           (change)="updateStock($event, element, stock, 'price')"></app-price-input>
         </mat-form-field>
         <ng-container *ngSwitchCase="'action'">
           <button mat-icon-button
