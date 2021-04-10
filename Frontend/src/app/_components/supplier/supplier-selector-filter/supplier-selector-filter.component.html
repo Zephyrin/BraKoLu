@@ -4,7 +4,7 @@
                (change)="selectionChange($event)"
                [selectable]="true">
   <mat-chip *ngFor="let childName of model"
-            class="overflow"
+            class="overflow pointer"
             [selected]="childName.selected"
             (selectionChange)="selectionChange($event)"
             (click)="selectChange(childName)">
