@@ -1,18 +1,3 @@
-<div class="inline">
-  <div class="filter-container"
-       [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
-    <h1>Fournisseur</h1>
-    <app-supplier-selector-filter (selectedSuppliers)="selectedSuppliersChange($event)"
-                                  class="initial"></app-supplier-selector-filter>
-    <h1>État</h1>
-    <app-stock-state-filter class="initial"
-                            (selectedStates)="selectedStatesChange($event)"></app-stock-state-filter>
-  </div>
-
-  <div class="full-width padding">
-    <!-- TABLEAU DU STOCK -->
-    <app-table [service]="service"
-               #Table></app-table>
-    <app-pagination [paginate]="service.paginate"></app-pagination>
-  </div>
-</div>
+<app-table [service]="service"
+           #Table></app-table>
+<app-pagination [paginate]="service.paginate"></app-pagination>

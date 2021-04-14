@@ -70,16 +70,34 @@
   </mat-dialog-content>
   <div mat-dialog-actions
        class="flex-reverse">
-    <button mat-button
+    <button mat-icon-button
             [disabled]="!service.form || service.form.invalid || service.loadingSource || ingredientService.loadingSource"
+            [attr.aria-label]="!value ? 'Ajouter' : 'Modifier'"
+            [matTooltip]="!value ? 'Ajouter' : 'Modifier'"
             type="submit"
             (click)="onSubmitClick()">
-      <ng-container *ngIf="!value">Ajouter</ng-container>
-      <ng-container *ngIf="value">Modifier</ng-container>
+      <ng-container *ngIf="!value">
+        <mat-icon svgIcon="flask-plus-outline"></mat-icon>
+      </ng-container>
+      <ng-container *ngIf="value">
+        <mat-icon svgIcon="flask"></mat-icon>
+      </ng-container>
     </button>
-    <button mat-button
+    <button mat-icon-button
+            attr.aria-label="Annuler"
+            matTooltip="Annuler"
             type="button"
-            (click)="onCancelClick()">Annuler</button>
+            (click)="onCancelClick()">
+      <mat-icon svgIcon="cancel"></mat-icon>
+    </button>
+    <button mat-icon-button
+            [disabled]="!service.form || service.form.invalid || service.loadingSource || ingredientService.loadingSource"
+            attr.aria-label="Suppression"
+            matTooltip="Suppression"
+            type="button"
+            (click)="onDeleteClick()">
+      <mat-icon svgIcon="flask-remove"></mat-icon>
+    </button>
   </div>
 
 </form>

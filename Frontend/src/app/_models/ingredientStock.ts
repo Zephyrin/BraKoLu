@@ -12,6 +12,7 @@ export class IngredientStock {
   state: string;
   orderedDate: Date;
   endedDate: Date;
+  receivedDate: Date;
   deliveryScheduledFor: Date;
   ingredient: Ingredient;
   brewStocks: BrewStock[];
@@ -34,6 +35,9 @@ export class IngredientStock {
       }
       if (stock.endedDate) {
         this.endedDate = new Date(stock.endedDate);
+      }
+      if (stock.receivedDate) {
+        this.receivedDate = new Date(stock.receivedDate);
       }
       if (stock.deliveryScheduledFor) {
         this.deliveryScheduledFor = new Date(stock.deliveryScheduledFor);
@@ -66,6 +70,7 @@ export class IngredientStock {
     if (value.state) { this.state = value.state; }
     if (value.orderedDate) { this.orderedDate = new Date(value.orderedDate); }
     if (value.endedDate) { this.endedDate = new Date(value.endedDate); }
+    if (value.receivedDate) { this.endedDate = new Date(value.receivedDate); }
     if (value.deliveryScheduledFor) { this.deliveryScheduledFor = new Date(value.deliveryScheduledFor); }
     if (value.supplier && value.supplier.id !== this.supplier?.id) {
       this.supplier = new Supplier(value.supplier);

@@ -16,7 +16,10 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.service.load(false);
+    this.init();
   }
+
+  public init(): void { }
 
   ngOnDestroy() {
     this.service.edit = false;

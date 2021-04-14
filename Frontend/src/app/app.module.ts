@@ -84,6 +84,7 @@ import { OrderFilterComponent } from './_components/order/order-desktop/order-fi
 import { TwoDigitDecimalNumberDirective } from './_directives/two-digit-decimal-number.directive';
 import { PriceInputComponent } from './_components/helpers/price-input/price-input.component';
 import { QuantityInputComponent } from './_components/helpers/quantity-input/quantity-input.component';
+import { StockListComponent } from './_components/stock/stock-list/stock-list.component';
 
 @NgModule({
   declarations: [
@@ -139,6 +140,7 @@ import { QuantityInputComponent } from './_components/helpers/quantity-input/qua
     TwoDigitDecimalNumberDirective,
     PriceInputComponent,
     QuantityInputComponent,
+    StockListComponent,
   ],
   imports: [
     BrowserModule,

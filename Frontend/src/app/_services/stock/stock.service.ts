@@ -92,7 +92,8 @@ export class StockService extends CService<IngredientStock>{
       case 'creationDate':
       case 'orderedDate':
       case 'endedDate':
-        return this.datepipe.transform(value[name], 'y-MM-dd');
+      case 'receivedDate':
+        return this.datepipe.transform(value[name], 'dd-MM-y');
       case 'supplier':
         return value.supplier?.name;
       default:

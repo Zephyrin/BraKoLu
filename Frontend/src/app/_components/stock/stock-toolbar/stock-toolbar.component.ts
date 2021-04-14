@@ -51,4 +51,9 @@ export class StockToolbarComponent implements OnInit, OnDestroy {
   search(): void {
     this.getSearch.updateSearch(this.searchForm.value.search);
   }
+
+  clear(): void {
+    this.searchForm.patchValue({ search: '' });
+    this.search();
+  }
 }

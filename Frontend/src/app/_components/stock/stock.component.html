@@ -1,4 +1,18 @@
 <div class="vertical-scroll">
-  <!-- mode ordinateur -->
-  <app-stock-desktop [service]="service"></app-stock-desktop>
+  <div class="inline">
+    <div class="filter-container"
+         [@filterExpand]="display.filterExpanded ? 'expanded': 'collapsed'">
+      <h1>Fournisseur</h1>
+      <app-supplier-selector-filter (selectedSuppliers)="selectedSuppliersChange($event)"
+                                    class="initial"></app-supplier-selector-filter>
+      <h1>État</h1>
+      <app-stock-state-filter class="initial"
+                              (selectedStates)="selectedStatesChange($event)"></app-stock-state-filter>
+    </div>
+    <div class="full-width padding">
+      <app-stock-desktop [service]="service"
+                         *ngIf="display.isViewTable"></app-stock-desktop>
+      <app-stock-list *ngIf="display.isViewList"></app-stock-list>
+    </div>
+  </div>
 </div>

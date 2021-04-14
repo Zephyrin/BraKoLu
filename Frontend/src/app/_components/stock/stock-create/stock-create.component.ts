@@ -1,3 +1,4 @@
+import { RemoveDialogComponent } from './../../helpers/remove-dialog/remove-dialog.component';
 import { Subscription } from 'rxjs';
 import { SupplierCreateComponent } from '@app/_components/supplier/supplier-create/supplier-create.component';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
@@ -14,7 +15,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['./stock-create.component.scss']
 })
 export class StockCreateComponent extends ChildCreateFormBaseComponent implements OnDestroy {
-  private afterClosedSubscription: Subscription;
+  private afterClosedDeleteSubscription: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<StockCreateComponent>,
@@ -22,13 +23,14 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent implement
     public service: StockService,
     public supplierService: SupplierService,
     protected formBuilder: FormBuilder,
-    public ingredientService: IngredientService
+    public ingredientService: IngredientService,
+    public dialog: MatDialog
   ) {
     super(dialogRef, service, formBuilder);
   }
 
   ngOnDestroy(): void {
-    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+    if (this.afterClosedDeleteSubscription) { this.afterClosedDeleteSubscription.unsubscribe(); }
   }
 
   init() {
@@ -48,14 +50,17 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent implement
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
-  addSupplier(evt: any): void {
-    const dialogRef = this.dialogSupplier.open(SupplierCreateComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as SupplierCreateComponent).create();
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
+  onDeleteClick() {
+    this.service.clearErrors();
+    const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
+    (dialogRef.componentInstance as RemoveDialogComponent).title = this.service.getDisplay('name', this.value);
+    (dialogRef.componentInstance as RemoveDialogComponent).element = this.value;
+    (dialogRef.componentInstance as RemoveDialogComponent).service = this.service;
+    this.afterClosedDeleteSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.service.form.patchValue({ supplier: result });
+        this.dialogRef.close();
       }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
+      if (this.afterClosedDeleteSubscription) { this.afterClosedDeleteSubscription.unsubscribe(); }
     });
   }
 }

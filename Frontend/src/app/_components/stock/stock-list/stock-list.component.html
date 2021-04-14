@@ -1,0 +1,31 @@
+<mat-list class="multi-column-container">
+  <mat-list-item *ngFor="let stock of service.model"
+                 class="mat-list-item"
+                 (click)="openUpdateDialog($event, stock)">
+    <div mat-line><b>{{stock.ingredient.name}}</b> {{stock.quantityCalc()}} {{stock.ingredient.unit}}&nbsp;
+      <i *ngIf="stock.creationDate && !stock.orderedDate && !stock.receivedDate && !stock.endedDate"
+         class="gray">Crée le :
+        {{stock.creationDate | date:
+        'dd-MM-y'}}</i>
+      <i *ngIf="stock.orderedDate && !stock.receivedDate && !stock.endedDate"
+         class="gray">Commandé le : {{stock.orderedDate | date:
+        'dd-MM-y'}}</i>
+      <i *ngIf="stock.receivedDate && !stock.endedDate"
+         class="gray">Reçu le : {{stock.receivedDate | date:
+        'dd-MM-y'}}</i>
+      <i *ngIf="stock.endedDate"
+         class="gray">Terminé le : {{stock.endedDate | date: 'dd-MM-y'}}</i>
+    </div>
+    <div mat-line>{{stock.supplier?.name}}</div>
+    <!--     <button mat-icon-button
+            (click)="openUpdateDialog($event, stock)"
+            [attr.aria-label]="'Met à jour ' + service.getDisplay('name', stock)">
+      <mat-icon>update</mat-icon>
+    </button> -->
+    <!-- <button mat-icon-button
+            (click)="openDeleteDialog($event, stock, service.getDisplay('name', stock))"
+            [attr.aria-label]="'Supprime ' + service.getDisplay('name', stock)">
+      <mat-icon>delete</mat-icon>
+    </button> -->
+  </mat-list-item>
+</mat-list>

@@ -3,8 +3,8 @@
     <button mat-icon-button
             (click)="openCreateDialog($event)"
             [matTooltip]="'Ajouter un ingrédient au stock'">
-            <mat-icon svgIcon="flask-plus-outline"></mat-icon>
-          </button>
+      <mat-icon svgIcon="flask-plus-outline"></mat-icon>
+    </button>
     <button mat-icon-button
             [matTooltip]="stockDisplay.filterExpanded ? 'Cacher les filtres' : 'Afficher les filtres'"
             (click)="stockDisplay.filterExpanded = !stockDisplay.filterExpanded">
@@ -12,6 +12,20 @@
                 *ngIf="stockDisplay.filterExpanded"></mat-icon>
       <mat-icon svgIcon="filter-off"
                 *ngIf="!stockDisplay.filterExpanded"></mat-icon>
+    </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de tableau"
+            *ngIf="stockDisplay.isViewList"
+            (click)="stockDisplay.viewTable()">
+      <mat-icon svgIcon="view-column">
+      </mat-icon>
+    </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de list"
+            *ngIf="stockDisplay.isViewTable"
+            (click)="stockDisplay.viewList()">
+      <mat-icon svgIcon="view-agenda">
+      </mat-icon>
     </button>
   </div>
 
@@ -27,8 +41,18 @@
               mat-icon-button
               matSuffix
               type="submit"
-              (click)="search()">
-        <mat-icon>search</mat-icon>
+              (click)="search()"
+              matTooltip="Rechercher">
+        <mat-icon svgIcon="magnify"></mat-icon>
+      </button>
+      <button for="searchText"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="clear()"
+              *ngIf="searchForm.value.search"
+              [matTooltip]="'Supprimer la recherche'">
+        <mat-icon svgIcon="magnify-close"></mat-icon>
       </button>
     </mat-form-field>
   </form>
