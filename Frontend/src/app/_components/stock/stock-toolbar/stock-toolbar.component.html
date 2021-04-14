@@ -28,7 +28,12 @@
       </mat-icon>
     </button>
   </div>
-
+  <div class="bra-center"
+       *ngIf="!((isHandset$ | async) || (isSmallScreen$ | async))">
+    <img class="little-title"
+         alt="Bra.Tool Menu"
+         src="./assets/dark/banner_BRATOOL.svg" />
+  </div>
   <form [formGroup]="searchForm">
     <mat-form-field>
       <mat-label>Recherche</mat-label>

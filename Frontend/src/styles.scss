@@ -106,3 +106,16 @@ body {
 .pointer {
   cursor: pointer !important;
 }
+
+.little-title,
+.title {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  align-content: center !important;
+  max-width: 200px;
+}
+
+.little-title {
+  max-height: 50px;
+  max-width: 400px;
+}
