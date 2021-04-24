@@ -1,3 +1,4 @@
+import { IngredientSelectDialogComponent } from './../../ingredients/ingredient-select-dialog/ingredient-select-dialog.component';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -5,14 +6,14 @@ import { BrewIngredientCreateComponent } from '@app/_components/brew/brew-ingred
 import { OrderService } from '@app/_services/order/order.service';
 import { OrderDisplayService } from '@app/_services/order/order-display.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-toolbar',
   templateUrl: './order-toolbar.component.html',
   styleUrls: ['./order-toolbar.component.scss']
 })
-export class OrderToolbarComponent implements OnInit, OnDestroy {
-  private closedSubscription: Subscription;
+export class OrderToolbarComponent implements OnInit {
   constructor(
     public orderDisplayService: OrderDisplayService,
     public orderService: OrderService,
@@ -23,18 +24,15 @@ export class OrderToolbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  ngOnDestroy(): void {
-    if (this.closedSubscription) { this.closedSubscription.unsubscribe(); }
-  }
 
   addIngredientToOrder(): void {
-    const dialogRef = this.dialog.open(BrewIngredientCreateComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as unknown as BrewIngredientCreateComponent).ingredientService = this.ingredientService;
-    this.closedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.orderDisplayService.addIngredientToOrder(result);
+    const dialogRef = this.dialog.open(IngredientSelectDialogComponent, { minWidth: '30em' });
+    dialogRef.afterClosed().pipe(first()).subscribe({
+      next: result => {
+        if (result) {
+          this.orderDisplayService.addIngredientToOrder(result);
+        }
       }
-      if (this.closedSubscription) { this.closedSubscription.unsubscribe(); }
     });
   }
 }
