@@ -159,6 +159,21 @@ export class IngredientService extends CService<Ingredient>{
     if (name === 'childName') {
       return this.findInValueViewChild(this.ingredientChildrenNames, value[name]);
     }
+    if (name === 'LittleTitle') {
+      return '- '
+        + this.findInValueViewChild(this.ingredientChildrenNames, value[`childName`])
+        + ' ('
+        + (value[`unitFactor`] > 1 ?
+          ('1 / '
+            + value[`unitFactor`]
+            + ' ')
+          : '')
+        + value[`unit`]
+        + ')';
+    }
+    if (name === 'ThirdLine') {
+      return value[`comment`];
+    }
     switch (value.childName) {
       case 'bottle':
         return this.getDisplayBottle(name, value as Bottle);
@@ -188,6 +203,12 @@ export class IngredientService extends CService<Ingredient>{
         return this.findInValueViewChild(this.bottleType, value[name]);
       case 'volume':
         return this.findInValueViewChild(this.bottleVolume, value[name]);
+      case 'ItalicText':
+        return undefined;
+      case 'SecondLine':
+        return this.findInValueViewChild(this.bottleType, value[`type`])
+          + ' - ' + this.findInValueViewChild(this.bottleVolume, value[`volume`])
+          + ' - ' + value[`color`];
       default:
         break;
     }
@@ -197,6 +218,10 @@ export class IngredientService extends CService<Ingredient>{
     switch (name) {
       case 'size':
         return this.findInValueViewChild(this.bottleTopSize, value[name]);
+      case 'ItalicText':
+        return undefined;
+      case 'SecondLine':
+        return this.findInValueViewChild(this.bottleTopSize, value[`size`]) + ' - ' + value[`color`];
       default:
         break;
     }
@@ -206,6 +231,10 @@ export class IngredientService extends CService<Ingredient>{
     switch (name) {
       case 'bottle':
         return value[name]?.name;
+      case 'ItalicText':
+        return undefined;
+      case 'SecondLine':
+        return 'Capacité de ' + value[`capacity`] + ' bouteilles ' + value[`bottle`]?.name;
       default:
         break;
     }
@@ -217,6 +246,14 @@ export class IngredientService extends CService<Ingredient>{
         return this.findInValueViewChild(this.cerealFormats, value[name]);
       case 'type':
         return this.findInValueViewChild(this.cerealTypes, value[name]);
+      case 'ItalicText':
+        return 'EBC : ' + value[`ebc`] + ' - ' + value[`category`];
+      case 'SecondLine':
+        return this.findInValueViewChild(this.cerealFormats, value[`format`])
+          + ' - '
+          + value[`plant`]
+          + ' - '
+          + this.findInValueViewChild(this.cerealTypes, value[`type`]);
       default:
         break;
     }
@@ -226,6 +263,11 @@ export class IngredientService extends CService<Ingredient>{
     switch (name) {
       case 'type':
         return this.findInValueViewChild(this.hopTypes, value[name]);
+      case 'ItalicText':
+        return value[`harvestYear`];
+      case 'SecondLine':
+        return this.findInValueViewChild(this.hopTypes, value[`type`])
+          + ' - Acid Alpha : ' + value[`acidAlpha`];
       default:
         break;
     }
@@ -237,6 +279,11 @@ export class IngredientService extends CService<Ingredient>{
         return this.findInValueViewChild(this.kegHead, value[name]);
       case 'volume':
         return this.findInValueViewChild(this.kegVolume, value[name]);
+      case 'ItalicText':
+        return undefined;
+      case 'SecondLine':
+        return this.findInValueViewChild(this.kegHead, value[`head`])
+          + ' - ' + this.findInValueViewChild(this.kegVolume, value[`volume`]);
       default:
         break;
     }
@@ -245,9 +292,13 @@ export class IngredientService extends CService<Ingredient>{
   private getDisplayYeast(name: string, value: Yeast): any {
     switch (name) {
       case 'productionYear':
-        return this.datepipe.transform(value[name], 'y-MM');
+        return this.datepipe.transform(value[name], 'MM-y');
       case 'type':
         return this.findInValueViewChild(this.yeastType, value[name]);
+      case 'ItalicText':
+        return this.datepipe.transform(value[`productionYear`], 'MM-y');
+      case 'SecondLine':
+        return this.findInValueViewChild(this.yeastType, value[`type`]);
       default:
         break;
     }

@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -85,6 +86,8 @@ import { TwoDigitDecimalNumberDirective } from './_directives/two-digit-decimal-
 import { PriceInputComponent } from './_components/helpers/price-input/price-input.component';
 import { QuantityInputComponent } from './_components/helpers/quantity-input/quantity-input.component';
 import { StockListComponent } from './_components/stock/stock-list/stock-list.component';
+import { IngredientsListComponent } from './_components/ingredients/ingredients-list/ingredients-list.component';
+import { IngredientsTypeFilterComponent } from './_components/ingredients/ingredients-type-filter/ingredients-type-filter.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +144,8 @@ import { StockListComponent } from './_components/stock/stock-list/stock-list.co
     PriceInputComponent,
     QuantityInputComponent,
     StockListComponent,
+    IngredientsListComponent,
+    IngredientsTypeFilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -151,6 +156,7 @@ import { StockListComponent } from './_components/stock/stock-list/stock-list.co
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
+    MatTreeModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,

@@ -1,27 +1,5 @@
-<div class="inline">
-  <!-- FILTRES TYPES INGREDIENTS -->
-  <div class="filter-container"
-       [@filterExpand]="displayService.filterExpanded ? 'expanded': 'collapsed'">
-    <mat-chip-list aria-label="Sélection des types d'ingrédients"
-                   class="mat-chip-list-stacked"
-                   [multiple]="true"
-                   (change)="selectionChange($event)"
-                   [selectable]="true">
-      <mat-chip *ngFor="let childName of getSearch.ingredientSearch.selectChildren"
-                class="overflow"
-                [selected]="childName.selected"
-                (selectionChange)="selectionChange($event)"
-                (click)="selectIngredientChange(childName)">
-        {{childName.viewValue}}
-      </mat-chip>
-    </mat-chip-list>
-  </div>
-  <div class="full-width padding">
-    <!-- TABLEAU DES INGREDIENTS -->
-    <app-table [service]="service"
-               [allowSelection]="allowSelection"
-               #tableComponent></app-table>
+<app-table [service]="service"
+           [allowSelection]="allowSelection"
+           #tableComponent></app-table>
 
-    <app-pagination [paginate]="service.paginate"></app-pagination>
-  </div>
-</div>
+<app-pagination [paginate]="service.paginate"></app-pagination>

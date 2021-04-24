@@ -206,6 +206,7 @@ export abstract class CService<T> implements IService {
   //#endregion
   protected initEnumDone = new Subject<boolean>();
   private loadAll = false;
+
   public constructor(
     protected http: HttpService<T>,
     private $search: ISearch | undefined
@@ -261,13 +262,15 @@ export abstract class CService<T> implements IService {
       httpParams = this.paginate.initPaginationParams(httpParams);
       httpParams = this.sort.initSortParams(httpParams);
     }
-    this.http.getAll(httpParams).subscribe(response => {
-      this.paginate.setParametersFromResponse(response.headers);
-      this.model = response.body.map((x) => this.createCpy(x));
-      this.end(true, undefined);
-    }, err => {
-      this.model = [];
-      this.end(true, undefined, err);
+    this.http.getAll(httpParams).subscribe({
+      next: response => {
+        this.paginate.setParametersFromResponse(response.headers);
+        this.model = response.body.map((x) => this.createCpy(x));
+        this.end(true, undefined);
+      }, error: err => {
+        this.model = [];
+        this.end(true, undefined, err);
+      }
     });
   }
   //#region IService

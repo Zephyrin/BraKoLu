@@ -1,6 +1,6 @@
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ChildCreateFormBaseComponent } from '@app/_components/child-create-form-base-component';
 import { Component } from '@angular/core';
 
@@ -14,9 +14,10 @@ export class SupplierCreateComponent extends ChildCreateFormBaseComponent {
   constructor(
     public dialogRef: MatDialogRef<SupplierCreateComponent>,
     public service: SupplierService,
-    protected formBuilder: FormBuilder
+    protected formBuilder: FormBuilder,
+    protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder);
+    super(dialogRef, service, formBuilder, dialog);
   }
 
   init() {

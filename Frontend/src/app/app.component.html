@@ -1,6 +1,6 @@
 <!-- FOND DE PAGE APPLICATION -->
 
-<mat-sidenav-container class="sidenav-container"
+<mat-sidenav-container class="main-sidenav-container"
                        autosize
                        fullscreen>
 
@@ -20,58 +20,48 @@
            src="./assets/dark/banner_BRATOOL.svg" /> -->
     </mat-toolbar>
 
-    <mat-nav-list>
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true}"
-         routerLink="sale">
-        <mat-icon matListIcon
-                  svgIcon="beer"></mat-icon>Ventes
-      </a>
-
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="stock">
-        <mat-icon svgIcon="flask-outline"
-                  matListIcon></mat-icon>Stock
-      </a>
-
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="brew">
-        <mat-icon matListIcon>local_dining</mat-icon>Brassin
-      </a>
-
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="command">
-        <mat-icon matListIcon>local_shipping</mat-icon>Commande
-      </a>
-
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="ingredients">
-        <mat-icon svgIcon="table-cog"
-                  matListIcon></mat-icon>Ingrédients
-      </a>
-
-      <a mat-list-item
-         routerLinkActive="active-link"
-         class="hover-link left-menu"
-         [routerLinkActiveOptions]="{ exact: true }"
-         routerLink="option">
-        <mat-icon matListIcon>settings</mat-icon>Options
-      </a>
-    </mat-nav-list>
+    <mat-tree [dataSource]="menuSource"
+              [treeControl]="treeControl"
+              class="menu-tree">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node"
+                     matTreeNodeToggle>
+        <li class="mat-tree-node">
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <a routerLinkActive="active-link"
+             class="hover-link left-menu"
+             [routerLinkActiveOptions]="{ exact: true}"
+             [routerLink]="node.routerLink">
+            <div class="mat-tree-content">
+              <mat-icon matListIcon
+                        class="mat-icon-padding"
+                        [svgIcon]="node.svgIcon"></mat-icon>{{node.label}}
+            </div>
+          </a>
+        </li>
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li>
+          <div class="mat-tree-node">
+            <div class="hover-link left-menu "
+                 matTreeNodeToggle
+                 [attr.aria-label]="'Toggle ' + node.label">
+              <div class="mat-tree-content">
+                <mat-icon [svgIcon]="node.svgIcon"
+                          [@rotatedState]="treeControl.isExpanded(node) ? 'rotated' : 'default'">
+                </mat-icon>
+                {{node.label}}
+              </div>
+            </div>
+          </div>
+          <div [@expandedState]="treeControl.isExpanded(node) ? 'expanded' : 'collapsed'"
+               class="hide-overflow">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </div>
+        </li>
+      </mat-nested-tree-node>
+    </mat-tree>
 
   </mat-sidenav>
 

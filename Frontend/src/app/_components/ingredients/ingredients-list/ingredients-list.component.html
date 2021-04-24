@@ -1,0 +1,16 @@
+<mat-list class="multi-column-container">
+  <mat-list-item *ngFor="let ingredient of service.model"
+                 class="mat-list-item"
+                 (click)="openUpdateDialog($event, ingredient)">
+    <div mat-line><b>{{ingredient.name}}</b>
+      {{service.getDisplay('LittleTitle', ingredient)}}
+      <i>{{service.getDisplay('ItalicText', ingredient)}}</i>
+    </div>
+    <div mat-line
+         *ngIf="service.getDisplay('SecondLine', ingredient)">{{service.getDisplay('SecondLine', ingredient)}}</div>
+    <div mat-line
+         *ngIf="service.getDisplay('ThirdLine', ingredient)">{{service.getDisplay('ThirdLine',
+      ingredient)}}</div>
+  </mat-list-item>
+</mat-list>
+<app-pagination [paginate]="service.paginate"></app-pagination>

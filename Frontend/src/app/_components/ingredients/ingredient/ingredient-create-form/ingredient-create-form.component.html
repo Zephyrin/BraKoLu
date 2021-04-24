@@ -402,19 +402,40 @@
     <!-- 2 BOUTONS DU BAS -->
     <div mat-dialog-actions
          class="flex-reverse">
-      <button mat-button
+      <button mat-icon-button
               [disabled]="!service.form || service.form.invalid"
               *ngIf="!value"
               type="submit"
-              (click)="onSubmitClick()">Ajouter</button>
-      <button mat-button
+              attr.aria-label="Ajout"
+              matTooltip="Ajout"
+              (click)="onSubmitClick()">
+        <mat-icon svgIcon="beaker-plus"></mat-icon>
+      </button>
+      <button mat-icon-button
               *ngIf="value"
               [disabled]="!service.form || service.form.invalid"
               type="submit"
-              (click)="onSubmitClick()">Modifier</button>
-      <button mat-button
+              (click)="onSubmitClick()"
+              attr.aria-label="Modifier"
+              matTooltip="Modifier">
+        <mat-icon svgIcon="beaker"></mat-icon>
+      </button>
+      <button mat-icon-button
               type="button"
-              (click)="onCancelClick()">Annuler</button>
+              attr.aria-label="Annuler"
+              matTooltip="Annuler"
+              (click)="onCancelClick()">
+        <mat-icon svgIcon="cancel"></mat-icon>
+      </button>
+      <div class="spacer"></div>
+      <button mat-icon-button
+              [disabled]="!service.form || service.form.invalid || service.loadingSource"
+              attr.aria-label="Supprimer"
+              matTooltip="Supprimer"
+              type="button"
+              (click)="onDeleteClick()">
+        <mat-icon svgIcon="beaker-remove"></mat-icon>
+      </button>
     </div>
   </fieldset>
 
@@ -426,16 +447,38 @@
 <div mat-dialog-actions
      *ngIf="!service.form"
      class="flex-reverse">
-  <button mat-button
+  <button mat-icon-button
+          [disabled]="!service.form || service.form.invalid"
           *ngIf="!value"
-          disabled
-          (click)="onSubmitClick()">Ajouter</button>
-  <button mat-button
+          type="submit"
+          attr.aria-label="Ajout"
+          matTooltip="Ajout"
+          (click)="onSubmitClick()">
+    <mat-icon svgIcon="beaker-plus"></mat-icon>
+  </button>
+  <button mat-icon-button
           *ngIf="value"
-          disabled
-          (click)="onSubmitClick()">Modifier</button>
-  <button mat-button
-          [disabled]="service.loading | async"
+          [disabled]="!service.form || service.form.invalid"
+          type="submit"
+          (click)="onSubmitClick()"
+          attr.aria-label="Modifier"
+          matTooltip="Modifier">
+    <mat-icon svgIcon="beaker"></mat-icon>
+  </button>
+  <button mat-icon-button
           type="button"
-          (click)="onCancelClick()">Annuler</button>
+          attr.aria-label="Annuler"
+          matTooltip="Annuler"
+          (click)="onCancelClick()">
+    <mat-icon svgIcon="cancel"></mat-icon>
+  </button>
+  <div class="spacer"></div>
+  <button mat-icon-button
+          [disabled]="!service.form || service.form.invalid || service.loadingSource"
+          attr.aria-label="Supprimer"
+          matTooltip="Supprimer"
+          type="button"
+          (click)="onDeleteClick()">
+    <mat-icon svgIcon="beaker-remove"></mat-icon>
+  </button>
 </div>

@@ -7,9 +7,11 @@ import { Injectable, SimpleChange, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Order } from '@app/_models/order';
+import { Ingredient } from '@app/_models/ingredient';
 
 import { StockSearchService } from '@app/_services/stock/stock-search.service';
 import { BrewSearchService } from '@app/_services/brew/brew-search.service';
+import { IngredientStock } from '@app/_models';
 @Injectable({
   providedIn: 'root'
 })
@@ -22,8 +24,10 @@ export class OrderDisplayService {
   public brewExpanded = true;
   public filterOrder = true;
   public launchOrder = new EventEmitter<any>();
+  public addIngredientToOrderSignal = new EventEmitter<Ingredient>();
   private selectedChangeSubscription: Subscription;
   loadStockAndBrewFormOrder = false;
+
 
   constructor(
     public brewService: BrewService,
@@ -139,5 +143,9 @@ export class OrderDisplayService {
       this.brewService.load(true);
       this.loadStockAndBrewFormOrder = true;
     }
+  }
+
+  public addIngredientToOrder(newIngredient: Ingredient): void {
+    this.addIngredientToOrderSignal.emit(newIngredient);
   }
 }

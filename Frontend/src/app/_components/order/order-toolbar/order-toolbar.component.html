@@ -48,3 +48,11 @@
   <mat-icon svgIcon="barley-off"
             *ngIf="!orderDisplayService.filterOrder"></mat-icon>
 </button>
+
+<button mat-icon-button
+        [disabled]="orderService.loadingSource || orderDisplayService.stockService.loadingSource"
+        *ngIf="orderDisplayService.formSelectedOrder.value !== 0"
+        matTooltip="Ajouter un autre ingrédient"
+        (click)="addIngredientToOrder()">
+  <mat-icon svgIcon="flask"></mat-icon>
+</button>

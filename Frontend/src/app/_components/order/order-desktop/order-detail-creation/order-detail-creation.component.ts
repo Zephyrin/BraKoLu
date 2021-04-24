@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Order } from '@app/_models/order';
+import { Ingredient } from '@app/_models/ingredient';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { OrderService } from '@app/_services/order/order.service';
 import { StockService } from '@app/_services/stock/stock.service';
@@ -65,6 +66,7 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
 
   private afterClosedSubscription: Subscription;
   private orderDisplaySubscription: Subscription;
+  private orderAddIngredientSubscription: Subscription;
   constructor(
     public brewService: BrewService,
     public stockService: StockService,
@@ -77,6 +79,9 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
   ) {
     this.orderDisplaySubscription = this.orderDisplayService.launchOrder.subscribe(x => {
       this.launchOrder(x);
+    });
+    this.orderAddIngredientSubscription = this.orderDisplayService.addIngredientToOrderSignal.subscribe(x => {
+      this.addIngredient(x);
     });
   }
 
@@ -97,7 +102,6 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
         this.orderDetailCreation.updateIngredientStock(change);
       }
     });
-
   }
 
   ngOnDestroy(): void {
@@ -105,12 +109,17 @@ export class OrderDetailCreationComponent implements OnInit, OnDestroy {
     if (this.stockSubscription) { this.stockSubscription.unsubscribe(); }
     if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     if (this.orderDisplaySubscription) { this.orderDisplaySubscription.unsubscribe(); }
+    if (this.orderAddIngredientSubscription) { this.orderAddIngredientSubscription.unsubscribe(); }
   }
 
   createPartIngredientType() {
     if (this.brewService.model && this.stockService.model) {
       this.orderDetailCreation.init(this.order);
     }
+  }
+
+  addIngredient(ingredient: Ingredient) {
+    this.orderDetailCreation.addIngredient(ingredient);
   }
 
   launchOrder(event: any) {

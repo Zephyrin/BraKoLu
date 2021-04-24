@@ -1,12 +1,11 @@
 <div class="inline-header">
   <div class="inline">
-    <button mat-button
+    <button mat-icon-button
             (click)="openCreateDialog($event)"
             [class.spinner]="service.loadingSource"
             [disabled]="service.loadingSource"
             [matTooltip]="'Ajouter un ingrédient type à la base de données'">
-      <mat-icon>add_circle_outline</mat-icon>
-      <mat-label> Ajouter ingrédient</mat-label>
+      <mat-icon svgIcon="beaker-plus"></mat-icon>
     </button>
     <button mat-icon-button
             [disabled]="service.loadingSource"
@@ -17,8 +16,27 @@
       <mat-icon svgIcon="filter-off"
                 *ngIf="!ingredientDisplay.filterExpanded"></mat-icon>
     </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de tableau"
+            *ngIf="ingredientDisplay.isViewList"
+            (click)="ingredientDisplay.viewTable()">
+      <mat-icon svgIcon="view-column">
+      </mat-icon>
+    </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de list"
+            *ngIf="ingredientDisplay.isViewTable"
+            (click)="ingredientDisplay.viewList()">
+      <mat-icon svgIcon="view-agenda">
+      </mat-icon>
+    </button>
   </div>
-
+  <div class="bra-center"
+       *ngIf="!((isHandset$ | async) || (isSmallScreen$ | async))">
+    <img class="little-title"
+         alt="Bra.Tool Menu"
+         src="./assets/dark/banner_BRATOOL.svg" />
+  </div>
   <form [formGroup]="searchForm">
     <fieldset [disabled]="service.loadingSource">
       <mat-form-field>

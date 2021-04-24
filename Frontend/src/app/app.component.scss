@@ -8,3 +8,68 @@
     display: none;
   }
 }
+
+.left-menu {
+  background-color: initial;
+  color: initial;
+  outline: none;
+  display: block;
+  width: 100%;
+  padding: 0;
+  position: relative;
+  height: 100%;
+  border-left: solid transparent;
+}
+
+.left-menu:hover {
+  background-color: #fafafa;
+}
+
+.active-link {
+  background-color: #fafafa;
+  border-left: solid gray;
+}
+
+.menu-tree-invisible {
+  display: none;
+}
+
+.menu-tree ul,
+.menu-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.mat-tree-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 16px 0px 16px;
+  position: relative;
+  height: inherit;
+  font-size: 16px;
+}
+
+.mat-tree-node {
+  height: 56px;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+.mat-icon {
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+  box-sizing: content-box;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+
+.hide-overflow {
+  overflow: hidden;
+}

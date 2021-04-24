@@ -1,18 +1,27 @@
-<div class="vertical-scroll">
-  <div class="inline">
-    <div class="filter-container"
-         [@filterExpand]="display.filterExpanded ? 'expanded': 'collapsed'">
+<mat-sidenav-container class="sidenav-container"
+                       autosize
+                       fullscreen>
+  <mat-sidenav #drawer
+               class="filter-sidenav"
+               [fixedInViewport]="true"
+               [attr.role]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'over' : 'side'"
+               [opened]="display.filterExpanded"
+               (openedChange)="display.filterExpanded = $event">
+    <mat-nav-list class="filter-container">
       <h1>Fournisseur</h1>
       <app-supplier-selector-filter (selectedSuppliers)="selectedSuppliersChange($event)"
                                     class="initial"></app-supplier-selector-filter>
       <h1>État</h1>
       <app-stock-state-filter class="initial"
                               (selectedStates)="selectedStatesChange($event)"></app-stock-state-filter>
-    </div>
-    <div class="full-width padding">
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main>
       <app-stock-desktop [service]="service"
                          *ngIf="display.isViewTable"></app-stock-desktop>
       <app-stock-list *ngIf="display.isViewList"></app-stock-list>
-    </div>
-  </div>
-</div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

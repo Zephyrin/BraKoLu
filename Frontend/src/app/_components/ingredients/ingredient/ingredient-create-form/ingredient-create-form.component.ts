@@ -5,7 +5,7 @@ import { IngredientService } from '@app/_services/ingredient/ingredient.service'
 import { Ingredient } from '@app/_models';
 
 import { FormBuilder } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component } from '@angular/core';
 import {
   MomentDateAdapter,
@@ -56,8 +56,9 @@ export class IngredientCreateFormComponent extends ChildCreateFormBaseComponent 
     public dialogRef: MatDialogRef<IngredientCreateFormComponent>,
     public service: IngredientService,
     protected formBuilder: FormBuilder,
+    protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder);
+    super(dialogRef, service, formBuilder, dialog);
     const date = new Date();
     const year = date.getFullYear();
     for (let i = year - 20; i < year + 1; i++) {

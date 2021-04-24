@@ -1,6 +1,3 @@
-import { RemoveDialogComponent } from './../../helpers/remove-dialog/remove-dialog.component';
-import { Subscription } from 'rxjs';
-import { SupplierCreateComponent } from '@app/_components/supplier/supplier-create/supplier-create.component';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { FormBuilder } from '@angular/forms';
@@ -14,8 +11,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   templateUrl: './stock-create.component.html',
   styleUrls: ['./stock-create.component.scss']
 })
-export class StockCreateComponent extends ChildCreateFormBaseComponent implements OnDestroy {
-  private afterClosedDeleteSubscription: Subscription;
+export class StockCreateComponent extends ChildCreateFormBaseComponent {
 
   constructor(
     public dialogRef: MatDialogRef<StockCreateComponent>,
@@ -24,13 +20,9 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent implement
     public supplierService: SupplierService,
     protected formBuilder: FormBuilder,
     public ingredientService: IngredientService,
-    public dialog: MatDialog
+    protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder);
-  }
-
-  ngOnDestroy(): void {
-    if (this.afterClosedDeleteSubscription) { this.afterClosedDeleteSubscription.unsubscribe(); }
+    super(dialogRef, service, formBuilder, dialog);
   }
 
   init() {
@@ -48,19 +40,5 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent implement
 
   compareId(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
-  }
-
-  onDeleteClick() {
-    this.service.clearErrors();
-    const dialogRef = this.dialog.open(RemoveDialogComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as RemoveDialogComponent).title = this.service.getDisplay('name', this.value);
-    (dialogRef.componentInstance as RemoveDialogComponent).element = this.value;
-    (dialogRef.componentInstance as RemoveDialogComponent).service = this.service;
-    this.afterClosedDeleteSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dialogRef.close();
-      }
-      if (this.afterClosedDeleteSubscription) { this.afterClosedDeleteSubscription.unsubscribe(); }
-    });
   }
 }

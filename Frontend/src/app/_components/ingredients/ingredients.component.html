@@ -1,3 +1,27 @@
+<mat-sidenav-container class="sidenav-container"
+                       autosize
+                       fullscreen>
+  <mat-sidenav #drawer
+               class="filter-sidenav"
+               [fixedInViewport]="true"
+               [attr.role]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) || (isSmallScreen$ | async) ? 'over' : 'side'"
+               [opened]="display.filterExpanded"
+               (openedChange)="display.filterExpanded = $event">
+    <mat-nav-list class="filter-container">
+      <h1>Type</h1>
+      <app-ingredients-type-filter class="initial"></app-ingredients-type-filter>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main>
+      <app-ingredients-desktop [service]="service"
+                               *ngIf="display.isViewTable"></app-ingredients-desktop>
+      <app-ingredients-list *ngIf="display.isViewList"></app-ingredients-list>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
 <div class="vertical-scroll">
   <app-ingredients-desktop [service]="service"></app-ingredients-desktop>
 </div>

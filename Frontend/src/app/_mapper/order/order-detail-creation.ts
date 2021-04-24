@@ -104,6 +104,20 @@ export class OrderDetailCreation {
       }
     });
   }
+
+  public addIngredient(ingredient: Ingredient) {
+    const indexAccordion = this.ingredientsByType.findIndex(x => x.childName.value === ingredient.childName);
+    const stock = new IngredientStock(undefined);
+    stock.init(ingredient, this.order);
+    if (indexAccordion < 0) {
+      const childname = this.ingredientService.ingredientChildrenNames.find(x => x.value === ingredient.childName);
+      const accordion = new IngredientsByType(childname, this.stockService, this.order);
+      accordion.addStockOrder(stock);
+      this.ingredientsByType.push(accordion);
+    } else {
+      this.ingredientsByType[indexAccordion].addStockOrder(stock);
+    }
+  }
 }
 
 
@@ -183,6 +197,7 @@ export class IngredientsByType {
     if (index < 0) {
       const orderStock = new OrderStock(stock.ingredient, this.order, stock, this.stockService);
       this.orderStocks.push(orderStock);
+      this.orderStocksUpdate.emit(true);
     } else {
       this.orderStocks[index].addOrderStock(stock);
     }

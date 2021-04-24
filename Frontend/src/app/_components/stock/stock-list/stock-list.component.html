@@ -17,15 +17,6 @@
          class="gray">Terminé le : {{stock.endedDate | date: 'dd-MM-y'}}</i>
     </div>
     <div mat-line>{{stock.supplier?.name}}</div>
-    <!--     <button mat-icon-button
-            (click)="openUpdateDialog($event, stock)"
-            [attr.aria-label]="'Met à jour ' + service.getDisplay('name', stock)">
-      <mat-icon>update</mat-icon>
-    </button> -->
-    <!-- <button mat-icon-button
-            (click)="openDeleteDialog($event, stock, service.getDisplay('name', stock))"
-            [attr.aria-label]="'Supprime ' + service.getDisplay('name', stock)">
-      <mat-icon>delete</mat-icon>
-    </button> -->
   </mat-list-item>
 </mat-list>
+<app-pagination [paginate]="service.paginate"></app-pagination>
