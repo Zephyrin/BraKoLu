@@ -6,7 +6,7 @@ import { Subscription, Observable } from 'rxjs';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
@@ -29,7 +29,7 @@ export class IngredientToolbarComponent implements OnInit, OnDestroy {
     map(result => result.matches),
     shareReplay()
   );
-
+  @Input() isDialog = false;
   constructor(
     public dialog: MatDialog,
     public service: IngredientService,
@@ -42,6 +42,8 @@ export class IngredientToolbarComponent implements OnInit, OnDestroy {
     this.searchForm = this.formBuilder.group({
       search: [this.getSearch.ingredientSearch.searchValue]
     });
+    if (this.isDialog) { this.ingredientDisplay.loadOtherConfig('isDialog'); }
+    else { this.ingredientDisplay.loadOtherConfig(); }
   }
 
   ngOnDestroy(): void {

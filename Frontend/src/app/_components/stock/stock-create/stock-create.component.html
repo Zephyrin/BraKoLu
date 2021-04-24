@@ -4,16 +4,19 @@
   <mat-dialog-content>
     <fieldset [disabled]="service.loadingSource || ingredientService.loadingSource"
               [ngStyle]="{'pointer-events':service.loadingSource || ingredientService.loadingSource ? 'none' : 'auto' }">
-      <mat-form-field class="full-width">
+
+      <mat-form-field class="full-width cursor"
+                      cdkFocusInitial>
         <mat-label>Quel est l'ingrédient ?</mat-label>
-        <mat-select cdkFocusInitial
-                    formControlName="ingredient"
-                    [compareWith]="compareId">
-          <mat-option *ngFor="let ingredient of ingredientService.model"
-                      [value]="ingredient">
-            {{ingredient.name}}
-          </mat-option>
-        </mat-select>
+        <app-ingredient-select-input #ingredient
+                                     formControlName="ingredient"></app-ingredient-select-input>
+        <button mat-icon-button
+                matSuffix
+                [matTooltip]="'Supprime l\'ingrédient'"
+                *ngIf="service.form.get('ingredient').value"
+                (click)="ingredient.deleteIngredient($event)">
+          <mat-icon svgIcon="close"></mat-icon>
+        </button>
         <mat-error>
           {{service.form.get('ingredient').errors?.serverError}}
         </mat-error>

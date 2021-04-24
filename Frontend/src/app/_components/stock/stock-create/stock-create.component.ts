@@ -26,8 +26,8 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent {
   }
 
   init() {
-    this.ingredientService.load(true);
-    this.supplierService.load(true);
+    this.ingredientService.load();
+    this.supplierService.load();
   }
 
   onSubmitClick(): void {

@@ -31,12 +31,14 @@
       </mat-icon>
     </button>
   </div>
+  <div class="spacer"></div>
   <div class="bra-center"
-       *ngIf="!((isHandset$ | async) || (isSmallScreen$ | async))">
+       *ngIf="!((isHandset$ | async) || (isSmallScreen$ | async)) && !isDialog">
     <img class="little-title"
          alt="Bra.Tool Menu"
          src="./assets/dark/banner_BRATOOL.svg" />
   </div>
+  <div class="spacer"></div>
   <form [formGroup]="searchForm">
     <fieldset [disabled]="service.loadingSource">
       <mat-form-field>

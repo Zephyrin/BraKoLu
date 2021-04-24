@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveDialogComponent } from '@app/_components/helpers/remove-dialog/remove-dialog.component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
@@ -11,7 +11,7 @@ import { IngredientCreateFormComponent } from './../ingredient/ingredient-create
   styleUrls: ['./ingredients-list.component.scss']
 })
 export class IngredientsListComponent implements OnInit {
-  private afterClosedSubscription: Subscription;
+  @Input() isDialog = false;
 
   constructor(
     public service: IngredientService,
@@ -23,13 +23,12 @@ export class IngredientsListComponent implements OnInit {
 
   openUpdateDialog(event: MouseEvent, element: any): void {
     event.stopPropagation();
-    const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '30em' });
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-    });
-    (dialogRef.componentInstance as unknown as IngredientCreateFormComponent).update(element);
+    if (this.isDialog) {
+      this.service.selected = element;
+    } else {
+      const dialogRef = this.dialog.open(IngredientCreateFormComponent, { minWidth: '30em' });
+      (dialogRef.componentInstance as unknown as IngredientCreateFormComponent).update(element);
+    }
   }
 
   openDeleteDialog(evt: MouseEvent, element: any, title: string): void {

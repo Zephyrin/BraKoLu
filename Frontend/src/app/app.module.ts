@@ -91,6 +91,8 @@ import { IngredientsTypeFilterComponent } from './_components/ingredients/ingred
 import { SupplierComponent } from './_components/supplier/supplier/supplier.component';
 import { SupplierToolbarComponent } from './_components/supplier/supplier-toolbar/supplier-toolbar.component';
 import { SupplierListComponent } from './_components/supplier/supplier-list/supplier-list.component';
+import { IngredientSelectInputComponent } from './_components/ingredients/ingredient-select-input/ingredient-select-input.component';
+import { IngredientSelectDialogComponent } from './_components/ingredients/ingredient-select-dialog/ingredient-select-dialog.component';
 
 @NgModule({
   declarations: [
@@ -152,6 +154,8 @@ import { SupplierListComponent } from './_components/supplier/supplier-list/supp
     SupplierComponent,
     SupplierToolbarComponent,
     SupplierListComponent,
+    IngredientSelectInputComponent,
+    IngredientSelectDialogComponent,
   ],
   imports: [
     BrowserModule,

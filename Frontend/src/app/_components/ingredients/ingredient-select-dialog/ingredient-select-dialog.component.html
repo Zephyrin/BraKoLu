@@ -1,0 +1,28 @@
+<app-ingredient-toolbar [isDialog]="true"></app-ingredient-toolbar>
+<div class="inline">
+  <mat-nav-list class="filter-container"
+                [@filterExpand]="display.filterExpanded ? 'expanded' : 'collapsed'">
+    <h1>Type</h1>
+    <app-ingredients-type-filter></app-ingredients-type-filter>
+  </mat-nav-list>
+  <div>
+    <app-ingredients-desktop [service]="service"
+                             *ngIf="display.isViewTable"
+                             [allowSelection]="true"></app-ingredients-desktop>
+    <app-ingredients-list *ngIf="display.isViewList"
+                          [isDialog]="true"></app-ingredients-list>
+  </div>
+</div>
+<div>
+  <div mat-dialog-actions
+       class="flex-reverse">
+    <button mat-button
+            [disabled]="!service.selected"
+            (click)="onSubmitClick()">
+      Celui-ci
+    </button>
+    <button mat-button
+            type="button"
+            (click)="onCancelClick()">Annuler</button>
+  </div>
+</div>

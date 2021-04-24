@@ -1,30 +1,30 @@
-import { SupplierService } from '@app/_services/supplier/supplier.service';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Component, EventEmitter, HostBinding, Input, Output, OnDestroy, Optional, Self, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldControl } from '@angular/material/form-field';
-import { Supplier } from '@app/_models';
+import { Ingredient } from '@app/_models';
+import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { Subject } from 'rxjs';
-import { SupplierSelectDialogComponent } from '../supplier-select-dialog/supplier-select-dialog.component';
 import { first } from 'rxjs/operators';
+import { IngredientSelectDialogComponent } from '../ingredient-select-dialog/ingredient-select-dialog.component';
 
 @Component({
-  selector: 'app-supplier-select-input',
-  templateUrl: './supplier-select-input.component.html',
-  styleUrls: ['./supplier-select-input.component.scss'],
-  providers: [{ provide: MatFormFieldControl, useExisting: SupplierSelectInputComponent }],
+  selector: 'app-ingredient-select-input',
+  templateUrl: './ingredient-select-input.component.html',
+  styleUrls: ['./ingredient-select-input.component.scss'],
+  providers: [{ provide: MatFormFieldControl, useExisting: IngredientSelectInputComponent }],
 })
-export class SupplierSelectInputComponent implements
-  MatFormFieldControl<Supplier>,
+export class IngredientSelectInputComponent implements
+  MatFormFieldControl<Ingredient>,
   OnDestroy,
   ControlValueAccessor {
   static nextId = 0;
-  @HostBinding() id = `supplier-select-input-${SupplierSelectInputComponent.nextId++}`;
-  @Output() newSupplier = new EventEmitter<Supplier>();
+  @HostBinding() id = `ingredient-select-input-${IngredientSelectInputComponent.nextId++}`;
+  @Output() newSupplier = new EventEmitter<Ingredient>();
 
-  valueP: Supplier;
+  valueP: Ingredient;
   @Input('value') set value(val) {
     this.valueP = val;
     this.stateChanges.next();
@@ -88,15 +88,17 @@ export class SupplierSelectInputComponent implements
     private fm: FocusMonitor,
     private elRef: ElementRef<HTMLElement>,
     @Optional() public parentFormField: MatFormField,
-    private service: SupplierService) {
+    private service: IngredientService) {
     if (this.ngControl != null) {
       // Setting the value accessor directly (instead of using
       // the providers) to avoid running into a circular import.
       this.ngControl.valueAccessor = this;
     }
-    fm.monitor(elRef, true).subscribe(origin => {
-      this.focused = !!origin;
-      this.stateChanges.next();
+    fm.monitor(elRef, true).subscribe({
+      next: origin => {
+        this.focused = !!origin;
+        this.stateChanges.next();
+      }
     });
   }
 
@@ -131,7 +133,7 @@ export class SupplierSelectInputComponent implements
 
   select() {
     if (!this.disabled) {
-      const dialogRef = this.dialog.open(SupplierSelectDialogComponent, { minWidth: '50em', data: this.value });
+      const dialogRef = this.dialog.open(IngredientSelectDialogComponent, { minWidth: '50em', data: this.value });
       /* (dialogRef.componentInstance as unknown as SupplierSelectDialogComponent).supplierService = this.service; */
       dialogRef.afterClosed().pipe(first())
         .subscribe({
@@ -145,7 +147,7 @@ export class SupplierSelectInputComponent implements
     }
   }
 
-  deleteSupplier(evt: MouseEvent) {
+  deleteIngredient(evt: MouseEvent) {
     evt.stopPropagation();
     evt.preventDefault();
     if (!this.disabled) {

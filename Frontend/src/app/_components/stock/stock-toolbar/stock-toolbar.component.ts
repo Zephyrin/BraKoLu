@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StockSearchService } from '@app/_services/stock/stock-search.service';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { StockDisplayService } from '@app/_services/stock/stock-display.service';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -30,6 +30,7 @@ export class StockToolbarComponent implements OnInit {
     shareReplay()
   );
 
+  @Input() isDialog = false;
   constructor(
     public dialog: MatDialog,
     public service: StockService,
@@ -42,6 +43,8 @@ export class StockToolbarComponent implements OnInit {
     this.searchForm = this.formBuilder.group({
       search: [this.getSearch.stockSearch.searchValue]
     });
+    if (this.isDialog) { this.stockDisplay.loadOtherConfig('dialog'); }
+    else { this.stockDisplay.loadOtherConfig(); }
   }
 
 

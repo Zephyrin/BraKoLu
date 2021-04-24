@@ -1,6 +1,7 @@
 <mat-list class="multi-column-container">
   <mat-list-item *ngFor="let ingredient of service.model"
                  class="mat-list-item"
+                 [ngClass]="{'mat-list-selected': service.selected?.id === ingredient?.id}"
                  (click)="openUpdateDialog($event, ingredient)">
     <div mat-line><b>{{ingredient.name}}</b>
       {{service.getDisplay('LittleTitle', ingredient)}}
