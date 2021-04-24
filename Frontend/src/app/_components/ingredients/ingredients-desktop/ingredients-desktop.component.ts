@@ -19,9 +19,8 @@ import { filterExpand } from '@app/_components/animations/filter-animation';
     filterExpand
   ]
 })
-export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements OnInit, AfterViewInit {
+export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements AfterViewInit {
   @ViewChild('tableComponent') tableComponent: TableComponent;
-  searchForm: FormGroup;
 
   constructor(
     public dialog: MatDialog,
@@ -36,23 +35,6 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
 
   public selectIngredientChange(child: ValueViewChildSelected) {
     this.getSearch.updateSelected(child);
-  }
-
-  public selectionChange($evt: MatChipSelectionChange) {
-    if ($evt.selected === true) {
-      $evt.source.color = 'accent';
-    } else {
-      // On ne peut pas changer la couleur lorsque celui-ci n'est pas sélectionné...
-      $evt.source.color = 'primary';
-    }
-
-  }
-
-  ngOnInit(): void {
-    super.ngOnInit();
-    this.searchForm = this.formBuilder.group({
-      search: [this.getSearch.ingredientSearch.searchValue]
-    });
   }
 
   ngAfterViewInit(): void {
@@ -179,9 +161,5 @@ export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCr
     if (index < 0) {
       this.service.displayedColumns.push(name);
     }
-  }
-
-  search(): void {
-    this.getSearch.updateSearch(this.searchForm.value.search);
   }
 }

@@ -14,10 +14,9 @@ import { map, shareReplay } from 'rxjs/operators';
   templateUrl: './stock-toolbar.component.html',
   styleUrls: ['./stock-toolbar.component.scss']
 })
-export class StockToolbarComponent implements OnInit, OnDestroy {
+export class StockToolbarComponent implements OnInit {
 
   searchForm: FormGroup;
-  private afterClosedSubscription: Subscription;
 
   get getSearch() { return this.service.search as StockSearchService; }
 
@@ -45,20 +44,12 @@ export class StockToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-  }
 
 
   openCreateDialog(event: MouseEvent): void {
     event.stopPropagation();
     const dialogRef = this.dialog.open(StockCreateComponent, { minWidth: '30em' });
     (dialogRef.componentInstance as unknown as StockCreateComponent).create();
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-    });
   }
 
   search(): void {

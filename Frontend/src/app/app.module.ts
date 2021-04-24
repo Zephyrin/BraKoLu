@@ -88,6 +88,9 @@ import { QuantityInputComponent } from './_components/helpers/quantity-input/qua
 import { StockListComponent } from './_components/stock/stock-list/stock-list.component';
 import { IngredientsListComponent } from './_components/ingredients/ingredients-list/ingredients-list.component';
 import { IngredientsTypeFilterComponent } from './_components/ingredients/ingredients-type-filter/ingredients-type-filter.component';
+import { SupplierComponent } from './_components/supplier/supplier/supplier.component';
+import { SupplierToolbarComponent } from './_components/supplier/supplier-toolbar/supplier-toolbar.component';
+import { SupplierListComponent } from './_components/supplier/supplier-list/supplier-list.component';
 
 @NgModule({
   declarations: [
@@ -146,6 +149,9 @@ import { IngredientsTypeFilterComponent } from './_components/ingredients/ingred
     StockListComponent,
     IngredientsListComponent,
     IngredientsTypeFilterComponent,
+    SupplierComponent,
+    SupplierToolbarComponent,
+    SupplierListComponent,
   ],
   imports: [
     BrowserModule,

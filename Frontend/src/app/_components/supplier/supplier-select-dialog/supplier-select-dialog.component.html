@@ -1,12 +1,16 @@
-<app-supplier-desktop [service]="supplierService"
-                      [allowSelection]="true">
-</app-supplier-desktop>
+<app-supplier-toolbar [isDialog]="true"
+                      [prefix]="dialog"></app-supplier-toolbar>
+<app-supplier-desktop [service]="service"
+                      *ngIf="display.isViewTable"
+                      [allowSelection]="true"></app-supplier-desktop>
+<app-supplier-list *ngIf="display.isViewList"
+                   [isDialog]="true"></app-supplier-list>
 <div mat-dialog-actions
      class="flex-reverse">
   <button mat-button
-          [disabled]="!supplierService.selected"
+          [disabled]="!service.selected"
           (click)="onSubmitClick()">
-    <ng-container>Ajouter</ng-container>
+    Celui-ci
   </button>
   <button mat-button
           type="button"

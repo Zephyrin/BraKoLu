@@ -34,7 +34,6 @@ export class IngredientsTypeFilterComponent implements OnInit, OnDestroy {
   }
 
   public selectChange(child: ValueViewChildSelected) {
-    child.selected = !child.selected;
     (this.service.search as IngredientSearchService).updateSelected(child);
   }
 }

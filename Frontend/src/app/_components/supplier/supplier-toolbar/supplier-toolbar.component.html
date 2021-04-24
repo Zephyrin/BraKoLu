@@ -1,0 +1,58 @@
+<div class="inline-header">
+  <div class="inline">
+    <button mat-icon-button
+            (click)="openCreateDialog($event)"
+            [matTooltip]="'Ajouter un fournisseur'">
+      <mat-icon svgIcon="folder-plus-outline"></mat-icon>
+    </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de tableau"
+            *ngIf="display.isViewList"
+            (click)="display.viewTable()">
+      <mat-icon svgIcon="view-column">
+      </mat-icon>
+    </button>
+    <button mat-icon-button
+            matTooltip="Affichage sous forme de list"
+            *ngIf="display.isViewTable"
+            (click)="display.viewList()">
+      <mat-icon svgIcon="view-agenda">
+      </mat-icon>
+    </button>
+  </div>
+  <div class="bra-center"
+       *ngIf="!((isHandset$ | async) || (isSmallScreen$ | async)) && !isDialog">
+    <img class="little-title"
+         alt="Bra.Tool Menu"
+         src="./assets/dark/banner_BRATOOL.svg" />
+  </div>
+  <div class="spacer"
+       *ngIf="isDialog"></div>
+  <form [formGroup]="searchForm">
+    <mat-form-field>
+      <mat-label>Recherche</mat-label>
+      <input matInput
+             id="searchText"
+             formControlName="search"
+             type="search"
+             aria-label="Recherche">
+      <button for="searchText"
+              mat-icon-button
+              matSuffix
+              type="submit"
+              (click)="search()"
+              matTooltip="Rechercher">
+        <mat-icon svgIcon="magnify"></mat-icon>
+      </button>
+      <button for="searchText"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="clear()"
+              *ngIf="searchForm.value.search"
+              [matTooltip]="'Supprimer la recherche'">
+        <mat-icon svgIcon="magnify-close"></mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>

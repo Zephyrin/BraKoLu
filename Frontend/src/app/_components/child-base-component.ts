@@ -7,9 +7,8 @@ import { OnInit, OnDestroy, Input, TemplateRef, Component, SimpleChange } from '
 import { ComponentType } from '@angular/cdk/portal';
 import { timeoutWith } from 'rxjs/operators';
 
-export class ChildBaseComponent<T> implements OnInit, OnDestroy {
+export abstract class ChildBaseComponent<T> implements OnInit, OnDestroy {
   private serviceEndUpdateSubscription: Subscription;
-  private afterClosedSubscription: Subscription;
   @Input() service: IService;
   @Input() allowSelection = false;
   constructor(
@@ -21,8 +20,10 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe(data => {
-      this.endUpdate(data);
+    this.serviceEndUpdateSubscription = this.service.endUpdate.subscribe({
+      next: data => {
+        this.endUpdate(data);
+      }
     });
     this.init();
   }
@@ -33,7 +34,6 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.serviceEndUpdateSubscription) { this.serviceEndUpdateSubscription.unsubscribe(); }
-    if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
     this.onDestroy();
   }
 
@@ -41,21 +41,11 @@ export class ChildBaseComponent<T> implements OnInit, OnDestroy {
     event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).create();
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-    });
   }
 
   openUpdateDialog(event: MouseEvent, element: any): void {
     event.stopPropagation();
     const dialogRef = this.dialog.open(this.componentOrTemplateRef, { minWidth: '30em' });
-    this.afterClosedSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-      }
-      if (this.afterClosedSubscription) { this.afterClosedSubscription.unsubscribe(); }
-    });
     (dialogRef.componentInstance as unknown as ChildCreateFormBaseComponent).update(element);
   }
 

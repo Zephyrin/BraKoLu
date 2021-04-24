@@ -44,6 +44,10 @@ const TREE_MENU: MenuNode[] = [
         routerLink: 'ingredients',
         svgIcon: 'beaker',
         label: 'Ingrédient'
+      }, {
+        routerLink: 'suppliers',
+        svgIcon: 'folder-account',
+        label: 'Fournisseur'
       }
     ]
   }

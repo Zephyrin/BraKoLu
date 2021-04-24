@@ -1,0 +1,11 @@
+<mat-sidenav-container class="sidenav-container"
+                       autosize
+                       fullscreen>
+  <mat-sidenav-content>
+    <main>
+      <app-supplier-desktop [service]="service"
+                            *ngIf="display.isViewTable"></app-supplier-desktop>
+      <app-supplier-list *ngIf="display.isViewList"></app-supplier-list>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

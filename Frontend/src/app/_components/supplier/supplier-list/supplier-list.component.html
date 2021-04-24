@@ -1,0 +1,10 @@
+<mat-list class="multi-column-container">
+  <mat-list-item *ngFor="let supplier of service.model"
+                 class="mat-list-item"
+                 [ngClass]="{'mat-list-selected': service.selected?.id === supplier?.id}"
+                 (click)="openUpdateDialog($event, supplier)">
+    <div mat-line><b>{{supplier.name}}</b>
+    </div>
+  </mat-list-item>
+</mat-list>
+<app-pagination [paginate]="service.paginate"></app-pagination>

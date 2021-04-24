@@ -1,3 +1,4 @@
+import { SupplierComponent } from './_components/supplier/supplier/supplier.component';
 import { OrderToolbarComponent } from './_components/order/order-toolbar/order-toolbar.component';
 import { OrderComponent } from './_components/order/order.component';
 import { BrewComponent } from './_components/brew/brew.component';
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'option', component: OptionComponent },
   { path: 'brew', component: BrewComponent },
   { path: 'command', component: OrderComponent },
+  { path: 'suppliers', component: SupplierComponent }
 ];
 
 @NgModule({

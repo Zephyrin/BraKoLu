@@ -6,6 +6,7 @@ import { FormErrors } from '@app/_helpers/form-error';
 import { HttpService } from '@app/_services/http.service';
 import { Subject } from 'rxjs';
 import { SimpleChange } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 export interface IService {
   /**
@@ -212,29 +213,38 @@ export abstract class CService<T> implements IService {
     private $search: ISearch | undefined
   ) {
     this.edit = false;
-    this.paginate.changePageSubject.subscribe(x => {
-      if (x === true) {
-        this.load();
+    this.paginate.changePageSubject.subscribe({
+      next: x => {
+        if (x === true) {
+          this.load$();
+        }
       }
     });
-    this.sort.changePageSubject.subscribe(x => {
-      if (x === true) {
-        this.load();
+    this.sort.changePageSubject.subscribe({
+      next: x => {
+        if (x === true) {
+          this.load$();
+        }
       }
     });
     this.search = $search;
     if (this.search) {
-      this.search.changePageSubject.subscribe(x => {
-        if (x === true) {
-          this.load();
+      this.search.changePageSubject.subscribe({
+        next: x => {
+          if (x === true) {
+            this.load$();
+          }
         }
       });
     }
-    this.initEnumDone.subscribe(x => {
-      if (x === true) {
-        this.load$();
-      }
-    });
+    this.initEnumDone.subscribe(
+      {
+        next: x => {
+          if (x === true) {
+            this.load$();
+          }
+        }
+      });
   }
 
   //#region Abstract IService
@@ -262,16 +272,18 @@ export abstract class CService<T> implements IService {
       httpParams = this.paginate.initPaginationParams(httpParams);
       httpParams = this.sort.initSortParams(httpParams);
     }
-    this.http.getAll(httpParams).subscribe({
-      next: response => {
-        this.paginate.setParametersFromResponse(response.headers);
-        this.model = response.body.map((x) => this.createCpy(x));
-        this.end(true, undefined);
-      }, error: err => {
-        this.model = [];
-        this.end(true, undefined, err);
-      }
-    });
+    this.http.getAll(httpParams)
+      .pipe(first())
+      .subscribe({
+        next: response => {
+          this.paginate.setParametersFromResponse(response.headers);
+          this.model = response.body.map((x) => this.createCpy(x));
+          this.end(true, undefined);
+        }, error: err => {
+          this.model = [];
+          this.end(true, undefined, err);
+        }
+      });
   }
   //#region IService
   public has(name: string, value: T | undefined): boolean {
@@ -371,27 +383,31 @@ export abstract class CService<T> implements IService {
     const model = simpleChange.currentValue;
     if (model[name] === undefined || model[name] === '') {
       const dataToSent = this.createCpy(model);
-      this.http.create(dataToSent).subscribe(data => {
-        // On met à jour sur l'ancienne valeur l'id pour le retrouver plus facilement
-        // lors des recherches. Pas sûr d'en avoir besoin.
-        // simpleChange.previousValue[name] = data[name];
-        simpleChange.currentValue = this.createCpy(data);
-        this.model.push(simpleChange.currentValue);
-        this.end(true, simpleChange);
-      }, error => {
-        this.end(true, simpleChange, error);
-      });
+      this.http.create(dataToSent)
+        .pipe(first())
+        .subscribe(data => {
+          // On met à jour sur l'ancienne valeur l'id pour le retrouver plus facilement
+          // lors des recherches. Pas sûr d'en avoir besoin.
+          // simpleChange.previousValue[name] = data[name];
+          simpleChange.currentValue = this.createCpy(data);
+          this.model.push(simpleChange.currentValue);
+          this.end(true, simpleChange);
+        }, error => {
+          this.end(true, simpleChange, error);
+        });
     } else {
-      this.http.update(model[name].toString(), model).subscribe(data => {
-        const newValue = simpleChange.previousValue;
-        simpleChange.previousValue = this.createCpy(simpleChange.previousValue);
-        this.updateData(data, newValue, model);
+      this.http.update(model[name].toString(), model)
+        .pipe(first())
+        .subscribe(data => {
+          const newValue = simpleChange.previousValue;
+          simpleChange.previousValue = this.createCpy(simpleChange.previousValue);
+          this.updateData(data, newValue, model);
 
-        simpleChange.currentValue = newValue;
-        this.end(true, simpleChange);
-      }, error => {
-        this.end(true, simpleChange, error);
-      });
+          simpleChange.currentValue = newValue;
+          this.end(true, simpleChange);
+        }, error => {
+          this.end(true, simpleChange, error);
+        });
     }
   }
 
@@ -413,15 +429,17 @@ export abstract class CService<T> implements IService {
     const name = 'id';
     const model = simpleChange.previousValue;
     if (model[name] !== undefined) {
-      this.http.delete(model[name]).subscribe(() => {
-        this.sliceWorkingOn(simpleChange);
-      }, (error) => {
-        if (error.status === 404) {
+      this.http.delete(model[name])
+        .pipe(first())
+        .subscribe(() => {
           this.sliceWorkingOn(simpleChange);
-        } else {
-          this.end(true, simpleChange, error);
-        }
-      });
+        }, (error) => {
+          if (error.status === 404) {
+            this.sliceWorkingOn(simpleChange);
+          } else {
+            this.end(true, simpleChange, error);
+          }
+        });
     } else {
       this.end(true, simpleChange, undefined);
     }

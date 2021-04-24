@@ -1,21 +1,20 @@
-import { StockCreateComponent } from './../stock-create/stock-create.component';
 import { MatDialog } from '@angular/material/dialog';
-import { StockDisplayService } from '@app/_services/stock/stock-display.service';
-import { StockService } from '@app/_services/stock/stock.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RemoveDialogComponent } from '@app/_components/helpers/remove-dialog/remove-dialog.component';
+import { SupplierDisplayService } from '@app/_services/supplier/supplier-display.service';
+import { SupplierCreateComponent } from '../supplier-create/supplier-create.component';
 
 @Component({
-  selector: 'app-stock-list',
-  templateUrl: './stock-list.component.html',
-  styleUrls: ['./stock-list.component.scss']
+  selector: 'app-supplier-list',
+  templateUrl: './supplier-list.component.html',
+  styleUrls: ['./supplier-list.component.scss']
 })
-export class StockListComponent implements OnInit {
+export class SupplierListComponent implements OnInit {
+  @Input() isDialog = false;
   constructor(
-    public serviceSupplier: SupplierService,
-    public service: StockService,
-    public displayService: StockDisplayService,
+    public service: SupplierService,
+    public display: SupplierDisplayService,
     public dialog: MatDialog
   ) { }
 
@@ -24,8 +23,12 @@ export class StockListComponent implements OnInit {
 
   openUpdateDialog(event: MouseEvent, element: any): void {
     event.stopPropagation();
-    const dialogRef = this.dialog.open(StockCreateComponent, { minWidth: '30em' });
-    (dialogRef.componentInstance as unknown as StockCreateComponent).update(element);
+    if (this.isDialog) {
+      this.service.selected = element;
+    } else {
+      const dialogRef = this.dialog.open(SupplierCreateComponent, { minWidth: '30em' });
+      (dialogRef.componentInstance as unknown as SupplierCreateComponent).update(element);
+    }
   }
 
   openDeleteDialog(evt: MouseEvent, element: any, title: string): void {

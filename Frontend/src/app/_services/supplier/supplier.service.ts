@@ -1,3 +1,4 @@
+import { SupplierSearchService } from '@app/_services/supplier/supplier-search.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SupplierHttpService } from './supplier-http.service';
@@ -5,6 +6,7 @@ import { SupplierHttpService } from './supplier-http.service';
 import { Injectable } from '@angular/core';
 import { Supplier } from '@app/_models';
 import { CService, ValueViewChild } from '@app/_services/iservice';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +18,27 @@ export class SupplierService extends CService<Supplier>{
   constructor(
     private h: SupplierHttpService,
     public datepipe: DatePipe) {
-    super(h, undefined);
+    super(h, new SupplierSearchService());
   }
 
   public initEnums(): void {
     this.nbEnumLeft = 0;
     if (this.headers.length === 0) {
       this.nbEnumLeft++;
-      this.h.getEnum('headers').subscribe(response => {
-        response.forEach(elt => {
-          this.headers.push(elt);
-          this.displayedColumns.push(elt.value);
-        });
-        this.nbEnumLeft--;
-        if (this.nbEnumLeft <= 0) {
-          this.initEnumDone.next(true);
-        }
-      });
+      this.h.getEnum('headers')
+        .pipe(first()).subscribe(
+          {
+            next: response => {
+              response.forEach(elt => {
+                this.headers.push(elt);
+                this.displayedColumns.push(elt.value);
+              });
+              this.nbEnumLeft--;
+              if (this.nbEnumLeft <= 0) {
+                this.initEnumDone.next(true);
+              }
+            }
+          });
     }
     if (this.nbEnumLeft <= 0) {
       this.initEnumDone.next(true);

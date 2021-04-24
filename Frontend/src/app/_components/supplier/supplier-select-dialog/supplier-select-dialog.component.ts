@@ -1,3 +1,4 @@
+import { SupplierDisplayService } from './../../../_services/supplier/supplier-display.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Supplier } from '@app/_models';
@@ -11,15 +12,16 @@ import { SupplierService } from '@app/_services/supplier/supplier.service';
 export class SupplierSelectDialogComponent implements OnInit {
   private previousSelected: Supplier = undefined;
   constructor(
-    public supplierService: SupplierService,
+    public service: SupplierService,
+    public display: SupplierDisplayService,
     public dialogRef: MatDialogRef<SupplierSelectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Supplier
   ) {
-    this.previousSelected = this.supplierService.selected;
+    this.previousSelected = this.service.selected;
     if (data !== null && data !== undefined) {
-      const index = this.supplierService.model.findIndex(c => c.id === data.id);
-      if (index >= 0 && index < this.supplierService.model.length) {
-        this.supplierService.setSelected(this.supplierService.model[index]);
+      const index = this.service.model.findIndex(c => c.id === data.id);
+      if (index >= 0 && index < this.service.model.length) {
+        this.service.setSelected(this.service.model[index]);
       }
     }
   }
@@ -29,12 +31,12 @@ export class SupplierSelectDialogComponent implements OnInit {
 
 
   onSubmitClick() {
-    this.dialogRef.close(this.supplierService.selected);
-    this.supplierService.selected = this.previousSelected;
+    this.dialogRef.close(this.service.selected);
+    this.service.selected = this.previousSelected;
   }
 
   onCancelClick() {
     this.dialogRef.close(undefined);
-    this.supplierService.selected = this.previousSelected;
+    this.service.selected = this.previousSelected;
   }
 }

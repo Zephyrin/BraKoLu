@@ -1,13 +1,3 @@
-<div class="inline-header">
-  <!-- BOUTON AJOUTER Fournisseur -->
-  <button mat-button
-          (click)="openCreateDialog($event)"
-          [matTooltip]="'Ajouter un fournisseur'">
-    <mat-icon>add_circle_outline</mat-icon>
-    <mat-label> Ajouter un fournisseur</mat-label>
-  </button>
-</div>
-<!-- TABLEAU des fournisseurs -->
 <app-table [service]="service"
            [allowSelection]="allowSelection"
            #Table></app-table>

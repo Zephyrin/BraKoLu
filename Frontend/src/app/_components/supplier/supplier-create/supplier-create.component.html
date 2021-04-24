@@ -19,17 +19,39 @@
   </mat-dialog-content>
   <div mat-dialog-actions
        class="flex-reverse">
-    <button mat-button
+    <button mat-icon-button
             *ngIf="!value"
             [disabled]="!service.form || service.form.invalid || service.loadingSource"
             type="submit"
-            (click)="onSubmitClick()">Ajouter</button>
-    <button mat-button
+            attr.aria-label="Ajouter"
+            matTooltip="Ajouter"
+            (click)="onSubmitClick()">
+      <mat-icon svgIcon="folder-plus"></mat-icon>
+    </button>
+    <button mat-icon-button
             *ngIf="value"
             [disabled]="!service.form || service.form.invalid || service.loadingSource"
-            (click)="onSubmitClick()">Modifier</button>
-    <button mat-button
+            attr.aria-label="Modifier"
+            matTooltip="Modifier"
+            (click)="onSubmitClick()">
+      <mat-icon svgIcon="folder-edit"></mat-icon>
+    </button>
+    <button mat-icon-button
             type="button"
-            (click)="onCancelClick()">Annuler</button>
+            attr.aria-label="Annuler"
+            matTooltip="Annuler"
+            (click)="onCancelClick()">
+      <mat-icon svgIcon="cancel"></mat-icon>
+    </button>
+    <div class="spacer"></div>
+    <button mat-icon-button
+            *ngIf="value"
+            [disabled]="!service.form || service.form.invalid || service.loadingSource"
+            attr.aria-label="Suppression"
+            matTooltip="Suppression"
+            type="button"
+            (click)="onDeleteClick()">
+      <mat-icon svgIcon="flask-remove"></mat-icon>
+    </button>
   </div>
 </form>
