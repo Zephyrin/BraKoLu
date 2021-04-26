@@ -3,8 +3,16 @@ import {
   transition, animate, style, state,
 } from '@angular/animations';
 
-export const filterExpand = trigger('filterExpand', [
-  state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden', padding: '0px' })),
-  state('expanded', style({ width: '*', visibility: 'visible', padding: '10px', paddingRight: '20px' })),
-  transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+export const filterDialogExpand = trigger('filterDialogExpand', [
+  state('collapsed', style({ boxShadow: 'none', visibility: 'hidden' })),
+  state('expanded', style({ transform: 'none', visibility: 'visible' })),
+  transition('expanded <=> collapsed', animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+]);
+
+export const contentDialogMarginExpand = trigger('contentDialogMarginExpand', [
+  state('collapsed', style({ marginLeft: '-{{margin_left}}px' }),
+    { params: { margin_left: '0' } }),
+  state('expanded', style({}),
+    { params: { margin_left: '0' } }),
+  transition('expanded <=> collapsed', animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
 ]);

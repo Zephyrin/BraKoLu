@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { filterExpand } from '@app/_components/animations/filter-animation';
+import { contentDialogMarginExpand, filterDialogExpand } from '@app/_components/animations/filter-animation';
 import { Ingredient } from '@app/_models';
 import { IngredientDisplayService } from '@app/_services/ingredient/ingredient-display.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
@@ -10,7 +10,8 @@ import { IngredientService } from '@app/_services/ingredient/ingredient.service'
   templateUrl: './ingredient-select-dialog.component.html',
   styleUrls: ['./ingredient-select-dialog.component.scss'],
   animations: [
-    filterExpand
+    filterDialogExpand,
+    contentDialogMarginExpand
   ]
 })
 export class IngredientSelectDialogComponent implements OnInit {

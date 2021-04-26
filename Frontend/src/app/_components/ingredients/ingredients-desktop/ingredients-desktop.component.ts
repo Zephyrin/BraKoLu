@@ -8,15 +8,14 @@ import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, OnInit, SimpleChange } from '@angular/core';
-import { MatChipSelectionChange } from '@angular/material/chips';
-import { filterExpand } from '@app/_components/animations/filter-animation';
+import { filterDialogExpand } from '@app/_components/animations/filter-animation';
 
 @Component({
   selector: 'app-ingredients-desktop',
   templateUrl: './ingredients-desktop.component.html',
   styleUrls: ['./ingredients-desktop.component.scss'],
   animations: [
-    filterExpand
+    filterDialogExpand
   ]
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements AfterViewInit {

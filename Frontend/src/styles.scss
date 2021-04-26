@@ -88,9 +88,21 @@ body {
   justify-content: space-between;
 }
 
+/* ** Gestion des boites de dialogue avec un filtre sur la gauche ayant le même système que la page principale ** */
+.dialog-container {
+  overflow: hidden;
+  display: flex;
+}
+
+.dialog-sidenav {
+  transform: translate3d(-100%, 0, 0);
+  border-right: solid 1px rgba(0, 0, 0, 0.12);
+}
+
+/* ** ** */
+
 .filter-container {
   min-width: 160px;
-  overflow: visible;
   padding-right: 20px;
 }
 

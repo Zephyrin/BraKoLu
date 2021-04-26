@@ -6,14 +6,14 @@ import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { Component, ViewChild, SimpleChange, OnInit } from '@angular/core';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
 import { OrderSearchService } from '@app/_services/order/order-search.service';
-import { filterExpand } from '@app/_components/animations/filter-animation';
+import { filterDialogExpand } from '@app/_components/animations/filter-animation';
 
 @Component({
   selector: 'app-order-desktop',
   templateUrl: './order-desktop.component.html',
   styleUrls: ['./order-desktop.component.scss'],
   animations: [
-    filterExpand
+    filterDialogExpand
   ]
 })
 export class OrderDesktopComponent extends ChildBaseComponent<undefined>{

@@ -1,11 +1,15 @@
 <app-ingredient-toolbar [isDialog]="true"></app-ingredient-toolbar>
-<div class="inline">
-  <mat-nav-list class="filter-container"
-                [@filterExpand]="display.filterExpanded ? 'expanded' : 'collapsed'">
-    <h1>Type</h1>
-    <app-ingredients-type-filter></app-ingredients-type-filter>
-  </mat-nav-list>
-  <div>
+<div class="dialog-container">
+  <div class="dialog-sidenav"
+       #filterSide
+       [@filterDialogExpand]="display.filterExpanded ? 'expanded' : 'collapsed'">
+    <mat-nav-list class="filter-container">
+      <h1>Type</h1>
+      <app-ingredients-type-filter></app-ingredients-type-filter>
+    </mat-nav-list>
+  </div>
+  <div
+       [@contentDialogMarginExpand]="{value: display.filterExpanded ? 'expanded' : 'collapsed', params:{margin_left: filterSide.offsetWidth}}">
     <app-ingredients-desktop [service]="service"
                              *ngIf="display.isViewTable"
                              [allowSelection]="true"></app-ingredients-desktop>
