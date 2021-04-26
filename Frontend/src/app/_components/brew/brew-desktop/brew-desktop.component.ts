@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core';
 import { ValueViewChild } from '@app/_services/iservice';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-brew-desktop',
@@ -30,8 +31,10 @@ export class BrewDesktopComponent extends ChildBaseComponent<BrewCreateComponent
   public brewsViewList = new Array<AccordionExtension>();
   constructor(
     public dialog: MatDialog,
+    public breakpointObserver: BreakpointObserver,
     public serviceIngredient: IngredientService) {
-    super(dialog, BrewCreateComponent);
+    super(dialog, breakpointObserver);
+    this.componentOrTemplateRef = BrewCreateComponent;
     serviceIngredient.load();
   }
 

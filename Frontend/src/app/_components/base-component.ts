@@ -2,17 +2,21 @@ import { IService } from '@app/_services/iservice';
 import { map, shareReplay } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
+@Component({
+  template: ''
+})
 export class BaseComponent implements OnInit, OnDestroy {
   public isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
       shareReplay()
     );
+  public service: IService;
+
   constructor(
-    protected breakpointObserver: BreakpointObserver,
-    public service: IService) { }
+    protected breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.service.load(false);
@@ -23,5 +27,8 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.service.edit = false;
+    this.destroy();
   }
+
+  public destroy(): void { }
 }

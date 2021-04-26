@@ -5,8 +5,7 @@
     <fieldset [disabled]="service.loadingSource || ingredientService.loadingSource"
               [ngStyle]="{'pointer-events':service.loadingSource || ingredientService.loadingSource ? 'none' : 'auto' }">
 
-      <mat-form-field class="full-width cursor"
-                      cdkFocusInitial>
+      <mat-form-field class="full-width cursor">
         <mat-label>Quel est l'ingrédient ?</mat-label>
         <app-ingredient-select-input #ingredient
                                      formControlName="ingredient"></app-ingredient-select-input>

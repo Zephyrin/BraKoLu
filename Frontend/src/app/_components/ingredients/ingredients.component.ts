@@ -26,7 +26,7 @@ export class IngredientsComponent extends BaseComponent implements OnDestroy {
     protected breakpointObserver: BreakpointObserver,
     public service: IngredientService,
     public display: IngredientDisplayService) {
-    super(breakpointObserver, service);
+    super(breakpointObserver);
   }
 
   public init() {

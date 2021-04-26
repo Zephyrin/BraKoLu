@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { Component, ViewChild, AfterViewInit, SimpleChange } from '@angular/core';
 import { SupplierCreateComponent } from '@app/_components/supplier/supplier-create/supplier-create.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-supplier-desktop',
@@ -13,8 +14,9 @@ import { SupplierCreateComponent } from '@app/_components/supplier/supplier-crea
 export class SupplierDesktopComponent extends ChildBaseComponent<SupplierCreateComponent> implements AfterViewInit {
 
   @ViewChild('Table') tableComponent: TableComponent;
-  constructor(public dialog: MatDialog) {
-    super(dialog, SupplierCreateComponent);
+  constructor(public dialog: MatDialog, public breakpointObserver: BreakpointObserver) {
+    super(dialog, breakpointObserver);
+    this.componentOrTemplateRef = SupplierCreateComponent;
   }
 
   ngAfterViewInit(): void {

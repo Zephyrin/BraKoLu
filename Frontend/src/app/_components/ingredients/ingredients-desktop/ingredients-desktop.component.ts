@@ -1,6 +1,5 @@
 import { IngredientDisplayService } from '@app/_services/ingredient/ingredient-display.service';
 import { TableComponent } from '@app/_components/helpers/table/table.component';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { ValueViewChildSelected } from '@app/_models/ValueViewChildSelected';
 import { IngredientSearchService } from '@app/_services/ingredient/ingredient-search.service';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
@@ -8,24 +7,22 @@ import { ChildBaseComponent } from '@app/_components/child-base-component';
 import { IngredientCreateFormComponent } from './../ingredient/ingredient-create-form/ingredient-create-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ViewChild, AfterViewInit, OnInit, SimpleChange } from '@angular/core';
-import { filterDialogExpand } from '@app/_components/animations/filter-animation';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-ingredients-desktop',
   templateUrl: './ingredients-desktop.component.html',
-  styleUrls: ['./ingredients-desktop.component.scss'],
-  animations: [
-    filterDialogExpand
-  ]
+  styleUrls: ['./ingredients-desktop.component.scss']
 })
 export class IngredientsDesktopComponent extends ChildBaseComponent<IngredientCreateFormComponent> implements AfterViewInit {
   @ViewChild('tableComponent') tableComponent: TableComponent;
 
   constructor(
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    public breakpointObserver: BreakpointObserver,
     public displayService: IngredientDisplayService) {
-    super(dialog, IngredientCreateFormComponent);
+    super(dialog, breakpointObserver);
+    this.componentOrTemplateRef = IngredientCreateFormComponent;
   }
 
   // Helper pour passer de IService à IngredientService

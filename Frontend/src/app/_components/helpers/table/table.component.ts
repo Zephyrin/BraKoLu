@@ -5,9 +5,10 @@ import { MatSort } from '@angular/material/sort';
 import { IService } from '@app/_services/iservice';
 import { Component, OnInit, Input, ViewChild, AfterViewInit, TemplateRef, Inject, SimpleChange } from '@angular/core';
 import { merge } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-table',
@@ -21,8 +22,9 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
   @Input() allowSelection = false;
 
   constructor(
-    public dialog: MatDialog) {
-    super(dialog, undefined);
+    public dialog: MatDialog,
+    public breakpointObserver: BreakpointObserver) {
+    super(dialog, breakpointObserver);
   }
 
   ngOnInit(): void {
@@ -36,7 +38,7 @@ export class TableComponent extends ChildBaseComponent<any> implements OnInit, A
     merge(this.sort.sortChange)
       .pipe(tap(() => {
         this.service.sort.change(this.sort.active, this.sort.direction);
-      })).subscribe();
+      })).pipe(first()).subscribe();
   }
 
   public endUpdate(change: SimpleChange) {

@@ -1,40 +1,47 @@
 <div class="full-width">
-  <mat-tab-group [selectedIndex]="displayService.formSelectedOrder.value"
+  <mat-tab-group [selectedIndex]="display.formSelectedOrder.value"
                  mat-align-tabs="center"
                  class="full-width"
-                 (selectedIndexChange)="displayService.changeSelectedIndex($event)">
+                 (selectedIndexChange)="display.changeSelectedIndex($event)">
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon svgIcon="truck-check"></mat-icon>
         Commandes
         <mat-icon svgIcon="arrow-expand-down"
-                  *ngIf="displayService.formSelectedOrder.value === 0"></mat-icon>
+                  *ngIf="display.formSelectedOrder.value === 0"></mat-icon>
         <mat-icon svgIcon="arrow-expand-right"
-                  *ngIf="displayService.formSelectedOrder.value > 0"></mat-icon>
+                  *ngIf="display.formSelectedOrder.value > 0"></mat-icon>
       </ng-template>
-      <div class="inline">
-        <div class="filter-container"
-             [@filterExpand]="displayService.filterOrder ? 'expanded' : 'collapsed'">
-          <h1>État</h1>
-          <app-order-filter (selectedStates)="selectedStatesChange($event)"></app-order-filter>
+
+      <div class="side-container">
+        <div class="side-sidenav"
+             #filterSide
+             [@filterDialogExpand]="display.filterOrder ? 'expanded' : 'collapsed'">
+          <mat-nav-list class="filter-container">
+            <h1>État</h1>
+            <app-order-filter (selectedStates)="selectedStatesChange($event)"></app-order-filter>
+          </mat-nav-list>
         </div>
-        <div class="full-width padding">
+        <div class="side-main"
+             [@contentSideMain]="{
+               value: display.filterOrder ? 'filterExpanded' : 'filterCollapsed'
+               , params:{margin_left: filterSide.offsetWidth}}">
           <app-table [service]="service"
                      class="full-width"
                      [allowSelection]="!service.loadingSource
-                  && !displayService.brewService.loadingSource
-                  && !displayService.supplierService.loadingSource"
+                  && !display.brewService.loadingSource
+                  && !display.supplierService.loadingSource"
                      #tableComponent></app-table>
           <app-pagination [paginate]="service.paginate"></app-pagination>
         </div>
       </div>
     </mat-tab>
-    <mat-tab *ngFor="let order of displayService.selectedOrders; let index = index"
+    <mat-tab *ngFor="let order of display.selectedOrders; let index = index"
              [ngSwitch]="order.state">
       <ng-template mat-tab-label>
         {{service.getDisplay('tabOrder', order)}}
         <button mat-icon-button
-                (click)="displayService.closeTab($event, order, index)">
+                (click)="display.closeTab($event, order, index)">
           <mat-icon>close</mat-icon>
         </button>
       </ng-template>

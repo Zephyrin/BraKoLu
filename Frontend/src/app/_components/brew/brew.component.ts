@@ -17,7 +17,7 @@ export class BrewComponent extends BaseComponent {
     public service: BrewService,
     public stockService: StockService
   ) {
-    super(breakpointObserver, service);
+    super(breakpointObserver);
     (service.search as BrewSearchService).brewSearch.clearStates();
     this.stockService.load(true);
   }

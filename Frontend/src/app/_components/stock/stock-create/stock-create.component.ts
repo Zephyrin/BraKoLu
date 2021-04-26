@@ -22,7 +22,7 @@ export class StockCreateComponent extends ChildCreateFormBaseComponent {
     public ingredientService: IngredientService,
     protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder, dialog);
+    super(dialogRef, formBuilder, dialog);
   }
 
   init() {

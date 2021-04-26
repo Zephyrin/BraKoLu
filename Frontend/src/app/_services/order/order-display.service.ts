@@ -65,8 +65,10 @@ export class OrderDisplayService {
   }
 
   public init() {
-    this.selectedChangeSubscription = this.orderService.selectedChange.subscribe(
-      order => { this.orderSelectedChange(order); });
+    this.selectedChangeSubscription = this.orderService.selectedChange.subscribe({
+      next:
+        order => { this.orderSelectedChange(order); }
+    });
   }
 
   public destroy() {

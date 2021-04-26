@@ -58,7 +58,7 @@ export class IngredientCreateFormComponent extends ChildCreateFormBaseComponent 
     protected formBuilder: FormBuilder,
     protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder, dialog);
+    super(dialogRef, formBuilder, dialog);
     const date = new Date();
     const year = date.getFullYear();
     for (let i = year - 20; i < year + 1; i++) {

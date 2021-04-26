@@ -3,30 +3,31 @@ import { IService } from '@app/_services/iservice';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { OnInit, OnDestroy } from '@angular/core';
+import { OnInit, OnDestroy, Component } from '@angular/core';
 import { RemoveDialogComponent } from './helpers/remove-dialog/remove-dialog.component';
 
-
+@Component({
+  template: ''
+})
 export class ChildCreateFormBaseComponent implements OnInit, OnDestroy {
   selectedChildName: ValueViewChild;
   endUpdateSubscription: Subscription;
   value: any;
   private afterClosedDeleteSubscription: Subscription;
-
+  public service: IService;
   constructor(
     public dialogRef: MatDialogRef<ChildCreateFormBaseComponent>,
-    public service: IService,
     protected formBuilder: FormBuilder,
     protected dialog: MatDialog
   ) {
-    this.endUpdateSubscription = service.endUpdate.subscribe(status => {
+  }
+  ngOnInit(): void {
+    this.init();
+    this.endUpdateSubscription = this.service.endUpdate.subscribe(status => {
       if (status?.currentValue) {
         this.dialogRef.close(status?.currentValue);
       }
     });
-  }
-  ngOnInit(): void {
-    this.init();
   }
 
   ngOnDestroy(): void {

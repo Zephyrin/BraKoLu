@@ -14,7 +14,7 @@ export class OrderComponent extends BaseComponent {
     protected breakpointObserver: BreakpointObserver,
     public service: OrderService
   ) {
-    super(breakpointObserver, service);
+    super(breakpointObserver);
   }
 
 }

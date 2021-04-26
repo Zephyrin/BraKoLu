@@ -1,4 +1,3 @@
-import { Subscription } from 'rxjs';
 import { IngredientService } from '@app/_services/ingredient/ingredient.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';

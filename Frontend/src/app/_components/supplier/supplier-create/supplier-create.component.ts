@@ -17,7 +17,7 @@ export class SupplierCreateComponent extends ChildCreateFormBaseComponent {
     protected formBuilder: FormBuilder,
     protected dialog: MatDialog
   ) {
-    super(dialogRef, service, formBuilder, dialog);
+    super(dialogRef, formBuilder, dialog);
   }
 
   init() {

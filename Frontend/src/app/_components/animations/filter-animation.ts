@@ -7,6 +7,7 @@ export const filterDialogExpand = trigger('filterDialogExpand', [
   state('collapsed', style({ boxShadow: 'none', visibility: 'hidden' })),
   state('expanded', style({ transform: 'none', visibility: 'visible' })),
   transition('expanded <=> collapsed', animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+
 ]);
 
 export const contentDialogMarginExpand = trigger('contentDialogMarginExpand', [
@@ -15,4 +16,12 @@ export const contentDialogMarginExpand = trigger('contentDialogMarginExpand', [
   state('expanded', style({}),
     { params: { margin_left: '0' } }),
   transition('expanded <=> collapsed', animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+]);
+
+export const contentSideMain = trigger('contentSideMain', [
+  state('filterCollapsed', style({}),
+    { params: { margin_left: '0' } }),
+  state('filterExpanded', style({ marginLeft: '{{margin_left}}px' }),
+    { params: { margin_left: '0' } }),
+  transition('filterExpanded <=> filterCollapsed', animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
 ]);

@@ -32,7 +32,7 @@ export class StockComponent extends BaseComponent implements OnDestroy {
     public display: StockDisplayService,
     public supplierService: SupplierService
   ) {
-    super(breakpointObserver, service);
+    super(breakpointObserver);
   }
 
   public init() {

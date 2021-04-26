@@ -56,7 +56,6 @@ import { BrewIngredientCreateComponent } from './_components/brew/brew-ingredien
 import { BrewIngredientDesktopComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-desktop.component';
 import { OrderComponent } from './_components/order/order.component';
 import { OrderDesktopComponent } from './_components/order/order-desktop/order-desktop.component';
-import { OrderMobileComponent } from './_components/order/order-mobile/order-mobile.component';
 import { BrewsTableComponent } from './_components/brew/brew-desktop/brews-table/brews-table.component';
 import { BrewDetailsDesktopComponent } from './_components/brew/brew-desktop/brew-details-desktop/brew-details-desktop.component';
 import { BrewIngredientTableComponent } from './_components/brew/brew-ingredient-desktop/brew-ingredient-table/brew-ingredient-table.component';
@@ -119,7 +118,6 @@ import { IngredientSelectDialogComponent } from './_components/ingredients/ingre
     BrewIngredientDesktopComponent,
     OrderComponent,
     OrderDesktopComponent,
-    OrderMobileComponent,
     BrewsTableComponent,
     BrewDetailsDesktopComponent,
     BrewIngredientTableComponent,

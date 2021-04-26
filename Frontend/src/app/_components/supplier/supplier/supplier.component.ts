@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SupplierDisplayService } from '@app/_services/supplier/supplier-display.service';
 import { SupplierService } from '@app/_services/supplier/supplier.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { map, shareReplay } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { BaseComponent } from '@app/_components/base-component';
@@ -24,18 +24,17 @@ export class SupplierComponent extends BaseComponent {
     public display: SupplierDisplayService,
     protected breakpointObserver: BreakpointObserver
   ) {
-    super(breakpointObserver, service);
+    super(breakpointObserver);
   }
 
   public init() {
     this.isSmallScreenSubscription = this.isSmallScreen$.subscribe(
-      {
-        next: isSmallScreen => {
-          if (isSmallScreen) {
-            this.display.viewList();
-          }
+      (isSmallScreen: boolean) => {
+        if (isSmallScreen) {
+          this.display.viewList();
         }
-      });
+      }
+    );
   }
 
 }
