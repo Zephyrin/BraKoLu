@@ -207,7 +207,7 @@ export abstract class CService<T> implements IService {
   //#endregion
   protected initEnumDone = new Subject<boolean>();
   private loadAll = false;
-
+  private initEnumAlreadyDone = false;
   public constructor(
     protected http: HttpService<T>,
     private $search: ISearch | undefined
@@ -241,6 +241,7 @@ export abstract class CService<T> implements IService {
       {
         next: x => {
           if (x === true) {
+            this.initEnumAlreadyDone = true;
             this.load$();
           }
         }
@@ -260,7 +261,8 @@ export abstract class CService<T> implements IService {
   public load(all: boolean = false): void {
     this.loadAll = all;
     this.start();
-    this.initEnums();
+    if (this.initEnumAlreadyDone) { this.load$(); }
+    else { this.initEnums(); }
   }
 
   private load$(): void {

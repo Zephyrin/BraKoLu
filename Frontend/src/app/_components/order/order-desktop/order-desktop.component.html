@@ -45,14 +45,10 @@
           <mat-icon>close</mat-icon>
         </button>
       </ng-template>
-      <div class="full-width padding">
-        <app-order-detail-creation *ngSwitchCase="'created'"
-                                   [order]="order"></app-order-detail-creation>
-        <app-order-detail *ngSwitchDefault
-                          class="padding"
-                          [order]="order"></app-order-detail>
-      </div>
-
+      <app-order-detail-creation *ngSwitchCase="'created'"
+                                 [order]="order"></app-order-detail-creation>
+      <app-order-detail *ngSwitchDefault
+                        [order]="order"></app-order-detail>
     </mat-tab>
   </mat-tab-group>
 </div>

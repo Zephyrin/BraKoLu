@@ -48,6 +48,17 @@ export class OrderDetailComponent implements OnInit {
     }
     return 'non trouvé';
   }
+  public updateQuantity(evt: number, stock: IngredientStock, name: string): void {
+    if (this.inputIntervalBeforeSave) {
+      clearInterval(this.inputIntervalBeforeSave);
+    }
+    this.inputIntervalBeforeSave = setInterval(() => {
+      clearInterval(this.inputIntervalBeforeSave);
+      const val = +evt;
+      this.stockService.update(name, stock, val);
+      this.inputIntervalBeforeSave = undefined;
+    }, 300);
+  }
 
   public updateStock(evt: any, stock: IngredientStock, name: string): void {
     if (this.inputIntervalBeforeSave) {

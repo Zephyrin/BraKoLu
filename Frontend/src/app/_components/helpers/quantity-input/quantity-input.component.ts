@@ -37,15 +37,14 @@ export class QuantityInputComponent implements
   }
   valueP: number;
   @Input('value') set value(val) {
-    this.valueP = val;
-    this.stateChanges.next();
-    this.onChange(val);
-    this.onTouched();
+    this.valueP = Math.round(val);
   }
 
   get value() {
     return this.valueP;
   }
+
+  @Output() changed = new EventEmitter<number>();
 
   stateChanges = new Subject<void>();
 
@@ -142,6 +141,10 @@ export class QuantityInputComponent implements
 
   onChangeEvent(event: any): void {
     this.value = event.target.value * this.unitFactor;
+    this.stateChanges.next();
+    this.onChange(this.valueP);
+    this.onTouched();
+    this.changed.emit(this.valueP);
   }
 
 }

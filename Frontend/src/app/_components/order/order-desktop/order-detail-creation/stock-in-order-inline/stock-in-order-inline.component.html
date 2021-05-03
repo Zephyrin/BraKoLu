@@ -3,7 +3,7 @@
   <mat-label>Quantité</mat-label>
   <app-quantity-input [value]="stock.quantity"
                       [ingredient]="element.ingredient"
-                      (change)="updateStock($event, element, stock, 'quantity')"></app-quantity-input>
+                      (changed)="updateQuantity($event, element, stock, 'quantity')"></app-quantity-input>
 </mat-form-field>
 <mat-form-field appearance="legacy"
                 class="supplierForm">

@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Yeast } from '@app/_models/yeast';
-import { Other } from '@app/_models/other';
 import { Keg } from '@app/_models/keg';
 import { Hop } from '@app/_models/hop';
 import { Cereal } from '@app/_models/cereal';

@@ -19,7 +19,30 @@ export class StockInOrderInlineComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public updateQuantity(evt: number, orderStock: OrderStock, stock: IngredientStock, name: string): void {
+
+    if (this.inputIntervalBeforeSave) {
+      clearInterval(this.inputIntervalBeforeSave);
+    }
+    this.inputIntervalBeforeSave = setInterval(() => {
+      clearInterval(this.inputIntervalBeforeSave);
+      const val = evt;
+      if (stock.id) { this.stockService.update(name, stock, val); }
+      else {
+        const old = stock[name];
+        stock[name] = evt;
+        this.stockService.update(undefined, stock, stock);
+        stock[name] = old;
+      }
+      if (name === 'quantity') {
+        orderStock.updateQuantity(stock, val);
+      }
+      this.inputIntervalBeforeSave = undefined;
+    }, 300);
+  }
+
   public updateStock(evt: any, orderStock: OrderStock, stock: IngredientStock, name: string): void {
+
     if (this.inputIntervalBeforeSave) {
       clearInterval(this.inputIntervalBeforeSave);
     }

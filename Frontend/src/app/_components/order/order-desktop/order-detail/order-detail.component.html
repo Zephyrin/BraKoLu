@@ -28,7 +28,7 @@
                               floatLabel="never">
                 <app-quantity-input [value]="element.quantity"
                                     [ingredient]="element.ingredient"
-                                    (change)="updateStock($event, element, 'quantity')"></app-quantity-input>
+                                    (changed)="updateQuantity($event, element, 'quantity')"></app-quantity-input>
               </mat-form-field>
             </div>
             <div *ngSwitchCase="'price'">

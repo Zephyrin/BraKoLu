@@ -23,6 +23,7 @@ import {
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DialogOrderDetailResult } from './dialog-order-detail-base';
 import { OrderDetailCreation } from '@app/_mapper/order/order-detail-creation';
+import { contentSideMain, filterDialogExpand } from '@app/_components/animations/filter-animation';
 
 @Component({
   selector: 'app-order-detail-creation',
@@ -44,16 +45,8 @@ import { OrderDetailCreation } from '@app/_mapper/order/order-detail-creation';
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
   animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-    trigger('brewExpand', [
-      state('collapsed', style({ width: '0px', minWidth: '0', visibility: 'hidden', padding: '0px' })),
-      state('expanded', style({ width: '*', visibility: 'visible', padding: '10px' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
-    ]),
+    filterDialogExpand,
+    contentSideMain
   ]
 })
 export class OrderDetailCreationComponent implements OnInit, OnDestroy {

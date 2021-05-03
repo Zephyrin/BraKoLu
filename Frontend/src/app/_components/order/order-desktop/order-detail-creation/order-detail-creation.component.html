@@ -1,25 +1,32 @@
-<div class="inline">
-  <div class="filter-container"
-       [@brewExpand]="orderDisplayService.brewExpanded ? 'expanded': 'collapsed'">
-    <h1>Brassins</h1>
-    <app-brew-check-list [orderDetailCreation]="orderDetailCreation"></app-brew-check-list>
+<div class="side-container">
+  <div class="side-sidenav"
+       #filterSide
+       [@filterDialogExpand]="orderDisplayService.brewExpanded ? 'expanded': 'collapsed'">
+    <mat-nav-list class="filter-container">
+      <h1>Brassins</h1>
+      <app-brew-check-list [orderDetailCreation]="orderDetailCreation"></app-brew-check-list>
+    </mat-nav-list>
   </div>
-
-  <fieldset [disabled]="stockService.loadingSource"
-            class="full-width padding">
-    <div *ngIf="orderDetailCreation?.ingredientsByType?.length === 0">Tout les brassins sont prêts pour être brassé. Il
-      n'y a rien à commander !
-    </div>
-    <mat-accordion multi>
-      <mat-expansion-panel *ngFor="let accordion of orderDetailCreation?.ingredientsByType"
-                           [expanded]="accordion.expanded">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{accordion.childName.viewValue}}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-ingredient-type [ingredientsByType]="accordion"></app-ingredient-type>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </fieldset>
+  <div class="side-main"
+       [@contentSideMain]="{
+      value: orderDisplayService.brewExpanded ? 'filterExpanded' : 'filterCollapsed'
+      , params:{margin_left: filterSide.offsetWidth}}">
+    <fieldset [disabled]="stockService.loadingSource">
+      <div *ngIf="orderDetailCreation?.ingredientsByType?.length === 0">
+        Tout les brassins sont prêts pour être brassé.
+        Il n'y a rien à commander !
+      </div>
+      <mat-accordion multi>
+        <mat-expansion-panel *ngFor="let accordion of orderDetailCreation?.ingredientsByType"
+                             [expanded]="accordion.expanded">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{accordion.childName.viewValue}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-ingredient-type [ingredientsByType]="accordion"></app-ingredient-type>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </fieldset>
+  </div>
 </div>
